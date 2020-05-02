@@ -47,10 +47,20 @@
     <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -60,6 +70,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
@@ -409,6 +422,16 @@
     <Content Include="img\logo3.jpg" />
     <Content Include="img\logo4.jpeg" />
     <Content Include="img\user.png" />
+    <Content Include="Models\BMSMODEL.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BMSMODEL.Context.cs</LastGenOutput>
+      <DependentUpon>BMSMODEL.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\BMSMODEL.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>BMSMODEL.edmx</DependentUpon>
+      <LastGenOutput>BMSMODEL.cs</LastGenOutput>
+    </Content>
     <Content Include="scripts\ai.0.22.9-build00167.js" />
     <Content Include="scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="scripts\bootstrap.min.js" />
@@ -701,10 +724,101 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\RORController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="DataHelpers\AreaHelpers.cs" />
+    <Compile Include="DataHelpers\FixedRatesHelpers.cs" />
+    <Compile Include="DataHelpers\LocationHelpers.cs" />
+    <Compile Include="DataHelpers\UserHelpers.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\HMTLHelperExtensions.cs" />
+    <Compile Include="Models\BMSMODEL.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BMSMODEL.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BMSMODEL.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BMSMODEL.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BMSMODEL.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ModelsValidatorHelper.cs" />
+    <Compile Include="Models\RequestModels\AreaRequestModel.cs" />
+    <Compile Include="Models\RequestModels\FixedRatesRequestModel.cs" />
+    <Compile Include="Models\RequestModels\LocationRequestModel.cs" />
+    <Compile Include="Models\RequestModels\UserRequestModel.cs" />
+    <Compile Include="Models\ResponseModels\AreaResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\FixedRatesResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\LocationResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\UserResponseModel.cs" />
+    <Compile Include="Models\tbl_action.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_area.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_billelectric.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_billpicture.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_controller.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_fixedrates.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_fixedratetype.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_location.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_paymenthistory.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_paymentstatus.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_paymenttype.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_readingelectric.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_readingelectriclog.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_readingpicture.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_residentbuilding.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_residenthistory.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_residents.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_userareas.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_userpermissions.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_users.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_usertype.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ViewModels\ResidentViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App_Start\SetPermissionsAttribute.cs" />
@@ -746,6 +860,13 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
+    <EntityDeploy Include="Models\BMSMODEL.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>BMSMODEL.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\BMSMODEL.edmx.diagram">
+      <DependentUpon>BMSMODEL.edmx</DependentUpon>
+    </Content>
     <None Include="packages.config" />
     <Content Include="scripts\plugins\jstree\LICENSE-MIT" />
     <Content Include="Views\Shared\_Footer.cshtml" />
@@ -779,7 +900,11 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="img\Models\" />
+    <Folder Include="Views\FixedRates\" />
     <Folder Include="Views\Reports\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
