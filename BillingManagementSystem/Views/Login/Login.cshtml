@@ -1,0 +1,300 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Login - MES</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="~/Images/icon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="~/Images/icon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="~/Images/icon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="~/Images/icon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="~/Images/icon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="~/Images/icon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="~/Images/icon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="~/Images/icon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Images/icon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon.ico">
+    <link rel="icon" type="image/png" sizes="96x96" href="~/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="~/Images/icon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/premium-line-icons/css")
+    @Styles.Render("~/premium-solid-icons/css")
+    @Styles.Render("~/font-awesome/css")
+    @Styles.Render("~/plugins/sweetAlert")
+    <style>
+        /* Absolute Center Spinner */
+    .loading {
+      position: fixed;
+      z-index: 999;
+      height: 2em;
+      width: 2em;
+      overflow: show;
+      margin: auto;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
+
+    /* Transparent Overlay */
+    .loading:before {
+      content: '';
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.3);
+    }
+
+    /* :not(:required) hides these rules from IE9 and below */
+    .loading:not(:required) {
+      /* hide "loading..." text */
+      font: 0/0 a;
+      color: transparent;
+      text-shadow: none;
+      background-color: transparent;
+      border: 0;
+    }
+
+    .loading:not(:required):after {
+      content: '';
+      display: block;
+      font-size: 10px;
+      width: 1em;
+      height: 1em;
+      margin-top: -0.5em;
+      -webkit-animation: spinner 1500ms infinite linear;
+      -moz-animation: spinner 1500ms infinite linear;
+      -ms-animation: spinner 1500ms infinite linear;
+      -o-animation: spinner 1500ms infinite linear;
+      animation: spinner 1500ms infinite linear;
+      border-radius: 0.5em;
+      -webkit-box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+      box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+    }
+
+/* Animation */
+
+@@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@@-moz-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@@-o-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+        @@keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="loading hidden">
+
+    </div>
+	
+    <div id="container" class="cls-container">
+
+        <!-- BACKGROUND IMAGE -->
+        <!--===================================================-->
+        <div id="bg-overlay" class="bg-img" style="background:#294f75;"></div>
+        
+        @*<div id="bg-overlay" class="bg-img" style="background-image :url('../../img/bg-img/bg.png');"></div>*@
+        <!-- LOGIN FORM -->
+        <!--===================================================-->
+        <div class="cls-content">
+            </br>
+            <div class="cls-content-lg panel" id="cls-content-panel">
+                <div class="panel-body">
+                    <h2>Billing Management System</h2>
+                    <br />
+                    <br />
+                    <h3>Login</h3>
+                    <p>Provide username and password</p>
+                    <div class="mar-ver pad-btm hidden">
+                        <h1 class="h3">Projects Management Portal</h1>
+
+                        <p>Admin Login</p>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon add-tooltip" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="Sign in with username">
+                                <i class="psi-worker"></i>
+                            </div>
+                            <input type="text" id="username" class="form-control" placeholder="Username" autofocus>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon add-tooltip" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="Password">
+                                <i class="psi-lock"></i>
+                            </div>
+                            <input type="password" id="password" class="form-control" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="checkbox pad-btm text-left">
+                        <input id="form-checkbox" class="magic-checkbox" type="checkbox">
+                        <label for="form-checkbox">Remember me</label>
+                    </div>
+                    <div class="row container-fluid">
+                        <a href="#" id="btn-login" data-target="#cls-content-panel" class="btn btn-primary btn-lg btn-block">Sign In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/nifty")
+    @Scripts.Render("~/bundles/sweetAlert")
+    <script>
+        FastClick.attach(document.body);
+    </script>
+    <script>
+        $('#btn-login').niftyOverlay().on('click',(function (e) {
+
+            e.preventDefault();
+            var user = $('#username').val();
+            var pwd = $('#password').val();
+            login(user, pwd);
+        }));
+        $(document).keypress(function (e) {
+
+            if (e.which == 13) {
+                e.preventDefault();
+                var user = $('#username').val();
+                var pwd = $('#password').val();
+                login(user, pwd);
+            }
+        });
+    </script>
+    <script>
+        function login(user,pwd)
+        {
+            if (!user) {
+                swal({
+                    title: "Warning",
+                    text: "Please provide a username",
+                    type: "warning"
+                });
+                $('#username').focus();
+            }
+            else if (!pwd) {
+                swal({
+                    title: "Warning",
+                    text: "Please provide a password",
+                    type: "warning"
+                });
+                $('#password').focus();
+            }
+            else {
+               window.location.href = '@Url.Action("Index","Home")';
+                @*$.ajax({
+                    type: 'POST',
+                    url: '/Login/LoginRequest',
+                    data: { username: user, password: pwd },
+                    dataType: 'json',
+                    beforeSend: function () { $('.loading').toggleClass('hidden'); },
+                    complete: function () { $('.loading').toggleClass('hidden'); },
+                    success: function (data) {
+                        if (data.resultCode == "1100") {
+                            window.location.href = '@Url.Action("Index","Home")';
+                        }
+                        else if (data.resultCode == "1000")
+                        {
+                            swal({
+                                title: "Error",
+                                text: data.remarks,
+                                type: "error"
+                            });
+                        }
+                        else {
+                            swal({
+                                title: "Warning",
+                                text: data.remarks,
+                                type: "warning"
+                            });
+                        }
+                    },
+                    error: function (a, b, c) {
+                         swal({
+                            title: "Error",
+                            text: a.status + " : " + c,
+                            type: "error"
+                        });
+                    }
+                });*@
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+﻿@model BillingManagementSystem.Models.ViewModels.ResidentViewModel
+@{
+    ViewBag.Title = "Resident Profile";
+}
+@section Styles
+{
+    @Styles.Render("~/plugins/select2")
+    @Styles.Render("~/plugins/datepicker")
+    @Styles.Render("~/plugins/datatable")
+    @Styles.Render("~/plugins/sweetAlert")
+}
+@section Scripts
+{
+    @Scripts.Render("~/bundles/select2")
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/datepicker")
+    @Scripts.Render("~/bundles/sweetAlert")
+
+    <script>
+        $(document).on('nifty.ready', function () {
+            $(".monthPicker").datepicker({
+                format: "mm-yyyy",
+                startView: "months",
+                minViewMode: "months"
+            });
+            $(".datepick").datepicker({
+                format: "dd-mm-yyyy"
+            });
+            $('.grid').dataTable({
+                scrollX:true
+            });
+        });
+    </script>
+
+}
+<div id="page-head">
+    <div class="pad-all text-center">
+        <h2>Resident Profile : Office XYZ</h2>
+    </div>
+</div>
+<div id="page-content">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-bordered-dark panel-colorful">
+                <div class="panel-body text-center">
+                    <p class="text-bold">
+                        Area :
+                        <i class="text-uppercase">Area</i>
+                    </p>
+                    <p class="text-bold">
+                        Location :
+                        <i class="text-uppercase">Building Flat #</i>
+                    </p>
+                    <p class="text-bold">
+                        Rank :
+                        <i class="text-uppercase">Officer</i>
+                    </p>
+                    <p class="text-bold">
+                        Name :
+                        <i class="text-uppercase">XYZ</i>
+                    </p>
+                    <p class="text-bold">
+                        PA No. :
+                        <i class="text-uppercase">12-12313123</i>
+                    </p>
+                    <p class="text-bold">
+                        Unit / FMN :
+                        <i class="text-uppercase">FMN</i>
+                    </p>
+                    <p class="text-bold">
+                        Total Outstanding :
+                        <span> 4500.0 /-Rs</span>
+                    </p>
+                    <button id="btnEditDetails" class="btn btn-primary">Edit Resident Details</button>
+                    <button id="btnEditLocation" class="btn btn-warning">Create Vocation</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+                <div class="tab-base">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#tab0" data-toggle="tab" aria-expanded="true">Electric Bill</a>
+                        </li>
+                        <li>
+                            <a href="#tab1" data-toggle="tab" aria-expanded="true">Gas Bill</a>
+                        </li>
+                        <li>
+                            <a href="#tab2" data-toggle="tab" aria-expanded="true">Wapda Bill</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab0" class="tab-pane fade active in">
+                            <div class="row">
+                                <div class="col-md-3 pull-right">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" />
+                                            <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <table class="table table-bordered table-responsive table-hover grid">
+                                        <thead>
+                                            <tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Units</th><th>Energy Charges</th><th>Amount</th><th>Water</th><th>TV</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab2" class="tab-pane fade">
+                            <div class="row">
+                                <div class="col-md-3 pull-right">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" />
+                                            <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <table class="table table-bordered table-responsive table-hover grid">
+                                        <thead>
+                                            <tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Units</th><th>Energy Charges</th><th>Amount</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab1" class="tab-pane fade">
+                            <div class="row">
+                                <div class="col-md-3 pull-right">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" />
+                                            <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <table class="table table-bordered table-responsive table-hover grid">
+                                        <thead>
+                                            <tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Difference</th><th>MM BTU</th><th>M/Rent</th><th>Amount</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+.starProject {
+    display: inline-block;
+}
+    .starProject a {
+        font-size: 20px;
+        padding: 0 1px;
+        cursor: pointer;
+        color: #FFD119;
+        text-decoration: none;
+    }
+.starContractor {
+    display: inline-block;
+}
+
+    .starContractor a {
+        font-size: 20px;
+        padding: 0 1px;
+        cursor: pointer;
+        color: #FFD119;
+        text-decoration: none;
+    }

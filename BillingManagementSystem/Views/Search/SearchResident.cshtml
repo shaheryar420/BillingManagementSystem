@@ -1,0 +1,165 @@
+﻿@{
+    ViewBag.Title = "Search Resident";
+}
+@section Styles
+{
+    @Styles.Render("~/plugins/select2")
+    @Styles.Render("~/plugins/datepicker")
+    @Styles.Render("~/plugins/datatable")
+    @Styles.Render("~/plugins/sweetAlert")
+}
+@section Scripts
+{
+    @Scripts.Render("~/bundles/select2")
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/datepicker")
+    @Scripts.Render("~/bundles/sweetAlert")
+
+    <script>
+        $(document).on('nifty.ready', function () {
+            $(".monthPicker").datepicker({
+                format: "mm-yyyy",
+                startView: "months",
+                minViewMode: "months"
+            });
+            $(".datepick").datepicker({
+                format: "dd-mm-yyyy"
+            });
+            $('.grid').dataTable();
+            $(document).on('click', '.viewResident', function () {
+                var url = "/Search/ResidentProfile/1";
+                window.open(url, "_blank");
+            });
+        });
+    </script>
+
+}
+<div id="page-head">
+    <div class="pad-all text-center">
+        <h2>Search Residents</h2>
+    </div>
+</div>
+<div id="page-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-bordered-dark panel-colorful">
+                <div class="panel-head">
+                    <h1 class="panel-title">Search Filters</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Search By Meter#</label>
+                            <div class="input-group">
+                                <input type="text" value="" placeholder="Select Meter#" class="form-control" />
+                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Search By Last Payment Date</label>
+                            <div class="input-group">
+                                <input type="text" value="" placeholder="Select Date" class="form-control datepick" />
+                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Search By Last Payment Amount</label>
+                            <div class="input-group">
+                                <input type="text" value="" placeholder="Enter Amount" class="form-control " />
+                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Search By Area</label>
+                            <div class="input-group">
+                                <input type="text" value="" placeholder="Select Area" class="form-control" />
+                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Search By Resident</label>
+                            <div class="input-group">
+                                <input type="text" value="" placeholder="Select Resident" class="form-control" />
+                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Search By Name</label>
+                            <div class="input-group">
+                                <input type="text" value="" placeholder="Enter Name" class="form-control" />
+                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Search By PANo</label>
+                            <div class="input-group">
+                                <input type="text" value="" placeholder="Enter PA No" class="form-control " />
+                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Search By Unit/Fmn</label>
+                            <div class="input-group">
+                                <input type="text" value="" placeholder="Select Unit/Fmn" class="form-control " />
+                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Search By Rank</label>
+                            <div class="input-group">
+                                <input type="text" value="" placeholder="Select Rank" class="form-control " />
+                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-bordered-info panel-colorful">
+                <div class="panel-head">
+                    <h1 class="panel-title">List of Residents</h1>
+                    <div class="col-md-3 pull-right">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" />
+                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-responsive table-hover grid">
+                        <thead>
+                            <tr><th>View</th><th>Sr.</th><th>Meter #</th><th>Location</th><th>PA No</th><th>Rank</th><th>Name</th><th>Unit/FMN</th><th>Total Outstanding</th><th>Last Payment</th><th>Last Payment Date</th><th>Remarks</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="#" class="btn btn-sm btn-success viewResident"><i class="psi-eye icon-2x"></i></a></td>
+                                <td>1</td>
+                                <td>123122</td>
+                                <td>Area Building Flat #</td>
+                                <td>12-12313123</td>
+                                <td>Officer</td>
+                                <td>XYZ</td>
+                                <td>FMN</td>
+                                <td>4500.0</td>
+                                <td>1500.0</td>
+                                <td>2020-04-24</td>
+                                <td>Some Remarks</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

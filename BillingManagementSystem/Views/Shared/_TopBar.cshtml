@@ -1,0 +1,97 @@
+﻿
+<!--NAVBAR-->
+<!--===================================================-->
+<header id="navbar">
+    <div id="navbar-container" class="boxed">
+
+        <!--Brand logo & name-->
+        <!--================================-->
+        <div class="navbar-header">
+            <a href="@Url.Action("Index","Home")" class="navbar-brand">
+                <span class="brand-icon pad-hor" height="30px" > <i class="psi-big-data text-light" style="font-size:1.5em;"></i>            </span>
+    @*<img src="~/img/icon-mini.png" class="brand-icon" alt="" />*@
+                <div class="brand-title">
+                    <span class="text-left text-bold" style='font-size:19px;'>BMS</span>
+                </div>
+            </a>
+        </div>
+        <!--================================-->
+        <!--End brand logo & name-->
+        <!--Navbar Dropdown-->
+        <!--================================-->
+        <div class="navbar-content clearfix">
+            <ul class="nav navbar-top-links">
+
+                <!--Navigation toggle button-->
+                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                <li class="tgl-menu-btn">
+                    <a class="mainnav-toggle" href="#">
+                        <i class="pli-list-view"></i>
+                    </a>
+                </li>
+            </ul>
+            
+            <ul class="nav navbar-top-links">
+                
+                
+                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                <li id="dropdown-user" class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
+                        <span class="ic-user pull-right">
+                            <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                            <!--You can use an image instead of an icon.-->
+                            <!--<img class="img-circle img-user media-object" src="img/profile-photos/1.png" alt="Profile Picture">-->
+                            <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                            <i class="pli-layout-grid"></i>
+                        </span>
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <!--You can also display a user name in the navbar.-->
+                        <!--<div class="username hidden-xs">Aaron Chavez</div>-->
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                    </a>
+
+
+                    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+                        <ul class="head-list">
+                            <li>
+                                <a href="#" data-target="#update-password-model" data-toggle="modal"><i class="pli-gear icon-lg icon-fw"></i> Update Password</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Login", "Login")"><i class="pli-unlock icon-lg icon-fw"></i> Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                <!--End user dropdown-->
+            </ul>
+        </div>
+        
+        <!--================================-->
+        <!--End Navbar Dropdown-->
+        <div class="modal fade" id="update-password-model" role="dialog" tabindex="-1" aria-labelledby="update-password-model" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+
+                    <!--Modal header-->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                        <h2 class="modal-title">Update Password</h2>
+                    </div>
+
+                    <!--Modal body-->
+                    <div class="modal-body">
+                        @Html.Partial("_UpdatePassword")
+                    </div>
+
+                    <!--Modal footer-->
+                    <div class="modal-footer">
+                        <button id="btnUpdatePassword" class="btn btn-primary" type="button">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!--===================================================-->
+<!--END NAVBAR-->

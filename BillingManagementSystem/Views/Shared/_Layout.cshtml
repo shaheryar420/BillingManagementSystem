@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="apple-touch-icon" sizes="57x57" href="~/Images/icon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="~/Images/icon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="~/Images/icon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="~/Images/icon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="~/Images/icon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="~/Images/icon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="~/Images/icon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="~/Images/icon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Images/icon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon.ico">
+    <link rel="icon" type="image/png" sizes="96x96" href="~/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/favicon.ico">
+    @*<link rel="manifest" href="/manifest.json">*@
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="~/Images/icon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>@ViewBag.Title - BMS</title>
+
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/premium-line-icons/css")
+    @Styles.Render("~/premium-solid-icons/css")
+    @Styles.Render("~/font-awesome/css")
+    @Styles.Render("~/plugins/validator")
+    @Styles.Render("~/plugins/sweetAlert")
+    @if (IsSectionDefined("Styles"))
+    {@RenderSection("Styles", required: false)}
+
+    <style>
+        /* Absolute Center Spinner */
+        .loading {
+            position: fixed;
+            z-index: 99999;
+            height: 2em;
+            width: 2em;
+            overflow: show;
+            margin: auto;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
+
+            /* Transparent Overlay */
+            .loading:before {
+                content: '';
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.3);
+            }
+
+            /* :not(:required) hides these rules from IE9 and below */
+            .loading:not(:required) {
+                /* hide "loading..." text */
+                font: 0/0 a;
+                color: transparent;
+                text-shadow: none;
+                background-color: transparent;
+                border: 0;
+            }
+
+                .loading:not(:required):after {
+                    content: '';
+                    display: block;
+                    font-size: 10px;
+                    width: 1em;
+                    height: 1em;
+                    margin-top: -0.5em;
+                    -webkit-animation: spinner 1500ms infinite linear;
+                    -moz-animation: spinner 1500ms infinite linear;
+                    -ms-animation: spinner 1500ms infinite linear;
+                    -o-animation: spinner 1500ms infinite linear;
+                    animation: spinner 1500ms infinite linear;
+                    border-radius: 0.5em;
+                    -webkit-box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+                    box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+                }
+
+        /* Animation */
+
+        @@-webkit-keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @@-moz-keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @@-o-keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="loading hidden">
+
+    </div>
+    <div id="container" class="effect mainnav-fixed mainnav-lg">
+
+        @Html.Partial("_TopBar")
+        <div class="boxed">
+            <!--CONTENT CONTAINER-->
+            <!--===================================================-->
+            <div id="content-container">
+                @RenderBody()
+            </div>
+
+            @Html.Partial("_NavBar")
+
+        </div>
+
+        <!-- SCROLL PAGE BUTTON -->
+        <!--===================================================-->
+        <button class="scroll-top btn">
+            <i class="pci-chevron chevron-up"></i>
+        </button>
+        @Html.Partial("_Footer")
+        <!--===================================================-->
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/nifty")
+    @Scripts.Render("~/bundles/validator")
+    @Scripts.Render("~/bundles/sweetAlert")
+    <script>
+        $(document).on('nifty.ready', function () {
+            FastClick.attach(document.body);
+            $('#btnUpdatePassword').on('click', function (e) {
+                e.preventDefault();
+                var validator = $('#updatePassword').data('bootstrapValidator');
+                validator.validate();
+                if (validator.isValid()) {
+                    var oldPassword = $('#oldpassword').val();
+                    var newPassword = $('#newpassword').val();
+                    var confirmPassword = $('#newpassword2').val();
+                    if (newPassword == confirmPassword) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/Login/UpdatePassword',
+                            data: { oldpassword: oldPassword, newpassword: newPassword },
+                            dataType: 'json',
+                            beforeSend: function () { $('.loading').toggleClass('hidden'); },
+                            complete: function () { $('.loading').toggleClass('hidden'); },
+                            success: function (data) {
+                                if (data.resultCode == "1100") {
+
+                                    swal({
+                                        title: "Success",
+                                        text: "Password Updated Successfully",
+                                        type: "success"
+                                    }, function () {
+                                        $("#update-password-model").modal('hide');
+                                        $('#oldpassword').val("");
+                                        $('#newpassword').val("");
+                                        $('#newpassword2').val("");
+                                    });
+                                }
+                                else if (data.resultCode == "1000") {
+                                    swal({
+                                        title: "Error",
+                                        text: data.remarks,
+                                        type: "error"
+                                    });
+                                }
+                                else {
+                                    swal({
+                                        title: "Info",
+                                        text: data.remarks,
+                                        type: "info"
+                                    });
+                                }
+                            },
+                            error: function (a, b, c) {
+                                swal({
+                                    title: "Error",
+                                    text: a.status + " : " + c,
+                                    type: "error"
+                                });
+                            }
+                        });
+                    }
+                    else {
+                        swal({
+                            title: "Info",
+                            text: "New Password and Confirm Password are not Same. ",
+                            type: "info"
+                        });
+
+                    }
+
+
+                }
+
+
+            });
+            $('#updatePassword').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'psi-yes',
+                    invalid: 'psi-close',
+                    validating: 'psi-refresh'
+                },
+                fields: {
+                    oldPassword: {
+                        validators: {
+                            notEmpty: {
+                                message: 'The password is required and can\'t be empty'
+                            }
+                        }
+                    },
+                    password: {
+                        validators: {
+                            notEmpty: {
+                                message: 'The password is required and can\'t be empty'
+                            },
+                            stringLength: {
+                                min: 3,
+                                message: 'The password must be more than 3'
+                            },
+                            identical: {
+                                field: 'confirmPassword',
+                                message: 'The password and its confirm are not the same'
+                            }
+                        }
+                    },
+                    confirmPassword: {
+                        validators: {
+                            notEmpty: {
+                                message: 'The confirm password is required and can\'t be empty'
+                            },
+                            identical: {
+                                field: 'password',
+                                message: 'The password and its confirm are not the same'
+                            }
+                        }
+                    }
+                }
+            }).on('success.field.bv', function (e, data) {
+                // $(e.target)  --> The field element
+                // data.bv      --> The BootstrapValidator instance
+                // data.field   --> The field name
+                // data.element --> The field element
+
+                var $parent = data.element.parents('.form-group');
+
+                // Remove the has-success class
+                $parent.removeClass('has-success');
+            });
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+
+</body>
+
+</html>

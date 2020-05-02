@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "ROR";
+}
+@section Styles
+{
+    @Styles.Render("~/plugins/select2")
+    @Styles.Render("~/plugins/datepicker")
+    @Styles.Render("~/plugins/datatable")
+    @Styles.Render("~/plugins/sweetAlert")
+}
+@section Scripts
+{
+    @Scripts.Render("~/bundles/select2")
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/datepicker")
+    @Scripts.Render("~/bundles/sweetAlert")
+
+    <script>
+        $(document).on('nifty.ready', function () {
+            $(".monthPicker").datepicker({
+                format: "mm-yyyy",
+                startView: "months",
+                minViewMode: "months"
+            });
+            $('.grid').dataTable();
+        });
+    </script>
+
+}
+<div id="page-head">
+    <div class="pad-all text-center">
+        <h2>GAS ROR</h2>
+    </div>
+</div>
+<div id="page-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-bordered-info panel-colorful">
+                <div class="panel-head">
+                    <h1 class="panel-title">Bills ROR</h1>
+                    <div class="col-md-3 pull-right">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" />
+                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-responsive table-hover grid">
+                        <thead>
+                            <tr><th>Sr.</th><th>Meter #</th><th>Location</th><th>PA No</th><th>Rank</th><th>Name</th><th>Unit/FMN</th><th>Previous Reading</th><th>Present Reading</th><th>Difference</th><th>MM BTU</th><th>M/Rent</th><th>Amount</th><th>Picture</th><th>Remarks</th></tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
