@@ -613,6 +613,7 @@ namespace BillingManagementSystem.DataHelpers
                                 var bill = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
                                 var _resident = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
                                 _resident.previousReading = bill.billelectric_prevreading.ToString();
+                                _resident.outstanding = bill.billelectric_outstanding.ToString();
                             }
                         }
                         else

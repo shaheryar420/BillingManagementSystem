@@ -7,6 +7,7 @@ namespace BillingManagementSystem.Models
 {
     public class ResidentResponseModel
     {
+        public string outstanding { get; set; }
         public string meterNo { get; set; }
         public string previousReading { get; set; }
         public string residentId { get; set; }
