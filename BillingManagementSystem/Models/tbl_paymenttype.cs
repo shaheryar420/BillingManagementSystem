@@ -7,11 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
-public partial class tbl_paymenttype
+namespace BillingManagementSystem.Models
 {
-    public int paymenttype_id { get; set; }
-    public string paymenttype_name { get; set; }
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class tbl_paymenttype
+    {
+        public int paymenttype_id { get; set; }
+        public string paymenttype_name { get; set; }
+    }
 }

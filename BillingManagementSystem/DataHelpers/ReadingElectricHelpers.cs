@@ -314,6 +314,25 @@ namespace BillingManagementSystem.DataHelpers
                             var residentBuilding = (from x in db.tbl_residentbuilding where x.fk_building == location.location_id select x).FirstOrDefault();
                             if(residentBuilding != null)
                             {
+                                var previousPendingBill = (from x in db.tbl_billelectric where x.fk_paymentstatus == 2 && x.fk_resident == residentBuilding.fk_resident select x).FirstOrDefault();
+                                var outstanding = "";
+                                if (previousPendingBill != null)
+                                {
+                                    outstanding = previousPendingBill.billelectric_outstanding.ToString();
+                                    previousPendingBill.fk_paymentstatus = 3;
+                                    db.SaveChanges();
+                                    var newPaymentHistory = new tbl_paymenthistory();
+                                    newPaymentHistory.paymentmonth = new MonthFinderHelpers().GetPreviousMonth(readingElectric.readingelectric_month);
+                                    newPaymentHistory.payment_amount = 0;
+                                    newPaymentHistory.fk_paymenttype = 0;
+                                    newPaymentHistory.paymenthistory_datetime = DateTime.UtcNow.AddHours(5);
+                                    db.tbl_paymenthistory.Add(newPaymentHistory);
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    outstanding = "0";
+                                }
                                 var fixedRatesElectric = (from x in db.tbl_fixedrates where x.fixedrates_name == "Electric Charges" select x).FirstOrDefault();
                                 var readingPicture = (from x in db.tbl_readingpicture where x.readingpicture_id == readingElectric.fk_readingpicture select x).FirstOrDefault();
                                 if (readingPicture != null)
@@ -331,7 +350,7 @@ namespace BillingManagementSystem.DataHelpers
                                         fk_billpicture = newBillPicture.billpicture_id,
                                         fk_location = residentBuilding.fk_building,
                                         fk_resident = residentBuilding.fk_resident,
-                                        fk_paymentstatus = 0,
+                                        fk_paymentstatus = 2,
                                         billelectric_amount = readingElectric.readingelectric_units* fixedRatesElectric.fixedrates_amount,
                                         billelectric_currentreading = readingElectric.readingelectric_currentreading,
                                         billelectric_month = readingElectric.readingelectric_month,
@@ -345,6 +364,7 @@ namespace BillingManagementSystem.DataHelpers
                                     };
                                     db.tbl_billelectric.Add(newBill);
                                     db.SaveChanges();
+                                    newBill.billelectric_outstanding = newBill.billelectric_amount + double.Parse(outstanding);
                                     db.tbl_readingelectric.Remove(readingElectric);
                                     db.tbl_readingpicture.Remove(readingPicture);
                                     db.SaveChanges();

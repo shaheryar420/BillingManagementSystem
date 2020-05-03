@@ -7,15 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
-public partial class tbl_location
+namespace BillingManagementSystem.Models
 {
-    public int location_id { get; set; }
-    public string location_name { get; set; }
-    public int fk_area { get; set; }
-    public string location_electricmeter { get; set; }
-    public string location_gassmeter { get; set; }
-    public string location_wapdameter { get; set; }
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class tbl_location
+    {
+        public int location_id { get; set; }
+        public string location_name { get; set; }
+        public int fk_area { get; set; }
+        public string location_electricmeter { get; set; }
+        public string location_gassmeter { get; set; }
+        public string location_wapdameter { get; set; }
+    }
 }

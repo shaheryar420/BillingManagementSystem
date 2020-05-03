@@ -7,12 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
-public partial class tbl_residentbuilding
+namespace BillingManagementSystem.Models
 {
-    public int residentbuilding_id { get; set; }
-    public int fk_resident { get; set; }
-    public int fk_building { get; set; }
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class tbl_residentbuilding
+    {
+        public int residentbuilding_id { get; set; }
+        public int fk_resident { get; set; }
+        public int fk_building { get; set; }
+    }
 }

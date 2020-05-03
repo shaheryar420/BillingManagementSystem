@@ -7,11 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
-public partial class tbl_usertype
+namespace BillingManagementSystem.Models
 {
-    public int usertype_id { get; set; }
-    public string usertype_name { get; set; }
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class tbl_usertype
+    {
+        public int usertype_id { get; set; }
+        public string usertype_name { get; set; }
+    }
 }

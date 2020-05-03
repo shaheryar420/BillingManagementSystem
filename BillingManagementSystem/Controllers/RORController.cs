@@ -41,6 +41,70 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult GetAllRORElectricByAmount([FromBody] BillElectricRequestModel model)
+        {
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORElectricByAmount(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORElectricByMeterNo([FromBody] BillElectricRequestModel model)
+        {
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORElectricByMeterNo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORElectricByArea([FromBody] BillElectricRequestModel model)
+        {
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORElectricByArea(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORElectricByResident([FromBody] BillElectricRequestModel model)
+        {
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORElectricByResident(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORElectricByPaNo([FromBody] BillElectricRequestModel model)
+        {
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORElectricByPaNo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORElectricByUnit([FromBody] BillElectricRequestModel model)
+        {
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORElectricByUnit(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORElectricByRank([FromBody] BillElectricRequestModel model)
+        {
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORElectricByRank(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORElectricByDateEntered([FromBody] BillElectricRequestModel model)
+        {
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORElectricByDate(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
         #endregion
     }

@@ -7,12 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
-public partial class tbl_userareas
+namespace BillingManagementSystem.Models
 {
-    public int userareas_id { get; set; }
-    public int fk_user { get; set; }
-    public int fk_area { get; set; }
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class tbl_userareas
+    {
+        public int userareas_id { get; set; }
+        public int fk_user { get; set; }
+        public int fk_area { get; set; }
+    }
 }

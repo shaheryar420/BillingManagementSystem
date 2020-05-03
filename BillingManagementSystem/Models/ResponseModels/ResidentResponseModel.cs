@@ -13,6 +13,7 @@ namespace BillingManagementSystem.Models
         public string residentName { get; set; }
         public string residentUnit { get; set; }
         public string residentRemarks { get; set; }
+        public string totatOutStandings { get; set; }
         public string remarks { get; set; }
         public string resultCode { get; set; }
     }

@@ -7,6 +7,11 @@ namespace BillingManagementSystem.Models
 {
     public class BillElectricRequestModel
     {
+        public string rank { get; set; }
+        public string unit { get; set; }
+        public string paNo { get; set; }
+        public string areaName { get; set; }
+        public string meterNo { get; set; }
         public string billElectricId { get; set; }
         public string billElectricDateTime { get; set; }
         public string billElectricAmount { get; set; }

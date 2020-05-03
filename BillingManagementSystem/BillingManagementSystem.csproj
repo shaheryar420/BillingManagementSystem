@@ -728,7 +728,9 @@
     <Compile Include="DataHelpers\FixedRatesHelpers.cs" />
     <Compile Include="DataHelpers\FixedRatesTypeHelpers.cs" />
     <Compile Include="DataHelpers\LocationHelpers.cs" />
+    <Compile Include="DataHelpers\MonthFinderHelpers.cs" />
     <Compile Include="DataHelpers\ReadingElectricHelpers.cs" />
+    <Compile Include="DataHelpers\RecoveryHelpers.cs" />
     <Compile Include="DataHelpers\ResidentHelpers.cs" />
     <Compile Include="DataHelpers\RORHelpers.cs" />
     <Compile Include="DataHelpers\UserHelpers.cs" />
@@ -758,6 +760,7 @@
     <Compile Include="Models\RequestModels\FixedRatesTypeRequestModel.cs" />
     <Compile Include="Models\RequestModels\FixedRatesRequestModel.cs" />
     <Compile Include="Models\RequestModels\LocationRequestModel.cs" />
+    <Compile Include="Models\RequestModels\PaymentRequestModel.cs" />
     <Compile Include="Models\RequestModels\ReadingElectricRequestModel.cs" />
     <Compile Include="Models\RequestModels\ResidentRequestModel.cs" />
     <Compile Include="Models\RequestModels\UserRequestModel.cs" />
@@ -767,6 +770,7 @@
     <Compile Include="Models\ResponseModels\FixedRatesResponseModel.cs" />
     <Compile Include="Models\ResponseModels\FixedRatesTypeResponseModel.cs" />
     <Compile Include="Models\ResponseModels\LocationResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\PaymentResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ReadingElectricResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ResidentResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserResponseModel.cs" />

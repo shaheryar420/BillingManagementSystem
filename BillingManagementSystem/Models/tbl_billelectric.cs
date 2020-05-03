@@ -7,24 +7,27 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
-public partial class tbl_billelectric
+namespace BillingManagementSystem.Models
 {
-    public int billelectric_id { get; set; }
-    public System.DateTime billelectric_datetime { get; set; }
-    public double billelectric_amount { get; set; }
-    public int fk_paymentstatus { get; set; }
-    public int fk_location { get; set; }
-    public int fk_resident { get; set; }
-    public double billelectric_prevreading { get; set; }
-    public double billelectric_currentreading { get; set; }
-    public double billelectric_units { get; set; }
-    public double billelectric_water { get; set; }
-    public double billelectric_tv { get; set; }
-    public string billelectric_remarks { get; set; }
-    public Nullable<int> fk_billpicture { get; set; }
-    public string billelectric_month { get; set; }
-    public Nullable<double> billelectric_outstanding { get; set; }
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class tbl_billelectric
+    {
+        public int billelectric_id { get; set; }
+        public System.DateTime billelectric_datetime { get; set; }
+        public double billelectric_amount { get; set; }
+        public int fk_paymentstatus { get; set; }
+        public int fk_location { get; set; }
+        public int fk_resident { get; set; }
+        public double billelectric_prevreading { get; set; }
+        public double billelectric_currentreading { get; set; }
+        public double billelectric_units { get; set; }
+        public double billelectric_water { get; set; }
+        public double billelectric_tv { get; set; }
+        public string billelectric_remarks { get; set; }
+        public Nullable<int> fk_billpicture { get; set; }
+        public string billelectric_month { get; set; }
+        public Nullable<double> billelectric_outstanding { get; set; }
+    }
 }

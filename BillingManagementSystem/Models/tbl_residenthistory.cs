@@ -7,14 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
-public partial class tbl_residenthistory
+namespace BillingManagementSystem.Models
 {
-    public int residenthistory_id { get; set; }
-    public int fk_resident { get; set; }
-    public int fk_location { get; set; }
-    public System.DateTime residenthistory_dateofoccupation { get; set; }
-    public System.DateTime residenthistory_dateofvocation { get; set; }
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class tbl_residenthistory
+    {
+        public int residenthistory_id { get; set; }
+        public int fk_resident { get; set; }
+        public int fk_location { get; set; }
+        public System.DateTime residenthistory_dateofoccupation { get; set; }
+        public System.DateTime residenthistory_dateofvocation { get; set; }
+    }
 }

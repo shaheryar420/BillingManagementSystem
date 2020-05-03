@@ -7,12 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
-public partial class tbl_action
+namespace BillingManagementSystem.Models
 {
-    public int action_id { get; set; }
-    public string action_name { get; set; }
-    public string action_description { get; set; }
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class tbl_action
+    {
+        public int action_id { get; set; }
+        public string action_name { get; set; }
+        public string action_description { get; set; }
+    }
 }

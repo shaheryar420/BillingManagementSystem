@@ -7,15 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
-public partial class tbl_residents
+namespace BillingManagementSystem.Models
 {
-    public int resident_id { get; set; }
-    public string resident_panumber { get; set; }
-    public string resident_rank { get; set; }
-    public string resident_name { get; set; }
-    public string resident_unit { get; set; }
-    public string resident_remarks { get; set; }
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class tbl_residents
+    {
+        public int resident_id { get; set; }
+        public string resident_panumber { get; set; }
+        public string resident_rank { get; set; }
+        public string resident_name { get; set; }
+        public string resident_unit { get; set; }
+        public string resident_remarks { get; set; }
+    }
 }

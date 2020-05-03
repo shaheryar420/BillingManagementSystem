@@ -7,11 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
-public partial class tbl_fixedratetype
+namespace BillingManagementSystem.Models
 {
-    public int fixedratetype_id { get; set; }
-    public string fixedratetype_name { get; set; }
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class tbl_fixedratetype
+    {
+        public int fixedratetype_id { get; set; }
+        public string fixedratetype_name { get; set; }
+    }
 }

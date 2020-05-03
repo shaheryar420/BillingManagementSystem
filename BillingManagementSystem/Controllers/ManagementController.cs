@@ -206,6 +206,38 @@ namespace BillingManagementSystem.Controllers
             var response = helper.GetAllResidents(model);
             return response;
         }
+        public ActionResult GetAllResidentsForSearch([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.GetAllResidentsForSearch(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllResidentsForSearchByPaNo([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.GetAllResidentsForSearchByPaNo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllResidentsForSearchByUnit([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.GetAllResidentsForSearchByUnit(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllResidentsForSearchByRank([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.GetAllResidentsForSearchByRank(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
         #region Fixed Rate
         public FixedRatesResponseModel EditFixedRateType([FromBody] FixedRatesRequestModel model)
