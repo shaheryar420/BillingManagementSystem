@@ -165,11 +165,13 @@ namespace BillingManagementSystem.Controllers
             var response = helper.GetAreaById(model);
             return response;
         }
-        public List<AreaResponseModel> GetAllAreas([FromBody] AreaRequestModel model)
+        public ActionResult GetAllAreas([FromBody] AreaRequestModel model)
         {
             AreaHelpers helper = new AreaHelpers();
             var response = helper.GetAllAreas(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
 
         #endregion
