@@ -218,7 +218,6 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    var fixedRateTypeId = int.Parse(model.fixedRateTypeId);
                     var fixedRateTypes = (from x in db.tbl_fixedratetype select x).ToList();
                     if (fixedRateTypes.Count() > 0)
                     {
