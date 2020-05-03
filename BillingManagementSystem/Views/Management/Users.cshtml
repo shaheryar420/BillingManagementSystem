@@ -1,0 +1,340 @@
+﻿
+    ViewBag.Title = "Users";
+}
+
+@section Styles
+{
+    @Styles.Render("~/plugins/select2")
+    @Styles.Render("~/plugins/datepicker")
+    @Styles.Render("~/plugins/datatable")
+    @Styles.Render("~/plugins/sweetAlert")
+}
+@section Scripts
+{
+    @Scripts.Render("~/bundles/select2")
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/datepicker")
+    @Scripts.Render("~/bundles/sweetAlert")
+
+
+    <script>
+        var Dtable = null;
+        $(document).on('nifty.ready', function () {
+            $('.dropdownlist').select2();
+            $('#btn_user_update').hide();
+            $('editTitle').hide();
+            initUserGrid();
+            initUserGridActions();
+            initDropDowns();
+        });
+
+    </script>
+    <script>
+        function clearFields() {
+            $('#user_id').val('');
+            $("#user_name").val('');
+            $("#user_password").val('');
+            $("#user_username").val('');
+            $("#user_status").val('');
+            $("#user_type").val('');
+        }
+        function initUserGrid() {
+            Dtable = $(".userGrid").DataTable({
+                autoWidth: true,
+                destroy: true,
+                "ajax": {
+                    "url": '/Management/GetAllUsers',
+                    "type": 'POST',
+                    "dataSrc": function (data) {
+
+                        if (data.length > 0)
+                            return data;
+                        else {
+
+                            return [];
+                        }
+                    },
+                    "error": function (a, b, c) {
+                        swal({
+                            title: "Error",
+                            text: a.status + ": " + c,
+                            type: "error"
+                        });
+                    }
+                },
+                "columns": [
+                    {
+                        title: 'Action',
+                        render: function (data, type, row, meta) {
+                            return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_user_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_user_delete'><i class='fa fa-trash'></i></a></div>";
+                        }
+                    },
+                    {
+                        title: 'Sr. #',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "title": "Id", "data": "usersId", className: "hidden" },
+                    { "title": "UserTypeId", "data": "fk_userType", className: "hidden" },
+                    { "title": "UserName", "data": "usersUsername" },
+                    { "title": "FullName", "data": "usersFullName" },
+                    { "title": "Password", "data": "usersPassword" },
+                    { "title": "UserType", "data": "userTypeName" },
+
+
+
+                ]
+            });
+            Dtable.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+        }
+        function initUserGridActions() {
+            $(document).on('click', '.btn_user_edit', function (e) {
+                e.preventDefault();
+                $('#btn_user_update').show();
+                $('#btn_user_add').hide();
+                $('#addTitle').hide();
+                $('#editTitle').show();
+                var rowData = Dtable.row($(this).parents('tr')).data();
+                var _id = rowData.usersId;
+                $('#user_id').val(_id);
+                $("#user_name").val(rowData.usersFullName);
+                $("#user_password").val(rowData.usersPassword);
+                $("#user_username").val(rowData.usersUsername);
+                $("#user_status").val(rowData.usersIsActive).trigger('change');
+                $("#user_type").val(rowData.fk_userType).trigger('change');
+            });
+            $(document).on('click', '.btn_user_delete', function (e) {
+                e.preventDefault();
+                var rowData = Dtable.row($(this).parents('tr')).data();
+                var _id = rowData.userId;
+                if (_id) {
+                    swal({
+                        title: "Are you sure?",
+                        text: "Your will not be able to recover this user record!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Delete",
+                        closeOnConfirm: false
+                    },
+                        function () {
+                            $.ajax({
+                                url: '/Management/DeleteUser',
+                                type: 'POST',
+                                data: { id: _id },
+                                beforeSend: function () {
+                                    $('.loading').show();
+                                },
+                                complete: function () {
+                                    $('.loading').hide();
+                                },
+                                success: function (response) {
+                                    if (response.resultCode == '1100') {
+                                        swal("Deleted!", response.remarks, "success");
+                                        initUserGrid();
+                                    }
+                                    else {
+                                        swal('Warning', response.remarks, 'warning');
+                                    }
+                                },
+                                error: function (a, b, c) {
+                                    swal('Error', a + b + c, 'error');
+                                }
+                            });
+
+                        });
+                }
+                else {
+                    swal("Warning", "Please select a user", "warning");
+                }
+            });
+            $('#btn_user_add').click(function () {
+                var url = "/Management/AddUser";
+                var _userType = $("#user_type").val();
+                var _userIsActive = $("#user_status").val();
+                var _userName = $("#user_name").val();
+                var _userPassword = $("#user_password").val();
+                var _userUserName = $("#user_username").val();
+                console.log(_userIsActive);
+                $.post(url, { fk_userType: _userType, usersIsActive: _userIsActive, usersFullName: _userName, usersPassword: _userPassword, usersUsername: _userUserName }, function (data) {
+                    if (data.resultCode == "1100") {
+                        swal("Added!", data.remarks, "success");
+                        initUserGrid();
+                        clearFields();
+                    }
+                    else {
+                        $('.loading').hide();
+                        swal("Not Added", data.remarks, "error");
+                    }
+                });
+            });
+            $(document).on('click', '#btn_user_update', function (e) {
+                e.preventDefault();
+                var _userId = $('#user_id').val();
+                if (_userId) {
+                    var _userType = $("#user_type").val();
+                    var _userIsActive = $("#user_status").val();
+                    var _userName = $("#user_name").val();
+                    var _userPassword = $("#user_password").val();
+                    var userUserName = $("#user_username").val();
+                    $.ajax({
+                        url: '/Management/EditUser',
+                        type: 'POST',
+                        data: {
+                            usersId: _userId,
+                            fk_userType: _userType,
+                            usersIsActive: _userIsActive,
+                            usersFullName: _userName,
+                            usersPassword: _userPassword,
+                            usersUsername: userUserName
+                        },
+                        beforeSend: function () {
+                            $('.loading').show();
+                        },
+                        complete: function () {
+                            $('.loading').hide();
+                        },
+                        success: function (response) {
+                            if (response.resultCode == '1100') {
+                                swal("Updated!", response.remarks, "success");
+                                initUserGrid();
+                                $('#btn_user_update').hide();
+                                $('#btn_user_add').show();
+                                $('#addTitle').show();
+                                $('#editTitle').hide();
+                                clearFields();
+                            }
+                            else {
+                                swal('Warning', response.remarks, 'warning');
+                            }
+                        },
+                        error: function (a, b, c) {
+                            swal('Error', a + b + c, 'error');
+                        }
+                    });
+
+                }
+                else {
+                    swal("Warning", "Please select a user", "warning");
+                }
+            });
+        }
+        function initDropDowns() {
+
+            $.ajax({
+                url: '/Management/GetUserTypeList',
+                type: 'POST',
+                success: function (response) {
+                    if (response) {
+                        if (response[0].resultCode == '1100') {
+                            var list = [];
+                            for (var i = 0; i < response.length; i++) {
+                                list.push({ text: response[i].userTypeName, id: response[i].userTypeId });
+                            }
+                            $('#user_type').select2({ data: list }).trigger('change');
+                        }
+                        else {
+                            swal("Warning", response[0].remarks, "warning");
+                        }
+                    }
+                    else {
+                        swal("Warning", 'No response from server', "warning");
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
+            });
+        }
+    </script>
+}
+<div id="page-head">
+    <div class="pad-all text-center">
+        <h2>Register New User</h2>
+    </div>
+</div>
+<div id="page-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-bordered-warning">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Search Filters</h1>
+                </div>
+                <div class="panel-body">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-bordered-warning">
+                <div class="panel-heading">
+                    <h1 id="addTitle" class="panel-title">User Details</h1>
+                    <h1 id="editTitle" class="panel-title">Edit User Details</h1>
+                </div>
+                <div class="panel-body ">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Full Name</span>
+                                    <input type="hidden" id="user_id" value="" />
+                                    <input type="text" value="" placeholder="Ali Ahmed" id="user_name" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Username</span>
+                                    <input type="text" value="" placeholder="XXXXXXXXX" id="user_username" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">User Type</span>
+                                    <select class="form-control dropdownlist" id="user_type">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Password</span>
+                                    <input type="text" value="" placeholder="XXXXXXXXX" id="user_password" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">User Status</span>
+                                    <select class="form-control dropdownlist" id="user_status">
+                                        <option id="1" value="1">Enabled</option>
+                                        <option id="0" value="0">Disabled</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="saveUpdateBtn" class="form-group">
+                                <a href="#" id="btn_user_add" class="btn btn-success btn-lg btn-block">Submit</a>
+                                <a href="#" id="btn_user_update" class="btn btn-success btn-lg btn-block">Update</a>
+                            </div>
+                            <div class="form-group">
+                                <div class="alert alert-info hidden" id="errorText"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-bordered-warning">
+                <div class="panel-heading">
+                    <h1 class="panel-title">User List</h1>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-striped table-hover userGrid"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

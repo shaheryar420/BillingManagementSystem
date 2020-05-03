@@ -17,6 +17,18 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
+        public ActionResult Users()
+        {
+            return View();
+        }
+        public ActionResult Area()
+        {
+            return View();
+        }
+        public ActionResult Location()
+        {
+            return View();
+        }
         #endregion
         #region Actions
         #region User

@@ -141,14 +141,14 @@
                                 <li class="@Html.IsSelected(controller: "Management", action:"FixedRates")">
                                     <a href="@Url.Action("FixedRates","Management")">Manage Fixed Rates</a>
                                 </li>
-                                <li class="">
-                                    <a href="#">Manage Users</a>
+                                <li class="@Html.IsSelected(controller: "Management", action:"Users")">
+                                    <a href="@Url.Action("Users","Management")">Manage Users</a>
                                 </li>
                                 <li class="">
                                     <a href="#">Manage Meter Readers</a>
                                 </li>
-                                <li class="">
-                                    <a href="#">Manage Areas</a>
+                                <li class="@Html.IsSelected(controller: "Management", action:"Area")">
+                                    <a href="@Url.Action("Area","Management")">Manage Areas</a>
                                 </li>
                                 <li class="">
                                     <a href="#">Manage Buildings</a>

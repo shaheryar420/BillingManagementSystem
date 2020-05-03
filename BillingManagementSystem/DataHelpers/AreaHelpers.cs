@@ -15,7 +15,7 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    if (String.IsNullOrEmpty(model.areaName))
+                    if (string.IsNullOrEmpty(model.areaName))
                     {
                         var area = new tbl_area()
                         {

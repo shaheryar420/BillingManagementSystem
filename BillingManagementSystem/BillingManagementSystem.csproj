@@ -867,6 +867,7 @@
     <Content Include="Models\BMSMODEL.edmx.diagram">
       <DependentUpon>BMSMODEL.edmx</DependentUpon>
     </Content>
+    <Content Include="libman.json" />
     <None Include="packages.config" />
     <Content Include="scripts\plugins\jstree\LICENSE-MIT" />
     <Content Include="Views\Shared\_Footer.cshtml" />
@@ -890,6 +891,9 @@
     <Content Include="Views\Search\SearchBill.cshtml" />
     <Content Include="Views\Search\SearchResident.cshtml" />
     <Content Include="Views\Search\ResidentProfile.cshtml" />
+    <Content Include="Views\Management\Users.cshtml" />
+    <Content Include="Views\Management\Area.cshtml" />
+    <Content Include="Views\Management\Location.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
