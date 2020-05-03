@@ -57,6 +57,39 @@ namespace BillingManagementSystem.Controllers
             return response;
         }
         #endregion
+        #region UserType
+        public UserTypeResponseModel AddUserType([FromBody] UserTypeRequestModel model)
+        {
+            UserTypeHelpers helper = new UserTypeHelpers();
+            var response = helper.AddUserType(model);
+            return response;
+        }
+        public UserTypeResponseModel EditUserType([FromBody] UserTypeRequestModel model)
+        {
+            UserTypeHelpers helper = new UserTypeHelpers();
+            var response = helper.EditUserType(model);
+            return response;
+        }
+        public UserTypeResponseModel DeleteUserType([FromBody] UserTypeRequestModel model)
+        {
+            UserTypeHelpers helper = new UserTypeHelpers();
+            var response = helper.DeleteUserType(model);
+            return response;
+        }
+        public UserTypeResponseModel GetUserTypeById([FromBody] UserTypeRequestModel model)
+        {
+            UserTypeHelpers helper = new UserTypeHelpers();
+            var response = helper.GetUserTypeById(model);
+            return response;
+        }
+        public List<UserTypeResponseModel> GetAllUserTypes([FromBody] UserTypeRequestModel model)
+        {
+            UserTypeHelpers helper = new UserTypeHelpers();
+            var response = helper.GetAllUserTypes(model);
+            return response;
+        }
+        
+        #endregion
         #region Location
         public LocationResponseModel AddLocation([FromBody] LocationRequestModel model)
         {
@@ -159,6 +192,47 @@ namespace BillingManagementSystem.Controllers
             var response = helper.GetAllResidents(model);
             return response;
         }
+        #endregion
+        #region Fixed Rate
+        public FixedRatesResponseModel EditFixedRateType([FromBody] FixedRatesRequestModel model)
+        {
+            FixedRatesHelpers helper = new FixedRatesHelpers();
+            var response = helper.UpdateFixedRates(model);
+            return response;
+        }
+        #endregion
+        #region Fixed Rate Type
+        public FixedRatesTypeResponseModel AddFixedRateType([FromBody] FixedRatesTypeRequestModel model)
+        {
+            FixedRatesTypeHelpers helper = new FixedRatesTypeHelpers();
+            var response = helper.AddFixedRateType(model);
+            return response;
+        }
+        public FixedRatesTypeResponseModel EditFixedRateType([FromBody] FixedRatesTypeRequestModel model)
+        {
+            FixedRatesTypeHelpers helper = new FixedRatesTypeHelpers();
+            var response = helper.EditFixedRateType(model);
+            return response;
+        }
+        public FixedRatesTypeResponseModel DeleteFixedRateType([FromBody] FixedRatesTypeRequestModel model)
+        {
+            FixedRatesTypeHelpers helper = new FixedRatesTypeHelpers();
+            var response = helper.DeleteFixedRateType(model);
+            return response;
+        }
+        public FixedRatesTypeResponseModel GetFixedRateTypeById([FromBody] FixedRatesTypeRequestModel model)
+        {
+            FixedRatesTypeHelpers helper = new FixedRatesTypeHelpers();
+            var response = helper.GetFixedRateTypeById(model);
+            return response;
+        }
+        public List<FixedRatesTypeResponseModel> GetAllFixedRateTypes([FromBody] FixedRatesTypeRequestModel model)
+        {
+            FixedRatesTypeHelpers helper = new FixedRatesTypeHelpers();
+            var response = helper.GetAllFixedRateTypes(model);
+            return response;
+        }
+
         #endregion
         #endregion
     }

@@ -49,6 +49,18 @@ namespace BillingManagementSystem.Controllers
             var response = helper.DeleteReadingElectric(model);
             return response;
         }
+        public List<ReadingElectricResponseModel> GetAllReadingsElectric([FromBody] ReadingElectricRequestModel model)
+        {
+            ReadingElectricHelpers helper = new ReadingElectricHelpers();
+            var response = helper.getAllReadings(model);
+            return response;
+        }
+        public ReadingElectricResponseModel ApproveReadingElectric([FromBody] ReadingElectricRequestModel model)
+        {
+            ReadingElectricHelpers helper = new ReadingElectricHelpers();
+            var response = helper.ApproveReadingElectric(model);
+            return response;
+        }
         #endregion
     }
 }
