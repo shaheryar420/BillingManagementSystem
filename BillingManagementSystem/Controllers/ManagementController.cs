@@ -126,7 +126,39 @@ namespace BillingManagementSystem.Controllers
             var response = helper.GetAllAreas(model);
             return response;
         }
-        
+
+        #endregion
+        #region Resident
+        public ResidentResponseModel AddResident([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.AddResident(model);
+            return response;
+        }
+        public ResidentResponseModel EditResident([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.EditResident(model);
+            return response;
+        }
+        public ResidentResponseModel DeleteResident([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.DeleteResident(model);
+            return response;
+        }
+        public ResidentResponseModel GetResidentById([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.GetResidentById(model);
+            return response;
+        }
+        public List<ResidentResponseModel> GetAllResidents([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.GetAllResidents(model);
+            return response;
+        }
         #endregion
         #endregion
     }
