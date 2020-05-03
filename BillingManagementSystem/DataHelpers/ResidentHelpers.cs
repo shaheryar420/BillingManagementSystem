@@ -23,9 +23,9 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 resident_name = model.residentName,
                                 resident_panumber = model.residentPaNumber,
-                                resident_rank = String.IsNullOrEmpty(model.residentRank)? model.residentRank:"",
-                                resident_remarks = String.IsNullOrEmpty(model.residentRemarks)? model.residentRemarks:"",
-                                resident_unit = String.IsNullOrEmpty(model.residentUnit)? model.residentUnit:""
+                                resident_rank = !string.IsNullOrEmpty(model.residentRank)? model.residentRank:"",
+                                resident_remarks = !string.IsNullOrEmpty(model.residentRemarks)? model.residentRemarks:"",
+                                resident_unit = !string.IsNullOrEmpty(model.residentUnit)? model.residentUnit:""
                             };
                             db.tbl_residents.Add(resident);
                             db.SaveChanges();
@@ -77,11 +77,11 @@ namespace BillingManagementSystem.DataHelpers
                         tbl_residents resident = (from x in db.tbl_residents where x.resident_id== residentId select x ).FirstOrDefault();
                         if(resident!= null)
                         {
-                            resident.resident_name = String.IsNullOrEmpty(model.residentName) ? model.residentName : resident.resident_name;
-                            resident.resident_panumber = String.IsNullOrEmpty(model.residentPaNumber) ? model.residentPaNumber : resident.resident_panumber;
-                            resident.resident_rank = String.IsNullOrEmpty(model.residentRank) ? model.residentRank : resident.resident_rank;
-                            resident.resident_remarks = String.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : resident.resident_remarks;
-                            resident.resident_unit = String.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : resident.resident_unit;
+                            resident.resident_name = !string.IsNullOrEmpty(model.residentName) ? model.residentName : resident.resident_name;
+                            resident.resident_panumber = !string.IsNullOrEmpty(model.residentPaNumber) ? model.residentPaNumber : resident.resident_panumber;
+                            resident.resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : resident.resident_rank;
+                            resident.resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : resident.resident_remarks;
+                            resident.resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : resident.resident_unit;
                             db.SaveChanges();
                             toReturn = new ResidentResponseModel()
                             {
@@ -185,10 +185,10 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 residentName = resident.resident_name,
                                 residentPaNumber = resident.resident_panumber,
-                                residentRank = String.IsNullOrEmpty(resident.resident_rank)?resident.resident_rank:"",
+                                residentRank = !string.IsNullOrEmpty(resident.resident_rank)?resident.resident_rank:"",
                                 residentId = resident.resident_id.ToString(),
-                                residentRemarks = String.IsNullOrEmpty(resident.resident_remarks)?resident.resident_remarks:"",
-                                residentUnit = String.IsNullOrEmpty(resident.resident_unit)?resident.resident_unit:"",
+                                residentRemarks = !string.IsNullOrEmpty(resident.resident_remarks)?resident.resident_remarks:"",
+                                residentUnit = !string.IsNullOrEmpty(resident.resident_unit)?resident.resident_unit:"",
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             };
@@ -236,10 +236,10 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             residentName = resident.resident_name,
                             residentPaNumber = resident.resident_panumber,
-                            residentRank = String.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
+                            residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
                             residentId = resident.resident_id.ToString(),
-                            residentRemarks = String.IsNullOrEmpty(resident.resident_remarks) ? resident.resident_remarks : "",
-                            residentUnit = String.IsNullOrEmpty(resident.resident_unit) ? resident.resident_unit : "",
+                            residentRemarks = !string.IsNullOrEmpty(resident.resident_remarks) ? resident.resident_remarks : "",
+                            residentUnit = !string.IsNullOrEmpty(resident.resident_unit) ? resident.resident_unit : "",
                             remarks = "Successfully Found",
                             resultCode = "1100"
                         }).ToList();

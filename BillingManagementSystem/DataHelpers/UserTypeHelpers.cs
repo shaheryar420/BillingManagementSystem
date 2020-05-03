@@ -15,7 +15,7 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using(db_bmsEntities db = new db_bmsEntities())
                 {
-                    if (String.IsNullOrEmpty(model.userTypeName))
+                    if (!string.IsNullOrEmpty(model.userTypeName))
                     {
                         var newUserType = new tbl_usertype()
                         {
@@ -62,7 +62,7 @@ namespace BillingManagementSystem.DataHelpers
                         var userType = (from x in db.tbl_usertype where x.usertype_id == userTypeId select x).FirstOrDefault();
                         if(userType!= null)
                         {
-                            userType.usertype_name = String.IsNullOrEmpty(model.userTypeName) ? model.userTypeName : userType.usertype_name;
+                            userType.usertype_name = !string.IsNullOrEmpty(model.userTypeName) ? model.userTypeName : userType.usertype_name;
                             db.SaveChanges();
                             toReturn = new UserTypeResponseModel()
                             {

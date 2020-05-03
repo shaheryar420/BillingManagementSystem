@@ -7,16 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BillingManagementSystem.Models
+using System;
+using System.Collections.Generic;
+
+public partial class tbl_billpicture
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class tbl_billpicture
-    {
-        public int billpicture_id { get; set; }
-        public string billpicture_date { get; set; }
-        public string billpicture_type { get; set; }
-        public double billpicture_size { get; set; }
-    }
+    public int billpicture_id { get; set; }
+    public string billpicture_date { get; set; }
+    public string billpicture_type { get; set; }
+    public double billpicture_size { get; set; }
 }

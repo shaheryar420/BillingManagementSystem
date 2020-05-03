@@ -7,44 +7,41 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BillingManagementSystem.Models
+using System;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+
+public partial class db_bmsEntities : DbContext
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Infrastructure;
-    
-    public partial class db_bmsEntities : DbContext
+    public db_bmsEntities()
+        : base("name=db_bmsEntities")
     {
-        public db_bmsEntities()
-            : base("name=db_bmsEntities")
-        {
-        }
-    
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
-        }
-    
-        public DbSet<tbl_action> tbl_action { get; set; }
-        public DbSet<tbl_area> tbl_area { get; set; }
-        public DbSet<tbl_billelectric> tbl_billelectric { get; set; }
-        public DbSet<tbl_billpicture> tbl_billpicture { get; set; }
-        public DbSet<tbl_controller> tbl_controller { get; set; }
-        public DbSet<tbl_fixedrates> tbl_fixedrates { get; set; }
-        public DbSet<tbl_fixedratetype> tbl_fixedratetype { get; set; }
-        public DbSet<tbl_location> tbl_location { get; set; }
-        public DbSet<tbl_paymenthistory> tbl_paymenthistory { get; set; }
-        public DbSet<tbl_paymentstatus> tbl_paymentstatus { get; set; }
-        public DbSet<tbl_paymenttype> tbl_paymenttype { get; set; }
-        public DbSet<tbl_readingelectric> tbl_readingelectric { get; set; }
-        public DbSet<tbl_readingelectriclog> tbl_readingelectriclog { get; set; }
-        public DbSet<tbl_readingpicture> tbl_readingpicture { get; set; }
-        public DbSet<tbl_residentbuilding> tbl_residentbuilding { get; set; }
-        public DbSet<tbl_residenthistory> tbl_residenthistory { get; set; }
-        public DbSet<tbl_residents> tbl_residents { get; set; }
-        public DbSet<tbl_userareas> tbl_userareas { get; set; }
-        public DbSet<tbl_userpermissions> tbl_userpermissions { get; set; }
-        public DbSet<tbl_users> tbl_users { get; set; }
-        public DbSet<tbl_usertype> tbl_usertype { get; set; }
     }
+
+    protected override void OnModelCreating(DbModelBuilder modelBuilder)
+    {
+        throw new UnintentionalCodeFirstException();
+    }
+
+    public DbSet<tbl_action> tbl_action { get; set; }
+    public DbSet<tbl_area> tbl_area { get; set; }
+    public DbSet<tbl_billelectric> tbl_billelectric { get; set; }
+    public DbSet<tbl_billpicture> tbl_billpicture { get; set; }
+    public DbSet<tbl_controller> tbl_controller { get; set; }
+    public DbSet<tbl_fixedrates> tbl_fixedrates { get; set; }
+    public DbSet<tbl_fixedratetype> tbl_fixedratetype { get; set; }
+    public DbSet<tbl_location> tbl_location { get; set; }
+    public DbSet<tbl_paymenthistory> tbl_paymenthistory { get; set; }
+    public DbSet<tbl_paymentstatus> tbl_paymentstatus { get; set; }
+    public DbSet<tbl_paymenttype> tbl_paymenttype { get; set; }
+    public DbSet<tbl_readingelectric> tbl_readingelectric { get; set; }
+    public DbSet<tbl_readingelectriclog> tbl_readingelectriclog { get; set; }
+    public DbSet<tbl_readingpicture> tbl_readingpicture { get; set; }
+    public DbSet<tbl_residentbuilding> tbl_residentbuilding { get; set; }
+    public DbSet<tbl_residenthistory> tbl_residenthistory { get; set; }
+    public DbSet<tbl_residents> tbl_residents { get; set; }
+    public DbSet<tbl_userareas> tbl_userareas { get; set; }
+    public DbSet<tbl_userpermissions> tbl_userpermissions { get; set; }
+    public DbSet<tbl_users> tbl_users { get; set; }
+    public DbSet<tbl_usertype> tbl_usertype { get; set; }
 }

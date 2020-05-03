@@ -7,17 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BillingManagementSystem.Models
+using System;
+using System.Collections.Generic;
+
+public partial class tbl_fixedrates
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class tbl_fixedrates
-    {
-        public int fixedrates_id { get; set; }
-        public string fixedrates_name { get; set; }
-        public double fixedrates_amount { get; set; }
-        public int fk_type { get; set; }
-        public string fixedrates_unit { get; set; }
-    }
+    public int fixedrates_id { get; set; }
+    public string fixedrates_name { get; set; }
+    public double fixedrates_amount { get; set; }
+    public int fk_type { get; set; }
+    public string fixedrates_unit { get; set; }
 }

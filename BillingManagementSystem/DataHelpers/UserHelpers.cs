@@ -15,11 +15,11 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using(db_bmsEntities db = new db_bmsEntities())
                 {
-                    if (String.IsNullOrEmpty(model.usersFullName))
+                    if (!string.IsNullOrEmpty(model.usersFullName))
                     {
-                        if (String.IsNullOrEmpty(model.usersUsername))
+                        if (!string.IsNullOrEmpty(model.usersUsername))
                         {
-                            if(String.IsNullOrEmpty(model.usersPassword))
+                            if(!string.IsNullOrEmpty(model.usersPassword))
                             {
                                 if(new ModelsValidatorHelper().validateint(model.fk_userType))
                                 {
@@ -80,7 +80,7 @@ namespace BillingManagementSystem.DataHelpers
             {
                 toReturn = new UserResponseModel()
                 {
-                    remarks = "There Was A Fatal Error",
+                    remarks = "There Was A Fatal Error "+Ex.ToString(),
                     resultCode = "1000"
                 };
             };
@@ -99,10 +99,10 @@ namespace BillingManagementSystem.DataHelpers
                         var user = (from x in db.tbl_users where x.users_id == userId select x).FirstOrDefault(); 
                         if(user!= null)
                         {
-                            user.fk_usertype = String.IsNullOrEmpty(model.fk_userType)?int.Parse(model.fk_userType):user.fk_usertype;
-                            user.users_fullname = String.IsNullOrEmpty(model.usersFullName)?model.usersFullName : user.users_fullname;
-                            user.users_username = String.IsNullOrEmpty(model.usersUsername)?model.usersUsername:user.users_username;
-                            user.users_password = String.IsNullOrEmpty(model.usersPassword)?model.usersPassword:user.users_password;
+                            user.fk_usertype = !string.IsNullOrEmpty(model.fk_userType)?int.Parse(model.fk_userType):user.fk_usertype;
+                            user.users_fullname = !string.IsNullOrEmpty(model.usersFullName)?model.usersFullName : user.users_fullname;
+                            user.users_username = !string.IsNullOrEmpty(model.usersUsername)?model.usersUsername:user.users_username;
+                            user.users_password = !string.IsNullOrEmpty(model.usersPassword)?model.usersPassword:user.users_password;
                             db.SaveChanges();
                             toReturn = new UserResponseModel()
                             {
@@ -133,7 +133,7 @@ namespace BillingManagementSystem.DataHelpers
             {
                 toReturn = new UserResponseModel()
                 {
-                    remarks = "There Was A Fatal Error",
+                    remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
                 };
             };
@@ -183,7 +183,7 @@ namespace BillingManagementSystem.DataHelpers
             {
                 toReturn = new UserResponseModel()
                 {
-                    remarks = "There Was A Fatal Error",
+                    remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
                 };
             };
@@ -215,10 +215,10 @@ namespace BillingManagementSystem.DataHelpers
                             toReturn = new UserResponseModel()
                             {
                                 fk_userType = user.fk_usertype.ToString(),
-                                userTypeName = String.IsNullOrEmpty(user.usertype_name)?user.usertype_name:"",
-                                usersFullName = String.IsNullOrEmpty(user.users_fullname) ? user.users_fullname : "",
-                                usersUsername = String.IsNullOrEmpty(user.users_username) ? user.users_username : "",
-                                usersPassword = String.IsNullOrEmpty(user.users_password) ? user.users_password : "",
+                                userTypeName = !string.IsNullOrEmpty(user.usertype_name)?user.usertype_name:"",
+                                usersFullName = !string.IsNullOrEmpty(user.users_fullname) ? user.users_fullname : "",
+                                usersUsername = !string.IsNullOrEmpty(user.users_username) ? user.users_username : "",
+                                usersPassword = !string.IsNullOrEmpty(user.users_password) ? user.users_password : "",
                                 remarks = "User Found SuccessFully",
                                 resultCode = "1100"
                             };
@@ -246,7 +246,7 @@ namespace BillingManagementSystem.DataHelpers
             {
                 toReturn = new UserResponseModel()
                 {
-                    remarks = "There Was A Fatal Error",
+                    remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
                 };
             };
@@ -274,10 +274,10 @@ namespace BillingManagementSystem.DataHelpers
                         toReturn= users.Select(user=>new UserResponseModel()
                         {
                             fk_userType = user.fk_usertype.ToString(),
-                            userTypeName = String.IsNullOrEmpty(user.usertype_name) ? user.usertype_name : "",
-                            usersFullName = String.IsNullOrEmpty(user.users_fullname) ? user.users_fullname : "",
-                            usersUsername = String.IsNullOrEmpty(user.users_username) ? user.users_username : "",
-                            usersPassword = String.IsNullOrEmpty(user.users_password) ? user.users_password : "",
+                            userTypeName = !string.IsNullOrEmpty(user.usertype_name) ? user.usertype_name : "",
+                            usersFullName = !string.IsNullOrEmpty(user.users_fullname) ? user.users_fullname : "",
+                            usersUsername = !string.IsNullOrEmpty(user.users_username) ? user.users_username : "",
+                            usersPassword = !string.IsNullOrEmpty(user.users_password) ? user.users_password : "",
                             remarks = "User Found SuccessFully",
                             resultCode = "1100"
                         }).ToList();
@@ -296,7 +296,7 @@ namespace BillingManagementSystem.DataHelpers
             {
                 toReturn.Add(new UserResponseModel()
                 {
-                    remarks = "There Was A Fatal Error",
+                    remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
                 });
             };
@@ -328,10 +328,10 @@ namespace BillingManagementSystem.DataHelpers
                             toReturn = users.Select(user => new UserResponseModel()
                             {
                                 fk_userType = user.fk_usertype.ToString(),
-                                userTypeName = String.IsNullOrEmpty(user.usertype_name) ? user.usertype_name : "",
-                                usersFullName = String.IsNullOrEmpty(user.users_fullname) ? user.users_fullname : "",
-                                usersUsername = String.IsNullOrEmpty(user.users_username) ? user.users_username : "",
-                                usersPassword = String.IsNullOrEmpty(user.users_password) ? user.users_password : "",
+                                userTypeName = !string.IsNullOrEmpty(user.usertype_name) ? user.usertype_name : "",
+                                usersFullName = !string.IsNullOrEmpty(user.users_fullname) ? user.users_fullname : "",
+                                usersUsername = !string.IsNullOrEmpty(user.users_username) ? user.users_username : "",
+                                usersPassword = !string.IsNullOrEmpty(user.users_password) ? user.users_password : "",
                                 remarks = "User Found SuccessFully",
                                 resultCode = "1100"
                             }).ToList();
@@ -359,7 +359,7 @@ namespace BillingManagementSystem.DataHelpers
             {
                 toReturn.Add(new UserResponseModel()
                 {
-                    remarks = "There Was A Fatal Error",
+                    remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
                 });
             };

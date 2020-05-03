@@ -13,9 +13,9 @@ namespace BillingManagementSystem.DataHelpers
             ReadingElectricResponseModel toReturn = new ReadingElectricResponseModel();
             try
             {
-                if(String.IsNullOrEmpty(model.readingpicture_data))
+                if(!string.IsNullOrEmpty(model.readingpicture_data))
                 {
-                    if (String.IsNullOrEmpty(model.readingpicture_type)) 
+                    if (!string.IsNullOrEmpty(model.readingpicture_type)) 
                     {
                         if(new ModelsValidatorHelper().validateint(model.readingpicture_size))
                         {
@@ -23,7 +23,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 if(new ModelsValidatorHelper().validateint(model.readingElectricAddedby))
                                 {
-                                    if(String.IsNullOrEmpty(model.readingElectricMonth))
+                                    if(!string.IsNullOrEmpty(model.readingElectricMonth))
                                     {
                                         if (new ModelsValidatorHelper().validateint(model.readingElectricPrevReading))
                                         {
@@ -46,8 +46,8 @@ namespace BillingManagementSystem.DataHelpers
                                                     readingelectric_currentreading = double.Parse(model.readingElectricCurrentReading),
                                                     readingelectric_datetime = DateTime.UtcNow.AddHours(5),
                                                     readingelectric_prevreading = double.Parse(model.readingElectricPrevReading),
-                                                    readingelectric_meterno = String.IsNullOrEmpty(model.readingElectricMeterNo)?model.readingElectricMeterNo:"",
-                                                    readingelectric_remarks = String.IsNullOrEmpty(model.readingElectricRemarks)?model.readingElectricRemarks:"",
+                                                    readingelectric_meterno = !string.IsNullOrEmpty(model.readingElectricMeterNo)?model.readingElectricMeterNo:"",
+                                                    readingelectric_remarks = !string.IsNullOrEmpty(model.readingElectricRemarks)?model.readingElectricRemarks:"",
                                                 };
                                                 db.tbl_readingelectric.Add(newReadingElectric);
                                                 db.SaveChanges();
@@ -147,16 +147,16 @@ namespace BillingManagementSystem.DataHelpers
                             var readingPicture = (from x in db.tbl_readingpicture where x.readingpicture_id == readingElectric.fk_readingpicture select x).FirstOrDefault();
                             if(readingPicture!=null)
                             {
-                                readingPicture.readingpicture_data = String.IsNullOrEmpty(model.readingpicture_data)?model.readingpicture_data :readingPicture.readingpicture_data;
-                                readingPicture.readingpicture_size = String.IsNullOrEmpty(model.readingpicture_size)?int.Parse(model.readingpicture_size):readingPicture.readingpicture_size;
-                                readingPicture.readingpicture_type = String.IsNullOrEmpty(model.readingpicture_type)?model.readingpicture_type :readingPicture.readingpicture_type;
+                                readingPicture.readingpicture_data = !string.IsNullOrEmpty(model.readingpicture_data)?model.readingpicture_data :readingPicture.readingpicture_data;
+                                readingPicture.readingpicture_size = !string.IsNullOrEmpty(model.readingpicture_size)?int.Parse(model.readingpicture_size):readingPicture.readingpicture_size;
+                                readingPicture.readingpicture_type = !string.IsNullOrEmpty(model.readingpicture_type)?model.readingpicture_type :readingPicture.readingpicture_type;
                                 db.SaveChanges();
                             }
                             else
                             {
-                                if (String.IsNullOrEmpty(model.readingpicture_data))
+                                if (!string.IsNullOrEmpty(model.readingpicture_data))
                                 {
-                                    if (String.IsNullOrEmpty(model.readingpicture_type))
+                                    if (!string.IsNullOrEmpty(model.readingpicture_type))
                                     {
                                         if (new ModelsValidatorHelper().validateint(model.readingpicture_size))
                                         {
@@ -197,14 +197,14 @@ namespace BillingManagementSystem.DataHelpers
                                     };
                                 }
                             }
-                            readingElectric.readingelectric_addedby = String.IsNullOrEmpty(model.readingElectricAddedby)?int.Parse(model.readingElectricAddedby):readingElectric.readingelectric_addedby;
-                            readingElectric.readingelectric_units = String.IsNullOrEmpty(model.readingElectricUnits)?double.Parse(model.readingElectricUnits):readingElectric.readingelectric_units;
-                            readingElectric.readingelectric_month = String.IsNullOrEmpty(model.readingElectricMonth)?model.readingElectricMonth : readingElectric.readingelectric_month;
-                            readingElectric.readingelectric_currentreading = String.IsNullOrEmpty(model.readingElectricCurrentReading)?double.Parse(model.readingElectricCurrentReading):readingElectric.readingelectric_currentreading;
+                            readingElectric.readingelectric_addedby = !string.IsNullOrEmpty(model.readingElectricAddedby)?int.Parse(model.readingElectricAddedby):readingElectric.readingelectric_addedby;
+                            readingElectric.readingelectric_units = !string.IsNullOrEmpty(model.readingElectricUnits)?double.Parse(model.readingElectricUnits):readingElectric.readingelectric_units;
+                            readingElectric.readingelectric_month = !string.IsNullOrEmpty(model.readingElectricMonth)?model.readingElectricMonth : readingElectric.readingelectric_month;
+                            readingElectric.readingelectric_currentreading = !string.IsNullOrEmpty(model.readingElectricCurrentReading)?double.Parse(model.readingElectricCurrentReading):readingElectric.readingelectric_currentreading;
                             readingElectric.readingelectric_datetime = DateTime.UtcNow.AddHours(5);
-                            readingElectric.readingelectric_prevreading = String.IsNullOrEmpty(model.readingElectricPrevReading)?double.Parse(model.readingElectricPrevReading):readingElectric.readingelectric_prevreading;
-                            readingElectric.readingelectric_meterno = String.IsNullOrEmpty(model.readingElectricMeterNo) ? model.readingElectricMeterNo : readingElectric.readingelectric_meterno;
-                            readingElectric.readingelectric_remarks = String.IsNullOrEmpty(model.readingElectricRemarks) ? model.readingElectricRemarks : readingElectric.readingelectric_remarks;
+                            readingElectric.readingelectric_prevreading = !string.IsNullOrEmpty(model.readingElectricPrevReading)?double.Parse(model.readingElectricPrevReading):readingElectric.readingelectric_prevreading;
+                            readingElectric.readingelectric_meterno = !string.IsNullOrEmpty(model.readingElectricMeterNo) ? model.readingElectricMeterNo : readingElectric.readingelectric_meterno;
+                            readingElectric.readingelectric_remarks = !string.IsNullOrEmpty(model.readingElectricRemarks) ? model.readingElectricRemarks : readingElectric.readingelectric_remarks;
                             db.SaveChanges();
                             toReturn = new ReadingElectricResponseModel()
                             {
@@ -432,10 +432,10 @@ namespace BillingManagementSystem.DataHelpers
                             readingElectricCurrentReading= x.readingelectric_currentreading.ToString(),
                             readingElectricDatetime=x.readingelectric_datetime.ToString(),
                             readingElectricId= x.readingelectric_id.ToString(),
-                            readingElectricMeterNo=String.IsNullOrEmpty(x.readingelectric_meterno)? x.readingelectric_meterno:"",
-                            readingElectricMonth=String.IsNullOrEmpty(x.readingelectric_month)?x.readingelectric_month:"",
+                            readingElectricMeterNo=!string.IsNullOrEmpty(x.readingelectric_meterno)? x.readingelectric_meterno:"",
+                            readingElectricMonth=!string.IsNullOrEmpty(x.readingelectric_month)?x.readingelectric_month:"",
                             readingElectricPrevReading=x.readingelectric_prevreading.ToString(),
-                            readingElectricRemarks=String.IsNullOrEmpty(x.readingelectric_remarks)?x.readingelectric_remarks:"",
+                            readingElectricRemarks=!string.IsNullOrEmpty(x.readingelectric_remarks)?x.readingelectric_remarks:"",
                             readingElectricUnits= x.readingelectric_units.ToString(),
                             readingpicture_data= x.readingpicture_data,
                             readingpicture_size= x.readingpicture_size.ToString(),

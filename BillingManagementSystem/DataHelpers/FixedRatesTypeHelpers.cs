@@ -15,7 +15,7 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    if (String.IsNullOrEmpty(model.fixedRateTypeName))
+                    if (!string.IsNullOrEmpty(model.fixedRateTypeName))
                     {
                         var newfixedRateType = new tbl_fixedratetype()
                         {
@@ -62,7 +62,7 @@ namespace BillingManagementSystem.DataHelpers
                         var fixedRateType = (from x in db.tbl_fixedratetype where x.fixedratetype_id == fixedRateTypeId select x).FirstOrDefault();
                         if (fixedRateType != null)
                         {
-                            fixedRateType.fixedratetype_name = String.IsNullOrEmpty(model.fixedRateTypeName) ? model.fixedRateTypeName : fixedRateType.fixedratetype_name;
+                            fixedRateType.fixedratetype_name = !string.IsNullOrEmpty(model.fixedRateTypeName) ? model.fixedRateTypeName : fixedRateType.fixedratetype_name;
                             db.SaveChanges();
                             toReturn = new FixedRatesTypeResponseModel()
                             {

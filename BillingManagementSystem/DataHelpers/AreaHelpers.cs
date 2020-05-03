@@ -15,7 +15,7 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    if (string.IsNullOrEmpty(model.areaName))
+                    if (!string.IsNullOrEmpty(model.areaName))
                     {
                         var area = new tbl_area()
                         {
@@ -62,7 +62,7 @@ namespace BillingManagementSystem.DataHelpers
                         var area = (from x in db.tbl_area where x.area_id == areaId select x).FirstOrDefault();
                         if (area != null)
                         {
-                            area.area_name = String.IsNullOrEmpty(model.areaName) ? model.areaName: area.area_name;
+                            area.area_name = !string.IsNullOrEmpty(model.areaName) ? model.areaName: area.area_name;
                             db.SaveChanges();
                             toReturn = new AreaResponseModel()
                             {
@@ -168,7 +168,7 @@ namespace BillingManagementSystem.DataHelpers
                             toReturn = new AreaResponseModel()
                             {
                                 areaId = area.area_id.ToString(),
-                                areaName = String.IsNullOrEmpty(area.area_name)?area.area_name:"",
+                                areaName = !string.IsNullOrEmpty(area.area_name)?area.area_name:"",
                                 remarks = "Area Found SuccessFully",
                                 resultCode = "1100"
                             };
@@ -215,7 +215,7 @@ namespace BillingManagementSystem.DataHelpers
                         toReturn = areas.Select(area => new AreaResponseModel()
                         {
                             areaId = area.area_id.ToString(),
-                            areaName = String.IsNullOrEmpty(area.area_name) ? area.area_name : "",
+                            areaName = !string.IsNullOrEmpty(area.area_name) ? area.area_name : "",
                             remarks = "Area Found SuccessFully",
                             resultCode = "1100"
                         }).ToList();

@@ -7,17 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BillingManagementSystem.Models
+using System;
+using System.Collections.Generic;
+
+public partial class tbl_userpermissions
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class tbl_userpermissions
-    {
-        public int userpermissions_id { get; set; }
-        public Nullable<int> fk_action { get; set; }
-        public Nullable<int> fk_user { get; set; }
-        public string userpermissions_action { get; set; }
-        public string userpermissions_controller { get; set; }
-    }
+    public int userpermissions_id { get; set; }
+    public Nullable<int> fk_action { get; set; }
+    public Nullable<int> fk_user { get; set; }
+    public string userpermissions_action { get; set; }
+    public string userpermissions_controller { get; set; }
 }

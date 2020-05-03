@@ -7,18 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BillingManagementSystem.Models
+using System;
+using System.Collections.Generic;
+
+public partial class tbl_users
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class tbl_users
-    {
-        public int users_id { get; set; }
-        public string users_username { get; set; }
-        public string users_fullname { get; set; }
-        public string users_password { get; set; }
-        public int fk_usertype { get; set; }
-        public int users_isActive { get; set; }
-    }
+    public int users_id { get; set; }
+    public string users_username { get; set; }
+    public string users_fullname { get; set; }
+    public string users_password { get; set; }
+    public int fk_usertype { get; set; }
+    public int users_isActive { get; set; }
 }

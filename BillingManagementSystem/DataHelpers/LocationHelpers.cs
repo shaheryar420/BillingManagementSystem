@@ -17,15 +17,15 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     if(new ModelsValidatorHelper().validateint(model.fk_area))
                     {
-                        if (String.IsNullOrEmpty(model.locationName))
+                        if (!string.IsNullOrEmpty(model.locationName))
                         {
                             var newLocation = new tbl_location() 
                             {
                                 fk_area = int.Parse(model.fk_area),
-                                location_electricmeter = String.IsNullOrEmpty(model.locationElectricMeter)?model.locationElectricMeter:"",
-                                location_gassmeter = String.IsNullOrEmpty(model.locationGassMeter)?model.locationGassMeter:"",
+                                location_electricmeter = !string.IsNullOrEmpty(model.locationElectricMeter)?model.locationElectricMeter:"",
+                                location_gassmeter = !string.IsNullOrEmpty(model.locationGassMeter)?model.locationGassMeter:"",
                                 location_name =model.locationName,
-                                location_wapdameter = String.IsNullOrEmpty(model.locationWapdaMeter)?model.locationWapdaMeter:"",
+                                location_wapdameter = !string.IsNullOrEmpty(model.locationWapdaMeter)?model.locationWapdaMeter:"",
                             };
                             db.tbl_location.Add(newLocation);
                             db.SaveChanges();
@@ -78,11 +78,11 @@ namespace BillingManagementSystem.DataHelpers
                         var location = (from x in db.tbl_location where x.location_id == locationId select x).FirstOrDefault();
                         if(location != null)
                         {
-                            location.fk_area = String.IsNullOrEmpty(model.fk_area) ? int.Parse(model.fk_area) : location.fk_area;
-                            location.location_electricmeter = String.IsNullOrEmpty(model.locationElectricMeter)?model.locationElectricMeter:location.location_electricmeter;
-                            location.location_gassmeter = String.IsNullOrEmpty(model.locationGassMeter)?model.locationGassMeter:location.location_gassmeter;
-                            location.location_name = String.IsNullOrEmpty(model.locationName) ? model.locationName :location.location_name ;
-                            location.location_wapdameter = String.IsNullOrEmpty(model.locationWapdaMeter)?model.locationWapdaMeter:location.location_wapdameter;
+                            location.fk_area = !string.IsNullOrEmpty(model.fk_area) ? int.Parse(model.fk_area) : location.fk_area;
+                            location.location_electricmeter = !string.IsNullOrEmpty(model.locationElectricMeter)?model.locationElectricMeter:location.location_electricmeter;
+                            location.location_gassmeter = !string.IsNullOrEmpty(model.locationGassMeter)?model.locationGassMeter:location.location_gassmeter;
+                            location.location_name = !string.IsNullOrEmpty(model.locationName) ? model.locationName :location.location_name ;
+                            location.location_wapdameter = !string.IsNullOrEmpty(model.locationWapdaMeter)?model.locationWapdaMeter:location.location_wapdameter;
                             db.SaveChanges();
                             toReturn = new LocationResponseModel()
                             {
@@ -199,10 +199,10 @@ namespace BillingManagementSystem.DataHelpers
                             toReturn = new LocationResponseModel()
                             {
                                 fk_area = location.fk_area.ToString(),
-                                locationElectricMeter = string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
-                                locationGassMeter = string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
-                                locationName = string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
-                                locationWapdaMeter = string.IsNullOrEmpty(location.location_wapdameter) ? location.location_wapdameter : "",
+                                locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
+                                locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
+                                locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
+                                locationWapdaMeter = !string.IsNullOrEmpty(location.location_wapdameter) ? location.location_wapdameter : "",
                                 locationId = location.location_id.ToString(),
                                 remarks ="Successfully Location Found",
                                 resultCode= "1100"
@@ -265,10 +265,10 @@ namespace BillingManagementSystem.DataHelpers
                             toReturn= locations.Select(location => new LocationResponseModel()
                             {
                                 fk_area = location.fk_area.ToString(),
-                                locationElectricMeter = string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
-                                locationGassMeter = string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
-                                locationName = string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
-                                locationWapdaMeter = string.IsNullOrEmpty(location.location_wapdameter) ? location.location_wapdameter : "",
+                                locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
+                                locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
+                                locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
+                                locationWapdaMeter = !string.IsNullOrEmpty(location.location_wapdameter) ? location.location_wapdameter : "",
                                 locationId = location.location_id.ToString(),
                                 remarks = "Successfully Location Found",
                                 resultCode = "1100"
@@ -327,10 +327,10 @@ namespace BillingManagementSystem.DataHelpers
                         toReturn = locations.Select(location => new LocationResponseModel()
                         {
                             fk_area = location.fk_area.ToString(),
-                            locationElectricMeter = string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
-                            locationGassMeter = string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
-                            locationName = string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
-                            locationWapdaMeter = string.IsNullOrEmpty(location.location_wapdameter) ? location.location_wapdameter : "",
+                            locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
+                            locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
+                            locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
+                            locationWapdaMeter = !string.IsNullOrEmpty(location.location_wapdameter) ? location.location_wapdameter : "",
                             locationId = location.location_id.ToString(),
                             remarks = "Successfully Location Found",
                             resultCode = "1100"

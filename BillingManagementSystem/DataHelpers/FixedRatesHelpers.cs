@@ -24,7 +24,7 @@ namespace BillingManagementSystem.DataHelpers
                             var fixedRate = (from x in db.tbl_fixedrates where x.fixedrates_id == fixedRateId select x).FirstOrDefault();
                             if(fixedRate != null)
                             {
-                                fixedRate.fixedrates_amount = String.IsNullOrEmpty(model.fixedRatesAmount) ? double.Parse(model.fixedRatesAmount) : fixedRate.fixedrates_amount;
+                                fixedRate.fixedrates_amount = !string.IsNullOrEmpty(model.fixedRatesAmount) ? double.Parse(model.fixedRatesAmount) : fixedRate.fixedrates_amount;
                                 db.SaveChanges();
                                 toReturn.remarks = " Successfully Updated";
                                 toReturn.resultCode = "1100";

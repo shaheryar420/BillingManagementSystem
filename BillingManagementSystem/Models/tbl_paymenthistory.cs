@@ -7,16 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BillingManagementSystem.Models
+using System;
+using System.Collections.Generic;
+
+public partial class tbl_paymenthistory
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class tbl_paymenthistory
-    {
-        public int paymenthistory_id { get; set; }
-        public System.DateTime paymenthistory_datetime { get; set; }
-        public double payment_amount { get; set; }
-        public int fk_paymenttype { get; set; }
-    }
+    public int paymenthistory_id { get; set; }
+    public System.DateTime paymenthistory_datetime { get; set; }
+    public double payment_amount { get; set; }
+    public int fk_paymenttype { get; set; }
 }

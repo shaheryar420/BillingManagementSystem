@@ -7,22 +7,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BillingManagementSystem.Models
+using System;
+using System.Collections.Generic;
+
+public partial class tbl_readingelectric
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class tbl_readingelectric
-    {
-        public int readingelectric_id { get; set; }
-        public System.DateTime readingelectric_datetime { get; set; }
-        public string readingelectric_remarks { get; set; }
-        public string readingelectric_meterno { get; set; }
-        public double readingelectric_prevreading { get; set; }
-        public double readingelectric_currentreading { get; set; }
-        public int fk_readingpicture { get; set; }
-        public double readingelectric_units { get; set; }
-        public int readingelectric_addedby { get; set; }
-        public string readingelectric_month { get; set; }
-    }
+    public int readingelectric_id { get; set; }
+    public System.DateTime readingelectric_datetime { get; set; }
+    public string readingelectric_remarks { get; set; }
+    public string readingelectric_meterno { get; set; }
+    public double readingelectric_prevreading { get; set; }
+    public double readingelectric_currentreading { get; set; }
+    public int fk_readingpicture { get; set; }
+    public double readingelectric_units { get; set; }
+    public int readingelectric_addedby { get; set; }
+    public string readingelectric_month { get; set; }
 }

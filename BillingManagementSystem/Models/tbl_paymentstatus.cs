@@ -7,14 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BillingManagementSystem.Models
+using System;
+using System.Collections.Generic;
+
+public partial class tbl_paymentstatus
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class tbl_paymentstatus
-    {
-        public int paymentstatus_id { get; set; }
-        public string paymentstatus_name { get; set; }
-    }
+    public int paymentstatus_id { get; set; }
+    public string paymentstatus_name { get; set; }
 }
