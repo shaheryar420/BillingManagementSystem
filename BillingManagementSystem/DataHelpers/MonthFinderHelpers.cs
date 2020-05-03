@@ -21,7 +21,7 @@ namespace BillingManagementSystem.DataHelpers
             {
                 month = month - 1;
             }
-            return month > 9 ? month + "_" + year : "0" + month + "_" + year;
+            return month > 9 ? month + "-" + year : "0" + month + "-" + year;
         } 
     }
 }
