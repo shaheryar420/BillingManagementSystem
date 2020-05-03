@@ -139,7 +139,7 @@ namespace BillingManagementSystem.DataHelpers
                                 {
                                     remarks = "User Name Already Exists",
                                     resultCode = "1400"
-                                };s
+                                };
                             }
                         }
                         else
