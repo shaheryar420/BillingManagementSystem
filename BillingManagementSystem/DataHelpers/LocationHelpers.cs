@@ -90,17 +90,37 @@ namespace BillingManagementSystem.DataHelpers
                         var location = (from x in db.tbl_location where x.location_id == locationId select x).FirstOrDefault();
                         if(location != null)
                         {
-                            location.fk_area = !string.IsNullOrEmpty(model.fk_area) ? int.Parse(model.fk_area) : location.fk_area;
-                            location.location_electricmeter = !string.IsNullOrEmpty(model.locationElectricMeter)?model.locationElectricMeter:location.location_electricmeter;
-                            location.location_gassmeter = !string.IsNullOrEmpty(model.locationGassMeter)?model.locationGassMeter:location.location_gassmeter;
-                            location.location_name = !string.IsNullOrEmpty(model.locationName) ? model.locationName :location.location_name ;
-                            location.location_wapdameter = !string.IsNullOrEmpty(model.locationWapdaMeter)?model.locationWapdaMeter:location.location_wapdameter;
-                            db.SaveChanges();
-                            toReturn = new LocationResponseModel()
+                            var existingLocation = new tbl_location();
+                            if (!string.IsNullOrEmpty(model.locationElectricMeter))
                             {
-                                remarks = "Location Updated Successfully",
-                                resultCode = "1100"
-                            };
+                                existingLocation = (from x in db.tbl_location where x.location_electricmeter == model.locationElectricMeter select x).FirstOrDefault(); 
+                            }
+                            else
+                            {
+                                existingLocation = null;
+                            }
+                            if (existingLocation == null)
+                            {
+                                location.fk_area = !string.IsNullOrEmpty(model.fk_area) ? int.Parse(model.fk_area) : location.fk_area;
+                                location.location_electricmeter = !string.IsNullOrEmpty(model.locationElectricMeter) ? model.locationElectricMeter : location.location_electricmeter;
+                                location.location_gassmeter = !string.IsNullOrEmpty(model.locationGassMeter) ? model.locationGassMeter : location.location_gassmeter;
+                                location.location_name = !string.IsNullOrEmpty(model.locationName) ? model.locationName : location.location_name;
+                                location.location_wapdameter = !string.IsNullOrEmpty(model.locationWapdaMeter) ? model.locationWapdaMeter : location.location_wapdameter;
+                                db.SaveChanges();
+                                toReturn = new LocationResponseModel()
+                                {
+                                    remarks = "Location Updated Successfully",
+                                    resultCode = "1100"
+                                };
+                            }
+                            else
+                            {
+                                toReturn = new LocationResponseModel()
+                                {
+                                    resultCode = "1400",
+                                    remarks = "Location Name Already Exists"
+                                };                            
+                            }
                         }
                         else
                         {

@@ -74,13 +74,33 @@ namespace BillingManagementSystem.DataHelpers
                         var area = (from x in db.tbl_area where x.area_id == areaId select x).FirstOrDefault();
                         if (area != null)
                         {
-                            area.area_name = !string.IsNullOrEmpty(model.areaName) ? model.areaName: area.area_name;
-                            db.SaveChanges();
-                            toReturn = new AreaResponseModel()
+                            var existingArea = new tbl_area();
+                            if(!string.IsNullOrEmpty(model.areaName))
                             {
-                                remarks = "Area Updated SuccessFully",
-                                resultCode = "1100"
-                            };
+                                existingArea = (from x in db.tbl_area where x.area_name == model.areaName select x).FirstOrDefault(); 
+                            }
+                            else
+                            {
+                                existingArea = null;
+                            }
+                            if (existingArea == null)
+                            {
+                                area.area_name = !string.IsNullOrEmpty(model.areaName) ? model.areaName : area.area_name;
+                                db.SaveChanges();
+                                toReturn = new AreaResponseModel()
+                                {
+                                    remarks = "Area Updated SuccessFully",
+                                    resultCode = "1100"
+                                };
+                            }
+                            else
+                            {
+                                toReturn = new AreaResponseModel()
+                                {
+                                    remarks = "Area Name Already Exists",
+                                    resultCode = "1400"
+                                };
+                            }
                         }
                         else
                         {

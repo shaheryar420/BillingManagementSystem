@@ -111,16 +111,36 @@ namespace BillingManagementSystem.DataHelpers
                         var user = (from x in db.tbl_users where x.users_id == userId select x).FirstOrDefault(); 
                         if(user!= null)
                         {
-                            user.fk_usertype = !string.IsNullOrEmpty(model.fk_userType)?int.Parse(model.fk_userType):user.fk_usertype;
-                            user.users_fullname = !string.IsNullOrEmpty(model.usersFullName)?model.usersFullName : user.users_fullname;
-                            user.users_username = !string.IsNullOrEmpty(model.usersUsername)?model.usersUsername:user.users_username;
-                            user.users_password = !string.IsNullOrEmpty(model.usersPassword)?model.usersPassword:user.users_password;
-                            db.SaveChanges();
-                            toReturn = new UserResponseModel()
+                            var existingUserName = new tbl_users();
+                            if(!string.IsNullOrEmpty(model.usersUsername))
                             {
-                                remarks = "User Updated SuccessFully",
-                                resultCode = "1100"
-                            };
+                                existingUserName = (from x in db.tbl_users where x.users_username == model.usersUsername select x).FirstOrDefault();
+                            }
+                            else
+                            {
+                                existingUserName = null;
+                            }
+                            if (existingUserName == null)
+                            {
+                                user.fk_usertype = !string.IsNullOrEmpty(model.fk_userType) ? int.Parse(model.fk_userType) : user.fk_usertype;
+                                user.users_fullname = !string.IsNullOrEmpty(model.usersFullName) ? model.usersFullName : user.users_fullname;
+                                user.users_username = !string.IsNullOrEmpty(model.usersUsername) ? model.usersUsername : user.users_username;
+                                user.users_password = !string.IsNullOrEmpty(model.usersPassword) ? model.usersPassword : user.users_password;
+                                db.SaveChanges();
+                                toReturn = new UserResponseModel()
+                                {
+                                    remarks = "User Updated SuccessFully",
+                                    resultCode = "1100"
+                                };
+                            }
+                            else
+                            {
+                                toReturn = new UserResponseModel()
+                                {
+                                    remarks = "User Name Already Exists",
+                                    resultCode = "1400"
+                                };s
+                            }
                         }
                         else
                         {

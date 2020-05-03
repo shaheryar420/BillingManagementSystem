@@ -89,17 +89,37 @@ namespace BillingManagementSystem.DataHelpers
                         tbl_residents resident = (from x in db.tbl_residents where x.resident_id== residentId select x ).FirstOrDefault();
                         if(resident!= null)
                         {
-                            resident.resident_name = !string.IsNullOrEmpty(model.residentName) ? model.residentName : resident.resident_name;
-                            resident.resident_panumber = !string.IsNullOrEmpty(model.residentPaNumber) ? model.residentPaNumber : resident.resident_panumber;
-                            resident.resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : resident.resident_rank;
-                            resident.resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : resident.resident_remarks;
-                            resident.resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : resident.resident_unit;
-                            db.SaveChanges();
-                            toReturn = new ResidentResponseModel()
+                            var existingResident = new tbl_residents();
+                            if (!string.IsNullOrEmpty(model.residentPaNumber))
                             {
-                                remarks = "Successfully Updated",
-                                resultCode = "1100"
-                            };
+                                existingResident = (from x in db.tbl_residents where x.resident_panumber == model.residentPaNumber select x).FirstOrDefault();
+                            }
+                            else
+                            {
+                                existingResident = null;
+                            }
+                            if (existingResident == null)
+                            {
+                                resident.resident_name = !string.IsNullOrEmpty(model.residentName) ? model.residentName : resident.resident_name;
+                                resident.resident_panumber = !string.IsNullOrEmpty(model.residentPaNumber) ? model.residentPaNumber : resident.resident_panumber;
+                                resident.resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : resident.resident_rank;
+                                resident.resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : resident.resident_remarks;
+                                resident.resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : resident.resident_unit;
+                                db.SaveChanges();
+                                toReturn = new ResidentResponseModel()
+                                {
+                                    remarks = "Successfully Updated",
+                                    resultCode = "1100"
+                                };
+                            }
+                            else
+                            {
+                                toReturn = new ResidentResponseModel()
+                                {
+                                    remarks = "Resident Already Exists",
+                                    resultCode = "1400"
+                                };
+                            }
                         }
                         else
                         {

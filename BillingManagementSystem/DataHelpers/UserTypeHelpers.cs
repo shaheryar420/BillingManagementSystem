@@ -74,13 +74,33 @@ namespace BillingManagementSystem.DataHelpers
                         var userType = (from x in db.tbl_usertype where x.usertype_id == userTypeId select x).FirstOrDefault();
                         if(userType!= null)
                         {
-                            userType.usertype_name = !string.IsNullOrEmpty(model.userTypeName) ? model.userTypeName : userType.usertype_name;
-                            db.SaveChanges();
-                            toReturn = new UserTypeResponseModel()
+                            var existingUserType = new tbl_usertype();
+                            if (!string.IsNullOrEmpty(model.userTypeName))
                             {
-                                remarks = "Successfully Updated",
-                                resultCode = "1100"
-                            };
+                                existingUserType = (from x in db.tbl_usertype where x.usertype_name == model.userTypeName select x).FirstOrDefault();
+                            }
+                            else
+                            {
+                                existingUserType = null;
+                            }
+                            if (existingUserType == null)
+                            {
+                                userType.usertype_name = !string.IsNullOrEmpty(model.userTypeName) ? model.userTypeName : userType.usertype_name;
+                                db.SaveChanges();
+                                toReturn = new UserTypeResponseModel()
+                                {
+                                    remarks = "Successfully Updated",
+                                    resultCode = "1100"
+                                };
+                            }
+                            else
+                            {
+                                toReturn = new UserTypeResponseModel()
+                                {
+                                    remarks = "User Type Already Exists",
+                                    resultCode = "1400"
+                                };
+                            }
                         }
                         else
                         {

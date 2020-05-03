@@ -17,7 +17,7 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     if (!string.IsNullOrEmpty(model.fixedRateTypeName))
                     {
-                        var existingFixedRateType = (from x in db.tbl_fixedratetype where x.fixedratetype_name == model.fixedRateTypeName select x).ToList();
+                        var existingFixedRateType = (from x in db.tbl_fixedratetype where x.fixedratetype_name == model.fixedRateTypeName select x).FirstOrDefault();
                         if(existingFixedRateType == null)
                         {
                             var newfixedRateType = new tbl_fixedratetype()
@@ -74,13 +74,33 @@ namespace BillingManagementSystem.DataHelpers
                         var fixedRateType = (from x in db.tbl_fixedratetype where x.fixedratetype_id == fixedRateTypeId select x).FirstOrDefault();
                         if (fixedRateType != null)
                         {
-                            fixedRateType.fixedratetype_name = !string.IsNullOrEmpty(model.fixedRateTypeName) ? model.fixedRateTypeName : fixedRateType.fixedratetype_name;
-                            db.SaveChanges();
-                            toReturn = new FixedRatesTypeResponseModel()
+                            var existingFixedRateType = new tbl_fixedratetype();
+                            if(!string.IsNullOrEmpty(model.fixedRateTypeName))
                             {
-                                remarks = "Successfully Updated",
-                                resultCode = "1100"
-                            };
+                                existingFixedRateType = (from x in db.tbl_fixedratetype where x.fixedratetype_name == model.fixedRateTypeName select x).FirstOrDefault();
+                            }
+                            else
+                            {
+                                existingFixedRateType = null;
+                            }
+                            if (existingFixedRateType == null)
+                            {
+                                fixedRateType.fixedratetype_name = !string.IsNullOrEmpty(model.fixedRateTypeName) ? model.fixedRateTypeName : fixedRateType.fixedratetype_name;
+                                db.SaveChanges();
+                                toReturn = new FixedRatesTypeResponseModel()
+                                {
+                                    remarks = "Successfully Updated",
+                                    resultCode = "1100"
+                                };
+                            }
+                            else
+                            {
+                                toReturn = new FixedRatesTypeResponseModel()
+                                {
+                                    remarks = "Fixed Rate Type Name Already Exists",
+                                    resultCode = "1400"
+                                };
+                            }
                         }
                         else
                         {
