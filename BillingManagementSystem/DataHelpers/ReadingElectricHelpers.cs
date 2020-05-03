@@ -345,6 +345,9 @@ namespace BillingManagementSystem.DataHelpers
                                     };
                                     db.tbl_billelectric.Add(newBill);
                                     db.SaveChanges();
+                                    db.tbl_readingelectric.Remove(readingElectric);
+                                    db.tbl_readingpicture.Remove(readingPicture);
+                                    db.SaveChanges();
                                     toReturn = new ReadingElectricResponseModel()
                                     {
                                         remarks = "Reading Successfully Approved",

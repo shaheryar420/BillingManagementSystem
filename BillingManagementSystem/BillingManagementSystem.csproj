@@ -730,6 +730,7 @@
     <Compile Include="DataHelpers\LocationHelpers.cs" />
     <Compile Include="DataHelpers\ReadingElectricHelpers.cs" />
     <Compile Include="DataHelpers\ResidentHelpers.cs" />
+    <Compile Include="DataHelpers\RORHelpers.cs" />
     <Compile Include="DataHelpers\UserHelpers.cs" />
     <Compile Include="DataHelpers\UserTypeHelpers.cs" />
     <Compile Include="Global.asax.cs">

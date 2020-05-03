@@ -218,7 +218,6 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    var userTypeId = int.Parse(model.userTypeId);
                     var userTypes = (from x in db.tbl_usertype select x).ToList();
                     if (userTypes.Count()>0)
                     {
