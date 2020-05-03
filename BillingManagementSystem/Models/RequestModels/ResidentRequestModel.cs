@@ -7,6 +7,7 @@ namespace BillingManagementSystem.Models
 {
     public class ResidentRequestModel
     {
+        public string areaId { get; set; }
         public string residentId { get; set; }
         public string residentPaNumber { get; set; }
         public string residentRank { get; set; }

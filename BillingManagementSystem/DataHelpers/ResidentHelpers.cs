@@ -576,5 +576,74 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
+        public List<ResidentResponseModel> GetAllResidentsByArea(ResidentRequestModel model)
+        {
+            List<ResidentResponseModel> toReturn = new List<ResidentResponseModel>();
+            try
+            {
+                if (new ModelsValidatorHelper().validateint(model.areaId))
+                {
+                    var areaId = int.Parse(model.areaId);
+                    using (db_bmsEntities db = new db_bmsEntities())
+                    {
+                        var residents = (from l in db.tbl_location
+                                         join a in db.tbl_area on l.fk_area equals a.area_id
+                                         join rl in db.tbl_residentbuilding on l.location_id equals rl.fk_building
+                                         join r in db.tbl_residents on rl.fk_resident equals r.resident_id
+                                         where a.area_id == areaId
+                                         select new 
+                                         {
+                                             r.resident_name,
+                                             r.resident_id,
+                                             l.location_electricmeter,
+                                         }).ToList();
+
+                        if (residents.Count() > 0)
+                        {
+                            toReturn = residents.Select(resident => new ResidentResponseModel()
+                            {
+                                residentName = resident.resident_name,
+                                residentId = resident.resident_id.ToString(),
+                                meterNo = resident.location_electricmeter,
+                                remarks = "Successfully Found",
+                                resultCode = "1100"
+                            }).ToList();
+                            foreach (var resident in residents )
+                            {
+                                var bill = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
+                                var _resident = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
+                                _resident.previousReading = bill.billelectric_prevreading.ToString();
+                            }
+                        }
+                        else
+                        {
+                            toReturn.Add(new ResidentResponseModel()
+                            {
+                                remarks = "No Record Found",
+                                resultCode = "1200"
+                            });
+                        }
+                    } 
+                }
+                else
+                {
+                    toReturn.Add(new ResidentResponseModel()
+                    {
+                        remarks="Please Provide Area",
+                        resultCode= "1300"
+                    });
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                toReturn.Add(new ResidentResponseModel()
+                {
+                    remarks = "There Was A fatal Error" + Ex.ToString(),
+                    resultCode = "1000"
+                });
+            }
+            return toReturn;
+        }
     }
 }
