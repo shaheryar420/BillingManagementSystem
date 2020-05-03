@@ -17,17 +17,29 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     if (!string.IsNullOrEmpty(model.fixedRateTypeName))
                     {
-                        var newfixedRateType = new tbl_fixedratetype()
+                        var existingFixedRateType = (from x in db.tbl_fixedratetype where x.fixedratetype_name == model.fixedRateTypeName select x).ToList();
+                        if(existingFixedRateType == null)
                         {
-                            fixedratetype_name = model.fixedRateTypeName
-                        };
-                        db.tbl_fixedratetype.Add(newfixedRateType);
-                        db.SaveChanges();
-                        toReturn = new FixedRatesTypeResponseModel()
+                            var newfixedRateType = new tbl_fixedratetype()
+                            {
+                                fixedratetype_name = model.fixedRateTypeName
+                            };
+                            db.tbl_fixedratetype.Add(newfixedRateType);
+                            db.SaveChanges();
+                            toReturn = new FixedRatesTypeResponseModel()
+                            {
+                                remarks = "Successfully Added",
+                                resultCode = "1100"
+                            };
+                        }
+                        else
                         {
-                            remarks = "Successfully Added",
-                            resultCode = "1100"
-                        };
+                            toReturn = new FixedRatesTypeResponseModel()
+                            {
+                                remarks = " Type Already Exists",
+                                resultCode = "1400"
+                            };
+                        }
                     }
                     else
                     {

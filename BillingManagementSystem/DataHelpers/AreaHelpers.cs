@@ -17,17 +17,29 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     if (!string.IsNullOrEmpty(model.areaName))
                     {
-                        var area = new tbl_area()
+                        var existingArea = (from x in db.tbl_area where x.area_name == model.areaName select x).FirstOrDefault();
+                        if (existingArea == null)
                         {
-                            area_name = model.areaName
-                        };
-                        db.tbl_area.Add(area);
-                        db.SaveChanges();
-                        toReturn = new AreaResponseModel()
+                            var area = new tbl_area()
+                            {
+                                area_name = model.areaName
+                            };
+                            db.tbl_area.Add(area);
+                            db.SaveChanges();
+                            toReturn = new AreaResponseModel()
+                            {
+                                remarks = "Area Added SuccessFully",
+                                resultCode = "1100"
+                            };
+                        }
+                        else
                         {
-                            remarks = "Area Added SuccessFully",
-                            resultCode = "1100"
-                        };
+                            toReturn = new AreaResponseModel()
+                            {
+                                remarks = "Area Name Already Exists",
+                                resultCode = "1400"
+                            };
+                        }
                     }
                     else
                     {

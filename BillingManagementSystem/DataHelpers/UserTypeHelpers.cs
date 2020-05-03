@@ -17,17 +17,29 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     if (!string.IsNullOrEmpty(model.userTypeName))
                     {
-                        var newUserType = new tbl_usertype()
+                        var existingUserType = (from x in db.tbl_usertype where x.usertype_name == model.userTypeName select x).FirstOrDefault();
+                        if(existingUserType==null)
                         {
-                            usertype_name = model.userTypeName
-                        };
-                        db.tbl_usertype.Add(newUserType);
-                        db.SaveChanges();
-                        toReturn = new UserTypeResponseModel()
+                            var newUserType = new tbl_usertype()
+                            {
+                                usertype_name = model.userTypeName
+                            };
+                            db.tbl_usertype.Add(newUserType);
+                            db.SaveChanges();
+                            toReturn = new UserTypeResponseModel()
+                            {
+                                remarks = "Successfully Added",
+                                resultCode = "1100"
+                            };
+                        }
+                        else
                         {
-                            remarks = "Successfully Added",
-                            resultCode = "1100"
-                        };
+                            toReturn = new UserTypeResponseModel()
+                            {
+                                remarks = "User Type Already Exists",
+                                resultCode = "1400"
+                            }; 
+                        }
                     }
                     else
                     {

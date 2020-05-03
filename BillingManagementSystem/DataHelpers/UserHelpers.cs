@@ -19,31 +19,43 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         if (!string.IsNullOrEmpty(model.usersUsername))
                         {
-                            if(!string.IsNullOrEmpty(model.usersPassword))
+                            var existingUserName = (from x in db.tbl_users where x.users_username == model.usersUsername select x).FirstOrDefault();
+                            if(existingUserName==null)
                             {
-                                if(new ModelsValidatorHelper().validateint(model.fk_userType))
+                                if (!string.IsNullOrEmpty(model.usersPassword))
                                 {
-                                    var user = new tbl_users() 
+                                    if (new ModelsValidatorHelper().validateint(model.fk_userType))
                                     {
-                                        fk_usertype = int.Parse(model.fk_userType),
-                                        users_fullname = model.usersFullName,
-                                        users_username = model.usersUsername,
-                                        users_password = model.usersPassword,
-                                        users_isActive = 1
-                                    };
-                                    db.tbl_users.Add(user);
-                                    db.SaveChanges();
-                                    toReturn = new UserResponseModel()
+                                        var user = new tbl_users()
+                                        {
+                                            fk_usertype = int.Parse(model.fk_userType),
+                                            users_fullname = model.usersFullName,
+                                            users_username = model.usersUsername,
+                                            users_password = model.usersPassword,
+                                            users_isActive = 1
+                                        };
+                                        db.tbl_users.Add(user);
+                                        db.SaveChanges();
+                                        toReturn = new UserResponseModel()
+                                        {
+                                            remarks = "User Added SuccessFully",
+                                            resultCode = "1100"
+                                        };
+                                    }
+                                    else
                                     {
-                                        remarks = "User Added SuccessFully",
-                                        resultCode = "1100"
-                                    };
+                                        toReturn = new UserResponseModel()
+                                        {
+                                            remarks = "Please Provide User Type",
+                                            resultCode = "1300"
+                                        };
+                                    }
                                 }
                                 else
                                 {
                                     toReturn = new UserResponseModel()
                                     {
-                                        remarks= "Please Provide User Type",
+                                        remarks = "Please Provide Password",
                                         resultCode = "1300"
                                     };
                                 }
@@ -52,8 +64,8 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 toReturn = new UserResponseModel()
                                 {
-                                    remarks = "Please Provide Password",
-                                    resultCode = "1300"
+                                    remarks = "Username Already Exists",
+                                    resultCode = "1400"
                                 };
                             }
                         }

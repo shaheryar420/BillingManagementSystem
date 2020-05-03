@@ -19,21 +19,33 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         if (!string.IsNullOrEmpty(model.locationName))
                         {
-                            var newLocation = new tbl_location() 
+                            var existingLocation = (from x in db.tbl_location where x.location_electricmeter == model.locationElectricMeter select x).FirstOrDefault();
+                            if (existingLocation == null)
                             {
-                                fk_area = int.Parse(model.fk_area),
-                                location_electricmeter = !string.IsNullOrEmpty(model.locationElectricMeter)?model.locationElectricMeter:"",
-                                location_gassmeter = !string.IsNullOrEmpty(model.locationGassMeter)?model.locationGassMeter:"",
-                                location_name =model.locationName,
-                                location_wapdameter = !string.IsNullOrEmpty(model.locationWapdaMeter)?model.locationWapdaMeter:"",
-                            };
-                            db.tbl_location.Add(newLocation);
-                            db.SaveChanges();
-                            toReturn = new LocationResponseModel()
+                                var newLocation = new tbl_location()
+                                {
+                                    fk_area = int.Parse(model.fk_area),
+                                    location_electricmeter = !string.IsNullOrEmpty(model.locationElectricMeter) ? model.locationElectricMeter : "",
+                                    location_gassmeter = !string.IsNullOrEmpty(model.locationGassMeter) ? model.locationGassMeter : "",
+                                    location_name = model.locationName,
+                                    location_wapdameter = !string.IsNullOrEmpty(model.locationWapdaMeter) ? model.locationWapdaMeter : "",
+                                };
+                                db.tbl_location.Add(newLocation);
+                                db.SaveChanges();
+                                toReturn = new LocationResponseModel()
+                                {
+                                    remarks = "Location Added Successfully",
+                                    resultCode = "1100"
+                                };
+                            }
+                            else
                             {
-                                remarks="Location Added Successfully",
-                                resultCode="1100"
-                            };
+                                toReturn = new LocationResponseModel()
+                                {
+                                    remarks = "Meter No Already Exist",
+                                    resultCode = "1400 "
+                                };
+                            }
                         }
                         else
                         {

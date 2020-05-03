@@ -19,21 +19,33 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         if(!string.IsNullOrEmpty(model.residentPaNumber))
                         {
-                            tbl_residents resident = new tbl_residents()
+                            var existingResident = (from x in db.tbl_residents where x.resident_panumber == model.residentPaNumber select x).FirstOrDefault();
+                            if (existingResident == null)
                             {
-                                resident_name = model.residentName,
-                                resident_panumber = model.residentPaNumber,
-                                resident_rank = !string.IsNullOrEmpty(model.residentRank)? model.residentRank:"",
-                                resident_remarks = !string.IsNullOrEmpty(model.residentRemarks)? model.residentRemarks:"",
-                                resident_unit = !string.IsNullOrEmpty(model.residentUnit)? model.residentUnit:""
-                            };
-                            db.tbl_residents.Add(resident);
-                            db.SaveChanges();
-                            toReturn = new ResidentResponseModel()
+                                tbl_residents resident = new tbl_residents()
+                                {
+                                    resident_name = model.residentName,
+                                    resident_panumber = model.residentPaNumber,
+                                    resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : "",
+                                    resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : "",
+                                    resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : ""
+                                };
+                                db.tbl_residents.Add(resident);
+                                db.SaveChanges();
+                                toReturn = new ResidentResponseModel()
+                                {
+                                    remarks = "Successfully Added",
+                                    resultCode = "1100"
+                                };
+                            }
+                            else
                             {
-                                remarks="Successfully Added",
-                                resultCode = "1100"
-                            };
+                                toReturn = new ResidentResponseModel()
+                                {
+                                    remarks = "Resident Already Exists",
+                                    resultCode = "1400"
+                                };
+                            }
                         }
                         else
                         {
