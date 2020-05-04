@@ -1,6 +1,8 @@
-﻿@{
-    ViewBag.Title = "Bill Generation";
+﻿
+@{
+    ViewBag.Title = "Bill Approvel";
 }
+
 @section Styles
 {
     @Styles.Render("~/plugins/select2")
@@ -17,6 +19,7 @@
 
     <script>
         var Id = null;
+        var Dtable = null;
         $(document).on('nifty.ready', function () {
             $('.dropdownlist').select2();
             $('#btn_electric_update').hide();
@@ -68,7 +71,7 @@
                     {
                         title: 'Action',
                         render: function (data, type, row, meta) {
-                            return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_electric_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_electric_delete'><i class='fa fa-trash'></i></a></div>";
+                            return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_electric_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-success btn_electric_approvel'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_electric_delete'><i class='fa fa-trash'></i></a></div>";
                         }
                     },
                     {
@@ -173,6 +176,32 @@
                     }
                 });
             });
+            $(document).on('click', '.btn_electric_approvel', function (e) {
+                e.preventDefault();
+                var rowData = Dtable.row($(this).parents('tr')).data();
+                var _id = rowData.readingElectricId;
+                 $.ajax({
+                url: '/Bill/ApproveReadingElectric',
+                type: 'POST',
+                data: { readingElectricId: _id },
+                success: function (response) {
+                    if (response) {
+                        if (response.resultCode == '1100') {
+                            initElectricGrid(_id);
+                            swal("Success", "Approved Successfully.", "success");
+                        }
+                        else {
+                            swal("Warning", response.remarks, "warning");
+                        }
+
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
+
+            });
+            });
             $(document).on('click', '#btn_electric_update', function (e) {
                 e.preventDefault();
                 var _locationId = $('#location_id').val();
@@ -192,7 +221,7 @@
                             readingElectricUnits: _currentUnit,
                             readingElectricCurrentReading: _currentReading,
                             readingElectricPrevReading: _previousReading,
-                            readingElectricMeterNo: _meterNo 
+                            readingElectricMeterNo: _meterNo
                         },
                         beforeSend: function () {
                             $('.loading').show();
@@ -225,7 +254,7 @@
                 }
             });
         }
-          
+
         function initDropDowns() {
             $.ajax({
                 url: '/Management/GetAllAreas',
@@ -267,7 +296,7 @@
                                     var list = [];
                                     for (var i = 0; i < response.length; i++) {
                                         list.push({ text: response[i].residentName, id: response[i].residentId });
-                                        
+
                                     }
                                     $('#electric_resident').select2().empty();
                                     $('#electric_resident').select2({ data: list }).trigger('change');
@@ -342,7 +371,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Previous Reading</label>
-                        <input type="number" value="" readonly class="form-control" id="previous_reading"/>
+                        <input type="number" value="" readonly class="form-control" id="previous_reading" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Enter Current Reading</label>
@@ -369,7 +398,7 @@
             </div>
         </div>
         <div class="col-md-8">
-            
+
             <div class="panel panel-bordered-info panel-colorful">
                 <div class="panel-heading">
                     <h1 class="panel-title">Bills Generated</h1>
@@ -383,3 +412,6 @@
 
 
 </div>
+
+<h2>Electric</h2>
+

@@ -29,37 +29,51 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
+        public ActionResult AdminElectric()
+        {
+            return View();
+        }
         #endregion
         #region Reading
-        public ReadingElectricResponseModel AddReadingElectric([FromBody] ReadingElectricRequestModel model)
+        public ActionResult AddReadingElectric([FromBody] ReadingElectricRequestModel model)
         {
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
             var response = helper.AddReadingElectric(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public ReadingElectricResponseModel EditReadingElectric([FromBody] ReadingElectricRequestModel model)
+        public ActionResult EditReadingElectric([FromBody] ReadingElectricRequestModel model)
         {
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
             var response = helper.EditReadingElectric(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public ReadingElectricResponseModel DeleteReadingElectric([FromBody] ReadingElectricRequestModel model)
+        public ActionResult DeleteReadingElectric([FromBody] ReadingElectricRequestModel model)
         {
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
             var response = helper.DeleteReadingElectric(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public List<ReadingElectricResponseModel> GetAllReadingsElectric([FromBody] ReadingElectricRequestModel model)
+        public ActionResult GetAllReadingsElectric([FromBody] ReadingElectricRequestModel model)
         {
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
             var response = helper.getAllReadings(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public ReadingElectricResponseModel ApproveReadingElectric([FromBody] ReadingElectricRequestModel model)
+        public ActionResult ApproveReadingElectric([FromBody] ReadingElectricRequestModel model)
         {
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
             var response = helper.ApproveReadingElectric(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
         #endregion
     }

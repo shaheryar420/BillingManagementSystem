@@ -721,6 +721,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
     <Compile Include="Controllers\RecoveryController.cs" />
+    <Compile Include="Controllers\RecoveryRequestModel.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\RORController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -913,6 +914,7 @@
     <Content Include="Views\Management\Users.cshtml" />
     <Content Include="Views\Management\Area.cshtml" />
     <Content Include="Views\Management\Location.cshtml" />
+    <Content Include="Views\Bill\AdminElectric.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -923,6 +925,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="img\Models\" />
+    <Folder Include="Views\Admin\" />
     <Folder Include="Views\FixedRates\" />
     <Folder Include="Views\Reports\" />
   </ItemGroup>

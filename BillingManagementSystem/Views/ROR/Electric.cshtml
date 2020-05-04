@@ -22,8 +22,65 @@
                 startView: "months", 
                 minViewMode: "months"
             });
-            $('.grid').dataTable();
+            initElectricGrid();
         });
+    </script>
+    <script>
+                function initElectricGrid() {
+            Dtable = $(".rorGrid").DataTable({
+                autoWidth: true,
+                destroy: true,
+                "ajax": {
+                    "url": '/ROR/GetAllRORElectric',
+                    "type": 'POST',
+                    "dataSrc": function (data) {
+
+                        if (data.length > 0)
+                            return data;
+                        else {
+
+                            return [];
+                        }
+                    },
+                    "error": function (a, b, c) {
+                        swal({
+                            title: "Error",
+                            text: a.status + ": " + c,
+                            type: "error"
+                        });
+                    }
+                },
+                "columns": [
+                   
+                    {
+                        title: 'Sr. #',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "title": "Id", "data": "billElectricId", className: "hidden" },
+                    { "title": "Meter #", "data": "locationMeterNo" },
+                    { "title": "Location", "data": "locationName" },
+                    { "title": "PA No", "data": "residentPaNo" },
+                    { "title": "Rank", "data": "residentRank" },
+                    { "title": "Name", "data": "residentName" },
+                    { "title": "Previous Reading", "data": "billElectricPrevReading" },
+                    { "title": "Present Reading", "data": "billElectricCurrentReading" },
+                    { "title": "Units", "data": "billElectricUnits" },
+                    { "title": "Energy Charges", "data": "residentUnit" },
+                    { "title": "Amount", "data": "billElectricAmount" },
+                    { "title": "Water", "data": "billElectricWater" },
+                    { "title": "TV", "data": "billElectricTv" },
+                    { "title": "Picture", "data": "fk_billPicture" },
+                    { "title": "Remarks", "data": "billElectricRemarks" }
+                ]
+            });
+            Dtable.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+        }
+
     </script>
 
 }
@@ -48,11 +105,8 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <table class="table table-bordered table-responsive table-hover grid">
-                        <thead>
-                            <tr><th>Sr.</th><th>Meter #</th><th>Location</th><th>PA No</th><th>Rank</th><th>Name</th><th>Unit/FMN</th><th>Previous Reading</th><th>Present Reading</th><th>Units</th><th>Energy Charges</th><th>Amount</th><th>Water</th><th>TV</th><th>Picture</th><th>Remarks</th></tr>
-                        </thead>
-                    </table>
+                    <table class="table table-bordered table-striped table-hover rorGrid"></table>
+                   
                 </div>
             </div>
         </div>

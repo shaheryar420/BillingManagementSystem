@@ -46,6 +46,9 @@
                                 <li class="@Html.IsSelected(action: "Electric", controller:"Bill")">
                                     <a href="@Url.Action("Electric","Bill")"> Electric / General</a>
                                 </li>
+                                <li class="@Html.IsSelected(action: "AdminElectric", controller:"Bill")">
+                                    <a href="@Url.Action("AdminElectric","Bill")"> Electric / Admin</a>
+                                </li>
                                 <li class="@Html.IsSelected(action: "Gas", controller:"Bill")">
                                     <a href="@Url.Action("Gas","Bill")">SUI Gas</a>
                                 </li>

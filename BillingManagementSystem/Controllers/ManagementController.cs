@@ -29,141 +29,184 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
+        
         #endregion
         #region Actions
         #region User
-        public UserResponseModel AddUser([FromBody] UserRequestModel model)
+        public ActionResult AddUser([FromBody] UserRequestModel model)
         {
             UserHelpers helper = new UserHelpers();
             var response = helper.AddUser(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public UserResponseModel EditUser([FromBody] UserRequestModel model)
+        public ActionResult EditUser([FromBody] UserRequestModel model)
         {
             UserHelpers helper = new UserHelpers();
             var response = helper.EditUser(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public UserResponseModel DeleteUser([FromBody] UserRequestModel model)
+        public ActionResult DeleteUser([FromBody] UserRequestModel model)
         {
             UserHelpers helper = new UserHelpers();
             var response = helper.DeleteUser(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public UserResponseModel GetUserById([FromBody] UserRequestModel model)
+        public ActionResult GetUserById([FromBody] UserRequestModel model)
         {
             UserHelpers helper = new UserHelpers();
             var response = helper.GetUserById(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public List<UserResponseModel> GetAllUsers([FromBody] UserRequestModel model)
+        public ActionResult GetAllUsers([FromBody] UserRequestModel model)
         {
             UserHelpers helper = new UserHelpers();
             var response = helper.GetAllUsers(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public List<UserResponseModel> GetAllUsersByUserType([FromBody] UserRequestModel model)
+        public ActionResult GetAllUsersByUserType([FromBody] UserRequestModel model)
         {
             UserHelpers helper = new UserHelpers();
             var response = helper.GetAllUsersByUserType(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
         #endregion
         #region UserType
-        public UserTypeResponseModel AddUserType([FromBody] UserTypeRequestModel model)
+        public ActionResult AddUserType([FromBody] UserTypeRequestModel model)
         {
             UserTypeHelpers helper = new UserTypeHelpers();
             var response = helper.AddUserType(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public UserTypeResponseModel EditUserType([FromBody] UserTypeRequestModel model)
+        public ActionResult EditUserType([FromBody] UserTypeRequestModel model)
         {
             UserTypeHelpers helper = new UserTypeHelpers();
             var response = helper.EditUserType(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public UserTypeResponseModel DeleteUserType([FromBody] UserTypeRequestModel model)
+        public ActionResult DeleteUserType([FromBody] UserTypeRequestModel model)
         {
             UserTypeHelpers helper = new UserTypeHelpers();
             var response = helper.DeleteUserType(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public UserTypeResponseModel GetUserTypeById([FromBody] UserTypeRequestModel model)
+        public ActionResult GetUserTypeById([FromBody] UserTypeRequestModel model)
         {
             UserTypeHelpers helper = new UserTypeHelpers();
             var response = helper.GetUserTypeById(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public List<UserTypeResponseModel> GetAllUserTypes([FromBody] UserTypeRequestModel model)
+        public ActionResult GetAllUserTypes([FromBody] UserTypeRequestModel model)
         {
             UserTypeHelpers helper = new UserTypeHelpers();
             var response = helper.GetAllUserTypes(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
         
         #endregion
         #region Location
-        public LocationResponseModel AddLocation([FromBody] LocationRequestModel model)
+        public ActionResult AddLocation([FromBody] LocationRequestModel model)
         {
             LocationHelpers helper = new LocationHelpers();
             var response = helper.AddLocation(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public LocationResponseModel EditLocation([FromBody] LocationRequestModel model)
+        public ActionResult EditLocation([FromBody] LocationRequestModel model)
         {
             LocationHelpers helper = new LocationHelpers();
             var response = helper.EditLocation(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public LocationResponseModel DeleteLocation([FromBody] LocationRequestModel model)
+        public ActionResult DeleteLocation([FromBody] LocationRequestModel model)
         {
             LocationHelpers helper = new LocationHelpers();
             var response = helper.DeleteLocation(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public LocationResponseModel GetLocationById([FromBody] LocationRequestModel model)
+        public ActionResult GetLocationById([FromBody] LocationRequestModel model)
         {
             LocationHelpers helper = new LocationHelpers();
             var response = helper.GetLocationById(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public List<LocationResponseModel> GetAllLocations([FromBody] LocationRequestModel model)
+        public ActionResult GetAllLocations([FromBody] LocationRequestModel model)
         {
             LocationHelpers helper = new LocationHelpers();
             var response = helper.GetAllLocations(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public List<LocationResponseModel> GetAllLocationsByArea([FromBody] LocationRequestModel model)
+        public ActionResult GetAllLocationsByArea([FromBody] LocationRequestModel model)
         {
             LocationHelpers helper = new LocationHelpers();
             var response = helper.GetAllLocationsByArea(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
         #endregion
         #region Area
-        public AreaResponseModel AddArea([FromBody] AreaRequestModel model)
+        public ActionResult AddArea([FromBody] AreaRequestModel model)
         {
             AreaHelpers helper = new AreaHelpers();
             var response = helper.AddArea(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public AreaResponseModel EditArea([FromBody] AreaRequestModel model)
+        public ActionResult EditArea([FromBody] AreaRequestModel model)
         {
             AreaHelpers helper = new AreaHelpers();
             var response = helper.EditArea(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public AreaResponseModel DeleteArea([FromBody] AreaRequestModel model)
+        public ActionResult DeleteArea([FromBody] AreaRequestModel model)
         {
             AreaHelpers helper = new AreaHelpers();
             var response = helper.DeleteArea(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public AreaResponseModel GetAreaById([FromBody] AreaRequestModel model)
+        public ActionResult GetAreaById([FromBody] AreaRequestModel model)
         {
             AreaHelpers helper = new AreaHelpers();
             var response = helper.GetAreaById(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
         public ActionResult GetAllAreas([FromBody] AreaRequestModel model)
         {
@@ -176,35 +219,45 @@ namespace BillingManagementSystem.Controllers
 
         #endregion
         #region Resident
-        public ResidentResponseModel AddResident([FromBody] ResidentRequestModel model)
+        public ActionResult AddResident([FromBody] ResidentRequestModel model)
         {
             ResidentHelpers helper = new ResidentHelpers();
             var response = helper.AddResident(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public ResidentResponseModel EditResident([FromBody] ResidentRequestModel model)
+        public ActionResult EditResident([FromBody] ResidentRequestModel model)
         {
             ResidentHelpers helper = new ResidentHelpers();
             var response = helper.EditResident(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public ResidentResponseModel DeleteResident([FromBody] ResidentRequestModel model)
+        public ActionResult DeleteResident([FromBody] ResidentRequestModel model)
         {
             ResidentHelpers helper = new ResidentHelpers();
             var response = helper.DeleteResident(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public ResidentResponseModel GetResidentById([FromBody] ResidentRequestModel model)
+        public ActionResult GetResidentById([FromBody] ResidentRequestModel model)
         {
             ResidentHelpers helper = new ResidentHelpers();
             var response = helper.GetResidentById(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public List<ResidentResponseModel> GetAllResidents([FromBody] ResidentRequestModel model)
+        public ActionResult GetAllResidents([FromBody] ResidentRequestModel model)
         {
             ResidentHelpers helper = new ResidentHelpers();
             var response = helper.GetAllResidents(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
         public ActionResult GetAllResidentsForSearch([FromBody] ResidentRequestModel model)
         {
@@ -238,45 +291,73 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult GetAllResidentsByArea([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.GetAllResidentsByArea(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult SelectDetailInfoByResident([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.SelectDetailInfoByResident(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
         #region Fixed Rate
-        public FixedRatesResponseModel EditFixedRateType([FromBody] FixedRatesRequestModel model)
+        public ActionResult EditFixedRateType([FromBody] FixedRatesRequestModel model)
         {
             FixedRatesHelpers helper = new FixedRatesHelpers();
             var response = helper.UpdateFixedRates(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
         #endregion
         #region Fixed Rate Type
-        public FixedRatesTypeResponseModel AddFixedRateType([FromBody] FixedRatesTypeRequestModel model)
+        public ActionResult AddFixedRateType([FromBody] FixedRatesTypeRequestModel model)
         {
             FixedRatesTypeHelpers helper = new FixedRatesTypeHelpers();
             var response = helper.AddFixedRateType(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public FixedRatesTypeResponseModel EditFixedRateType([FromBody] FixedRatesTypeRequestModel model)
+        public ActionResult EditFixedRateType([FromBody] FixedRatesTypeRequestModel model)
         {
             FixedRatesTypeHelpers helper = new FixedRatesTypeHelpers();
             var response = helper.EditFixedRateType(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public FixedRatesTypeResponseModel DeleteFixedRateType([FromBody] FixedRatesTypeRequestModel model)
+        public ActionResult DeleteFixedRateType([FromBody] FixedRatesTypeRequestModel model)
         {
             FixedRatesTypeHelpers helper = new FixedRatesTypeHelpers();
             var response = helper.DeleteFixedRateType(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public FixedRatesTypeResponseModel GetFixedRateTypeById([FromBody] FixedRatesTypeRequestModel model)
+        public ActionResult GetFixedRateTypeById([FromBody] FixedRatesTypeRequestModel model)
         {
             FixedRatesTypeHelpers helper = new FixedRatesTypeHelpers();
             var response = helper.GetFixedRateTypeById(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
-        public List<FixedRatesTypeResponseModel> GetAllFixedRateTypes([FromBody] FixedRatesTypeRequestModel model)
+        public ActionResult GetAllFixedRateTypes([FromBody] FixedRatesTypeRequestModel model)
         {
             FixedRatesTypeHelpers helper = new FixedRatesTypeHelpers();
             var response = helper.GetAllFixedRateTypes(model);
-            return response;
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
 
         #endregion

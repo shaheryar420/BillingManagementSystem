@@ -80,9 +80,7 @@
                     { "title": "UserName", "data": "usersUsername" },
                     { "title": "FullName", "data": "usersFullName" },
                     { "title": "Password", "data": "usersPassword" },
-                    { "title": "UserType", "data": "userTypeName" },
-
-
+                    { "title": "UserType", "data": "userTypeName" }
 
                 ]
             });
@@ -100,6 +98,7 @@
                 $('#editTitle').show();
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 var _id = rowData.usersId;
+                console.log(_id);
                 $('#user_id').val(_id);
                 $("#user_name").val(rowData.usersFullName);
                 $("#user_password").val(rowData.usersPassword);
@@ -180,7 +179,7 @@
                     var _userIsActive = $("#user_status").val();
                     var _userName = $("#user_name").val();
                     var _userPassword = $("#user_password").val();
-                    var userUserName = $("#user_username").val();
+                    var _userUserName = $("#user_username").val();
                     $.ajax({
                         url: '/Management/EditUser',
                         type: 'POST',
@@ -190,7 +189,7 @@
                             usersIsActive: _userIsActive,
                             usersFullName: _userName,
                             usersPassword: _userPassword,
-                            usersUsername: userUserName
+                            usersUsername: _userUserName
                         },
                         beforeSend: function () {
                             $('.loading').show();

@@ -111,11 +111,12 @@
             $(document).on('click', '.btn_location_delete', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
-                var _id = rowData.userId;
+                var _id = rowData.locationId;
+                console.log(_id);
                 if (_id) {
                     swal({
                         title: "Are you sure?",
-                        text: "Your will not be able to recover this user record!",
+                        text: "Your will not be able to recover this location record!",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger",
@@ -124,9 +125,9 @@
                     },
                         function () {
                             $.ajax({
-                                url: '/Management/DeleteUser',
+                                url: '/Management/DeleteLocation',
                                 type: 'POST',
-                                data: { id: _id },
+                                data: { locationId: _id },
                                 beforeSend: function () {
                                     $('.loading').show();
                                 },
@@ -136,7 +137,7 @@
                                 success: function (response) {
                                     if (response.resultCode == '1100') {
                                         swal("Deleted!", response.remarks, "success");
-                                        initUserGrid();
+                                        initLocationGrid();
                                     }
                                     else {
                                         swal('Warning', response.remarks, 'warning');
@@ -150,7 +151,7 @@
                         });
                 }
                 else {
-                    swal("Warning", "Please select a user", "warning");
+                    swal("Warning", "Please select a location", "warning");
                 }
             });
             $('#btn_location_add').click(function () {
@@ -163,7 +164,7 @@
                 $.post(url, { locationName: _locationName, locationElectricMeter: _locationElectricMeter, locationGassMeter: _locationGassMeter, locationWapdaMeter: _locationWapdaMeter, fk_area: _areaId }, function (data) {
                     if (data.resultCode == "1100") {
                         swal("Added!", data.remarks, "success");
-                        initUserGrid();
+                        initlocationGrid();
                         clearFields();
                     }
                     else {
