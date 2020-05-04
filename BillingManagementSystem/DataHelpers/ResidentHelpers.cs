@@ -595,7 +595,7 @@ namespace BillingManagementSystem.DataHelpers
                                          {
                                              r.resident_name,
                                              r.resident_id,
-                                             l.location_electricmeter,
+                                             
                                          }).ToList();
 
                         if (residents.Count() > 0)
@@ -604,17 +604,9 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 residentName = resident.resident_name,
                                 residentId = resident.resident_id.ToString(),
-                                meterNo = resident.location_electricmeter,
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             }).ToList();
-                            foreach (var resident in residents )
-                            {
-                                var bill = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
-                                var _resident = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
-                                _resident.previousReading = bill.billelectric_prevreading.ToString();
-                                _resident.outstanding = bill.billelectric_outstanding.ToString();
-                            }
                         }
                         else
                         {
@@ -643,6 +635,73 @@ namespace BillingManagementSystem.DataHelpers
                     remarks = "There Was A fatal Error" + Ex.ToString(),
                     resultCode = "1000"
                 });
+            }
+            return toReturn;
+        }
+        public ResidentResponseModel SelectDetailInfoByResident(ResidentRequestModel model)
+        {
+            ResidentResponseModel toReturn = new ResidentResponseModel();
+            try
+            {
+                if (new ModelsValidatorHelper().validateint(model.areaId))
+                {
+                    var areaId = int.Parse(model.residentId);
+                    using (db_bmsEntities db = new db_bmsEntities())
+                    {
+                        var resident = (from l in db.tbl_location
+                                         join a in db.tbl_area on l.fk_area equals a.area_id
+                                         join rl in db.tbl_residentbuilding on l.location_id equals rl.fk_building
+                                         join r in db.tbl_residents on rl.fk_resident equals r.resident_id
+                                         where a.area_id == areaId
+                                         select new
+                                         {
+                                             r.resident_name,
+                                             r.resident_id,
+                                             l.location_electricmeter,
+                                         }).FirstOrDefault();
+
+                        if (resident!=null)
+                        {
+                            toReturn = new ResidentResponseModel()
+                            {
+                                residentName = resident.resident_name,
+                                residentId = resident.resident_id.ToString(),
+                                meterNo = resident.location_electricmeter,
+                                remarks = "Successfully Found",
+                                resultCode = "1100"
+                            };
+                            var bill = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
+                            toReturn.previousReading = bill.billelectric_prevreading.ToString();
+                            toReturn.outstanding = bill.billelectric_outstanding.ToString();
+                           
+                        }
+                        else
+                        {
+                            toReturn = new ResidentResponseModel()
+                            {
+                                remarks = "No Record Found",
+                                resultCode = "1200"
+                            };
+                        }
+                    }
+                }
+                else
+                {
+                    toReturn = new ResidentResponseModel()
+                    {
+                        remarks = "Please Provide Area",
+                        resultCode = "1300"
+                    };
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                toReturn =new ResidentResponseModel()
+                {
+                    remarks = "There Was A fatal Error" + Ex.ToString(),
+                    resultCode = "1000"
+                };
             }
             return toReturn;
         }
