@@ -22,6 +22,13 @@ namespace BillingManagementSystem.DataHelpers
                 month = month - 1;
             }
             return month > 9 ? month + "-" + year : "0" + month + "-" + year;
-        } 
+        }
+        public string GetCurrentMonth()
+        {
+            DateTime currentDate = DateTime.UtcNow.AddHours(5);
+            int month = currentDate.Month;
+            int year = currentDate.Year;
+            return month > 9 ? month + "-" + year : "0" + month + "-" + year;
+        }
     }
 }

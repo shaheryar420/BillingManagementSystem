@@ -240,8 +240,17 @@ namespace BillingManagementSystem.DataHelpers
                                 resultCode= "1100"
                             };
                             var bill = (from x in db.tbl_billelectric where x.fk_location == locationId select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
-                            toReturn.previousReading = String.IsNullOrEmpty(bill.billelectric_prevreading.ToString())?bill.billelectric_prevreading.ToString():"";
-                            toReturn.outstanding = String.IsNullOrEmpty(bill.billelectric_outstanding.ToString())? bill.billelectric_outstanding.ToString():"";
+                            if (bill != null)
+                            {
+                                toReturn.previousReading = String.IsNullOrEmpty(bill.billelectric_prevreading.ToString()) ? bill.billelectric_prevreading.ToString() : "";
+                                toReturn.outstanding = String.IsNullOrEmpty(bill.billelectric_outstanding.ToString()) ? bill.billelectric_outstanding.ToString() : "";
+                            }
+                            else
+                            {
+                                toReturn.previousReading = "0";
+                                toReturn.outstanding = "0";
+
+                            }
                         }
                         else 
                         {
