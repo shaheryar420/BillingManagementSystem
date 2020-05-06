@@ -18,8 +18,41 @@
 
     <script>
         $(document).on('nifty.ready', function () {
-           
+            fetchStatusStats();
         });
+    </script>
+    <script>
+        function fetchStatusStats() {
+            $.ajax({
+                url: '/Home/DashBoardStats',
+                type: 'POST',
+                success: function (response) {
+                    if (response) {
+                        if (response.resultCode == '1100') {
+                            var _totalResidents = response.totalResidents;
+                            var _totalOutstanding = response.totalOutstandings;
+                            var _monthlyOutstanding = response.monthlyOutstandings;
+                            var _monthlyRecovery = response.monthlyRecovery;
+                            $('#total_residents').text(_totalResidents);
+                            $('#total_outstanding').text(_totalOutstanding);
+                            $('#monthly_outstanding').text(_monthlyOutstanding);
+                            $('#monthly_recovery').text(_monthlyRecovery);
+                            
+                        }
+                        else {
+                            swal('Warning', response.remarks, 'warning');
+                        }
+                    }
+                    else {
+                        swal('Warning', response.remarks, 'warning');
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
+            });
+
+        }
     </script>
    
 }
@@ -40,7 +73,7 @@
                 </div>
                 <div class="media-body">
                     <a href="~/Inbox/ComplaintInbox">
-                        <p class="text-2x mar-no text-semibold" id="stat_inbox">0</p>
+                        <p class="text-2x mar-no text-semibold" id="total_residents">0</p>
                         <p class="mar-no">Total Residents</p>
                     </a>
                 </div>
@@ -56,7 +89,7 @@
                 </div>
                 <div class="media-body">
                     <a href="~/Complaints/ComplaintList" class="text-light">
-                        <p class="text-2x mar-no text-semibold" id="stat_registered">0</p>
+                        <p class="text-2x mar-no text-semibold" id="total_outstanding">0</p>
                         <p class="mar-no">Total Outstanding</p>
                     </a>
                 </div>
@@ -71,7 +104,7 @@
                 </div>
                 <div class="media-body">
                     <a href="~/Complaints/ComplaintList" class="text-light">
-                        <p class="text-2x mar-no text-semibold" id="stat_process">0</p>
+                        <p class="text-2x mar-no text-semibold" id="monthly_outstanding">0</p>
                         <p class="mar-no">Monthly Outstanding</p>
                     </a>
                 </div>
@@ -86,7 +119,7 @@
                 </div>
                 <div class="media-body">
                     <a href="~/Complaints/DisposedComplaints" class="text-light">
-                        <p class="text-2x mar-no text-semibold" id="stat_disposed">0</p>
+                        <p class="text-2x mar-no text-semibold" id="monthly_recovery">0</p>
                         <p class="mar-no">Monthly Recovery</p>
                     </a>
                 </div>

@@ -48,8 +48,11 @@
                     "type": 'POST',
                     "dataSrc": function (data) {
 
-                        if (data.length > 0)
-                            return data;
+                        if (data.length > 0) {
+                            if (data[0].resultCode == '1100') {
+                                return data;
+                            }
+                            }
                         else {
 
                             return [];
@@ -164,7 +167,7 @@
                 $.post(url, { locationName: _locationName, locationElectricMeter: _locationElectricMeter, locationGassMeter: _locationGassMeter, locationWapdaMeter: _locationWapdaMeter, fk_area: _areaId }, function (data) {
                     if (data.resultCode == "1100") {
                         swal("Added!", data.remarks, "success");
-                        initlocationGrid();
+                        initLocationGrid();
                         clearFields();
                     }
                     else {

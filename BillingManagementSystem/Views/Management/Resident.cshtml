@@ -3,5 +3,321 @@
     ViewBag.Title = "Resident";
 }
 
-<h2>Resident</h2>
+@section Styles
+{
+    @Styles.Render("~/plugins/select2")
+    @Styles.Render("~/plugins/datepicker")
+    @Styles.Render("~/plugins/datatable")
+    @Styles.Render("~/plugins/sweetAlert")
+}
+@section Scripts
+{
+    @Scripts.Render("~/bundles/select2")
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/datepicker")
+    @Scripts.Render("~/bundles/sweetAlert")
+
+
+    <script>
+        var Dtable = null;
+        $(document).on('nifty.ready', function () {
+            $('#btn_resident_update').hide();
+            $('editTitle').hide();
+            initResidentGrid();
+            initResidentGridActions();
+           });
+
+    </script>
+    <script>
+        function clearFields() {
+            $('#resident_id').val('');
+            $("#resident_panumber").val('');
+            $("#resident_rank").val('');
+            $("#resident_name").val('');
+            $("#resident_unit").val('');
+            $("#resident_remarks").val('');
+        }
+        function initResidentGrid() {
+            Dtable = $(".residentGrid").DataTable({
+                scrollX: true,
+                destroy: true,
+                "ajax": {
+                    "url": '/Management/GetAllResidents',
+                    "type": 'POST',
+                    "dataSrc": function (data) {
+                       
+                        if (data.length > 0) {
+                            if (data[0].resultCode == '1100') {
+                                return data;
+                            }
+                            }
+                            else {
+
+                                return [];
+                            }
+                        
+                        },
+                        "error": function (a, b, c) {
+                            swal({
+                                title: "Error",
+                                text: a.status + ": " + c,
+                                type: "error"
+                            });
+                        }
+                    
+                    },
+                    "columns": [
+                        {
+                            title: 'Action',
+                            render: function (data, type, row, meta) {
+                                return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_resident_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_resident_delete'><i class='fa fa-trash'></i></a></div>";
+                            }
+                        },
+                        {
+                            title: 'Sr. #',
+                            render: function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
+                        },
+                        { "title": "Id", "data": "residentId", className: "hidden" },
+                        { "title": "PaNumber", "data": "residentPaNumber" },
+                        { "title": "Rank", "data": "residentRank" },
+                        { "title": "Name", "data": "residentName" },
+                        { "title": "Unit", "data": "residentUnit" },
+                        { "title": "Remarks", "data": "residentRemarks" },
+                        { "title": "Totat Out Standings", "data": "totatOutStandings" },
+                        { "title": "Out Standing", "data": "outstanding" },
+                        { "title": "Meter #", "data": "meterNo" },
+                        { "title": "Previous Reading", "data": "previousReading" },
+
+
+
+                    ]
+               
+            });
+            Dtable.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+        }
+        function initResidentGridActions() {
+            $(document).on('click', '.btn_resident_edit', function (e) {
+                e.preventDefault();
+                $('#btn_resident_update').show();
+                $('#btn_resident_add').hide();
+                $('#addTitle').hide();
+                $('#editTitle').show();
+                var rowData = Dtable.row($(this).parents('tr')).data();
+                var _id = rowData.residentId;
+                $('#resident_id').val(_id);
+                $("#resident_rank").val(rowData.residentRank);
+                $("#resident_panumber").val(rowData.residentPaNumber);
+                $("#resident_name").val(rowData.residentName);
+                $("#resident_unit").val(rowData.residentUnit);
+                $("#resident_remarks").val(rowData.residentRemarks);
+            });
+            $(document).on('click', '.btn_resident_delete', function (e) {
+                e.preventDefault();
+                var rowData = Dtable.row($(this).parents('tr')).data();
+                var _id = rowData.residentId;
+                console.log(_id);
+                if (_id) {
+                    swal({
+                        title: "Are you sure?",
+                        text: "Your will not be able to recover this resident record!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Delete",
+                        closeOnConfirm: false
+                    },
+                        function () {
+                            $.ajax({
+                                url: '/Management/DeleteResident',
+                                type: 'POST',
+                                data: { residentId: _id },
+                                beforeSend: function () {
+                                    $('.loading').show();
+                                },
+                                complete: function () {
+                                    $('.loading').hide();
+                                },
+                                success: function (response) {
+                                    if (response.resultCode == '1100') {
+                                        swal("Deleted!", response.remarks, "success");
+                                        initResidentGrid();
+                                    }
+                                    else {
+                                        swal('Warning', response.remarks, 'warning');
+                                    }
+                                },
+                                error: function (a, b, c) {
+                                    swal('Error', a + b + c, 'error');
+                                }
+                            });
+
+                        });
+                }
+                else {
+                    swal("Warning", "Please select a Resident", "warning");
+                }
+            });
+            $('#btn_resident_add').click(function () {
+                var url = "/Management/AddResident";
+                var _panumber = $("#resident_panumber").val();
+                var _rank = $("#resident_rank").val();
+                var _name = $("#resident_name").val();
+                var _unit = $("#resident_unit").val();
+                var _remarks = $("#resident_remarks").val();
+                $.post(url, { residentPaNumber: _panumber, residentRank: _rank, residentName: _name, residentUnit: _unit, residentRemarks: _remarks }, function (data) {
+                    if (data.resultCode == "1100") {
+                        swal("Added!", data.remarks, "success");
+                        initResidentGrid();
+                        clearFields();
+                    }
+                    else {
+                        $('.loading').hide();
+                        swal("Not Added", data.remarks, "error");
+                    }
+                });
+            });
+            $(document).on('click', '#btn_resident_update', function (e) {
+                e.preventDefault();
+                var _residentId = $('#resident_id').val();
+                if (_residentId) {
+                    var _panumber = $("#resident_panumber").val();
+                    var _rank = $("#resident_rank").val();
+                    var _name = $("#resident_name").val();
+                    var _unit = $("#resident_unit").val();
+                    var _remarks = $("#resident_remarks").val();
+                    $.ajax({
+                        url: '/Management/EditResident',
+                        type: 'POST',
+                        data: {
+                            residentId: _residentId,
+                            residentPaNumber: _panumber,
+                            residentRank: _rank,
+                            residentName: _name,
+                            residentUnit: _unit,
+                            residentRemarks: _remarks
+                        },
+                        beforeSend: function () {
+                            $('.loading').show();
+                        },
+                        complete: function () {
+                            $('.loading').hide();
+                        },
+                        success: function (response) {
+                            if (response.resultCode == '1100') {
+                                swal("Updated!", response.remarks, "success");
+                                initResidentGrid();
+                                $('#btn_resident_update').hide();
+                                $('#btn_resident_add').show();
+                                $('#addTitle').show();
+                                $('#editTitle').hide();
+                                clearFields();
+                            }
+                            else {
+                                swal('Warning', response.remarks, 'warning');
+                            }
+                        },
+                        error: function (a, b, c) {
+                            swal('Error', a + b + c, 'error');
+                        }
+                    });
+
+                }
+                else {
+                    swal("Warning", "Please select a resident", "warning");
+                }
+            });
+        }
+    
+    </script>
+}
+<div id="page-head">
+    <div class="pad-all text-center">
+        <h2>Register New Resident</h2>
+    </div>
+</div>
+<div id="page-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-bordered-warning">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Search Filters</h1>
+                </div>
+                <div class="panel-body">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-bordered-warning">
+                <div class="panel-heading">
+                    <h1 id="addTitle" class="panel-title">Location Details</h1>
+                    <h1 id="editTitle" class="panel-title">Edit Location Details</h1>
+                </div>
+                <div class="panel-body ">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Resident PaNumber</span>
+                                    <input type="hidden" id="resident_id" value="" />
+                                    <input type="text" value="" placeholder="" id="resident_panumber" class="form-control" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Resident Rank</span>
+                                    <input type="text" value="" placeholder="XXXXXXXXX" id="resident_rank" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Resident Name</span>
+                                    <input type="text" value="" placeholder="XXXXXXXXX" id="resident_name" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Resident Unit</span>
+                                    <input type="text" value="" placeholder="XXXXXXXXX" id="resident_unit" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Resident Remarks</span>
+                                    <input type="text" value="" placeholder="XXXXXXXXX" id="resident_remarks" class="form-control" />
+                                </div>
+                            </div>
+                            <div id="saveUpdateBtn" class="form-group">
+                                <a href="#" id="btn_resident_add" class="btn btn-success btn-lg btn-block">Submit</a>
+                                <a href="#" id="btn_resident_update" class="btn btn-success btn-lg btn-block">Update</a>
+                            </div>
+                            <div class="form-group">
+                                <div class="alert alert-info hidden" id="errorText"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-bordered-warning">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Resident List</h1>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-striped table-hover residentGrid"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 

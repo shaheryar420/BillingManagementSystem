@@ -49,8 +49,11 @@
                     "type": 'POST',
                     "dataSrc": function (data) {
 
-                        if (data.length > 0)
-                            return data;
+                        if (data.count > 0) {
+                            if (data[0].resultCode == '1100') {
+                                return data;
+                            }
+                            }
                         else {
 
                             return [];
@@ -257,21 +260,23 @@
 
             $("#electric_area").change(function () {
                 var _areaId = $("#electric_area").val();
+                console.log(_areaId);
                 $.ajax({
-                        url: '/Management/GetAllResidentsByArea',
+                        url: '/Management/GetAllLocationsByArea',
                         type: 'POST',
-                        data: { areaId: _areaId },
+                        data: { fk_area: _areaId },
                         success: function (response) {
                             if (response) {
                                 if (response[0].resultCode == '1100') {
                                     var list = [];
                                     for (var i = 0; i < response.length; i++) {
-                                        list.push({ text: response[i].residentName, id: response[i].residentId });
+                                        list.push({ text: response[i].locationName, id: response[i].locationId });
                                         
                                     }
                                     $('#electric_resident').select2().empty();
                                     $('#electric_resident').select2({ data: list }).trigger('change');
                                     Id = $('#electric_resident').val();
+                                    console.log(Id);
                                     initmeterNo(Id);
                                 }
                                 else {
@@ -291,9 +296,9 @@
         }
         function initmeterNo(Id) {
             $.ajax({
-                url: '/Management/SelectDetailInfoByResident',
+                url: '/Management/GetLocationById',
                 type: 'POST',
-                data: { residentId: Id},
+                data: { locationId: Id},
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
