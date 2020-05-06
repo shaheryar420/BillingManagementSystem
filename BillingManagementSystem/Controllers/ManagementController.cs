@@ -29,7 +29,11 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
-        
+        public ActionResult Resident()
+        {
+            return View();
+        }
+
         #endregion
         #region Actions
         #region User

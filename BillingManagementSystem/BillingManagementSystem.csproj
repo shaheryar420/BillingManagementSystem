@@ -915,6 +915,7 @@
     <Content Include="Views\Management\Area.cshtml" />
     <Content Include="Views\Management\Location.cshtml" />
     <Content Include="Views\Bill\AdminElectric.cshtml" />
+    <Content Include="Views\Management\Resident.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
