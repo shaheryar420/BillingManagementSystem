@@ -13,6 +13,8 @@ namespace BillingManagementSystem.Models
         public string locationElectricMeter { get; set; }
         public string locationGassMeter { get; set; }
         public string locationWapdaMeter { get; set; }
+        public string previousReading { get; set; }
+        public string outstanding { get; set; }
         public string remarks { get; set; }
         public string resultCode { get; set; }
     }
