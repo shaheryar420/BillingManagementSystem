@@ -284,7 +284,7 @@ namespace BillingManagementSystem.DataHelpers
                         int areaId = int.Parse(model.fk_area);
                         var locations = (from x in db.tbl_location
                                         join y in db.tbl_area on x.fk_area equals y.area_id
-                                        where x.location_id == areaId
+                                        where x.fk_area == areaId
                                         select new
                                         {
                                             x.fk_area,
