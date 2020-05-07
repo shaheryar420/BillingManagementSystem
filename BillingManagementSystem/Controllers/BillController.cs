@@ -38,7 +38,8 @@ namespace BillingManagementSystem.Controllers
         #region Reading
         public ActionResult AddReadingElectric([FromBody] ReadingElectricRequestModel model)
         {
-           
+            
+
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
             var response = helper.AddReadingElectric(model);
             var json = Json(response);

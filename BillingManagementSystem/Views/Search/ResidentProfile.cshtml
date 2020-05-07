@@ -17,6 +17,8 @@
     @Scripts.Render("~/bundles/sweetAlert")
 
     <script>
+        var Dtable = null;
+        var residentId = '@{ var cId = "";  if (Model != null) { cId = Model.resident_id; } }@cId';
         $(document).on('nifty.ready', function () {
             $(".monthPicker").datepicker({
                 format: "mm-yyyy",
@@ -26,10 +28,106 @@
             $(".datepick").datepicker({
                 format: "dd-mm-yyyy"
             });
-            $('.grid').dataTable({
-                scrollX:true
-            });
+          fetchResidentDetails(residentId);
+            initResidentDetails(residentId);
+           
         });
+    </script>
+    <script>
+        function fetchResidentDetails(_id) {
+            if (_id) {
+                $.ajax({
+                    url: '/Management/GetResidentById',
+                    type: 'POST',
+                    data: { residentId: _id },
+                    success: function (response) {
+                        if (response.resultCode == "1100") {
+
+                            $("#resident_pano").text(response.residentPaNumber);
+                            $("#resident_rank").text(response.residentRank);
+                            $("#resident_name").text(response.residentName);
+                            $("#resident_unit").text(response.residentUnit);
+                            $("#resident_Os").text(response.totatOutStandings);
+                            
+                        }
+                        else {
+                            swal('Warning', response.remarks, 'warning');
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+
+                });
+            }
+
+        };
+        function initResidentDetails(_id) {
+            Dtable = $(".residentGrid").DataTable({
+                scrollX: true,
+                destroy: true,
+                "ajax": {
+                    "url": '/Management/GetResidentById',
+                    "type": 'POST',
+                    "data":
+                    { residentId: _id },
+                    "dataSrc": function (data) {
+                        console.log(data);
+                        if (data.length > 0) {
+                            if (data[0].resultCode == '1100') {
+                                return data;
+                            }
+                            else {
+
+                                return [];
+                            }
+                        }
+                        else {
+                            return [];
+                        }
+                        
+                        },
+                        "error": function (a, b, c) {
+                            swal({
+                                title: "Error",
+                                text: a.status + ": " + c,
+                                type: "error"
+                            });
+                        }
+                    
+                },
+                
+                 "columns": [
+
+                     
+                     {
+                         title: 'Sr. #',
+                         render: function (data, type, row, meta) {
+                             return meta.row + meta.settings._iDisplayStart + 1;
+                         }
+                     },
+                     { "title": "Id", "data": "residentId", className: "hidden" },
+                     { "title": "PaNumber", "data": "residentPaNumber" },
+                     { "title": "Rank", "data": "residentRank" },
+                     { "title": "Name", "data": "residentName" },
+                     { "title": "Unit", "data": "residentUnit" },
+                     { "title": "Remarks", "data": "residentRemarks" },
+                     { "title": "Totat Out Standings", "data": "totatOutStandings" },
+                     { "title": "Out Standing", "data": "outstanding" },
+                     { "title": "Meter #", "data": "meterNo" },
+                     { "title": "Previous Reading", "data": "previousReading" },
+
+
+
+                 ]
+             
+               
+            });
+            Dtable.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+        }
     </script>
 
 }
@@ -45,31 +143,31 @@
                 <div class="panel-body text-center">
                     <p class="text-bold">
                         Area :
-                        <i class="text-uppercase">Area</i>
+                        <i class="text-uppercase" id="resident_area">Ares</i>
                     </p>
                     <p class="text-bold">
                         Location :
-                        <i class="text-uppercase">Building Flat #</i>
+                        <i class="text-uppercase" id="resident_location">Building Flat #</i>
                     </p>
                     <p class="text-bold">
                         Rank :
-                        <i class="text-uppercase">Officer</i>
+                        <i class="text-uppercase"  id="resident_rank">Officer</i>
                     </p>
                     <p class="text-bold">
                         Name :
-                        <i class="text-uppercase">XYZ</i>
+                        <i class="text-uppercase" id="resident_name">XYZ</i>
                     </p>
                     <p class="text-bold">
                         PA No. :
-                        <i class="text-uppercase">12-12313123</i>
+                        <i class="text-uppercase" id="resident_pano">12-12313123</i>
                     </p>
                     <p class="text-bold">
                         Unit / FMN :
-                        <i class="text-uppercase">FMN</i>
+                        <i class="text-uppercase" id="resident_unit">FMN</i>
                     </p>
                     <p class="text-bold">
                         Total Outstanding :
-                        <span> 4500.0 /-Rs</span>
+                        <span id="resident_Os">  /-Rs</span>
                     </p>
                     <button id="btnEditDetails" class="btn btn-primary">Edit Resident Details</button>
                     <button id="btnEditLocation" class="btn btn-warning">Create Vocation</button>
@@ -101,11 +199,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <table class="table table-bordered table-responsive table-hover grid">
-                                        <thead>
-                                            <tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Units</th><th>Energy Charges</th><th>Amount</th><th>Water</th><th>TV</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>
-                                        </thead>
-                                    </table>
+                                    <table class="table table-bordered table-striped table-hover residentGrid"></table>
+
+                                    @*<tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Units</th><th>Energy Charges</th><th>Amount</th><th>Water</th><th>TV</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>*@
+
                                 </div>
                             </div>
                         </div>

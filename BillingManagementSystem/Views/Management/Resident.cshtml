@@ -46,15 +46,18 @@
                     "type": 'POST',
                     "dataSrc": function (data) {
                        
-                        if (data.length > 0) {
+                        if (data.count > 0) {
                             if (data[0].resultCode == '1100') {
                                 return data;
                             }
-                            }
-                            else {
-
+                            {
                                 return [];
                             }
+                        }
+                        else {
+
+                            
+                        }
                         
                         },
                         "error": function (a, b, c) {

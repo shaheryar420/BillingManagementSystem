@@ -59,10 +59,13 @@
                             if (data[0].resultCode == '1100') {
                                 return data;
                             }
+                            {
+                                return [];
+                            }
                         }
                         else {
 
-                            return [];
+                            
                         }
                     },
                     "error": function (a, b, c) {

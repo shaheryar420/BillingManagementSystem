@@ -29,7 +29,11 @@
             });
             
             $(document).on('click', '.viewResident', function () {
-                var url = "/Search/ResidentProfile/1";
+                var rowData = Dtable.row($(this).parents('tr')).data();
+                var _id = rowData.residentId;
+
+                var url = "/Search/ResidentProfile";
+                url += "/" + _id;
                 window.open(url, "_blank");
             });
             initResidentGrid();
@@ -46,17 +50,19 @@
                     "url": '/Management/GetAllResidentsDetailInfo',
                     "type": 'POST',
                     "dataSrc": function (data) {
-                       
+                        
                         if (data.length > 0) {
                             if (data[0].resultCode == '1100') {
                                 return data;
-                            }
                             }
                             else {
 
                                 return [];
                             }
-                        
+                        }
+                        else {
+                            return [];
+                        }
                         },
                         "error": function (a, b, c) {
                             swal({
@@ -66,34 +72,37 @@
                             });
                         }
                     
-                    },
-                    "columns": [
-                        {
-                            title: 'Action',
-                            render: function (data, type, row, meta) {
-                                return "<div class='btn-group'><a href='#' class='btn btn-sm btn-success viewResident'><i class='psi-eye icon-2x'></i></a></div>";
-                            }
-                        },
-                        {
-                            title: 'Sr. #',
-                            render: function (data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            }
-                        },
-                        { "title": "Id", "data": "residentId", className: "hidden" },
-                        { "title": "PaNumber", "data": "residentPaNumber" },
-                        { "title": "Rank", "data": "residentRank" },
-                        { "title": "Name", "data": "residentName" },
-                        { "title": "Unit", "data": "residentUnit" },
-                        { "title": "Remarks", "data": "residentRemarks" },
-                        { "title": "Totat Out Standings", "data": "totatOutStandings" },
-                        { "title": "Out Standing", "data": "outstanding" },
-                        { "title": "Meter #", "data": "meterNo" },
-                        { "title": "Previous Reading", "data": "previousReading" },
+                },
+                
+                 "columns": [
+
+                     {
+                         title: 'Action',
+                         render: function (data, type, row, meta) {
+                             return "<div class='btn-group'><a href='#' class='btn btn-sm btn-success viewResident'><i class='psi-eye icon-2x'></i></a></div>";
+                         }
+                     },
+                     {
+                         title: 'Sr. #',
+                         render: function (data, type, row, meta) {
+                             return meta.row + meta.settings._iDisplayStart + 1;
+                         }
+                     },
+                     { "title": "Id", "data": "residentId", className: "hidden" },
+                     { "title": "PaNumber", "data": "residentPaNumber" },
+                     { "title": "Rank", "data": "residentRank" },
+                     { "title": "Name", "data": "residentName" },
+                     { "title": "Unit", "data": "residentUnit" },
+                     { "title": "Remarks", "data": "residentRemarks" },
+                     { "title": "Totat Out Standings", "data": "totatOutStandings" },
+                     { "title": "Out Standing", "data": "outstanding" },
+                     { "title": "Meter #", "data": "meterNo" },
+                     { "title": "Previous Reading", "data": "previousReading" },
 
 
 
-                    ]
+                 ]
+             
                
             });
             Dtable.columns.adjust();
