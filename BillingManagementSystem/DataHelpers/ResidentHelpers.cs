@@ -738,8 +738,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             var residentId = int.Parse(_resident.residentId);
                             var bill = (from x in db.tbl_billelectric where x.fk_resident == residentId select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
-                            _resident.previousReading = bill.billelectric_prevreading.ToString();
-                            _resident.outstanding = bill.billelectric_outstanding.ToString();
+                            _resident.previousReading = bill.billelectric_prevreading!=  null?bill.billelectric_prevreading.ToString():"0";
+                            _resident.outstanding = bill.billelectric_outstanding!= null ? bill.billelectric_outstanding.ToString():"0";
                         }
 
                     }
