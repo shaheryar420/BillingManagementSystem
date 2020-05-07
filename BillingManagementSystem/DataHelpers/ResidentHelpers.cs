@@ -721,6 +721,10 @@ namespace BillingManagementSystem.DataHelpers
                                         r.resident_name,
                                         r.resident_id,
                                         l.location_electricmeter,
+                                        r.resident_panumber,
+                                        r.resident_rank,
+                                        r.resident_remarks,
+                                        r.resident_unit
                                     }).ToList();
 
                     if (residents.Count()> 0)
@@ -730,6 +734,10 @@ namespace BillingManagementSystem.DataHelpers
                             residentName = resident.resident_name,
                             residentId = resident.resident_id.ToString(),
                             meterNo = resident.location_electricmeter,
+                            residentPaNumber = !string.IsNullOrEmpty(resident.resident_panumber)?resident.resident_panumber:"",
+                            residentRank = !string.IsNullOrEmpty(resident.resident_rank)? resident.resident_rank:"",
+                            residentRemarks = !string.IsNullOrEmpty(resident.resident_remarks)?resident.resident_remarks:"",
+                            residentUnit = !string.IsNullOrEmpty(resident.resident_unit)?resident.resident_unit:"",
                             remarks = "Successfully Found",
                             resultCode = "1100"
                         }).ToList();
