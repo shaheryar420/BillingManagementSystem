@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using BillingManagementSystem.Models;
 using BillingManagementSystem.DataHelpers;
 using System.Web.Http;
+using System.IO;
 
 namespace BillingManagementSystem.Controllers
 {
@@ -37,6 +38,7 @@ namespace BillingManagementSystem.Controllers
         #region Reading
         public ActionResult AddReadingElectric([FromBody] ReadingElectricRequestModel model)
         {
+           
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
             var response = helper.AddReadingElectric(model);
             var json = Json(response);
