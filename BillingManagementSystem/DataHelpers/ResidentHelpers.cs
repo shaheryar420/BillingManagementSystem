@@ -705,5 +705,64 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
+        public List<ResidentResponseModel>  GetAllResidentsDetailInfo(ResidentRequestModel model)
+        {
+            List<ResidentResponseModel> toReturn = new List<ResidentResponseModel>();
+            try
+            {
+                var areaId = int.Parse(model.residentId);
+                using (db_bmsEntities db = new db_bmsEntities())
+                {
+                    var residents = (from l in db.tbl_location
+                                    join a in db.tbl_area on l.fk_area equals a.area_id
+                                    join rl in db.tbl_residentbuilding on l.location_id equals rl.fk_building
+                                    join r in db.tbl_residents on rl.fk_resident equals r.resident_id
+                                    select new
+                                    {
+                                        r.resident_name,
+                                        r.resident_id,
+                                        l.location_electricmeter,
+                                    }).ToList();
+
+                    if (residents.Count()> 0)
+                    {
+                        toReturn = residents.Select(resident => new ResidentResponseModel()
+                        {
+                            residentName = resident.resident_name,
+                            residentId = resident.resident_id.ToString(),
+                            meterNo = resident.location_electricmeter,
+                            remarks = "Successfully Found",
+                            resultCode = "1100"
+                        }).ToList();
+                        foreach (var _resident in toReturn)
+                        {
+                            var residentId = int.Parse(_resident.residentId);
+                            var bill = (from x in db.tbl_billelectric where x.fk_resident == residentId select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
+                            _resident.previousReading = bill.billelectric_prevreading.ToString();
+                            _resident.outstanding = bill.billelectric_outstanding.ToString();
+                        }
+
+                    }
+                    else
+                    {
+                        toReturn.Add( new ResidentResponseModel()
+                        {
+                            remarks = "No Record Found",
+                            resultCode = "1200"
+                        });
+                    }
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                toReturn.Add( new ResidentResponseModel()
+                {
+                    remarks = "There Was A fatal Error" + Ex.ToString(),
+                    resultCode = "1000"
+                });
+            }
+            return toReturn;
+        }
     }
 }
