@@ -311,6 +311,14 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult GetAllResidentsDetailInfo([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.GetAllResidentsDetailInfo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
         #region Fixed Rate
         public ActionResult EditFixedRateType([FromBody] FixedRatesRequestModel model)
