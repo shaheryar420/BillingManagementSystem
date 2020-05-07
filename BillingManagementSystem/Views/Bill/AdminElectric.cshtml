@@ -286,48 +286,50 @@
 
             $("#electric_area").change(function () {
                 var _areaId = $("#electric_area").val();
+                console.log(_areaId);
                 $.ajax({
-                        url: '/Management/GetAllResidentsByArea',
-                        type: 'POST',
-                        data: { areaId: _areaId },
-                        success: function (response) {
-                            if (response) {
-                                if (response[0].resultCode == '1100') {
-                                    var list = [];
-                                    for (var i = 0; i < response.length; i++) {
-                                        list.push({ text: response[i].residentName, id: response[i].residentId });
+                    url: '/Management/GetAllLocationsByArea',
+                    type: 'POST',
+                    data: { fk_area: _areaId },
+                    success: function (response) {
+                        if (response) {
+                            if (response[0].resultCode == '1100') {
+                                var list = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    list.push({ text: response[i].locationName, id: response[i].locationId });
 
-                                    }
-                                    $('#electric_resident').select2().empty();
-                                    $('#electric_resident').select2({ data: list }).trigger('change');
-                                    Id = $('#electric_resident').val();
-                                    initmeterNo(Id);
                                 }
-                                else {
-                                    $('#electric_resident').select2().empty();
-                                    $('#electric_resident').select2({
-                                        placeholder: "resident not found ",
-                                        allowClear: true
-                                    }).trigger('change');
-                                }
+                                $('#electric_resident').select2().empty();
+                                $('#electric_resident').select2({ data: list }).trigger('change');
+                                Id = $('#electric_resident').val();
+                                console.log(Id);
+                                initmeterNo(Id);
                             }
-                        },
-                        error: function (a, b, c) {
-                            swal('Error', a + b + c, 'error');
+                            else {
+                                $('#electric_resident').select2().empty();
+                                $('#electric_resident').select2({
+                                    placeholder: "resident not found ",
+                                    allowClear: true
+                                }).trigger('change');
+                            }
                         }
-                    });
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
             });
         }
         function initmeterNo(Id) {
             $.ajax({
-                url: '/Management/SelectDetailInfoByResident',
+                url: '/Management/GetLocationById',
                 type: 'POST',
-                data: { residentId: Id},
+                data: { locationId: Id },
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
-                            $('#meter_no').text(response.meterNo);
-                             $('#previous_reading').text(response.previousReading);
+                            $('#meter_no').val(response.locationElectricMeter);
+                            $('#previous_reading').val(response.previousReading);
                         }
                         else {
                             swal("Warning", response.remarks, "warning");
@@ -383,8 +385,11 @@
                         <input type="number" value="" class="form-control" id="current_unit" />
                     </div>
                     <div class="form-group">
+                        div class="input-group mar-top">
                         <label class="control-label">Upload Picture</label>
-                        <input type="file" value="" class="form-control" />
+                        <input type="file" id="online_file" value="" class="form-control" accept=".jpg,.png,.jpeg,.pdf" />
+                        <div class="input-group-btn"><a href="#" id="btn_online_upload" class="btn btn-success">Upload</a></div>
+                    </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select Month</label>

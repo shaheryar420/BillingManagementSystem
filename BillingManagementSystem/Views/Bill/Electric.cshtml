@@ -17,6 +17,8 @@
 
     <script>
         var Id = null;
+        var fileCounter = 0;
+        var dataSet = [];
         $(document).on('nifty.ready', function () {
             $('.dropdownlist').select2();
             $('#btn_electric_update').hide();
@@ -25,6 +27,10 @@
                 format: "mm-yyyy",
                 startView: "months",
                 minViewMode: "months"
+            });
+            $('#btn_online_upload').on('click', function (e) {
+                e.preventDefault();
+                addFile($("#online_file")[0].files[0]);
             });
             initElectricGrid();
             initDropDowns();
@@ -53,7 +59,7 @@
                             if (data[0].resultCode == '1100') {
                                 return data;
                             }
-                            }
+                        }
                         else {
 
                             return [];
@@ -161,7 +167,7 @@
                 var url = "/Bill/AddReadingElectric";
                 var _meterNo = $("#meter_no").val();
                 var _previousReading = $("#previous_reading").val();
-                var _currentReading= $("#current_reading").val();
+                var _currentReading = $("#current_reading").val();
                 var _currentUnit = $("#current_unit").val();
                 var _month = $("#month").val();
                 $.post(url, { readingElectricMonth: _month, readingElectricUnits: _currentUnit, readingElectricCurrentReading: _currentReading, readingElectricPrevReading: _previousReading, readingElectricMeterNo: _meterNo }, function (data) {
@@ -195,7 +201,7 @@
                             readingElectricUnits: _currentUnit,
                             readingElectricCurrentReading: _currentReading,
                             readingElectricPrevReading: _previousReading,
-                            readingElectricMeterNo: _meterNo 
+                            readingElectricMeterNo: _meterNo
                         },
                         beforeSend: function () {
                             $('.loading').show();
@@ -228,7 +234,7 @@
                 }
             });
         }
-          
+
         function initDropDowns() {
             $.ajax({
                 url: '/Management/GetAllAreas',
@@ -262,48 +268,48 @@
                 var _areaId = $("#electric_area").val();
                 console.log(_areaId);
                 $.ajax({
-                        url: '/Management/GetAllLocationsByArea',
-                        type: 'POST',
-                        data: { fk_area: _areaId },
-                        success: function (response) {
-                            if (response) {
-                                if (response[0].resultCode == '1100') {
-                                    var list = [];
-                                    for (var i = 0; i < response.length; i++) {
-                                        list.push({ text: response[i].locationName, id: response[i].locationId });
-                                        
-                                    }
-                                    $('#electric_resident').select2().empty();
-                                    $('#electric_resident').select2({ data: list }).trigger('change');
-                                    Id = $('#electric_resident').val();
-                                    console.log(Id);
-                                    initmeterNo(Id);
+                    url: '/Management/GetAllLocationsByArea',
+                    type: 'POST',
+                    data: { fk_area: _areaId },
+                    success: function (response) {
+                        if (response) {
+                            if (response[0].resultCode == '1100') {
+                                var list = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    list.push({ text: response[i].locationName, id: response[i].locationId });
+
                                 }
-                                else {
-                                    $('#electric_resident').select2().empty();
-                                    $('#electric_resident').select2({
-                                        placeholder: "resident not found ",
-                                        allowClear: true
-                                    }).trigger('change');
-                                }
+                                $('#electric_resident').select2().empty();
+                                $('#electric_resident').select2({ data: list }).trigger('change');
+                                Id = $('#electric_resident').val();
+                                console.log(Id);
+                                initmeterNo(Id);
                             }
-                        },
-                        error: function (a, b, c) {
-                            swal('Error', a + b + c, 'error');
+                            else {
+                                $('#electric_resident').select2().empty();
+                                $('#electric_resident').select2({
+                                    placeholder: "resident not found ",
+                                    allowClear: true
+                                }).trigger('change');
+                            }
                         }
-                    });
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
             });
         }
         function initmeterNo(Id) {
             $.ajax({
                 url: '/Management/GetLocationById',
                 type: 'POST',
-                data: { locationId: Id},
+                data: { locationId: Id },
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
-                            $('#meter_no').text(response.meterNo);
-                             $('#previous_reading').text(response.previousReading);
+                            $('#meter_no').val(response.locationElectricMeter);
+                            $('#previous_reading').val(response.previousReading);
                         }
                         else {
                             swal("Warning", response.remarks, "warning");
@@ -318,73 +324,92 @@
             });
         }
     </script>
+    <script>
+        function addFile(file) {
 
+            fileCounter += 1;
+            if (dataSet.length < 5) {
+                var entry = { "Sr": fileCounter, "Name": file.name, "Data": file };
+                dataSet.push(entry);
+                
+            }
+            else {
+                swal("warning", "You can only attach upto 5 files", "warning");
+            }
+
+        }
+        </script>
 }
-<div id="page-head">
-    <div class="pad-all text-center">
-        <h2>Electric Bill Entry</h2>
-    </div>
-</div>
-<div id="page-content">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="panel panel-bordered-warning panel-colorful">
-                <div class="panel-head">
-                    <h1 class="panel-title">Generate Bill</h1>
-                </div>
-                <div class="panel-body">
-                    <div class="form-group">
-                        <label class="control-label">Select Area</label>
-                        <select class="form-control dropdownlist" id="electric_area"></select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Select Resident</label>
-                        <select class="form-control dropdownlist" id="electric_resident"></select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Meter No.</label>
-                        <input type="number" value="" readonly class="form-control" id="meter_no" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Previous Reading</label>
-                        <input type="number" value="" readonly class="form-control" id="previous_reading"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Enter Current Reading</label>
-                        <input type="hidden" id="electric_id" value="" />
-                        <input type="number" value="" class="form-control" id="current_reading" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Current Units</label>
-                        <input type="number" value="" class="form-control" id="current_unit" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Upload Picture</label>
-                        <input type="file" value="" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Select Month</label>
-                        <input type="text" value="" class="form-control monthPicker" id="month" />
-                    </div>
-                    <div class="form-group">
-                        <a href="#" id="btn_electric_add" class="btn btn-success pull-right">Submit</a>
-                        <a href="#" id="btn_electric_update" class="btn btn-success pull-right">Submit</a>
-                    </div>
-                </div>
+        <div id="page-head">
+            <div class="pad-all text-center">
+                <h2>Electric Bill Entry</h2>
             </div>
         </div>
-        <div class="col-md-8">
-            
-            <div class="panel panel-bordered-info panel-colorful">
-                <div class="panel-heading">
-                    <h1 class="panel-title">Bills Generated</h1>
+            <div id="page-content">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-bordered-warning panel-colorful">
+                            <div class="panel-head">
+                                <h1 class="panel-title">Generate Bill</h1>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="control-label">Select Area</label>
+                                    <select class="form-control dropdownlist" id="electric_area"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Select Resident</label>
+                                    <select class="form-control dropdownlist" id="electric_resident"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Meter No.</label>
+                                    <input type="number" value="" readonly class="form-control" id="meter_no" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Previous Reading</label>
+                                    <input type="number" value="" readonly class="form-control" id="previous_reading" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Enter Current Reading</label>
+                                    <input type="hidden" id="electric_id" value="" />
+                                    <input type="number" value="" class="form-control" id="current_reading" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Current Units</label>
+                                    <input type="number" value="" class="form-control" id="current_unit" />
+                                </div>
+                                <div class="form-group">
+                                   
+                                            <div class="input-group mar-top">
+                                                <label class="control-label">Upload Picture</label>
+                                                <input type="file" id="online_file" value="" class="form-control" accept=".jpg,.png,.jpeg,.pdf" />
+                                                <div class="input-group-btn"><a href="#" id="btn_online_upload" class="btn btn-success">Upload</a></div>
+                                            </div>
+                                        </div>
+                                
+                                <div class="form-group">
+                                    <label class="control-label">Select Month</label>
+                                    <input type="text" value="" class="form-control monthPicker" id="month" />
+                                </div>
+                                <div class="form-group">
+                                    <a href="#" id="btn_electric_add" class="btn btn-success pull-right">Submit</a>
+                                    <a href="#" id="btn_electric_update" class="btn btn-success pull-right">Submit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+
+                        <div class="panel panel-bordered-info panel-colorful">
+                            <div class="panel-heading">
+                                <h1 class="panel-title">Bills Generated</h1>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-bordered table-responsive table-hover electricGrid"></table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <table class="table table-bordered table-responsive table-hover electricGrid"></table>
-                </div>
+
+
             </div>
-        </div>
-    </div>
-
-
-</div>

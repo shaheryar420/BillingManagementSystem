@@ -25,10 +25,61 @@
             $(".datepick").datepicker({
                 format: "dd-mm-yyyy"
             });
-            $('.grid').dataTable();
+           
         });
     </script>
+    <script>
+         function initElectricGrid() {
+            Dtable = $(".electricGrid").DataTable({
+                autoWidth: true,
+                destroy: true,
+                "ajax": {
+                    "url": '/Bill/GetAllReadingsElectric',
+                    "type": 'POST',
+                    "dataSrc": function (data) {
 
+                        if (data.count > 0) {
+                            if (data[0].resultCode == '1100') {
+                                return data;
+                            }
+                        }
+                        else {
+
+                            return [];
+                        }
+                    },
+                    "error": function (a, b, c) {
+                        swal({
+                            title: "Error",
+                            text: a.status + ": " + c,
+                            type: "error"
+                        });
+                    }
+                },
+                "columns": [
+                    
+                    {
+                        title: 'Sr. #',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "title": "Id", "data": "readingElectricId", className: "hidden" },
+                    { "title": "Billing Month", "data": "readingElectricMonth" },
+                    { "title": "Meter #", "data": "readingElectricMeterNo" },
+                    { "title": "Previous Reading", "data": "readingElectricPrevReading" },
+                    { "title": "Current Reading", "data": "readingElectricCurrentReading" },
+                    { "title": "Current Units", "data": "readingElectricUnits" },
+                    { "title": "Date Added", "data": "readingElectricDatetime" },
+
+                ]
+            });
+            Dtable.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+        }
+    </script>
 }
 <div id="page-head">
     <div class="pad-all text-center">
@@ -147,11 +198,8 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <table class="table table-bordered table-responsive table-hover grid">
-                        <thead>
-                            <tr><th>Sr.</th><th>Meter #</th><th>Location</th><th>PA No</th><th>Rank</th><th>Name</th><th>Unit/FMN</th><th>Previous Reading</th><th>Present Reading</th><th>Units</th><th>Energy Charges</th><th>Amount</th><th>Water</th><th>TV</th><th>Picture</th><th>Remarks</th><th>Date Entered</th><th>Entry By</th></tr>
-                        </thead>
-                    </table>
+                    <table class="table table-bordered table-responsive table-hover electricGrid"></table>
+
                 </div>
             </div>
         </div>
