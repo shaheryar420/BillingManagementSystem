@@ -710,7 +710,6 @@ namespace BillingManagementSystem.DataHelpers
             List<ResidentResponseModel> toReturn = new List<ResidentResponseModel>();
             try
             {
-                var areaId = int.Parse(model.residentId);
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
                     var residents = (from l in db.tbl_location
