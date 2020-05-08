@@ -13,6 +13,7 @@ namespace BillingManagementSystem.Controllers
     public class HomeController : Controller
     {
         // GET: Home
+        [SetPermissions]
         public ActionResult Index()
         {
             return View();

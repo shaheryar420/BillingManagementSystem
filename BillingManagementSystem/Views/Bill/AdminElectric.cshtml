@@ -52,7 +52,7 @@
                     "type": 'POST',
                     "dataSrc": function (data) {
 
-                        if (data.count > 0) {
+                        if (data.length > 0) {
                             if (data[0].resultCode == '1100') {
                                 return data;
                             }
@@ -92,7 +92,14 @@
                     { "title": "Previous Reading", "data": "readingElectricPrevReading" },
                     { "title": "Current Reading", "data": "readingElectricCurrentReading" },
                     { "title": "Current Units", "data": "readingElectricUnits" },
+                    {
+                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.readingpicture_type + ";base64, " + row.readingpicture_data + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
                     { "title": "Date Added", "data": "readingElectricDatetime" },
+                    { "title": "Added By", "data": "readingElectricAddedby" }
+
 
                 ]
             });
@@ -354,7 +361,7 @@
 }
 <div id="page-head">
     <div class="pad-all text-center">
-        <h2>Electric Bill Entry</h2>
+        <h2>Electric Bill Approval</h2>
     </div>
 </div>
 <div id="page-content">
@@ -407,12 +414,11 @@
                     </div>
                 </div>
             </div>
-        </div>
         <div class="col-md-8">
 
             <div class="panel panel-bordered-info panel-colorful">
                 <div class="panel-heading">
-                    <h1 class="panel-title">Bills Generated</h1>
+                    <h1 class="panel-title">Readings Added</h1>
                 </div>
                 <div class="panel-body">
                     <table class="table table-bordered table-responsive table-hover electricGrid"></table>
@@ -420,9 +426,4 @@
             </div>
         </div>
     </div>
-
-
-
-
-<h2>Electric</h2>
-
+</div>

@@ -39,14 +39,13 @@
         }
         function initResidentGrid() {
             Dtable = $(".residentGrid").DataTable({
-                scrollX: true,
                 destroy: true,
                 "ajax": {
                     "url": '/Management/GetAllResidents',
                     "type": 'POST',
                     "dataSrc": function (data) {
-                       
-                        if (data.count > 0) {
+                        if (data.length > 0) {
+                            console.log(data);
                             if (data[0].resultCode == '1100') {
                                 return data;
                             }
@@ -55,8 +54,7 @@
                             }
                         }
                         else {
-
-                            
+                            return [];
                         }
                         
                         },
@@ -88,13 +86,6 @@
                         { "title": "Name", "data": "residentName" },
                         { "title": "Unit", "data": "residentUnit" },
                         { "title": "Remarks", "data": "residentRemarks" },
-                        { "title": "Totat Out Standings", "data": "totatOutStandings" },
-                        { "title": "Out Standing", "data": "outstanding" },
-                        { "title": "Meter #", "data": "meterNo" },
-                        { "title": "Previous Reading", "data": "previousReading" },
-
-
-
                     ]
                
             });

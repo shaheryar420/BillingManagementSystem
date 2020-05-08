@@ -41,7 +41,7 @@ namespace BillingManagementSystem.DataHelpers
                                                 {
                                                     fk_readingpicture = newReadingPicture.readingpicture_id,
                                                     readingelectric_addedby = int.Parse(model.readingElectricAddedby),
-                                                    readingelectric_units = double.Parse(model.readingElectricPrevReading)-double.Parse(model.readingElectricCurrentReading),
+                                                    readingelectric_units = double.Parse(model.readingElectricCurrentReading) - double.Parse(model.readingElectricPrevReading),
                                                     readingelectric_month = model.readingElectricMonth,
                                                     readingelectric_currentreading = double.Parse(model.readingElectricCurrentReading),
                                                     readingelectric_datetime = DateTime.UtcNow.AddHours(5),
@@ -333,7 +333,9 @@ namespace BillingManagementSystem.DataHelpers
                                 {
                                     outstanding = "0";
                                 }
-                                var fixedRatesElectric = (from x in db.tbl_fixedrates where x.fixedrates_name == "Electric Charges" select x).FirstOrDefault();
+                                var fixedRatesElectric = (from x in db.tbl_fixedrates where x.fixedrates_id==1 select x).FirstOrDefault();
+                                var fixedRatesTv = (from x in db.tbl_fixedrates where x.fixedrates_id == 2 select x).FirstOrDefault();
+                                var fixedRatesWater = (from x in db.tbl_fixedrates where x.fixedrates_id == 3 select x).FirstOrDefault();
                                 var readingPicture = (from x in db.tbl_readingpicture where x.readingpicture_id == readingElectric.fk_readingpicture select x).FirstOrDefault();
                                 if (readingPicture != null)
                                 {
@@ -357,8 +359,8 @@ namespace BillingManagementSystem.DataHelpers
                                         billelectric_outstanding = 0,
                                         billelectric_prevreading = readingElectric.readingelectric_prevreading,
                                         billelectric_units = readingElectric.readingelectric_units,
-                                        billelectric_tv = 0,
-                                        billelectric_water = 0,
+                                        billelectric_tv = fixedRatesTv.fixedrates_amount,
+                                        billelectric_water = fixedRatesWater.fixedrates_amount,
                                         billelectric_datetime = readingElectric.readingelectric_datetime,
                                         billelectric_remarks = readingElectric.readingelectric_remarks
                                     };
@@ -428,8 +430,14 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using(db_bmsEntities db = new db_bmsEntities())
                 {
+                    int user = int.Parse(model.readingElectricAddedby);
+                    var meters = (from x in db.tbl_userareas
+                                  join y in db.tbl_location on x.fk_area equals y.fk_area
+                                  where x.fk_user == user
+                                  select y.location_electricmeter).ToList();
                     var readings = (from x in db.tbl_readingelectric
                                     join y in db.tbl_readingpicture on x.fk_readingpicture equals y.readingpicture_id
+                                    join z in db.tbl_users on x.readingelectric_addedby equals z.users_id
                                     select new
                                     {
                                        x.fk_readingpicture,
@@ -444,14 +452,15 @@ namespace BillingManagementSystem.DataHelpers
                                        x.readingelectric_units,
                                        y.readingpicture_data,
                                        y.readingpicture_size,
-                                       y.readingpicture_type
-                                    }).ToList();
+                                       y.readingpicture_type,
+                                       z.users_fullname
+                                    }).Where(x=> meters.Contains(x.readingelectric_meterno)).ToList();
                     if (readings.Count() > 0)
                     {
                         toRetrun = readings.Select(x => new ReadingElectricResponseModel()
                         {
                             fk_readingPicture= x.fk_readingpicture.ToString(),
-                            readingElectricAddedby= x.readingelectric_addedby.ToString(),
+                            readingElectricAddedby= x.users_fullname.ToString(),
                             readingElectricCurrentReading= x.readingelectric_currentreading.ToString(),
                             readingElectricDatetime=x.readingelectric_datetime.ToString(),
                             readingElectricId= x.readingelectric_id.ToString(),

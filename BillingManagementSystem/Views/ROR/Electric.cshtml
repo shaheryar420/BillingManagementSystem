@@ -35,7 +35,7 @@
                     "type": 'POST',
                     "dataSrc": function (data) {
 
-                       if (data.count > 0) {
+                       if (data.length > 0) {
                             if (data[0].resultCode == '1100') {
                                 return data;
                             }
@@ -67,17 +67,21 @@
                     { "title": "Id", "data": "billElectricId", className: "hidden" },
                     { "title": "Meter #", "data": "locationMeterNo" },
                     { "title": "Location", "data": "locationName" },
+                    { "title": "Name", "data": "residentName" },
                     { "title": "PA No", "data": "residentPaNo" },
                     { "title": "Rank", "data": "residentRank" },
-                    { "title": "Name", "data": "residentName" },
+                    { "title": "Unit/FMN", "data": "residentUnit" },
                     { "title": "Previous Reading", "data": "billElectricPrevReading" },
                     { "title": "Present Reading", "data": "billElectricCurrentReading" },
                     { "title": "Units", "data": "billElectricUnits" },
-                    { "title": "Energy Charges", "data": "residentUnit" },
                     { "title": "Amount", "data": "billElectricAmount" },
                     { "title": "Water", "data": "billElectricWater" },
                     { "title": "TV", "data": "billElectricTv" },
-                    { "title": "Picture", "data": "fk_billPicture" },
+                    {
+                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
                     { "title": "Remarks", "data": "billElectricRemarks" }
                 ]
             });

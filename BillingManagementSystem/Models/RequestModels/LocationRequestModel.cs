@@ -7,6 +7,7 @@ namespace BillingManagementSystem.Models
 {
     public class LocationRequestModel
     {
+        public string userId { get; set; }
         public string locationId { get; set; }
         public string locationName { get; set; }
         public string fk_area { get; set; }

@@ -1,4 +1,5 @@
-﻿using BillingManagementSystem.Models.ViewModels;
+﻿using BillingManagementSystem.App_Start;
+using BillingManagementSystem.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,17 @@ namespace BillingManagementSystem.Controllers
     public class SearchController : Controller
     {
         // GET: Search
+        [SetPermissions]
         public ActionResult SearchBill()
         {
             return View();
         }
+        [SetPermissions]
         public ActionResult SearchResident()
         {
             return View();
         }
+
         public ActionResult ResidentProfile(int id)
         {
             ResidentViewModel model = new ResidentViewModel();

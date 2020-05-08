@@ -397,5 +397,50 @@ namespace BillingManagementSystem.DataHelpers
             };
             return toReturn;
         }
+        public List<UserResponseModel> GetUserPermissions(string userId)
+        {
+            List<UserResponseModel> toReturn = new List<UserResponseModel>();
+            try
+            {
+                using (db_bmsEntities db = new db_bmsEntities())
+                {
+                    int _user = int.Parse(userId);
+                    var users = (from x in db.tbl_userpermissions
+                                 where x.fk_user == _user
+                                 select new
+                                 {
+                                     x.userpermissions_action,
+                                     x.userpermissions_controller
+                                 }).ToList();
+                    if (users.Count() > 0)
+                    {
+                        toReturn = users.Select(user => new UserResponseModel()
+                        {
+                            action = user.userpermissions_action,
+                            controller = user.userpermissions_controller,
+                            remarks = "Permissions Found Successfully",
+                            resultCode = "1100"
+                        }).ToList();
+                    }
+                    else
+                    {
+                        toReturn.Add(new UserResponseModel()
+                        {
+                            remarks = "No Record Found",
+                            resultCode = "1200"
+                        });
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn.Add(new UserResponseModel()
+                {
+                    remarks = "There Was A Fatal Error " + Ex.ToString(),
+                    resultCode = "1000"
+                });
+            };
+            return toReturn;
+        }
     }
 }

@@ -14,6 +14,8 @@ namespace BillingManagementSystem.Models
         public string fk_userType { get; set; }
         public string userTypeName { get; set; }
         public string usersIsActive { get; set; }
+        public string action { get; set; }
+        public string controller { get; set; }
         public string remarks { get; set; }
         public string resultCode { get; set; }
     }

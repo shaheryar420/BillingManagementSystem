@@ -35,7 +35,7 @@
                                 <span class="menu-title">Home</span>
                             </a>
                         </li>
-                        <li class="@Html.IsSelected(controller: "Bill")">
+                        <li class="@Html.IsSelected(controller: "Bill") @Html.IsAllowed(controller:"Bill")">
                             <a href="#">
                                 <i class="psi-notepad"></i>
                                 <span class="menu-title">Bill Entry</span>
@@ -43,22 +43,22 @@
                             </a>
                             <ul class="collapse">
 
-                                <li class="@Html.IsSelected(action: "Electric", controller:"Bill")">
+                                <li class="@Html.IsSelected(action: "Electric", controller:"Bill")  @Html.IsAllowed(controller:"Bill", action: "Electric")">
                                     <a href="@Url.Action("Electric","Bill")"> Electric / General</a>
                                 </li>
-                                <li class="@Html.IsSelected(action: "AdminElectric", controller:"Bill")">
+                                <li class="@Html.IsSelected(action: "AdminElectric", controller:"Bill")  @Html.IsAllowed(controller:"Bill", action: "AdminElectric")">
                                     <a href="@Url.Action("AdminElectric","Bill")"> Electric / Admin</a>
                                 </li>
-                                <li class="@Html.IsSelected(action: "Gas", controller:"Bill")">
+                                <li class="@Html.IsSelected(action: "Gas", controller:"Bill")  @Html.IsAllowed(controller:"Bill", action: "Gas")">
                                     <a href="@Url.Action("Gas","Bill")">SUI Gas</a>
                                 </li>
-                                <li class="@Html.IsSelected(action: "Wapda", controller:"Bill")">
+                                <li class="@Html.IsSelected(action: "Wapda", controller:"Bill")  @Html.IsAllowed(controller:"Bill", action: "Wapda")">
                                     <a href="@Url.Action("Wapda","Bill")">Wapda</a>
                                 </li>
                             </ul>
 
                         </li>
-                        <li class="@Html.IsSelected(controller: "Recovery")">
+                        <li class="@Html.IsSelected(controller: "Recovery") @Html.IsAllowed(controller:"Recovery")">
                             <a href="#">
                                 <i class="psi-financial"></i>
                                 <span class="menu-title">Bill Recovery</span>
@@ -66,19 +66,22 @@
                             </a>
                             <ul class="collapse">
 
-                                <li class="@Html.IsSelected(action: "Electric", controller:"Recovery")">
+                                <li class="@Html.IsSelected(action: "Electric", controller:"Recovery")@Html.IsAllowed(controller:"Recovery", action: "Electric")">
                                     <a href="@Url.Action("Electric","Recovery")"> Electric / General</a>
                                 </li>
-                                <li class="@Html.IsSelected(action: "Gas", controller:"Recovery")">
+                                <li class="@Html.IsSelected(action: "Gas", controller:"Recovery")" @Html.IsAllowed(controller: "Recovery", action: "Gas")>
                                     <a href="@Url.Action("Gas","Recovery")">SUI Gas</a>
                                 </li>
-                                <li class="@Html.IsSelected(action: "Wapda", controller:"Recovery")">
+                                <li class="@Html.IsSelected(action: "Wapda", controller:"Recovery")" @Html.IsAllowed(controller: "Recovery", action: "Wapda")>
                                     <a href="@Url.Action("Wapda","Recovery")">Wapda</a>
+                                </li>
+                                <li class="@Html.IsSelected(action: "RecoveryApproval", controller:"Recovery")" @Html.IsAllowed(controller: "RecoveryApproval", action: "Wapda")>
+                                    <a href="@Url.Action("RecoveryApproval","Recovery")">Wapda</a>
                                 </li>
                             </ul>
 
                         </li>
-                        <li class="@Html.IsSelected(controller: "ROR")">
+                        <li class="@Html.IsSelected(controller: "ROR")@Html.IsAllowed(controller:"ROR")">
                             <a href="#">
                                 <i class="psi-box-full"></i>
                                 <span class="menu-title">ROR</span>
@@ -86,75 +89,67 @@
                             </a>
                             <ul class="collapse">
 
-                                <li class="@Html.IsSelected(action: "Electric", controller:"ROR")">
+                                <li class="@Html.IsSelected(action: "Electric", controller:"ROR")@Html.IsAllowed(controller:"ROR", action: "Electric")">
                                     <a href="@Url.Action("Electric","ROR")"> Electric / General</a>
                                 </li>
-                                <li class="@Html.IsSelected(action: "Gas", controller:"ROR")">
+                                <li class="@Html.IsSelected(action: "Gas", controller:"ROR")@Html.IsAllowed(controller:"ROR", action: "Gas")">
                                     <a href="@Url.Action("Gas","ROR")">SUI Gas</a>
                                 </li>
-                                <li class="@Html.IsSelected(action: "Wapda", controller:"ROR")">
+                                <li class="@Html.IsSelected(action: "Wapda", controller:"ROR")@Html.IsAllowed(controller:"ROR", action: "Wapda")">
                                     <a href="@Url.Action("Wapda","ROR")">Wapda</a>
                                 </li>
-                                @*<li class="@Html.IsSelected(action: "ListProjects")">
-            <a href="@Url.Action("ListProjects","Projects")">List of Necessity </a>
-        </li>*@
                             </ul>
 
                         </li>
-                        <li class="@Html.IsSelected(controller: "Search")">
+                        <li class="@Html.IsSelected(controller: "Search")@Html.IsAllowed(controller:"Search")">
                             <a href="#">
                                 <i class="pli-magnifi-glass"></i>
                                 <span class="menu-title">Search</span>
                                 <i class="arrow"></i>
                             </a>
                             <ul class="collapse">
-                                <li class="@Html.IsSelected(action: "SearchBill", controller:"Search")">
+                                <li class="@Html.IsSelected(action: "SearchBill", controller:"Search")@Html.IsAllowed(controller:"Search", action: "SearchBill")">
                                     <a href="@Url.Action("SearchBill","Search")"> Search Bill</a>
                                 </li>
-                                <li class="@Html.IsSelected(action: "SearchResident", controller:"Search")">
+                                <li class="@Html.IsSelected(action: "SearchResident", controller:"Search")@Html.IsAllowed(controller:"Search", action: "SearchResident")">
                                     <a href="@Url.Action("SearchResident","Search")"> Search Resident</a>
                                 </li>
                             </ul>
 
                         </li>
-                        <li class="">
+                        <li class="@Html.IsSelected(controller: "Reports")@Html.IsAllowed(controller:"Reports")">
                             <a href="#">
                                 <i class="psi-bar-chart"></i>
                                 <span class="menu-title">Reports</span>
                                 <i class="arrow"></i>
                             </a>
                             <ul class="collapse">
-                                <li class="">
-                                    <a href="#">Outstanding Report</a>
-                                </li>
-                                <li class="">
-                                    <a href="#">Reader Report</a>
-                                </li>
+                                
                             </ul>
 
                         </li>
 
-                        <li class="@Html.IsSelected(controller: "Management")">
+                        <li class="@Html.IsSelected(controller: "Management")@Html.IsAllowed(controller:"Management")">
                             <a href="#">
                                 <i class="psi-gears"></i>
                                 <span class="menu-title">Management</span>
                                 <i class="arrow"></i>
                             </a>
                             <ul class="collapse">
-                                <li class="@Html.IsSelected(controller: "Management", action:"FixedRates")">
+                                <li class="@Html.IsSelected(controller: "Management", action:"Management")"@Html.IsAllowed(controller:"Management", action: "Management")>
                                     <a href="@Url.Action("FixedRates","Management")">Manage Fixed Rates</a>
                                 </li>
-                                <li class="@Html.IsSelected(controller: "Management", action:"Users")">
+                                <li class="@Html.IsSelected(controller: "Management", action:"Users")"@Html.IsAllowed(controller:"Management", action: "Users")>
                                     <a href="@Url.Action("Users","Management")">Manage Users</a>
                                 </li>
                                 
-                                <li class="@Html.IsSelected(controller: "Management", action:"Area")">
+                                <li class="@Html.IsSelected(controller: "Management", action:"Area")"@Html.IsAllowed(controller:"Management", action: "Area")>
                                     <a href="@Url.Action("Area","Management")">Manage Areas</a>
                                 </li>
-                                <li class="@Html.IsSelected(controller: "Management", action:"Location")">
+                                <li class="@Html.IsSelected(controller: "Management", action:"Location")@Html.IsAllowed(controller:"Management", action: "Location")">
                                     <a href="@Url.Action("Location","Management")">Manage Locations</a>
                                 </li>
-                                <li class="@Html.IsSelected(controller: "Management", action:"Resident")">
+                                <li class="@Html.IsSelected(controller: "Management", action:"Resident")@Html.IsAllowed(controller:"Management", action: "Resident")">
                                     <a href="@Url.Action("Resident","Management")">Manage Residents</a>
                                 </li>
                             </ul>

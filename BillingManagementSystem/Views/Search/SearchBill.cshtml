@@ -25,27 +25,30 @@
             $(".datepick").datepicker({
                 format: "dd-mm-yyyy"
             });
-           
+            initElectricGrid();
         });
     </script>
     <script>
          function initElectricGrid() {
             Dtable = $(".electricGrid").DataTable({
-                autoWidth: true,
+               autoWidth: true,
                 destroy: true,
                 "ajax": {
-                    "url": '/Bill/GetAllReadingsElectric',
+                    "url": '/ROR/GetAllRORElectric',
                     "type": 'POST',
                     "dataSrc": function (data) {
 
-                        if (data.count > 0) {
+                       if (data.length > 0) {
                             if (data[0].resultCode == '1100') {
                                 return data;
+                            }
+                            {
+                                return [];
                             }
                         }
                         else {
 
-                            return [];
+                            
                         }
                     },
                     "error": function (a, b, c) {
@@ -57,20 +60,32 @@
                     }
                 },
                 "columns": [
-                    
+                   
                     {
                         title: 'Sr. #',
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { "title": "Id", "data": "readingElectricId", className: "hidden" },
-                    { "title": "Billing Month", "data": "readingElectricMonth" },
-                    { "title": "Meter #", "data": "readingElectricMeterNo" },
-                    { "title": "Previous Reading", "data": "readingElectricPrevReading" },
-                    { "title": "Current Reading", "data": "readingElectricCurrentReading" },
-                    { "title": "Current Units", "data": "readingElectricUnits" },
-                    { "title": "Date Added", "data": "readingElectricDatetime" },
+                    { "title": "Id", "data": "billElectricId", className: "hidden" },
+                    { "title": "Meter #", "data": "locationMeterNo" },
+                    { "title": "Location", "data": "locationName" },
+                    { "title": "PA No", "data": "residentPaNo" },
+                    { "title": "Rank", "data": "residentRank" },
+                    { "title": "Name", "data": "residentName" },
+                    { "title": "Previous Reading", "data": "billElectricPrevReading" },
+                    { "title": "Present Reading", "data": "billElectricCurrentReading" },
+                    { "title": "Units", "data": "billElectricUnits" },
+                    { "title": "Energy Charges", "data": "residentUnit" },
+                    { "title": "Amount", "data": "billElectricAmount" },
+                    { "title": "Water", "data": "billElectricWater" },
+                    { "title": "TV", "data": "billElectricTv" },
+                    {
+                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
+                    { "title": "Remarks", "data": "billElectricRemarks" }
 
                 ]
             });

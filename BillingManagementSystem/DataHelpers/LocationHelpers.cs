@@ -242,8 +242,8 @@ namespace BillingManagementSystem.DataHelpers
                             var bill = (from x in db.tbl_billelectric where x.fk_location == locationId select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
                             if (bill != null)
                             {
-                                toReturn.previousReading = String.IsNullOrEmpty(bill.billelectric_prevreading.ToString()) ? bill.billelectric_prevreading.ToString() : "";
-                                toReturn.outstanding = String.IsNullOrEmpty(bill.billelectric_outstanding.ToString()) ? bill.billelectric_outstanding.ToString() : "";
+                                toReturn.previousReading = !String.IsNullOrEmpty(bill.billelectric_prevreading.ToString()) ? bill.billelectric_prevreading.ToString() : "";
+                                toReturn.outstanding = !String.IsNullOrEmpty(bill.billelectric_outstanding.ToString()) ? bill.billelectric_outstanding.ToString() : "";
                             }
                             else
                             {

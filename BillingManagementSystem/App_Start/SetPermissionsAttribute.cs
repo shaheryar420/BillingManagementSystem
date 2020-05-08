@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BillingManagementSystem.DataHelpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,25 +19,23 @@ namespace BillingManagementSystem.App_Start
                 throw new ArgumentNullException("httpContext");
             }
             // Check that the user belongs to one or more of these roles 
-            //if (httpContext.Request.Cookies["mes_data"] !=null)
-            //{
-            //    var routeData = httpContext.Request.RequestContext.RouteData;
-            //    var controller = routeData.GetRequiredString("controller");
-            //    var action = routeData.GetRequiredString("action");
-            //    string role = httpContext.Request.Cookies["mes_data"]["Id"];
-            //    var permissions = new RolesHelper().GetRoles(role);
-            //    var actionList = permissions.Select(x => x.controllerName + "/" + x.actionName).ToList();
-            //    if(actionList.Contains(controller+"/"+action))
-            //    {
-            //       isUserAuthorized = true;
+            if (httpContext.Request.Cookies["bms_data"] != null)
+            {
+                var routeData = httpContext.Request.RequestContext.RouteData;
+                var controller = routeData.GetRequiredString("controller");
+                var action = routeData.GetRequiredString("action");
+                string userId = httpContext.Request.Cookies["bms_data"]["id"];
+                var permissions = new UserHelpers().GetUserPermissions(userId);
+                var actionList = permissions.Select(x => x.controller + "/" + x.action).ToList();
+                if (actionList.Contains(controller + "/" + action))
+                {
+                    isUserAuthorized = true;
+                }
 
-                    
-            //    }
+                if (isUserAuthorized)
+                    return true;
 
-            //    if (isUserAuthorized)
-            //        return true;
-
-            //}
+            }
             return base.AuthorizeCore(httpContext);
         }
         public override void OnAuthorization(AuthorizationContext filterContext)
@@ -48,9 +47,17 @@ namespace BillingManagementSystem.App_Start
             }
             else
             {
-                if(filterContext.RequestContext.HttpContext.Request.Cookies["mes_data"] != null)
+                if(filterContext.RequestContext.HttpContext.Request.Cookies["bms_data"] != null)
                 {
-                    filterContext.Result = new RedirectResult("~/Home/Index");
+                    if(filterContext.RequestContext.HttpContext.Request.Cookies["bms_data"]["Id"] != null)
+                    {
+                        filterContext.Result = new RedirectResult("~/Home/Index");
+                    }
+                    else
+                    {
+                        filterContext.Result = new RedirectResult("~/Login/Login");
+                    }
+                    
                 }
                 else
                 {

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using BillingManagementSystem.Models;
 using BillingManagementSystem.DataHelpers;
 using System.Web.Http;
+using BillingManagementSystem.App_Start;
 
 namespace BillingManagementSystem.Controllers
 {
@@ -13,22 +14,27 @@ namespace BillingManagementSystem.Controllers
     {
         // GET: Management
         #region Views
+        [SetPermissions]
         public ActionResult FixedRates()
         {
             return View();
         }
+        [SetPermissions]
         public ActionResult Users()
         {
             return View();
         }
+        [SetPermissions]
         public ActionResult Area()
         {
             return View();
         }
+        [SetPermissions]
         public ActionResult Location()
         {
             return View();
         }
+        [SetPermissions]
         public ActionResult Resident()
         {
             return View();
@@ -212,10 +218,23 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-        public ActionResult GetAllAreas([FromBody] AreaRequestModel model)
+        public ActionResult GetAllAreas()
         {
             AreaHelpers helper = new AreaHelpers();
-            var response = helper.GetAllAreas(model);
+            var response = helper.GetAllAreas(new AreaRequestModel());
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllAreasByUser()
+        {
+            string userId = Request.Cookies["bms_data"]["id"].ToString();
+            AreaRequestModel model = new AreaRequestModel()
+            {
+                userId = userId
+            };
+            AreaHelpers helper = new AreaHelpers();
+            var response = helper.GetAllAreasByUser(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BillingManagementSystem.DataHelpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -39,35 +40,34 @@ namespace BillingManagementSystem
         public static string IsAllowed(this HtmlHelper html, string controller = null, string action = null, string cssClass = null)
         {
 
-            //if (action != null)
-            //{
-            //    string role = System.Web.HttpContext.Current.Request.Cookies["mes_data"]["Id"];
-            //    var permissions = new RolesHelper().GetRoles(role);
-            //    var actionList = permissions.Select(x => x.actionName).ToList();
-            //    if (!actionList.Contains(action))
-            //    {
-            //        cssClass = "hidden";
-            //    }
-            //}
-            //else
-            //{
-            //    if(System.Web.HttpContext.Current.Request.Cookies["mes_data"] !=null)
-            //    {
-            //        string role = System.Web.HttpContext.Current.Request.Cookies["mes_data"]["Id"];
-            //        var permissions = new RolesHelper().GetRoles(role);
-            //        var actionList = permissions.Select(x => x.controllerName).ToList();
-            //        if (!actionList.Contains(controller))
-            //        {
-            //            cssClass = "hidden";
-            //        }
-            //    }
-            //    else
-            //    {
-            //        cssClass = "hidden";
-            //    }
+            if (action != null)
+            {
+                string role = System.Web.HttpContext.Current.Request.Cookies["bms_data"]["Id"];
+                var permissions = new UserHelpers().GetUserPermissions(role);
+                var actionList = permissions.Select(x => x.controller + "/" + x.action).ToList();
+                if (!actionList.Contains(controller + "/" + action))
+                {
+                    cssClass = "hidden";
+                }
+            }
+            else
+            {
+                if (System.Web.HttpContext.Current.Request.Cookies["bms_data"] != null)
+                {
+                    string role = System.Web.HttpContext.Current.Request.Cookies["bms_data"]["Id"];
+                    var permissions = new UserHelpers().GetUserPermissions(role);
+                    var actionList = permissions.Select(x => x.controller).ToList();
+                    if (!actionList.Contains(controller))
+                    {
+                        cssClass = "hidden";
+                    }
+                }
+                else
+                {
+                    cssClass = "hidden";
+                }
 
-            //}
-            cssClass = "active";
+            }
             return cssClass;
         }
         public static string PageClass(this HtmlHelper html)

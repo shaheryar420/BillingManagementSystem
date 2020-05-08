@@ -1,4 +1,5 @@
-﻿using BillingManagementSystem.DataHelpers;
+﻿using BillingManagementSystem.App_Start;
+using BillingManagementSystem.DataHelpers;
 using BillingManagementSystem.Models;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,17 @@ namespace BillingManagementSystem.Controllers
     public class RORController : Controller
     {
         #region views
+        [SetPermissions]
         public ActionResult Electric()
         {
             return View();
         }
+        [SetPermissions]
         public ActionResult Gas()
         {
             return View();
         }
+        [SetPermissions]
         public ActionResult Wapda()
         {
             return View();

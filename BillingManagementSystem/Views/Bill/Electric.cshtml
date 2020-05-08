@@ -55,7 +55,7 @@
                     "type": 'POST',
                     "dataSrc": function (data) {
 
-                        if (data.count > 0) {
+                        if (data.length > 0) {
                             if (data[0].resultCode == '1100') {
                                 return data;
                             }
@@ -65,7 +65,7 @@
                         }
                         else {
 
-                            
+
                         }
                     },
                     "error": function (a, b, c) {
@@ -96,6 +96,12 @@
                     { "title": "Current Reading", "data": "readingElectricCurrentReading" },
                     { "title": "Current Units", "data": "readingElectricUnits" },
                     { "title": "Date Added", "data": "readingElectricDatetime" },
+                     { "title": "Added By", "data": "readingElectricAddedby" },
+                    {
+                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.readingpicture_type + ";base64, " + row.readingpicture_data + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
 
                 ]
             });
@@ -167,23 +173,48 @@
                 }
             });
             $('#btn_electric_add').click(function () {
-                var url = "/Bill/AddReadingElectric";
+                var _url = "/Bill/AddReadingElectric";
                 var _meterNo = $("#meter_no").val();
                 var _previousReading = $("#previous_reading").val();
                 var _currentReading = $("#current_reading").val();
                 var _currentUnit = $("#current_unit").val();
                 var _month = $("#month").val();
-                $.post(url, { readingElectricMonth: _month, readingElectricUnits: _currentUnit, readingElectricCurrentReading: _currentReading, readingElectricPrevReading: _previousReading, readingElectricMeterNo: _meterNo }, function (data) {
-                    if (data.resultCode == "1100") {
-                        swal("Added!", data.remarks, "success");
-                        initElectricGrid();
-                        clearFields();
-                    }
-                    else {
+                var formdata = new FormData(); //FormData object
+                var fileInput = document.getElementById('online_file');
+                formdata.append(fileInput.files[0].name, fileInput.files[0]);
+                formdata.append("_meterNo", _meterNo);
+                formdata.append("_previousReading", _previousReading);
+                formdata.append("_currentReading", _currentReading);
+                formdata.append("_currentUnit", _currentUnit);
+                formdata.append("_month", _month);
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        $('.loading').show();
+                    },
+                    complete: function () {
                         $('.loading').hide();
-                        swal("Not Added", data.remarks, "error");
+                    },
+                    success: function (data) {
+                        if (data.resultCode == "1100") {
+                            swal("Added!", data.remarks, "success");
+                            initElectricGrid();
+                            clearFields();
+                        }
+                        else {
+                            $('.loading').hide();
+                            swal("Not Added", data.remarks, "error");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorMessage) {
+                        console.log(errorMessage);
                     }
                 });
+
             });
             $(document).on('click', '#btn_electric_update', function (e) {
                 e.preventDefault();
@@ -240,7 +271,7 @@
 
         function initDropDowns() {
             $.ajax({
-                url: '/Management/GetAllAreas',
+                url: '/Management/GetAllAreasByUser',
                 type: 'POST',
                 success: function (response) {
                     if (response) {
@@ -309,6 +340,7 @@
                 type: 'POST',
                 data: { locationId: Id },
                 success: function (response) {
+                    console.log(response);
                     if (response) {
                         if (response.resultCode == '1100') {
                             $('#meter_no').val(response.locationElectricMeter);
@@ -327,92 +359,70 @@
             });
         }
     </script>
-    <script>
-        function addFile(file) {
-
-            fileCounter += 1;
-            if (dataSet.length < 5) {
-                var entry = { "Sr": fileCounter, "Name": file.name, "Data": file };
-                dataSet.push(entry);
-                
-            }
-            else {
-                swal("warning", "You can only attach upto 5 files", "warning");
-            }
-
-        }
-        </script>
 }
-        <div id="page-head">
-            <div class="pad-all text-center">
-                <h2>Electric Bill Entry</h2>
-            </div>
-        </div>
-            <div id="page-content">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="panel panel-bordered-warning panel-colorful">
-                            <div class="panel-head">
-                                <h1 class="panel-title">Generate Bill</h1>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label class="control-label">Select Area</label>
-                                    <select class="form-control dropdownlist" id="electric_area"></select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">Select Resident</label>
-                                    <select class="form-control dropdownlist" id="electric_resident"></select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">Meter No.</label>
-                                    <input type="number" value="" readonly class="form-control" id="meter_no" />
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">Previous Reading</label>
-                                    <input type="number" value="" readonly class="form-control" id="previous_reading" />
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">Enter Current Reading</label>
-                                    <input type="hidden" id="electric_id" value="" />
-                                    <input type="number" value="" class="form-control" id="current_reading" />
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">Current Units</label>
-                                    <input type="number" value="" class="form-control" id="current_unit" />
-                                </div>
-                                <div class="form-group">
-                                   
-                                            <div class="input-group mar-top">
-                                                <label class="control-label">Upload Picture</label>
-                                                <input type="file" id="online_file" value="" class="form-control" accept=".jpg,.png,.jpeg,.pdf" />
-                                                <div class="input-group-btn"><a href="#" id="btn_online_upload" class="btn btn-success">Upload</a></div>
-                                            </div>
-                                        </div>
-                                
-                                <div class="form-group">
-                                    <label class="control-label">Select Month</label>
-                                    <input type="text" value="" class="form-control monthPicker" id="month" />
-                                </div>
-                                <div class="form-group">
-                                    <a href="#" id="btn_electric_add" class="btn btn-success pull-right">Submit</a>
-                                    <a href="#" id="btn_electric_update" class="btn btn-success pull-right">Submit</a>
-                                </div>
-                            </div>
-                        </div>
+<div id="page-head">
+    <div class="pad-all text-center">
+        <h2>Electric Bill Entry</h2>
+    </div>
+</div>
+<div id="page-content">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-bordered-warning panel-colorful">
+                <div class="panel-head">
+                    <h1 class="panel-title">Generate Bill</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="control-label">Select Area</label>
+                        <select class="form-control dropdownlist" id="electric_area"></select>
                     </div>
-                    <div class="col-md-8">
-
-                        <div class="panel panel-bordered-info panel-colorful">
-                            <div class="panel-heading">
-                                <h1 class="panel-title">Bills Generated</h1>
-                            </div>
-                            <div class="panel-body">
-                                <table class="table table-bordered table-responsive table-hover electricGrid"></table>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label class="control-label">Select Location</label>
+                        <select class="form-control dropdownlist" id="electric_resident"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Meter No.</label>
+                        <input type="number" value="" readonly class="form-control" id="meter_no" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Previous Reading</label>
+                        <input type="number" value="" readonly class="form-control" id="previous_reading" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Enter Current Reading</label>
+                        <input type="hidden" id="electric_id" value="" />
+                        <input type="number" value="" class="form-control" id="current_reading" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Current Units</label>
+                        <input type="number" value="" class="form-control" id="current_unit" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Upload Picture</label>
+                        <input type="file" id="online_file" value="" class="form-control" accept=".jpg,.png,.jpeg,.pdf" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Select Month</label>
+                        <input type="text" value="" class="form-control monthPicker" id="month" />
+                    </div>
+                    <div class="form-group">
+                        <a href="#" id="btn_electric_add" class="btn btn-success pull-right">Submit</a>
+                        <a href="#" id="btn_electric_update" class="btn btn-success pull-right">Submit</a>
                     </div>
                 </div>
-
-
             </div>
+        </div>
+        <div class="col-md-8">
+
+            <div class="panel panel-bordered-info panel-colorful">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Bills Generated</h1>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-responsive table-hover electricGrid"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
