@@ -25,6 +25,7 @@
             $('editTitle').hide();
             initResidentGrid();
             initResidentGridActions();
+            initDropDowns();
            });
 
     </script>
@@ -45,7 +46,6 @@
                     "type": 'POST',
                     "dataSrc": function (data) {
                         if (data.length > 0) {
-                            console.log(data);
                             if (data[0].resultCode == '1100') {
                                 return data;
                             }
@@ -109,12 +109,12 @@
                 $("#resident_name").val(rowData.residentName);
                 $("#resident_unit").val(rowData.residentUnit);
                 $("#resident_remarks").val(rowData.residentRemarks);
+
             });
             $(document).on('click', '.btn_resident_delete', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 var _id = rowData.residentId;
-                console.log(_id);
                 if (_id) {
                     swal({
                         title: "Are you sure?",
@@ -163,7 +163,10 @@
                 var _name = $("#resident_name").val();
                 var _unit = $("#resident_unit").val();
                 var _remarks = $("#resident_remarks").val();
-                $.post(url, { residentPaNumber: _panumber, residentRank: _rank, residentName: _name, residentUnit: _unit, residentRemarks: _remarks }, function (data) {
+                console.log(_remarks);
+                var _areaId = $("#resident_area").val();
+                var _locationId = $("#resident_location").val();
+                $.post(url, { locationId: _locationId, areaId: _areaId, residentPaNumber: _panumber, residentRank: _rank, residentName: _name, residentUnit: _unit, residentRemarks: _remarks }, function (data) {
                     if (data.resultCode == "1100") {
                         swal("Added!", data.remarks, "success");
                         initResidentGrid();
@@ -184,10 +187,14 @@
                     var _name = $("#resident_name").val();
                     var _unit = $("#resident_unit").val();
                     var _remarks = $("#resident_remarks").val();
+                    var _areaId = $("#resident_area").val();
+                    var _locationId = $("#resident_location").val();
                     $.ajax({
                         url: '/Management/EditResident',
                         type: 'POST',
                         data: {
+                            locationId: _locationId,
+                            areaId: _areaId,
                             residentId: _residentId,
                             residentPaNumber: _panumber,
                             residentRank: _rank,
@@ -226,7 +233,67 @@
                 }
             });
         }
-    
+        function initDropDowns() {
+            $.ajax({
+                url: '/Management/GetAllAreasByUser',
+                type: 'POST',
+                success: function (response) {
+                    if (response) {
+                        if (response[0].resultCode == '1100') {
+                            var list = [];
+                            for (var i = 0; i < response.length; i++) {
+                                list.push({ text: response[i].areaName, id: response[i].areaId });
+                            }
+                            $('#resident_area').select2({ data: list }).trigger('change');
+
+
+                        }
+                        else {
+                            $('#electric_area').select2({
+                                placeholder: "area not found ",
+                                allowClear: true
+                            }).trigger('change');
+                        }
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
+
+            });
+
+            $("#resident_area").change(function () {
+                var _areaId = $("#resident_area").val();
+                $.ajax({
+                    url: '/Management/GetAllLocationsByArea',
+                    type: 'POST',
+                    data: { fk_area: _areaId },
+                    success: function (response) {
+                        if (response) {
+                            if (response[0].resultCode == '1100') {
+                                var list = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    list.push({ text: response[i].locationName, id: response[i].locationId });
+
+                                }
+                                $('#resident_location').select2().empty();
+                                $('#resident_location').select2({ data: list }).trigger('change');
+                            }
+                            else {
+                                $('#resident_location').select2().empty();
+                                $('#resident_location').select2({
+                                    placeholder: "resident not found ",
+                                    allowClear: true
+                                }).trigger('change');
+                            }
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            });
+        }
     </script>
 }
 <div id="page-head">
@@ -287,6 +354,20 @@
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">Resident Remarks</span>
                                     <input type="text" value="" placeholder="XXXXXXXXX" id="resident_remarks" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Area</span>
+                                    <select class="form-control dropdownlist" id="resident_area">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Location</span>
+                                    <select class="form-control dropdownlist" id="resident_location">
+                                    </select>
                                 </div>
                             </div>
                             <div id="saveUpdateBtn" class="form-group">

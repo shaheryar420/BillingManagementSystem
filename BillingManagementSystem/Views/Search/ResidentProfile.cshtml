@@ -72,18 +72,16 @@
                     "data":
                     { residentId: _id },
                     "dataSrc": function (data) {
-                        console.log(data);
-                        if (data.length > 0) {
-                            if (data[0].resultCode == '1100') {
+                        if (data) {
+                            if (data.resultCode == '1100') {
+                                console.log(data);
                                 return data;
+
                             }
                             else {
 
                                 return [];
                             }
-                        }
-                        else {
-                            return [];
                         }
                         
                         },

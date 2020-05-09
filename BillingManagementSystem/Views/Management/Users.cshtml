@@ -115,7 +115,7 @@
             $(document).on('click', '.btn_user_delete', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
-                var _id = rowData.userId;
+                var _id = rowData.usersId;
                 if (_id) {
                     swal({
                         title: "Are you sure?",
@@ -130,7 +130,7 @@
                             $.ajax({
                                 url: '/Management/DeleteUser',
                                 type: 'POST',
-                                data: { id: _id },
+                                data: { usersId: _id },
                                 beforeSend: function () {
                                     $('.loading').show();
                                 },
