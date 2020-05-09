@@ -295,6 +295,7 @@ namespace BillingManagementSystem.DataHelpers
                                 join y in db.tbl_usertype on x.fk_usertype equals y.usertype_id
                                 select new
                                 {
+                                    x.users_id,
                                     x.fk_usertype,
                                     x.users_fullname,
                                     x.users_username,
@@ -305,6 +306,7 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         toReturn= users.Select(user=>new UserResponseModel()
                         {
+                            usersId = user.users_id.ToString(),
                             fk_userType = user.fk_usertype.ToString(),
                             userTypeName = !string.IsNullOrEmpty(user.usertype_name) ? user.usertype_name : "",
                             usersFullName = !string.IsNullOrEmpty(user.users_fullname) ? user.users_fullname : "",
