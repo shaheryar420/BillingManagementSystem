@@ -15,35 +15,55 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using(db_bmsEntities db = new db_bmsEntities())
                 {
-                    if (!string.IsNullOrEmpty(model.residentName))
+                    if (new ModelsValidatorHelper().validateint(model.locationId))
                     {
-                        if(!string.IsNullOrEmpty(model.residentPaNumber))
+                        int locationId = int.Parse(model.locationId);
+                        if (!string.IsNullOrEmpty(model.residentName))
                         {
-                            var existingResident = (from x in db.tbl_residents where x.resident_panumber == model.residentPaNumber select x).FirstOrDefault();
-                            if (existingResident == null)
-                            {
-                                tbl_residents resident = new tbl_residents()
+                            if (!string.IsNullOrEmpty(model.residentPaNumber))
+                            {   
+                                var existingResident = (from x in db.tbl_residents where x.resident_panumber == model.residentPaNumber select x).FirstOrDefault();
+                                if (existingResident == null)
                                 {
-                                    resident_name = model.residentName,
-                                    resident_panumber = model.residentPaNumber,
-                                    resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : "",
-                                    resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : "",
-                                    resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : ""
-                                };
-                                db.tbl_residents.Add(resident);
-                                db.SaveChanges();
-                                toReturn = new ResidentResponseModel()
+                                    tbl_residents resident = new tbl_residents()
+                                    {
+                                        resident_name = model.residentName,
+                                        resident_panumber = model.residentPaNumber,
+                                        resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : "",
+                                        resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : "",
+                                        resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : ""
+                                    };
+                                    db.tbl_residents.Add(resident);
+                                    db.SaveChanges();
+                                    toReturn = new ResidentResponseModel()
+                                    {
+                                        residentId = resident.resident_id.ToString(),
+                                        remarks = "Successfully Added",
+                                        resultCode = "1100"
+                                    };
+                                    var resdidentBuilding = new tbl_residentbuilding()
+                                    {
+                                        fk_building = locationId,
+                                        fk_resident =resident.resident_id
+                                    };
+                                    db.tbl_residentbuilding.Add(resdidentBuilding);
+                                    db.SaveChanges();
+                                }
+                                else
                                 {
-                                    remarks = "Successfully Added",
-                                    resultCode = "1100"
-                                };
+                                    toReturn = new ResidentResponseModel()
+                                    {
+                                        remarks = "Resident Already Exists",
+                                        resultCode = "1400"
+                                    };
+                                }
                             }
                             else
                             {
                                 toReturn = new ResidentResponseModel()
                                 {
-                                    remarks = "Resident Already Exists",
-                                    resultCode = "1400"
+                                    remarks = "Please Provide Pa Number",
+                                    resultCode = "1300"
                                 };
                             }
                         }
@@ -51,8 +71,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn = new ResidentResponseModel()
                             {
-                                remarks="Please Provide Pa Number",
-                                resultCode="1300"
+                                remarks = "Please Provide Name",
+                                resultCode = "1300"
                             };
                         }
                     }
@@ -60,8 +80,8 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         toReturn = new ResidentResponseModel()
                         {
-                            remarks="Please Provide Name",
-                            resultCode="1300"
+                            remarks = "Please Provide Building",
+                            resultCode = "1300"
                         };
                     }
                 }
@@ -105,6 +125,8 @@ namespace BillingManagementSystem.DataHelpers
                                 resident.resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : resident.resident_rank;
                                 resident.resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : resident.resident_remarks;
                                 resident.resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : resident.resident_unit;
+                                var residentBuilding = (from x in db.tbl_residentbuilding where x.fk_resident == resident.resident_id select x).FirstOrDefault();
+                                residentBuilding.fk_building = int.Parse(model.locationId);
                                 db.SaveChanges();
                                 toReturn = new ResidentResponseModel()
                                 {

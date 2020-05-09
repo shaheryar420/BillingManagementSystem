@@ -353,7 +353,7 @@ namespace BillingManagementSystem.DataHelpers
                                         fk_location = residentBuilding.fk_building,
                                         fk_resident = residentBuilding.fk_resident,
                                         fk_paymentstatus = 2,
-                                        billelectric_amount = readingElectric.readingelectric_units* fixedRatesElectric.fixedrates_amount,
+                                        billelectric_amount = double.Parse(model.amount),
                                         billelectric_currentreading = readingElectric.readingelectric_currentreading,
                                         billelectric_month = readingElectric.readingelectric_month,
                                         billelectric_outstanding = 0,

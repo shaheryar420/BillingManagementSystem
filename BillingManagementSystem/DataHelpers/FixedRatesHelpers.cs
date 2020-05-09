@@ -67,5 +67,69 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
+        public FixedRatesResponseModel GetFixedRatesByName(FixedRatesRequestModel model)
+        {
+            FixedRatesResponseModel toReturn = new FixedRatesResponseModel();
+            try
+            {
+                if (new ModelsValidatorHelper().validateint(model.userId))
+                {
+                    if (!string.IsNullOrEmpty(model.fixedRatesName))
+                    {
+                        using (db_bmsEntities db = new db_bmsEntities())
+                        {
+                            var fixedRate = (from x in db.tbl_fixedrates where x.fixedrates_name == model.fixedRatesName select x).FirstOrDefault();
+                            if (fixedRate != null)
+                            {
+                                toReturn = new FixedRatesResponseModel()
+                                {
+                                    fixedRatesAmount = fixedRate.fixedrates_amount.ToString(),
+                                    fixedRatesId = fixedRate.fixedrates_id.ToString(),
+                                    fixedRatesName = fixedRate.fixedrates_name,
+                                    fixedRatesUnit = fixedRate.fixedrates_unit,
+                                    remarks = " Successfully Updated",
+                                    resultCode = "1100",
+                                };
+                                db.SaveChanges();
+                              
+                            }
+                            else
+                            {
+                                toReturn = new FixedRatesResponseModel()
+                                {
+                                    resultCode = "1200",
+                                    remarks = "No Record Found"
+                                };
+                            }
+                        }
+                    }
+                    else
+                    {
+                        toReturn = new FixedRatesResponseModel()
+                        {
+                            remarks = "Please Select Fixed Rate",
+                            resultCode = "1300"
+                        };
+                    }
+                }
+                else
+                {
+                    toReturn = new FixedRatesResponseModel()
+                    {
+                        remarks = " Please Provide User",
+                        resultCode = "1300"
+                    };
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn = new FixedRatesResponseModel()
+                {
+                    remarks = "There was a Fatal Error" + Ex.ToString(),
+                    resultCode = "1000"
+                };
+            }
+            return toReturn;
+        }
     }
 }
