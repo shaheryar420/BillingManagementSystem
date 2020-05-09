@@ -304,11 +304,31 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    var residents = (from x in db.tbl_residents select x).ToList();
+                    var residents = (from x in db.tbl_residents
+                                     join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
+                                     join z in db.tbl_location on y.fk_building equals z.location_id
+                                     join a in db.tbl_area on z.fk_area equals a.area_id
+                                     select new
+                                     {
+                                         x.resident_id,
+                                         x.resident_name,
+                                         x.resident_panumber,
+                                         x.resident_rank,
+                                         x.resident_remarks,
+                                         x.resident_unit,
+                                         z.location_id,
+                                         z.location_name,
+                                         a.area_id,
+                                         a.area_name
+                                     }).ToList();
                     if (residents.Count()>0)
                     {
                         toReturn =residents.Select(resident=> new ResidentResponseModel()
                         {
+                            areaId = resident.area_id.ToString(),
+                            areaName = resident.area_name,
+                            locationName = resident.location_name,
+                            loactionId = resident.location_id.ToString(),
                             residentName = resident.resident_name,
                             residentPaNumber = resident.resident_panumber,
                             residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
@@ -346,24 +366,32 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    var residents = (from x in db.tbl_residentbuilding
-                                     join r in db.tbl_residents on x.fk_resident equals r.resident_id
-                                     join l in db.tbl_location on x.fk_building equals l.location_id
+                    var residents = (from x in db.tbl_residents
+                                     join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
+                                     join z in db.tbl_location on y.fk_building equals z.location_id
+                                     join a in db.tbl_area on z.fk_area equals a.area_id
                                      select new 
                                      {
-                                         r.resident_name,
-                                         r.resident_id,
-                                         r.resident_panumber,
-                                         r.resident_rank,
-                                         r.resident_remarks,
-                                         r.resident_unit,
-                                         l.location_name,
-                                         
+                                         x.resident_id,
+                                         x.resident_name,
+                                         x.resident_panumber,
+                                         x.resident_rank,
+                                         x.resident_remarks,
+                                         x.resident_unit,
+                                         z.location_id,
+                                         z.location_name,
+                                         a.area_id,
+                                         a.area_name
+
                                      }).ToList();
                     if (residents.Count() > 0)
                     {
                         toReturn = residents.Select(resident => new ResidentResponseModel()
                         {
+                            areaId = resident.area_id.ToString(),
+                            areaName = resident.area_name,
+                            locationName = resident.location_name,
+                            loactionId = resident.location_id.ToString(),
                             residentName = resident.resident_name,
                             residentPaNumber = resident.resident_panumber,
                             residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
@@ -409,19 +437,23 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var residents = (from x in db.tbl_residentbuilding
-                                         join r in db.tbl_residents on x.fk_resident equals r.resident_id
-                                         join l in db.tbl_location on x.fk_building equals l.location_id
-                                         where r.resident_panumber == model.residentPaNumber
+                        var residents = (from x in db.tbl_residents
+                                         join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
+                                         join z in db.tbl_location on y.fk_building equals z.location_id
+                                         join a in db.tbl_area on z.fk_area equals a.area_id
+                                         where x.resident_panumber == model.residentPaNumber
                                          select new
                                          {
-                                             r.resident_name,
-                                             r.resident_id,
-                                             r.resident_panumber,
-                                             r.resident_rank,
-                                             r.resident_remarks,
-                                             r.resident_unit,
-                                             l.location_name,
+                                             x.resident_id,
+                                             x.resident_name,
+                                             x.resident_panumber,
+                                             x.resident_rank,
+                                             x.resident_remarks,
+                                             x.resident_unit,
+                                             z.location_id,
+                                             z.location_name,
+                                             a.area_id,
+                                             a.area_name
 
                                          }).ToList();
                         if (residents.Count() > 0)
@@ -482,19 +514,23 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var residents = (from x in db.tbl_residentbuilding
-                                         join r in db.tbl_residents on x.fk_resident equals r.resident_id
-                                         join l in db.tbl_location on x.fk_building equals l.location_id
-                                         where r.resident_rank == model.residentRank
+                        var residents = (from x in db.tbl_residents
+                                         join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
+                                         join z in db.tbl_location on y.fk_building equals z.location_id
+                                         join a in db.tbl_area on z.fk_area equals a.area_id
+                                         where x.resident_rank == model.residentRank
                                          select new
                                          {
-                                             r.resident_name,
-                                             r.resident_id,
-                                             r.resident_panumber,
-                                             r.resident_rank,
-                                             r.resident_remarks,
-                                             r.resident_unit,
-                                             l.location_name,
+                                             x.resident_id,
+                                             x.resident_name,
+                                             x.resident_panumber,
+                                             x.resident_rank,
+                                             x.resident_remarks,
+                                             x.resident_unit,
+                                             z.location_id,
+                                             z.location_name,
+                                             a.area_id,
+                                             a.area_name
 
                                          }).ToList();
                         if (residents.Count() > 0)
@@ -555,19 +591,23 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var residents = (from x in db.tbl_residentbuilding
-                                         join r in db.tbl_residents on x.fk_resident equals r.resident_id
-                                         join l in db.tbl_location on x.fk_building equals l.location_id
-                                         where r.resident_unit == model.residentUnit
+                        var residents = (from x in db.tbl_residents
+                                         join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
+                                         join z in db.tbl_location on y.fk_building equals z.location_id
+                                         join a in db.tbl_area on z.fk_area equals a.area_id
+                                         where x.resident_unit == model.residentUnit
                                          select new
                                          {
-                                             r.resident_name,
-                                             r.resident_id,
-                                             r.resident_panumber,
-                                             r.resident_rank,
-                                             r.resident_remarks,
-                                             r.resident_unit,
-                                             l.location_name,
+                                             x.resident_id,
+                                             x.resident_name,
+                                             x.resident_panumber,
+                                             x.resident_rank,
+                                             x.resident_remarks,
+                                             x.resident_unit,
+                                             z.location_id,
+                                             z.location_name,
+                                             a.area_id,
+                                             a.area_name
 
                                          }).ToList();
                         if (residents.Count() > 0)

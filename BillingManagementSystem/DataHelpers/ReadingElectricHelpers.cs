@@ -333,9 +333,7 @@ namespace BillingManagementSystem.DataHelpers
                                 {
                                     outstanding = "0";
                                 }
-                                var fixedRatesElectric = (from x in db.tbl_fixedrates where x.fixedrates_id==1 select x).FirstOrDefault();
-                                var fixedRatesTv = (from x in db.tbl_fixedrates where x.fixedrates_id == 2 select x).FirstOrDefault();
-                                var fixedRatesWater = (from x in db.tbl_fixedrates where x.fixedrates_id == 3 select x).FirstOrDefault();
+                               
                                 var readingPicture = (from x in db.tbl_readingpicture where x.readingpicture_id == readingElectric.fk_readingpicture select x).FirstOrDefault();
                                 if (readingPicture != null)
                                 {
@@ -359,8 +357,8 @@ namespace BillingManagementSystem.DataHelpers
                                         billelectric_outstanding = 0,
                                         billelectric_prevreading = readingElectric.readingelectric_prevreading,
                                         billelectric_units = readingElectric.readingelectric_units,
-                                        billelectric_tv = fixedRatesTv.fixedrates_amount,
-                                        billelectric_water = fixedRatesWater.fixedrates_amount,
+                                        billelectric_tv = 0,
+                                        billelectric_water = 0,
                                         billelectric_datetime = readingElectric.readingelectric_datetime,
                                         billelectric_remarks = readingElectric.readingelectric_remarks
                                     };
