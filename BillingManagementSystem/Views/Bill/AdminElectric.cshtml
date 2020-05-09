@@ -193,10 +193,31 @@
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 var _id = rowData.readingElectricId;
+                var _unit = rowData.readingElectricUnits;
+                $.ajax({
+                url: '/Management/ApproveReadingElectric',
+                type: 'POST',
+                success: function (response) {
+                    if (response) {
+                        if (response.resultCode == '1100') {
+                            var electricrate = response.fixedRatesAmount;
+                            _unit = _unit * electricrate;
+                        }
+                        else {
+                            swal("Warning", response.remarks, "warning");
+                        }
+
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
+
+            });
                  $.ajax({
                 url: '/Bill/ApproveReadingElectric',
                 type: 'POST',
-                data: { readingElectricId: _id },
+                data: { readingElectricId: _id , amount: _unit},
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
