@@ -38,10 +38,10 @@
         }
         function initElectricGrid() {
             Dtable = $(".electricGrid").DataTable({
-                autoWidth: true,
+                scrollX: true,
                 destroy: true,
                 "ajax": {
-                    "url": '/Bill/GetAllReadingsElectric',
+                    "url": '/ROR/GetAllRORElectric',
                     "type": 'POST',
                     "dataSrc": function (data) {
 
@@ -79,19 +79,25 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { "title": "Id", "data": "readingElectricId", className: "hidden" },
-                    { "title": "Billing Month", "data": "readingElectricMonth" },
-                    { "title": "Meter #", "data": "readingElectricMeterNo" },
-                    { "title": "Previous Reading", "data": "readingElectricPrevReading" },
-                    { "title": "Current Reading", "data": "readingElectricCurrentReading" },
-                    { "title": "Current Units", "data": "readingElectricUnits" },
-                    { "title": "Date Added", "data": "readingElectricDatetime" },
+                    { "title": "Id", "data": "billElectricId", className: "hidden" },
+                    { "title": "Meter #", "data": "locationMeterNo" },
+                    { "title": "Location", "data": "locationName" },
+                    { "title": "Name", "data": "residentName" },
+                    { "title": "PA No", "data": "residentPaNo" },
+                    { "title": "Rank", "data": "residentRank" },
+                    { "title": "Unit/FMN", "data": "residentUnit" },
+                    { "title": "Previous Reading", "data": "billElectricPrevReading" },
+                    { "title": "Present Reading", "data": "billElectricCurrentReading" },
+                    { "title": "Units", "data": "billElectricUnits" },
+                    { "title": "Amount", "data": "billElectricAmount" },
+                    { "title": "Water", "data": "billElectricWater" },
+                    { "title": "TV", "data": "billElectricTv" },
                     {
                         "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
-                            return "<img src='data:" + row.readingpicture_type + ";base64, " + row.readingpicture_data + "' class='img-sm img-thumbnail'/>";
+                            return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
                         }
                     },
-
+                    { "title": "Remarks", "data": "billElectricRemarks" }
                 ]
             });
             Dtable.columns.adjust();
@@ -412,10 +418,8 @@
                     <h1 class="panel-title">Bills Recovered</h1>
                 </div>
                 <div class="panel-body">
-                    <table class="table table-bordered table-responsive table-hover grid">
-                        <thead>
-                            <tr><th>Sr.</th><th>Billing Month</th><th>Meter #</th><th>Total Outstanding</th><th>Amount Received</th><th>Date Added</th><th>Status</th></tr>
-                        </thead>
+                    <table class="table table-bordered table-responsive table-hover electricGrid">
+                       
                     </table>
                 </div>
             </div>

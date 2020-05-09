@@ -19,7 +19,9 @@
 
     <script>
         var Id = null;
+        var _id  = null;
         var Dtable = null;
+        var electricrate = null;
         $(document).on('nifty.ready', function () {
             $('.dropdownlist').select2();
             $('#btn_electric_update').hide();
@@ -174,7 +176,7 @@
                 var url = "/Bill/AddReadingElectric";
                 var _meterNo = $("#meter_no").val();
                 var _previousReading = $("#previous_reading").val();
-                var _currentReading= $("#current_reading").val();
+                var _currentReading = $("#current_reading").val();
                 var _currentUnit = $("#current_unit").val();
                 var _month = $("#month").val();
                 $.post(url, { readingElectricMonth: _month, readingElectricUnits: _currentUnit, readingElectricCurrentReading: _currentReading, readingElectricPrevReading: _previousReading, readingElectricMeterNo: _meterNo }, function (data) {
@@ -192,50 +194,35 @@
             $(document).on('click', '.btn_electric_approvel', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
-                var _id = rowData.readingElectricId;
+                _id = rowData.readingElectricId;
                 var _unit = rowData.readingElectricUnits;
                 $.ajax({
-                url: '/Management/ApproveReadingElectric',
-                type: 'POST',
-                success: function (response) {
-                    if (response) {
-                        if (response.resultCode == '1100') {
-                            var electricrate = response.fixedRatesAmount;
-                            _unit = _unit * electricrate;
-                        }
-                        else {
-                            swal("Warning", response.remarks, "warning");
-                        }
+                    url: '/Management/GetFixedRateByName',
+                    type: 'POST',
+                    data: { fixedRatesName: 'Electric Charges' },
+                    success: function (response) {
+                        if (response) {
+                            if (response.resultCode == '1100') {
+                                electricrate = response.fixedRatesAmount;
+                                console.log(electricrate);
+                                electricrate = _unit * electricrate;
+                                console.log(electricrate);
+                                initApprovel();
+                            }
+                            else {
+                                swal("Warning", response.remarks, "warning");
+                            }
 
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
                     }
-                },
-                error: function (a, b, c) {
-                    swal('Error', a + b + c, 'error');
-                }
 
+                });
             });
-                 $.ajax({
-                url: '/Bill/ApproveReadingElectric',
-                type: 'POST',
-                data: { readingElectricId: _id , amount: _unit},
-                success: function (response) {
-                    if (response) {
-                        if (response.resultCode == '1100') {
-                            initElectricGrid(_id);
-                            swal("Success", "Approved Successfully.", "success");
-                        }
-                        else {
-                            swal("Warning", response.remarks, "warning");
-                        }
-
-                    }
-                },
-                error: function (a, b, c) {
-                    swal('Error', a + b + c, 'error');
-                }
-
-            });
-            });
+           
+        
             $(document).on('click', '#btn_electric_update', function (e) {
                 e.preventDefault();
                 var _locationId = $('#location_id').val();
@@ -364,6 +351,29 @@
                         if (response.resultCode == '1100') {
                             $('#meter_no').val(response.locationElectricMeter);
                             $('#previous_reading').val(response.previousReading);
+                        }
+                        else {
+                            swal("Warning", response.remarks, "warning");
+                        }
+
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
+
+            });
+        }
+        function initApprovel() {
+            $.ajax({
+                url: '/Bill/ApproveReadingElectric',
+                type: 'POST',
+                data: { readingElectricId: _id, amount: electricrate },
+                success: function (response) {
+                    if (response) {
+                        if (response.resultCode == '1100') {
+                            initElectricGrid();
+                            swal("Success", "Approved Successfully.", "success");
                         }
                         else {
                             swal("Warning", response.remarks, "warning");
