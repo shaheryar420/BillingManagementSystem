@@ -77,7 +77,7 @@ namespace BillingManagementSystem.DataHelpers
                             var existingFixedRateType = new tbl_fixedratetype();
                             if(!string.IsNullOrEmpty(model.fixedRateTypeName))
                             {
-                                existingFixedRateType = (from x in db.tbl_fixedratetype where x.fixedratetype_name == model.fixedRateTypeName select x).FirstOrDefault();
+                                existingFixedRateType = (from x in db.tbl_fixedratetype where x.fixedratetype_name == model.fixedRateTypeName && x.fixedratetype_id != fixedRateTypeId select x).FirstOrDefault();
                             }
                             else
                             {

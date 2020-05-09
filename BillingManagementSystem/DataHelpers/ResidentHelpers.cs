@@ -112,7 +112,7 @@ namespace BillingManagementSystem.DataHelpers
                             var existingResident = new tbl_residents();
                             if (!string.IsNullOrEmpty(model.residentPaNumber))
                             {
-                                existingResident = (from x in db.tbl_residents where x.resident_panumber == model.residentPaNumber select x).FirstOrDefault();
+                                existingResident = (from x in db.tbl_residents where x.resident_panumber == model.residentPaNumber && x.resident_id != residentId select x).FirstOrDefault();
                             }
                             else
                             {

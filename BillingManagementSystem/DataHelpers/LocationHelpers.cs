@@ -93,7 +93,7 @@ namespace BillingManagementSystem.DataHelpers
                             var existingLocation = new tbl_location();
                             if (!string.IsNullOrEmpty(model.locationElectricMeter))
                             {
-                                existingLocation = (from x in db.tbl_location where x.location_electricmeter == model.locationElectricMeter select x).FirstOrDefault(); 
+                                existingLocation = (from x in db.tbl_location where x.location_electricmeter == model.locationElectricMeter && x.location_id != locationId select x).FirstOrDefault(); 
                             }
                             else
                             {

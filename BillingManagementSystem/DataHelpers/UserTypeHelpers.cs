@@ -77,7 +77,7 @@ namespace BillingManagementSystem.DataHelpers
                             var existingUserType = new tbl_usertype();
                             if (!string.IsNullOrEmpty(model.userTypeName))
                             {
-                                existingUserType = (from x in db.tbl_usertype where x.usertype_name == model.userTypeName select x).FirstOrDefault();
+                                existingUserType = (from x in db.tbl_usertype where x.usertype_name == model.userTypeName && x.usertype_id != userTypeId select x).FirstOrDefault();
                             }
                             else
                             {
