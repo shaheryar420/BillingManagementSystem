@@ -232,11 +232,32 @@ namespace BillingManagementSystem.DataHelpers
                     if (new ModelsValidatorHelper().validateint(model.residentId))
                     {
                         var residentId = int.Parse(model.residentId);
-                        tbl_residents resident = (from x in db.tbl_residents where x.resident_id == residentId select x).FirstOrDefault();
+                        var resident = (from x in db.tbl_residents 
+                                                  join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident 
+                                                  join z in db.tbl_location on y.fk_building equals z.location_id
+                                                  join a in db.tbl_area on z.fk_area equals a.area_id
+                                                  where x.resident_id == residentId
+                                                  select new 
+                                                  {
+                                                     x.resident_id,
+                                                     x.resident_name,
+                                                     x.resident_panumber,
+                                                     x.resident_rank,
+                                                     x.resident_remarks,
+                                                     x.resident_unit,
+                                                     z.location_id,
+                                                     z.location_name,
+                                                     a.area_id,
+                                                     a.area_name
+                                                  }).FirstOrDefault();
                         if (resident != null)
                         {
                             toReturn = new ResidentResponseModel()
                             {
+                                areaId = resident.area_id.ToString(),
+                                areaName = resident.area_name,
+                                locationName = resident.location_name,
+                                loactionId = resident.location_id.ToString(),
                                 residentName = resident.resident_name,
                                 residentPaNumber = resident.resident_panumber,
                                 residentRank = !string.IsNullOrEmpty(resident.resident_rank)?resident.resident_rank:"",
