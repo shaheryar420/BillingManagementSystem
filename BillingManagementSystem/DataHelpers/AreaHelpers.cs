@@ -77,7 +77,7 @@ namespace BillingManagementSystem.DataHelpers
                             var existingArea = new tbl_area();
                             if(!string.IsNullOrEmpty(model.areaName))
                             {
-                                existingArea = (from x in db.tbl_area where x.area_name == model.areaName select x).FirstOrDefault(); 
+                                existingArea = (from x in db.tbl_area where x.area_name == model.areaName && x.area_id!= areaId select x).FirstOrDefault(); 
                             }
                             else
                             {

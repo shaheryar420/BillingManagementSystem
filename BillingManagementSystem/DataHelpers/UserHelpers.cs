@@ -114,7 +114,7 @@ namespace BillingManagementSystem.DataHelpers
                             var existingUserName = new tbl_users();
                             if(!string.IsNullOrEmpty(model.usersUsername))
                             {
-                                existingUserName = (from x in db.tbl_users where x.users_username == model.usersUsername select x).FirstOrDefault();
+                                existingUserName = (from x in db.tbl_users where x.users_username == model.usersUsername && x.users_id!= userId select x).FirstOrDefault();
                             }
                             else
                             {
