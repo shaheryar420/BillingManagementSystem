@@ -35,6 +35,7 @@
             initElectricGrid();
             initDropDowns();
             initElectricGridActions();
+           
         });
     </script>
     <script>
@@ -316,7 +317,6 @@
                                 $('#electric_resident').select2().empty();
                                 $('#electric_resident').select2({ data: list }).trigger('change');
                                 Id = $('#electric_resident').val();
-                                console.log(Id);
                                 initmeterNo(Id);
                             }
                             else {
@@ -340,7 +340,6 @@
                 type: 'POST',
                 data: { locationId: Id },
                 success: function (response) {
-                    console.log(response);
                     if (response) {
                         if (response.resultCode == '1100') {
                             $('#meter_no').val(response.locationElectricMeter);
@@ -357,7 +356,15 @@
                 }
 
             });
+             
         }
+        $("#current_reading").change(function () {
+             
+            previousReading = $('#previous_reading').val();
+            currentReading = $('#current_reading').val();
+            var unit = currentReading - previousReading;
+            $('#current_unit').val(unit);
+        });
     </script>
 }
 <div id="page-head">
