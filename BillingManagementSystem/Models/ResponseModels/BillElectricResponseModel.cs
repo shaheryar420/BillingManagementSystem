@@ -11,6 +11,7 @@ namespace BillingManagementSystem.Models
         public string billElectricDateTime { get; set; }
         public string billElectricAmount { get; set; }
         public string fk_paymentStatus { get; set; }
+        public string paymentStatusName { get; set; }
         public string fk_location { get; set; }
         public string fk_resident { get; set; }
         public string billElectricPrevReading { get; set; }

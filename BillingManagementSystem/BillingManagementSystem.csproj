@@ -774,6 +774,7 @@
     <Compile Include="DataHelpers\MonthFinderHelpers.cs" />
     <Compile Include="DataHelpers\PictureHelpers.cs" />
     <Compile Include="DataHelpers\ReadingElectricHelpers.cs" />
+    <Compile Include="DataHelpers\ReadingGasHelpers.cs" />
     <Compile Include="DataHelpers\RecoveryHelpers.cs" />
     <Compile Include="DataHelpers\ResidentBuildingHelper.cs" />
     <Compile Include="DataHelpers\ResidentHelpers.cs" />
@@ -808,6 +809,7 @@
     <Compile Include="Models\RequestModels\PaymentRequestModel.cs" />
     <Compile Include="Models\RequestModels\PictureRequestModel.cs" />
     <Compile Include="Models\RequestModels\ReadingElectricRequestModel.cs" />
+    <Compile Include="Models\RequestModels\ReadingGasRequestModel.cs" />
     <Compile Include="Models\RequestModels\ResidentBuildingRequestModel.cs" />
     <Compile Include="Models\RequestModels\ResidentRequestModel.cs" />
     <Compile Include="Models\RequestModels\UserRequestModel.cs" />
@@ -822,6 +824,7 @@
     <Compile Include="Models\ResponseModels\PaymentResponseModel.cs" />
     <Compile Include="Models\ResponseModels\PictureResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ReadingElectricResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\ReadingGasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ResidentBuildingResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ResidentResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserResponseModel.cs" />
