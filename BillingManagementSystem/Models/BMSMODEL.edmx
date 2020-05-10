@@ -103,6 +103,16 @@
           <Property Name="location_gassmeter" Type="varchar" MaxLength="45" />
           <Property Name="location_wapdameter" Type="varchar" MaxLength="45" />
         </EntityType>
+        <EntityType Name="tbl_paymentgashistory">
+          <Key>
+            <PropertyRef Name="paymenthistory_id" />
+          </Key>
+          <Property Name="paymenthistory_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="paymenthistory_datetime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="payment_amount" Type="double" Nullable="false" />
+          <Property Name="fk_paymenttype" Type="int" Nullable="false" />
+          <Property Name="paymentmonth" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
         <EntityType Name="tbl_paymenthistory">
           <Key>
             <PropertyRef Name="paymenthistory_id" />
@@ -273,6 +283,7 @@
           <EntitySet Name="tbl_fixedrates" EntityType="Self.tbl_fixedrates" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_fixedratetype" EntityType="Self.tbl_fixedratetype" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_location" EntityType="Self.tbl_location" Schema="db_bms" store:Type="Tables" />
+          <EntitySet Name="tbl_paymentgashistory" EntityType="Self.tbl_paymentgashistory" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_paymenthistory" EntityType="Self.tbl_paymenthistory" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_paymentstatus" EntityType="Self.tbl_paymentstatus" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_paymenttype" EntityType="Self.tbl_paymenttype" Schema="db_bms" store:Type="Tables" />
@@ -517,6 +528,7 @@
           <EntitySet Name="tbl_readinggas" EntityType="db_bmsModel.tbl_readinggas" />
           <EntitySet Name="tbl_readinggaslog" EntityType="db_bmsModel.tbl_readinggaslog" />
           <EntitySet Name="tbl_billgas" EntityType="db_bmsModel.tbl_billgas" />
+          <EntitySet Name="tbl_paymentgashistory" EntityType="db_bmsModel.tbl_paymentgashistory" />
         </EntityContainer>
         <EntityType Name="tbl_paymenthistory">
           <Key>
@@ -576,6 +588,16 @@
           <Property Name="fk_billpicture" Type="Int32" />
           <Property Name="month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="outstanding" Type="Double" />
+        </EntityType>
+        <EntityType Name="tbl_paymentgashistory">
+          <Key>
+            <PropertyRef Name="paymenthistory_id" />
+          </Key>
+          <Property Name="paymenthistory_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="paymenthistory_datetime" Type="DateTime" Nullable="false" />
+          <Property Name="payment_amount" Type="Double" Nullable="false" />
+          <Property Name="fk_paymenttype" Type="Int32" Nullable="false" />
+          <Property Name="paymentmonth" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -862,6 +884,17 @@
                 <ScalarProperty Name="amount" ColumnName="amount" />
                 <ScalarProperty Name="datetime" ColumnName="datetime" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_paymentgashistory">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_paymentgashistory">
+              <MappingFragment StoreEntitySet="tbl_paymentgashistory">
+                <ScalarProperty Name="paymentmonth" ColumnName="paymentmonth" />
+                <ScalarProperty Name="fk_paymenttype" ColumnName="fk_paymenttype" />
+                <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />
+                <ScalarProperty Name="paymenthistory_datetime" ColumnName="paymenthistory_datetime" />
+                <ScalarProperty Name="paymenthistory_id" ColumnName="paymenthistory_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -243,6 +243,7 @@ namespace BillingManagementSystem.DataHelpers
                                 resultCode= "1100"
                             };
                             var bill = (from x in db.tbl_billelectric where x.fk_location == locationId select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
+                            var billGas = (from x in db.tbl_billgas where x.fk_location == locationId select x).OrderByDescending(x => x.datetime).FirstOrDefault();
                             if (bill != null)
                             {
                                 toReturn.previousReading = !String.IsNullOrEmpty(bill.billelectric_prevreading.ToString()) ? bill.billelectric_prevreading.ToString() : "";
@@ -255,6 +256,18 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 toReturn.previousReading = "0";
                                 toReturn.outstanding = "0";
+
+                            }
+                            if(billGas!= null)
+                            {
+                                toReturn.previousGasReading = billGas.prevreading.ToString();
+                                toReturn.gasOutstanding = billGas.outstanding.ToString();
+                                toReturn.billGasMonth = billGas.month.ToString();
+                                toReturn.currentGasReading = billGas.currentreading.ToString();
+                                toReturn.currentGasUnit = billGas.units.ToString();
+                            }
+                            else
+                            {
 
                             }
                         }

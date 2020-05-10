@@ -15,6 +15,11 @@ namespace BillingManagementSystem.Models
         public string locationGassMeter { get; set; }
         public string locationWapdaMeter { get; set; }
         public string previousReading { get; set; }
+        public string previousGasReading { get; set; }
+        public string gasOutstanding { get; set; }
+        public string billGasMonth { get; set; }
+        public string currentGasReading { get; set; }
+        public string currentGasUnit { get; set; }
         public string outstanding { get; set; }
         public string billMonth { get; set; }
         public string currentReading { get; set; }

@@ -29,6 +29,7 @@
         <EntityTypeShape EntityType="db_bmsModel.tbl_readinggas" Width="1.5" PointX="2.75" PointY="12.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_readinggaslog" Width="1.5" PointX="4.75" PointY="12.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_billgas" Width="1.5" PointX="9.375" PointY="12.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_paymentgashistory" Width="1.5" PointX="11.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

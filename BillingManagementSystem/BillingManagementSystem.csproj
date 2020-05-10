@@ -858,6 +858,9 @@
     <Compile Include="Models\tbl_location.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tbl_paymentgashistory.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl_paymenthistory.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
