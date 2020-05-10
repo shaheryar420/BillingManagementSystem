@@ -803,6 +803,7 @@
     <Compile Include="Models\ModelsValidatorHelper.cs" />
     <Compile Include="Models\RequestModels\AreaRequestModel.cs" />
     <Compile Include="Models\RequestModels\BillElectricRequestModel.cs" />
+    <Compile Include="Models\RequestModels\BillGasRequestModel.cs" />
     <Compile Include="Models\RequestModels\FixedRatesTypeRequestModel.cs" />
     <Compile Include="Models\RequestModels\FixedRatesRequestModel.cs" />
     <Compile Include="Models\RequestModels\LocationRequestModel.cs" />
@@ -816,6 +817,7 @@
     <Compile Include="Models\RequestModels\UserTypeRequestModel.cs" />
     <Compile Include="Models\ResponseModels\AreaResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillElectricResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\BillGasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\DashBoardResponseModel.cs" />
     <Compile Include="Models\ResponseModels\FixedRatesResponseModel.cs" />
     <Compile Include="Models\ResponseModels\FixedRatesTypeResponseModel.cs" />

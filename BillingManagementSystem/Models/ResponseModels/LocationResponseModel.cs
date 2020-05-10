@@ -16,6 +16,9 @@ namespace BillingManagementSystem.Models
         public string locationWapdaMeter { get; set; }
         public string previousReading { get; set; }
         public string outstanding { get; set; }
+        public string billMonth { get; set; }
+        public string currentReading { get; set; }
+        public string currentUnit { get; set; }
         public string remarks { get; set; }
         public string resultCode { get; set; }
     }

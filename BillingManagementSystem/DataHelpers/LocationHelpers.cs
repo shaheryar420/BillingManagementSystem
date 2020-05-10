@@ -247,6 +247,9 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 toReturn.previousReading = !String.IsNullOrEmpty(bill.billelectric_prevreading.ToString()) ? bill.billelectric_prevreading.ToString() : "";
                                 toReturn.outstanding = !String.IsNullOrEmpty(bill.billelectric_outstanding.ToString()) ? bill.billelectric_outstanding.ToString() : "";
+                                toReturn.billMonth = !string.IsNullOrEmpty(bill.billelectric_month) ? bill.billelectric_month : "";
+                                toReturn.currentReading = bill.billelectric_currentreading.ToString();
+                                toReturn.currentUnit = bill.billelectric_units.ToString();
                             }
                             else
                             {

@@ -1167,31 +1167,29 @@ namespace BillingManagementSystem.DataHelpers
         }
         #endregion
         #region ROR Gas
-        public List<BillElectricResponseModel> GetAllBillGasByPaymentStatus(BillElectricRequestModel model)
+        public List<BillGasResponseModel> GetAllBillGasByPaymentStatus(BillGasRequestModel model)
         {
-            List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
+            List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    var billsElectric = (from x in db.tbl_billelectric
+                    var billsGas = (from x in db.tbl_billgas
                                          join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                          join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                          join l in db.tbl_location on x.fk_location equals l.location_id
                                          where x.fk_paymentstatus == 2
                                          select new
                                          {
-                                             x.billelectric_amount,
-                                             x.billelectric_currentreading,
-                                             x.billelectric_datetime,
-                                             x.billelectric_id,
-                                             x.billelectric_month,
-                                             x.billelectric_outstanding,
-                                             x.billelectric_prevreading,
-                                             x.billelectric_remarks,
-                                             x.billelectric_tv,
-                                             x.billelectric_units,
-                                             x.billelectric_water,
+                                             x.amount,
+                                             x.currentreading,
+                                             x.datetime,
+                                             x.id,
+                                             x.month,
+                                             x.outstanding,
+                                             x.prevreading,
+                                             x.remarks,
+                                             x.units,
                                              x.fk_location,
                                              x.fk_paymentstatus,
                                              x.fk_resident,
@@ -1205,44 +1203,42 @@ namespace BillingManagementSystem.DataHelpers
                                              z.resident_remarks,
                                              z.resident_unit,
                                              l.location_name,
-                                             l.location_electricmeter
+                                             l.location_gassmeter
                                          }).ToList();
-                    if (billsElectric.Count() > 0)
+                    if (billsGas.Count() > 0)
                     {
-                        toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
+                        toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                         {
-                            billElectricAmount = billElectric.billelectric_amount.ToString(),
-                            billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
-                            billElectricDateTime = billElectric.billelectric_datetime.ToString(),
-                            billElectricId = billElectric.billelectric_id.ToString(),
-                            billElectricMonth = !String.IsNullOrEmpty(billElectric.billelectric_month) ? billElectric.billelectric_month : "",
-                            billElectricOutstanding = billElectric.billelectric_outstanding.ToString(),
-                            billElectricPrevReading = billElectric.billelectric_prevreading.ToString(),
-                            billElectricRemarks = !string.IsNullOrEmpty(billElectric.billelectric_remarks) ? billElectric.billelectric_remarks : "",
-                            billElectricTv = billElectric.billelectric_tv.ToString(),
-                            billElectricUnits = billElectric.billelectric_units.ToString(),
-                            billElectricWater = billElectric.billelectric_water.ToString(),
-                            pictureData = billElectric.billpicture_date,
-                            pictureSize = billElectric.billpicture_size.ToString(),
-                            pictureType = billElectric.billpicture_type,
-                            residentName = !String.IsNullOrEmpty(billElectric.resident_name) ? billElectric.resident_name : "",
-                            residentPaNo = !string.IsNullOrEmpty(billElectric.resident_panumber) ? billElectric.resident_panumber : "",
-                            residentRank = !string.IsNullOrEmpty(billElectric.resident_rank) ? billElectric.resident_rank : "",
-                            residentRemarks = !string.IsNullOrEmpty(billElectric.resident_remarks) ? billElectric.resident_remarks : "",
-                            residentUnit = !string.IsNullOrEmpty(billElectric.resident_unit) ? billElectric.resident_unit : "",
-                            locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
-                            locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
-                            fk_billPicture = billElectric.fk_billpicture.ToString(),
-                            fk_location = billElectric.fk_location.ToString(),
-                            fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
-                            fk_resident = billElectric.fk_resident.ToString(),
+                            billGasAmount = billGas.amount.ToString(),
+                            billGasCurrentReading = billGas.currentreading.ToString(),
+                            billGasDateTime = billGas.datetime.ToString(),
+                            billGasId = billGas.id.ToString(),
+                            billGasMonth = !String.IsNullOrEmpty(billGas.month) ? billGas.month : "",
+                            billGasOutstanding = billGas.outstanding.ToString(),
+                            billGasPrevReading = billGas.prevreading.ToString(),
+                            billGasRemarks = !string.IsNullOrEmpty(billGas.remarks) ? billGas.remarks : "",
+                            billGasUnits = billGas.units.ToString(),
+                            pictureData = billGas.billpicture_date,
+                            pictureSize = billGas.billpicture_size.ToString(),
+                            pictureType = billGas.billpicture_type,
+                            residentName = !String.IsNullOrEmpty(billGas.resident_name) ? billGas.resident_name : "",
+                            residentPaNo = !string.IsNullOrEmpty(billGas.resident_panumber) ? billGas.resident_panumber : "",
+                            residentRank = !string.IsNullOrEmpty(billGas.resident_rank) ? billGas.resident_rank : "",
+                            residentRemarks = !string.IsNullOrEmpty(billGas.resident_remarks) ? billGas.resident_remarks : "",
+                            residentUnit = !string.IsNullOrEmpty(billGas.resident_unit) ? billGas.resident_unit : "",
+                            locationName = !string.IsNullOrEmpty(billGas.location_name) ? billGas.location_name : "",
+                            locationMeterNo = !string.IsNullOrEmpty(billGas.location_gassmeter) ? billGas.location_gassmeter : "",
+                            fk_billPicture = billGas.fk_billpicture.ToString(),
+                            fk_location = billGas.fk_location.ToString(),
+                            fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
+                            fk_resident = billGas.fk_resident.ToString(),
                             remarks = "Successfully Found",
                             resultCode = "1100"
                         }).ToList();
                     }
                     else
                     {
-                        toReturn.Add(new BillElectricResponseModel()
+                        toReturn.Add(new BillGasResponseModel()
                         {
                             resultCode = "No Record Found",
                             remarks = "1200"
@@ -1252,7 +1248,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             catch (Exception Ex)
             {
-                toReturn.Add(new BillElectricResponseModel()
+                toReturn.Add(new BillGasResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
@@ -1260,32 +1256,29 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<BillElectricResponseModel> GetAllGasElectric(BillElectricRequestModel model)
+        public List<BillGasResponseModel> GetAllGas(BillGasRequestModel model)
         {
-            List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
+            List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    var billsElectric = (from x in db.tbl_billelectric
+                    var billsGas = (from x in db.tbl_billgas
                                          join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                          join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                          join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                          join l in db.tbl_location on x.fk_location equals l.location_id
                                          select new
                                          {
-                                             x.billelectric_amount,
-                                             x.billelectric_currentreading,
-                                             x.billelectric_datetime,
-                                             p.paymentstatus_name,
-                                             x.billelectric_id,
-                                             x.billelectric_month,
-                                             x.billelectric_outstanding,
-                                             x.billelectric_prevreading,
-                                             x.billelectric_remarks,
-                                             x.billelectric_tv,
-                                             x.billelectric_units,
-                                             x.billelectric_water,
+                                             x.amount,
+                                             x.currentreading,
+                                             x.datetime,
+                                             x.id,
+                                             x.month,
+                                             x.outstanding,
+                                             x.prevreading,
+                                             x.remarks,
+                                             x.units,
                                              x.fk_location,
                                              x.fk_paymentstatus,
                                              x.fk_resident,
@@ -1299,45 +1292,42 @@ namespace BillingManagementSystem.DataHelpers
                                              z.resident_remarks,
                                              z.resident_unit,
                                              l.location_name,
-                                             l.location_electricmeter
+                                             l.location_gassmeter
                                          }).ToList();
-                    if (billsElectric.Count() > 0)
+                    if (billsGas.Count() > 0)
                     {
-                        toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
+                        toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                         {
-                            paymentStatusName = billElectric.paymentstatus_name,
-                            billElectricAmount = billElectric.billelectric_amount.ToString(),
-                            billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
-                            billElectricDateTime = billElectric.billelectric_datetime.ToString(),
-                            billElectricId = billElectric.billelectric_id.ToString(),
-                            billElectricMonth = !String.IsNullOrEmpty(billElectric.billelectric_month) ? billElectric.billelectric_month : "",
-                            billElectricOutstanding = billElectric.billelectric_outstanding.ToString(),
-                            billElectricPrevReading = billElectric.billelectric_prevreading.ToString(),
-                            billElectricRemarks = !string.IsNullOrEmpty(billElectric.billelectric_remarks) ? billElectric.billelectric_remarks : "",
-                            billElectricTv = billElectric.billelectric_tv.ToString(),
-                            billElectricUnits = billElectric.billelectric_units.ToString(),
-                            billElectricWater = billElectric.billelectric_water.ToString(),
-                            pictureData = billElectric.billpicture_date,
-                            pictureSize = billElectric.billpicture_size.ToString(),
-                            pictureType = billElectric.billpicture_type,
-                            residentName = !String.IsNullOrEmpty(billElectric.resident_name) ? billElectric.resident_name : "",
-                            residentPaNo = !string.IsNullOrEmpty(billElectric.resident_panumber) ? billElectric.resident_panumber : "",
-                            residentRank = !string.IsNullOrEmpty(billElectric.resident_rank) ? billElectric.resident_rank : "",
-                            residentRemarks = !string.IsNullOrEmpty(billElectric.resident_remarks) ? billElectric.resident_remarks : "",
-                            residentUnit = !string.IsNullOrEmpty(billElectric.resident_unit) ? billElectric.resident_unit : "",
-                            locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
-                            locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
-                            fk_billPicture = billElectric.fk_billpicture.ToString(),
-                            fk_location = billElectric.fk_location.ToString(),
-                            fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
-                            fk_resident = billElectric.fk_resident.ToString(),
+                            billGasAmount = billGas.amount.ToString(),
+                            billGasCurrentReading = billGas.currentreading.ToString(),
+                            billGasDateTime = billGas.datetime.ToString(),
+                            billGasId = billGas.id.ToString(),
+                            billGasMonth = !String.IsNullOrEmpty(billGas.month) ? billGas.month : "",
+                            billGasOutstanding = billGas.outstanding.ToString(),
+                            billGasPrevReading = billGas.prevreading.ToString(),
+                            billGasRemarks = !string.IsNullOrEmpty(billGas.remarks) ? billGas.remarks : "",
+                            billGasUnits = billGas.units.ToString(),
+                            pictureData = billGas.billpicture_date,
+                            pictureSize = billGas.billpicture_size.ToString(),
+                            pictureType = billGas.billpicture_type,
+                            residentName = !String.IsNullOrEmpty(billGas.resident_name) ? billGas.resident_name : "",
+                            residentPaNo = !string.IsNullOrEmpty(billGas.resident_panumber) ? billGas.resident_panumber : "",
+                            residentRank = !string.IsNullOrEmpty(billGas.resident_rank) ? billGas.resident_rank : "",
+                            residentRemarks = !string.IsNullOrEmpty(billGas.resident_remarks) ? billGas.resident_remarks : "",
+                            residentUnit = !string.IsNullOrEmpty(billGas.resident_unit) ? billGas.resident_unit : "",
+                            locationName = !string.IsNullOrEmpty(billGas.location_name) ? billGas.location_name : "",
+                            locationMeterNo = !string.IsNullOrEmpty(billGas.location_gassmeter) ? billGas.location_gassmeter : "",
+                            fk_billPicture = billGas.fk_billpicture.ToString(),
+                            fk_location = billGas.fk_location.ToString(),
+                            fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
+                            fk_resident = billGas.fk_resident.ToString(),
                             remarks = "Successfully Found",
-                            resultCode = "1100"
+                            resultCode = "1100",
                         }).ToList();
                     }
                     else
                     {
-                        toReturn.Add(new BillElectricResponseModel()
+                        toReturn.Add(new BillGasResponseModel()
                         {
                             resultCode = "No Record Found",
                             remarks = "1200"
@@ -1347,7 +1337,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             catch (Exception Ex)
             {
-                toReturn.Add(new BillElectricResponseModel()
+                toReturn.Add(new BillGasResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
@@ -1355,35 +1345,32 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<BillElectricResponseModel> GetAllGasElectricByMonth(BillElectricRequestModel model)
+        public List<BillGasResponseModel> GetAllGasByMonth(BillGasRequestModel model)
         {
-            List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
+            List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
-                if (!string.IsNullOrEmpty(model.billElectricMonth))
+                if (!string.IsNullOrEmpty(model.billGasMonth))
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var billsElectric = (from x in db.tbl_billelectric
+                        var billsGas = (from x in db.tbl_billgas
                                              join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                              join l in db.tbl_location on x.fk_location equals l.location_id
-                                             where x.billelectric_month == model.billElectricMonth
+                                             where x.month == model.billGasMonth
                                              select new
                                              {
-                                                 x.billelectric_amount,
-                                                 x.billelectric_currentreading,
-                                                 x.billelectric_datetime,
-                                                 p.paymentstatus_name,
-                                                 x.billelectric_id,
-                                                 x.billelectric_month,
-                                                 x.billelectric_outstanding,
-                                                 x.billelectric_prevreading,
-                                                 x.billelectric_remarks,
-                                                 x.billelectric_tv,
-                                                 x.billelectric_units,
-                                                 x.billelectric_water,
+                                                 x.amount,
+                                                 x.currentreading,
+                                                 x.datetime,
+                                                 x.id,
+                                                 x.month,
+                                                 x.outstanding,
+                                                 x.prevreading,
+                                                 x.remarks,
+                                                 x.units,
                                                  x.fk_location,
                                                  x.fk_paymentstatus,
                                                  x.fk_resident,
@@ -1397,45 +1384,42 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_gassmeter
                                              }).ToList();
-                        if (billsElectric.Count() > 0)
+                        if (billsGas.Count() > 0)
                         {
-                            toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
+                            toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
-                                paymentStatusName = billElectric.paymentstatus_name,
-                                billElectricAmount = billElectric.billelectric_amount.ToString(),
-                                billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
-                                billElectricDateTime = billElectric.billelectric_datetime.ToString(),
-                                billElectricId = billElectric.billelectric_id.ToString(),
-                                billElectricMonth = !String.IsNullOrEmpty(billElectric.billelectric_month) ? billElectric.billelectric_month : "",
-                                billElectricOutstanding = billElectric.billelectric_outstanding.ToString(),
-                                billElectricPrevReading = billElectric.billelectric_prevreading.ToString(),
-                                billElectricRemarks = !string.IsNullOrEmpty(billElectric.billelectric_remarks) ? billElectric.billelectric_remarks : "",
-                                billElectricTv = billElectric.billelectric_tv.ToString(),
-                                billElectricUnits = billElectric.billelectric_units.ToString(),
-                                billElectricWater = billElectric.billelectric_water.ToString(),
-                                pictureData = billElectric.billpicture_date,
-                                pictureSize = billElectric.billpicture_size.ToString(),
-                                pictureType = billElectric.billpicture_type,
-                                residentName = !String.IsNullOrEmpty(billElectric.resident_name) ? billElectric.resident_name : "",
-                                residentPaNo = !string.IsNullOrEmpty(billElectric.resident_panumber) ? billElectric.resident_panumber : "",
-                                residentRank = !string.IsNullOrEmpty(billElectric.resident_rank) ? billElectric.resident_rank : "",
-                                residentRemarks = !string.IsNullOrEmpty(billElectric.resident_remarks) ? billElectric.resident_remarks : "",
-                                residentUnit = !string.IsNullOrEmpty(billElectric.resident_unit) ? billElectric.resident_unit : "",
-                                locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
-                                locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
-                                fk_billPicture = billElectric.fk_billpicture.ToString(),
-                                fk_location = billElectric.fk_location.ToString(),
-                                fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
-                                fk_resident = billElectric.fk_resident.ToString(),
+                                billGasAmount = billGas.amount.ToString(),
+                                billGasCurrentReading = billGas.currentreading.ToString(),
+                                billGasDateTime = billGas.datetime.ToString(),
+                                billGasId = billGas.id.ToString(),
+                                billGasMonth = !String.IsNullOrEmpty(billGas.month) ? billGas.month : "",
+                                billGasOutstanding = billGas.outstanding.ToString(),
+                                billGasPrevReading = billGas.prevreading.ToString(),
+                                billGasRemarks = !string.IsNullOrEmpty(billGas.remarks) ? billGas.remarks : "",
+                                billGasUnits = billGas.units.ToString(),
+                                pictureData = billGas.billpicture_date,
+                                pictureSize = billGas.billpicture_size.ToString(),
+                                pictureType = billGas.billpicture_type,
+                                residentName = !String.IsNullOrEmpty(billGas.resident_name) ? billGas.resident_name : "",
+                                residentPaNo = !string.IsNullOrEmpty(billGas.resident_panumber) ? billGas.resident_panumber : "",
+                                residentRank = !string.IsNullOrEmpty(billGas.resident_rank) ? billGas.resident_rank : "",
+                                residentRemarks = !string.IsNullOrEmpty(billGas.resident_remarks) ? billGas.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(billGas.resident_unit) ? billGas.resident_unit : "",
+                                locationName = !string.IsNullOrEmpty(billGas.location_name) ? billGas.location_name : "",
+                                locationMeterNo = !string.IsNullOrEmpty(billGas.location_gassmeter) ? billGas.location_gassmeter : "",
+                                fk_billPicture = billGas.fk_billpicture.ToString(),
+                                fk_location = billGas.fk_location.ToString(),
+                                fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
+                                fk_resident = billGas.fk_resident.ToString(),
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             }).ToList();
                         }
                         else
                         {
-                            toReturn.Add(new BillElectricResponseModel()
+                            toReturn.Add(new BillGasResponseModel()
                             {
                                 resultCode = "No Record Found",
                                 remarks = "1200"
@@ -1445,7 +1429,7 @@ namespace BillingManagementSystem.DataHelpers
                 }
                 else
                 {
-                    toReturn.Add(new BillElectricResponseModel()
+                    toReturn.Add(new BillGasResponseModel()
                     {
                         remarks = "Please Provide Month",
                         resultCode = "1300"
@@ -1454,7 +1438,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             catch (Exception Ex)
             {
-                toReturn.Add(new BillElectricResponseModel()
+                toReturn.Add(new BillGasResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
@@ -1462,36 +1446,33 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<BillElectricResponseModel> GetAllGasElectricByAmount(BillElectricRequestModel model)
+        public List<BillGasResponseModel> GetAllGasByAmount(BillGasRequestModel model)
         {
-            List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
+            List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
-                if (!string.IsNullOrEmpty(model.billElectricAmount))
+                if (!string.IsNullOrEmpty(model.billGasAmount))
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var amount = double.Parse(model.billElectricAmount);
-                        var billsElectric = (from x in db.tbl_billelectric
+                        var amount = double.Parse(model.billGasAmount);
+                        var billsGas = (from x in db.tbl_billgas
                                              join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                              join l in db.tbl_location on x.fk_location equals l.location_id
-                                             where x.billelectric_amount == amount
+                                             where x.amount == amount
                                              select new
                                              {
-                                                 x.billelectric_amount,
-                                                 x.billelectric_currentreading,
-                                                 x.billelectric_datetime,
-                                                 p.paymentstatus_name,
-                                                 x.billelectric_id,
-                                                 x.billelectric_month,
-                                                 x.billelectric_outstanding,
-                                                 x.billelectric_prevreading,
-                                                 x.billelectric_remarks,
-                                                 x.billelectric_tv,
-                                                 x.billelectric_units,
-                                                 x.billelectric_water,
+                                                 x.amount,
+                                                 x.currentreading,
+                                                 x.datetime,
+                                                 x.id,
+                                                 x.month,
+                                                 x.outstanding,
+                                                 x.prevreading,
+                                                 x.remarks,
+                                                 x.units,
                                                  x.fk_location,
                                                  x.fk_paymentstatus,
                                                  x.fk_resident,
@@ -1505,45 +1486,42 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_gassmeter
                                              }).ToList();
-                        if (billsElectric.Count() > 0)
+                        if (billsGas.Count() > 0)
                         {
-                            toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
+                            toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
-                                paymentStatusName = billElectric.paymentstatus_name,
-                                billElectricAmount = billElectric.billelectric_amount.ToString(),
-                                billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
-                                billElectricDateTime = billElectric.billelectric_datetime.ToString(),
-                                billElectricId = billElectric.billelectric_id.ToString(),
-                                billElectricMonth = !String.IsNullOrEmpty(billElectric.billelectric_month) ? billElectric.billelectric_month : "",
-                                billElectricOutstanding = billElectric.billelectric_outstanding.ToString(),
-                                billElectricPrevReading = billElectric.billelectric_prevreading.ToString(),
-                                billElectricRemarks = !string.IsNullOrEmpty(billElectric.billelectric_remarks) ? billElectric.billelectric_remarks : "",
-                                billElectricTv = billElectric.billelectric_tv.ToString(),
-                                billElectricUnits = billElectric.billelectric_units.ToString(),
-                                billElectricWater = billElectric.billelectric_water.ToString(),
-                                pictureData = billElectric.billpicture_date,
-                                pictureSize = billElectric.billpicture_size.ToString(),
-                                pictureType = billElectric.billpicture_type,
-                                residentName = !String.IsNullOrEmpty(billElectric.resident_name) ? billElectric.resident_name : "",
-                                residentPaNo = !string.IsNullOrEmpty(billElectric.resident_panumber) ? billElectric.resident_panumber : "",
-                                residentRank = !string.IsNullOrEmpty(billElectric.resident_rank) ? billElectric.resident_rank : "",
-                                residentRemarks = !string.IsNullOrEmpty(billElectric.resident_remarks) ? billElectric.resident_remarks : "",
-                                residentUnit = !string.IsNullOrEmpty(billElectric.resident_unit) ? billElectric.resident_unit : "",
-                                locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
-                                locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
-                                fk_billPicture = billElectric.fk_billpicture.ToString(),
-                                fk_location = billElectric.fk_location.ToString(),
-                                fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
-                                fk_resident = billElectric.fk_resident.ToString(),
+                                billGasAmount = billGas.amount.ToString(),
+                                billGasCurrentReading = billGas.currentreading.ToString(),
+                                billGasDateTime = billGas.datetime.ToString(),
+                                billGasId = billGas.id.ToString(),
+                                billGasMonth = !String.IsNullOrEmpty(billGas.month) ? billGas.month : "",
+                                billGasOutstanding = billGas.outstanding.ToString(),
+                                billGasPrevReading = billGas.prevreading.ToString(),
+                                billGasRemarks = !string.IsNullOrEmpty(billGas.remarks) ? billGas.remarks : "",
+                                billGasUnits = billGas.units.ToString(),
+                                pictureData = billGas.billpicture_date,
+                                pictureSize = billGas.billpicture_size.ToString(),
+                                pictureType = billGas.billpicture_type,
+                                residentName = !String.IsNullOrEmpty(billGas.resident_name) ? billGas.resident_name : "",
+                                residentPaNo = !string.IsNullOrEmpty(billGas.resident_panumber) ? billGas.resident_panumber : "",
+                                residentRank = !string.IsNullOrEmpty(billGas.resident_rank) ? billGas.resident_rank : "",
+                                residentRemarks = !string.IsNullOrEmpty(billGas.resident_remarks) ? billGas.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(billGas.resident_unit) ? billGas.resident_unit : "",
+                                locationName = !string.IsNullOrEmpty(billGas.location_name) ? billGas.location_name : "",
+                                locationMeterNo = !string.IsNullOrEmpty(billGas.location_gassmeter) ? billGas.location_gassmeter : "",
+                                fk_billPicture = billGas.fk_billpicture.ToString(),
+                                fk_location = billGas.fk_location.ToString(),
+                                fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
+                                fk_resident = billGas.fk_resident.ToString(),
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             }).ToList();
                         }
                         else
                         {
-                            toReturn.Add(new BillElectricResponseModel()
+                            toReturn.Add(new BillGasResponseModel()
                             {
                                 resultCode = "No Record Found",
                                 remarks = "1200"
@@ -1553,7 +1531,7 @@ namespace BillingManagementSystem.DataHelpers
                 }
                 else
                 {
-                    toReturn.Add(new BillElectricResponseModel()
+                    toReturn.Add(new BillGasResponseModel()
                     {
                         remarks = "Please Provide Amount",
                         resultCode = "1300"
@@ -1562,7 +1540,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             catch (Exception Ex)
             {
-                toReturn.Add(new BillElectricResponseModel()
+                toReturn.Add(new BillGasResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
@@ -1570,35 +1548,32 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<BillElectricResponseModel> GetAllGasElectricByMeterNo(BillElectricRequestModel model)
+        public List<BillGasResponseModel> GetAllGasByMeterNo(BillGasRequestModel model)
         {
-            List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
+            List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
                 if (!string.IsNullOrEmpty(model.meterNo))
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var billsElectric = (from x in db.tbl_billelectric
+                        var billsGas = (from x in db.tbl_billgas
                                              join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                              join l in db.tbl_location on x.fk_location equals l.location_id
-                                             where l.location_electricmeter == model.meterNo
+                                             where l.location_gassmeter == model.meterNo
                                              select new
                                              {
-                                                 x.billelectric_amount,
-                                                 x.billelectric_currentreading,
-                                                 x.billelectric_datetime,
-                                                 p.paymentstatus_name,
-                                                 x.billelectric_id,
-                                                 x.billelectric_month,
-                                                 x.billelectric_outstanding,
-                                                 x.billelectric_prevreading,
-                                                 x.billelectric_remarks,
-                                                 x.billelectric_tv,
-                                                 x.billelectric_units,
-                                                 x.billelectric_water,
+                                                 x.amount,
+                                                 x.currentreading,
+                                                 x.datetime,
+                                                 x.id,
+                                                 x.month,
+                                                 x.outstanding,
+                                                 x.prevreading,
+                                                 x.remarks,
+                                                 x.units,
                                                  x.fk_location,
                                                  x.fk_paymentstatus,
                                                  x.fk_resident,
@@ -1612,45 +1587,42 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_gassmeter
                                              }).ToList();
-                        if (billsElectric.Count() > 0)
+                        if (billsGas.Count() > 0)
                         {
-                            toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
+                            toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
-                                paymentStatusName = billElectric.paymentstatus_name,
-                                billElectricAmount = billElectric.billelectric_amount.ToString(),
-                                billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
-                                billElectricDateTime = billElectric.billelectric_datetime.ToString(),
-                                billElectricId = billElectric.billelectric_id.ToString(),
-                                billElectricMonth = !String.IsNullOrEmpty(billElectric.billelectric_month) ? billElectric.billelectric_month : "",
-                                billElectricOutstanding = billElectric.billelectric_outstanding.ToString(),
-                                billElectricPrevReading = billElectric.billelectric_prevreading.ToString(),
-                                billElectricRemarks = !string.IsNullOrEmpty(billElectric.billelectric_remarks) ? billElectric.billelectric_remarks : "",
-                                billElectricTv = billElectric.billelectric_tv.ToString(),
-                                billElectricUnits = billElectric.billelectric_units.ToString(),
-                                billElectricWater = billElectric.billelectric_water.ToString(),
-                                pictureData = billElectric.billpicture_date,
-                                pictureSize = billElectric.billpicture_size.ToString(),
-                                pictureType = billElectric.billpicture_type,
-                                residentName = !String.IsNullOrEmpty(billElectric.resident_name) ? billElectric.resident_name : "",
-                                residentPaNo = !string.IsNullOrEmpty(billElectric.resident_panumber) ? billElectric.resident_panumber : "",
-                                residentRank = !string.IsNullOrEmpty(billElectric.resident_rank) ? billElectric.resident_rank : "",
-                                residentRemarks = !string.IsNullOrEmpty(billElectric.resident_remarks) ? billElectric.resident_remarks : "",
-                                residentUnit = !string.IsNullOrEmpty(billElectric.resident_unit) ? billElectric.resident_unit : "",
-                                locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
-                                locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
-                                fk_billPicture = billElectric.fk_billpicture.ToString(),
-                                fk_location = billElectric.fk_location.ToString(),
-                                fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
-                                fk_resident = billElectric.fk_resident.ToString(),
+                                billGasAmount = billGas.amount.ToString(),
+                                billGasCurrentReading = billGas.currentreading.ToString(),
+                                billGasDateTime = billGas.datetime.ToString(),
+                                billGasId = billGas.id.ToString(),
+                                billGasMonth = !String.IsNullOrEmpty(billGas.month) ? billGas.month : "",
+                                billGasOutstanding = billGas.outstanding.ToString(),
+                                billGasPrevReading = billGas.prevreading.ToString(),
+                                billGasRemarks = !string.IsNullOrEmpty(billGas.remarks) ? billGas.remarks : "",
+                                billGasUnits = billGas.units.ToString(),
+                                pictureData = billGas.billpicture_date,
+                                pictureSize = billGas.billpicture_size.ToString(),
+                                pictureType = billGas.billpicture_type,
+                                residentName = !String.IsNullOrEmpty(billGas.resident_name) ? billGas.resident_name : "",
+                                residentPaNo = !string.IsNullOrEmpty(billGas.resident_panumber) ? billGas.resident_panumber : "",
+                                residentRank = !string.IsNullOrEmpty(billGas.resident_rank) ? billGas.resident_rank : "",
+                                residentRemarks = !string.IsNullOrEmpty(billGas.resident_remarks) ? billGas.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(billGas.resident_unit) ? billGas.resident_unit : "",
+                                locationName = !string.IsNullOrEmpty(billGas.location_name) ? billGas.location_name : "",
+                                locationMeterNo = !string.IsNullOrEmpty(billGas.location_gassmeter) ? billGas.location_gassmeter : "",
+                                fk_billPicture = billGas.fk_billpicture.ToString(),
+                                fk_location = billGas.fk_location.ToString(),
+                                fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
+                                fk_resident = billGas.fk_resident.ToString(),
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             }).ToList();
                         }
                         else
                         {
-                            toReturn.Add(new BillElectricResponseModel()
+                            toReturn.Add(new BillGasResponseModel()
                             {
                                 resultCode = "No Record Found",
                                 remarks = "1200"
@@ -1660,7 +1632,7 @@ namespace BillingManagementSystem.DataHelpers
                 }
                 else
                 {
-                    toReturn.Add(new BillElectricResponseModel()
+                    toReturn.Add(new BillGasResponseModel()
                     {
                         remarks = "Please Provide MeterNo",
                         resultCode = "1300"
@@ -1669,7 +1641,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             catch (Exception Ex)
             {
-                toReturn.Add(new BillElectricResponseModel()
+                toReturn.Add(new BillGasResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
@@ -1677,16 +1649,16 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<BillElectricResponseModel> GetAllRORGasByArea(BillElectricRequestModel model)
+        public List<BillGasResponseModel> GetAllRORGasByArea(BillGasRequestModel model)
         {
-            List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
+            List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
                 if (!string.IsNullOrEmpty(model.areaName))
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var billsElectric = (from x in db.tbl_billelectric
+                        var billsGas = (from x in db.tbl_billgas
                                              join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
@@ -1695,18 +1667,15 @@ namespace BillingManagementSystem.DataHelpers
                                              where a.area_name == model.areaName
                                              select new
                                              {
-                                                 x.billelectric_amount,
-                                                 x.billelectric_currentreading,
-                                                 x.billelectric_datetime,
-                                                 p.paymentstatus_name,
-                                                 x.billelectric_id,
-                                                 x.billelectric_month,
-                                                 x.billelectric_outstanding,
-                                                 x.billelectric_prevreading,
-                                                 x.billelectric_remarks,
-                                                 x.billelectric_tv,
-                                                 x.billelectric_units,
-                                                 x.billelectric_water,
+                                                 x.amount,
+                                                 x.currentreading,
+                                                 x.datetime,
+                                                 x.id,
+                                                 x.month,
+                                                 x.outstanding,
+                                                 x.prevreading,
+                                                 x.remarks,
+                                                 x.units,
                                                  x.fk_location,
                                                  x.fk_paymentstatus,
                                                  x.fk_resident,
@@ -1720,45 +1689,42 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_gassmeter
                                              }).ToList();
-                        if (billsElectric.Count() > 0)
+                        if (billsGas.Count() > 0)
                         {
-                            toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
+                            toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
-                                paymentStatusName = billElectric.paymentstatus_name,
-                                billElectricAmount = billElectric.billelectric_amount.ToString(),
-                                billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
-                                billElectricDateTime = billElectric.billelectric_datetime.ToString(),
-                                billElectricId = billElectric.billelectric_id.ToString(),
-                                billElectricMonth = !String.IsNullOrEmpty(billElectric.billelectric_month) ? billElectric.billelectric_month : "",
-                                billElectricOutstanding = billElectric.billelectric_outstanding.ToString(),
-                                billElectricPrevReading = billElectric.billelectric_prevreading.ToString(),
-                                billElectricRemarks = !string.IsNullOrEmpty(billElectric.billelectric_remarks) ? billElectric.billelectric_remarks : "",
-                                billElectricTv = billElectric.billelectric_tv.ToString(),
-                                billElectricUnits = billElectric.billelectric_units.ToString(),
-                                billElectricWater = billElectric.billelectric_water.ToString(),
-                                pictureData = billElectric.billpicture_date,
-                                pictureSize = billElectric.billpicture_size.ToString(),
-                                pictureType = billElectric.billpicture_type,
-                                residentName = !String.IsNullOrEmpty(billElectric.resident_name) ? billElectric.resident_name : "",
-                                residentPaNo = !string.IsNullOrEmpty(billElectric.resident_panumber) ? billElectric.resident_panumber : "",
-                                residentRank = !string.IsNullOrEmpty(billElectric.resident_rank) ? billElectric.resident_rank : "",
-                                residentRemarks = !string.IsNullOrEmpty(billElectric.resident_remarks) ? billElectric.resident_remarks : "",
-                                residentUnit = !string.IsNullOrEmpty(billElectric.resident_unit) ? billElectric.resident_unit : "",
-                                locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
-                                locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
-                                fk_billPicture = billElectric.fk_billpicture.ToString(),
-                                fk_location = billElectric.fk_location.ToString(),
-                                fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
-                                fk_resident = billElectric.fk_resident.ToString(),
+                                billGasAmount = billGas.amount.ToString(),
+                                billGasCurrentReading = billGas.currentreading.ToString(),
+                                billGasDateTime = billGas.datetime.ToString(),
+                                billGasId = billGas.id.ToString(),
+                                billGasMonth = !String.IsNullOrEmpty(billGas.month) ? billGas.month : "",
+                                billGasOutstanding = billGas.outstanding.ToString(),
+                                billGasPrevReading = billGas.prevreading.ToString(),
+                                billGasRemarks = !string.IsNullOrEmpty(billGas.remarks) ? billGas.remarks : "",
+                                billGasUnits = billGas.units.ToString(),
+                                pictureData = billGas.billpicture_date,
+                                pictureSize = billGas.billpicture_size.ToString(),
+                                pictureType = billGas.billpicture_type,
+                                residentName = !String.IsNullOrEmpty(billGas.resident_name) ? billGas.resident_name : "",
+                                residentPaNo = !string.IsNullOrEmpty(billGas.resident_panumber) ? billGas.resident_panumber : "",
+                                residentRank = !string.IsNullOrEmpty(billGas.resident_rank) ? billGas.resident_rank : "",
+                                residentRemarks = !string.IsNullOrEmpty(billGas.resident_remarks) ? billGas.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(billGas.resident_unit) ? billGas.resident_unit : "",
+                                locationName = !string.IsNullOrEmpty(billGas.location_name) ? billGas.location_name : "",
+                                locationMeterNo = !string.IsNullOrEmpty(billGas.location_gassmeter) ? billGas.location_gassmeter : "",
+                                fk_billPicture = billGas.fk_billpicture.ToString(),
+                                fk_location = billGas.fk_location.ToString(),
+                                fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
+                                fk_resident = billGas.fk_resident.ToString(),
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             }).ToList();
                         }
                         else
                         {
-                            toReturn.Add(new BillElectricResponseModel()
+                            toReturn.Add(new BillGasResponseModel()
                             {
                                 resultCode = "No Record Found",
                                 remarks = "1200"
@@ -1768,7 +1734,7 @@ namespace BillingManagementSystem.DataHelpers
                 }
                 else
                 {
-                    toReturn.Add(new BillElectricResponseModel()
+                    toReturn.Add(new BillGasResponseModel()
                     {
                         remarks = "Please Provide Area Name",
                         resultCode = "1300"
@@ -1777,7 +1743,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             catch (Exception Ex)
             {
-                toReturn.Add(new BillElectricResponseModel()
+                toReturn.Add(new BillGasResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
@@ -1785,9 +1751,9 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<BillElectricResponseModel> GetAllRORGasByResident(BillElectricRequestModel model)
+        public List<BillGasResponseModel> GetAllRORGasByResident(BillGasRequestModel model)
         {
-            List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
+            List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
                 if (!string.IsNullOrEmpty(model.fk_resident))
@@ -1795,7 +1761,7 @@ namespace BillingManagementSystem.DataHelpers
                     int residentId = int.Parse(model.fk_resident);
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var billsElectric = (from x in db.tbl_billelectric
+                        var billsGas = (from x in db.tbl_billgas
                                              join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
@@ -1803,18 +1769,15 @@ namespace BillingManagementSystem.DataHelpers
                                              where x.fk_resident == residentId
                                              select new
                                              {
-                                                 x.billelectric_amount,
-                                                 x.billelectric_currentreading,
-                                                 x.billelectric_datetime,
-                                                 p.paymentstatus_name,
-                                                 x.billelectric_id,
-                                                 x.billelectric_month,
-                                                 x.billelectric_outstanding,
-                                                 x.billelectric_prevreading,
-                                                 x.billelectric_remarks,
-                                                 x.billelectric_tv,
-                                                 x.billelectric_units,
-                                                 x.billelectric_water,
+                                                 x.amount,
+                                                 x.currentreading,
+                                                 x.datetime,
+                                                 x.id,
+                                                 x.month,
+                                                 x.outstanding,
+                                                 x.prevreading,
+                                                 x.remarks,
+                                                 x.units,
                                                  x.fk_location,
                                                  x.fk_paymentstatus,
                                                  x.fk_resident,
@@ -1828,45 +1791,42 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_gassmeter
                                              }).ToList();
-                        if (billsElectric.Count() > 0)
+                        if (billsGas.Count() > 0)
                         {
-                            toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
+                            toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
-                                paymentStatusName = billElectric.paymentstatus_name,
-                                billElectricAmount = billElectric.billelectric_amount.ToString(),
-                                billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
-                                billElectricDateTime = billElectric.billelectric_datetime.ToString(),
-                                billElectricId = billElectric.billelectric_id.ToString(),
-                                billElectricMonth = !String.IsNullOrEmpty(billElectric.billelectric_month) ? billElectric.billelectric_month : "",
-                                billElectricOutstanding = billElectric.billelectric_outstanding.ToString(),
-                                billElectricPrevReading = billElectric.billelectric_prevreading.ToString(),
-                                billElectricRemarks = !string.IsNullOrEmpty(billElectric.billelectric_remarks) ? billElectric.billelectric_remarks : "",
-                                billElectricTv = billElectric.billelectric_tv.ToString(),
-                                billElectricUnits = billElectric.billelectric_units.ToString(),
-                                billElectricWater = billElectric.billelectric_water.ToString(),
-                                pictureData = billElectric.billpicture_date,
-                                pictureSize = billElectric.billpicture_size.ToString(),
-                                pictureType = billElectric.billpicture_type,
-                                residentName = !String.IsNullOrEmpty(billElectric.resident_name) ? billElectric.resident_name : "",
-                                residentPaNo = !string.IsNullOrEmpty(billElectric.resident_panumber) ? billElectric.resident_panumber : "",
-                                residentRank = !string.IsNullOrEmpty(billElectric.resident_rank) ? billElectric.resident_rank : "",
-                                residentRemarks = !string.IsNullOrEmpty(billElectric.resident_remarks) ? billElectric.resident_remarks : "",
-                                residentUnit = !string.IsNullOrEmpty(billElectric.resident_unit) ? billElectric.resident_unit : "",
-                                locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
-                                locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
-                                fk_billPicture = billElectric.fk_billpicture.ToString(),
-                                fk_location = billElectric.fk_location.ToString(),
-                                fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
-                                fk_resident = billElectric.fk_resident.ToString(),
+                                billGasAmount = billGas.amount.ToString(),
+                                billGasCurrentReading = billGas.currentreading.ToString(),
+                                billGasDateTime = billGas.datetime.ToString(),
+                                billGasId = billGas.id.ToString(),
+                                billGasMonth = !String.IsNullOrEmpty(billGas.month) ? billGas.month : "",
+                                billGasOutstanding = billGas.outstanding.ToString(),
+                                billGasPrevReading = billGas.prevreading.ToString(),
+                                billGasRemarks = !string.IsNullOrEmpty(billGas.remarks) ? billGas.remarks : "",
+                                billGasUnits = billGas.units.ToString(),
+                                pictureData = billGas.billpicture_date,
+                                pictureSize = billGas.billpicture_size.ToString(),
+                                pictureType = billGas.billpicture_type,
+                                residentName = !String.IsNullOrEmpty(billGas.resident_name) ? billGas.resident_name : "",
+                                residentPaNo = !string.IsNullOrEmpty(billGas.resident_panumber) ? billGas.resident_panumber : "",
+                                residentRank = !string.IsNullOrEmpty(billGas.resident_rank) ? billGas.resident_rank : "",
+                                residentRemarks = !string.IsNullOrEmpty(billGas.resident_remarks) ? billGas.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(billGas.resident_unit) ? billGas.resident_unit : "",
+                                locationName = !string.IsNullOrEmpty(billGas.location_name) ? billGas.location_name : "",
+                                locationMeterNo = !string.IsNullOrEmpty(billGas.location_gassmeter) ? billGas.location_gassmeter : "",
+                                fk_billPicture = billGas.fk_billpicture.ToString(),
+                                fk_location = billGas.fk_location.ToString(),
+                                fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
+                                fk_resident = billGas.fk_resident.ToString(),
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             }).ToList();
                         }
                         else
                         {
-                            toReturn.Add(new BillElectricResponseModel()
+                            toReturn.Add(new BillGasResponseModel()
                             {
                                 resultCode = "No Record Found",
                                 remarks = "1200"
@@ -1876,7 +1836,7 @@ namespace BillingManagementSystem.DataHelpers
                 }
                 else
                 {
-                    toReturn.Add(new BillElectricResponseModel()
+                    toReturn.Add(new BillGasResponseModel()
                     {
                         remarks = "Please Provide Resident",
                         resultCode = "1300"
@@ -1885,7 +1845,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             catch (Exception Ex)
             {
-                toReturn.Add(new BillElectricResponseModel()
+                toReturn.Add(new BillGasResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
@@ -1893,16 +1853,16 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<BillElectricResponseModel> GetAllRORGasByPaNo(BillElectricRequestModel model)
+        public List<BillGasResponseModel> GetAllRORGasByPaNo(BillGasRequestModel model)
         {
-            List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
+            List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
                 if (!string.IsNullOrEmpty(model.paNo))
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var billsElectric = (from x in db.tbl_billelectric
+                        var billsGas = (from x in db.tbl_billgas
                                              join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
@@ -1910,18 +1870,15 @@ namespace BillingManagementSystem.DataHelpers
                                              where z.resident_panumber == model.paNo
                                              select new
                                              {
-                                                 x.billelectric_amount,
-                                                 x.billelectric_currentreading,
-                                                 x.billelectric_datetime,
-                                                 p.paymentstatus_name,
-                                                 x.billelectric_id,
-                                                 x.billelectric_month,
-                                                 x.billelectric_outstanding,
-                                                 x.billelectric_prevreading,
-                                                 x.billelectric_remarks,
-                                                 x.billelectric_tv,
-                                                 x.billelectric_units,
-                                                 x.billelectric_water,
+                                                 x.amount,
+                                                 x.currentreading,
+                                                 x.datetime,
+                                                 x.id,
+                                                 x.month,
+                                                 x.outstanding,
+                                                 x.prevreading,
+                                                 x.remarks,
+                                                 x.units,
                                                  x.fk_location,
                                                  x.fk_paymentstatus,
                                                  x.fk_resident,
@@ -1935,45 +1892,42 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_gassmeter
                                              }).ToList();
-                        if (billsElectric.Count() > 0)
+                        if (billsGas.Count() > 0)
                         {
-                            toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
+                            toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
-                                paymentStatusName = billElectric.paymentstatus_name,
-                                billElectricAmount = billElectric.billelectric_amount.ToString(),
-                                billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
-                                billElectricDateTime = billElectric.billelectric_datetime.ToString(),
-                                billElectricId = billElectric.billelectric_id.ToString(),
-                                billElectricMonth = !String.IsNullOrEmpty(billElectric.billelectric_month) ? billElectric.billelectric_month : "",
-                                billElectricOutstanding = billElectric.billelectric_outstanding.ToString(),
-                                billElectricPrevReading = billElectric.billelectric_prevreading.ToString(),
-                                billElectricRemarks = !string.IsNullOrEmpty(billElectric.billelectric_remarks) ? billElectric.billelectric_remarks : "",
-                                billElectricTv = billElectric.billelectric_tv.ToString(),
-                                billElectricUnits = billElectric.billelectric_units.ToString(),
-                                billElectricWater = billElectric.billelectric_water.ToString(),
-                                pictureData = billElectric.billpicture_date,
-                                pictureSize = billElectric.billpicture_size.ToString(),
-                                pictureType = billElectric.billpicture_type,
-                                residentName = !String.IsNullOrEmpty(billElectric.resident_name) ? billElectric.resident_name : "",
-                                residentPaNo = !string.IsNullOrEmpty(billElectric.resident_panumber) ? billElectric.resident_panumber : "",
-                                residentRank = !string.IsNullOrEmpty(billElectric.resident_rank) ? billElectric.resident_rank : "",
-                                residentRemarks = !string.IsNullOrEmpty(billElectric.resident_remarks) ? billElectric.resident_remarks : "",
-                                residentUnit = !string.IsNullOrEmpty(billElectric.resident_unit) ? billElectric.resident_unit : "",
-                                locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
-                                locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
-                                fk_billPicture = billElectric.fk_billpicture.ToString(),
-                                fk_location = billElectric.fk_location.ToString(),
-                                fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
-                                fk_resident = billElectric.fk_resident.ToString(),
+                                billGasAmount = billGas.amount.ToString(),
+                                billGasCurrentReading = billGas.currentreading.ToString(),
+                                billGasDateTime = billGas.datetime.ToString(),
+                                billGasId = billGas.id.ToString(),
+                                billGasMonth = !String.IsNullOrEmpty(billGas.month) ? billGas.month : "",
+                                billGasOutstanding = billGas.outstanding.ToString(),
+                                billGasPrevReading = billGas.prevreading.ToString(),
+                                billGasRemarks = !string.IsNullOrEmpty(billGas.remarks) ? billGas.remarks : "",
+                                billGasUnits = billGas.units.ToString(),
+                                pictureData = billGas.billpicture_date,
+                                pictureSize = billGas.billpicture_size.ToString(),
+                                pictureType = billGas.billpicture_type,
+                                residentName = !String.IsNullOrEmpty(billGas.resident_name) ? billGas.resident_name : "",
+                                residentPaNo = !string.IsNullOrEmpty(billGas.resident_panumber) ? billGas.resident_panumber : "",
+                                residentRank = !string.IsNullOrEmpty(billGas.resident_rank) ? billGas.resident_rank : "",
+                                residentRemarks = !string.IsNullOrEmpty(billGas.resident_remarks) ? billGas.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(billGas.resident_unit) ? billGas.resident_unit : "",
+                                locationName = !string.IsNullOrEmpty(billGas.location_name) ? billGas.location_name : "",
+                                locationMeterNo = !string.IsNullOrEmpty(billGas.location_gassmeter) ? billGas.location_gassmeter : "",
+                                fk_billPicture = billGas.fk_billpicture.ToString(),
+                                fk_location = billGas.fk_location.ToString(),
+                                fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
+                                fk_resident = billGas.fk_resident.ToString(),
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             }).ToList();
                         }
                         else
                         {
-                            toReturn.Add(new BillElectricResponseModel()
+                            toReturn.Add(new BillGasResponseModel()
                             {
                                 resultCode = "No Record Found",
                                 remarks = "1200"
@@ -1983,7 +1937,7 @@ namespace BillingManagementSystem.DataHelpers
                 }
                 else
                 {
-                    toReturn.Add(new BillElectricResponseModel()
+                    toReturn.Add(new BillGasResponseModel()
                     {
                         remarks = "Please Provide Pa No",
                         resultCode = "1300"
@@ -1992,7 +1946,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             catch (Exception Ex)
             {
-                toReturn.Add(new BillElectricResponseModel()
+                toReturn.Add(new BillGasResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
@@ -2000,16 +1954,16 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<BillElectricResponseModel> GetAllRORGasByUnit(BillElectricRequestModel model)
+        public List<BillGasResponseModel> GetAllRORGasByUnit(BillGasRequestModel model)
         {
-            List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
+            List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
                 if (!string.IsNullOrEmpty(model.unit))
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var billsElectric = (from x in db.tbl_billelectric
+                        var billsGas = (from x in db.tbl_billgas
                                              join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
@@ -2017,18 +1971,15 @@ namespace BillingManagementSystem.DataHelpers
                                              where z.resident_unit == model.unit
                                              select new
                                              {
-                                                 x.billelectric_amount,
-                                                 x.billelectric_currentreading,
-                                                 x.billelectric_datetime,
-                                                 p.paymentstatus_name,
-                                                 x.billelectric_id,
-                                                 x.billelectric_month,
-                                                 x.billelectric_outstanding,
-                                                 x.billelectric_prevreading,
-                                                 x.billelectric_remarks,
-                                                 x.billelectric_tv,
-                                                 x.billelectric_units,
-                                                 x.billelectric_water,
+                                                 x.amount,
+                                                 x.currentreading,
+                                                 x.datetime,
+                                                 x.id,
+                                                 x.month,
+                                                 x.outstanding,
+                                                 x.prevreading,
+                                                 x.remarks,
+                                                 x.units,
                                                  x.fk_location,
                                                  x.fk_paymentstatus,
                                                  x.fk_resident,
@@ -2042,45 +1993,42 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_gassmeter
                                              }).ToList();
-                        if (billsElectric.Count() > 0)
+                        if (billsGas.Count() > 0)
                         {
-                            toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
+                            toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
-                                paymentStatusName = billElectric.paymentstatus_name,
-                                billElectricAmount = billElectric.billelectric_amount.ToString(),
-                                billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
-                                billElectricDateTime = billElectric.billelectric_datetime.ToString(),
-                                billElectricId = billElectric.billelectric_id.ToString(),
-                                billElectricMonth = !String.IsNullOrEmpty(billElectric.billelectric_month) ? billElectric.billelectric_month : "",
-                                billElectricOutstanding = billElectric.billelectric_outstanding.ToString(),
-                                billElectricPrevReading = billElectric.billelectric_prevreading.ToString(),
-                                billElectricRemarks = !string.IsNullOrEmpty(billElectric.billelectric_remarks) ? billElectric.billelectric_remarks : "",
-                                billElectricTv = billElectric.billelectric_tv.ToString(),
-                                billElectricUnits = billElectric.billelectric_units.ToString(),
-                                billElectricWater = billElectric.billelectric_water.ToString(),
-                                pictureData = billElectric.billpicture_date,
-                                pictureSize = billElectric.billpicture_size.ToString(),
-                                pictureType = billElectric.billpicture_type,
-                                residentName = !String.IsNullOrEmpty(billElectric.resident_name) ? billElectric.resident_name : "",
-                                residentPaNo = !string.IsNullOrEmpty(billElectric.resident_panumber) ? billElectric.resident_panumber : "",
-                                residentRank = !string.IsNullOrEmpty(billElectric.resident_rank) ? billElectric.resident_rank : "",
-                                residentRemarks = !string.IsNullOrEmpty(billElectric.resident_remarks) ? billElectric.resident_remarks : "",
-                                residentUnit = !string.IsNullOrEmpty(billElectric.resident_unit) ? billElectric.resident_unit : "",
-                                locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
-                                locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
-                                fk_billPicture = billElectric.fk_billpicture.ToString(),
-                                fk_location = billElectric.fk_location.ToString(),
-                                fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
-                                fk_resident = billElectric.fk_resident.ToString(),
+                                billGasAmount = billGas.amount.ToString(),
+                                billGasCurrentReading = billGas.currentreading.ToString(),
+                                billGasDateTime = billGas.datetime.ToString(),
+                                billGasId = billGas.id.ToString(),
+                                billGasMonth = !String.IsNullOrEmpty(billGas.month) ? billGas.month : "",
+                                billGasOutstanding = billGas.outstanding.ToString(),
+                                billGasPrevReading = billGas.prevreading.ToString(),
+                                billGasRemarks = !string.IsNullOrEmpty(billGas.remarks) ? billGas.remarks : "",
+                                billGasUnits = billGas.units.ToString(),
+                                pictureData = billGas.billpicture_date,
+                                pictureSize = billGas.billpicture_size.ToString(),
+                                pictureType = billGas.billpicture_type,
+                                residentName = !String.IsNullOrEmpty(billGas.resident_name) ? billGas.resident_name : "",
+                                residentPaNo = !string.IsNullOrEmpty(billGas.resident_panumber) ? billGas.resident_panumber : "",
+                                residentRank = !string.IsNullOrEmpty(billGas.resident_rank) ? billGas.resident_rank : "",
+                                residentRemarks = !string.IsNullOrEmpty(billGas.resident_remarks) ? billGas.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(billGas.resident_unit) ? billGas.resident_unit : "",
+                                locationName = !string.IsNullOrEmpty(billGas.location_name) ? billGas.location_name : "",
+                                locationMeterNo = !string.IsNullOrEmpty(billGas.location_gassmeter) ? billGas.location_gassmeter : "",
+                                fk_billPicture = billGas.fk_billpicture.ToString(),
+                                fk_location = billGas.fk_location.ToString(),
+                                fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
+                                fk_resident = billGas.fk_resident.ToString(),
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             }).ToList();
                         }
                         else
                         {
-                            toReturn.Add(new BillElectricResponseModel()
+                            toReturn.Add(new BillGasResponseModel()
                             {
                                 resultCode = "No Record Found",
                                 remarks = "1200"
@@ -2090,7 +2038,7 @@ namespace BillingManagementSystem.DataHelpers
                 }
                 else
                 {
-                    toReturn.Add(new BillElectricResponseModel()
+                    toReturn.Add(new BillGasResponseModel()
                     {
                         remarks = "Please Provide Unit",
                         resultCode = "1300"
@@ -2099,7 +2047,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             catch (Exception Ex)
             {
-                toReturn.Add(new BillElectricResponseModel()
+                toReturn.Add(new BillGasResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
@@ -2107,16 +2055,16 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<BillElectricResponseModel> GetAllRORGasByRank(BillElectricRequestModel model)
+        public List<BillGasResponseModel> GetAllRORGasByRank(BillGasRequestModel model)
         {
-            List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
+            List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
                 if (!string.IsNullOrEmpty(model.rank))
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var billsElectric = (from x in db.tbl_billelectric
+                        var billsGas = (from x in db.tbl_billgas
                                              join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
@@ -2124,18 +2072,15 @@ namespace BillingManagementSystem.DataHelpers
                                              where z.resident_rank == model.rank
                                              select new
                                              {
-                                                 x.billelectric_amount,
-                                                 x.billelectric_currentreading,
-                                                 x.billelectric_datetime,
-                                                 p.paymentstatus_name,
-                                                 x.billelectric_id,
-                                                 x.billelectric_month,
-                                                 x.billelectric_outstanding,
-                                                 x.billelectric_prevreading,
-                                                 x.billelectric_remarks,
-                                                 x.billelectric_tv,
-                                                 x.billelectric_units,
-                                                 x.billelectric_water,
+                                                 x.amount,
+                                                 x.currentreading,
+                                                 x.datetime,
+                                                 x.id,
+                                                 x.month,
+                                                 x.outstanding,
+                                                 x.prevreading,
+                                                 x.remarks,
+                                                 x.units,
                                                  x.fk_location,
                                                  x.fk_paymentstatus,
                                                  x.fk_resident,
@@ -2149,45 +2094,42 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_gassmeter
                                              }).ToList();
-                        if (billsElectric.Count() > 0)
+                        if (billsGas.Count() > 0)
                         {
-                            toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
+                            toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
-                                paymentStatusName = billElectric.paymentstatus_name,
-                                billElectricAmount = billElectric.billelectric_amount.ToString(),
-                                billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
-                                billElectricDateTime = billElectric.billelectric_datetime.ToString(),
-                                billElectricId = billElectric.billelectric_id.ToString(),
-                                billElectricMonth = !String.IsNullOrEmpty(billElectric.billelectric_month) ? billElectric.billelectric_month : "",
-                                billElectricOutstanding = billElectric.billelectric_outstanding.ToString(),
-                                billElectricPrevReading = billElectric.billelectric_prevreading.ToString(),
-                                billElectricRemarks = !string.IsNullOrEmpty(billElectric.billelectric_remarks) ? billElectric.billelectric_remarks : "",
-                                billElectricTv = billElectric.billelectric_tv.ToString(),
-                                billElectricUnits = billElectric.billelectric_units.ToString(),
-                                billElectricWater = billElectric.billelectric_water.ToString(),
-                                pictureData = billElectric.billpicture_date,
-                                pictureSize = billElectric.billpicture_size.ToString(),
-                                pictureType = billElectric.billpicture_type,
-                                residentName = !String.IsNullOrEmpty(billElectric.resident_name) ? billElectric.resident_name : "",
-                                residentPaNo = !string.IsNullOrEmpty(billElectric.resident_panumber) ? billElectric.resident_panumber : "",
-                                residentRank = !string.IsNullOrEmpty(billElectric.resident_rank) ? billElectric.resident_rank : "",
-                                residentRemarks = !string.IsNullOrEmpty(billElectric.resident_remarks) ? billElectric.resident_remarks : "",
-                                residentUnit = !string.IsNullOrEmpty(billElectric.resident_unit) ? billElectric.resident_unit : "",
-                                locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
-                                locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
-                                fk_billPicture = billElectric.fk_billpicture.ToString(),
-                                fk_location = billElectric.fk_location.ToString(),
-                                fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
-                                fk_resident = billElectric.fk_resident.ToString(),
+                                billGasAmount = billGas.amount.ToString(),
+                                billGasCurrentReading = billGas.currentreading.ToString(),
+                                billGasDateTime = billGas.datetime.ToString(),
+                                billGasId = billGas.id.ToString(),
+                                billGasMonth = !String.IsNullOrEmpty(billGas.month) ? billGas.month : "",
+                                billGasOutstanding = billGas.outstanding.ToString(),
+                                billGasPrevReading = billGas.prevreading.ToString(),
+                                billGasRemarks = !string.IsNullOrEmpty(billGas.remarks) ? billGas.remarks : "",
+                                billGasUnits = billGas.units.ToString(),
+                                pictureData = billGas.billpicture_date,
+                                pictureSize = billGas.billpicture_size.ToString(),
+                                pictureType = billGas.billpicture_type,
+                                residentName = !String.IsNullOrEmpty(billGas.resident_name) ? billGas.resident_name : "",
+                                residentPaNo = !string.IsNullOrEmpty(billGas.resident_panumber) ? billGas.resident_panumber : "",
+                                residentRank = !string.IsNullOrEmpty(billGas.resident_rank) ? billGas.resident_rank : "",
+                                residentRemarks = !string.IsNullOrEmpty(billGas.resident_remarks) ? billGas.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(billGas.resident_unit) ? billGas.resident_unit : "",
+                                locationName = !string.IsNullOrEmpty(billGas.location_name) ? billGas.location_name : "",
+                                locationMeterNo = !string.IsNullOrEmpty(billGas.location_gassmeter) ? billGas.location_gassmeter : "",
+                                fk_billPicture = billGas.fk_billpicture.ToString(),
+                                fk_location = billGas.fk_location.ToString(),
+                                fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
+                                fk_resident = billGas.fk_resident.ToString(),
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             }).ToList();
                         }
                         else
                         {
-                            toReturn.Add(new BillElectricResponseModel()
+                            toReturn.Add(new BillGasResponseModel()
                             {
                                 resultCode = "No Record Found",
                                 remarks = "1200"
@@ -2197,7 +2139,7 @@ namespace BillingManagementSystem.DataHelpers
                 }
                 else
                 {
-                    toReturn.Add(new BillElectricResponseModel()
+                    toReturn.Add(new BillGasResponseModel()
                     {
                         remarks = "Please Provide Rank",
                         resultCode = "1300"
@@ -2206,7 +2148,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             catch (Exception Ex)
             {
-                toReturn.Add(new BillElectricResponseModel()
+                toReturn.Add(new BillGasResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
@@ -2214,36 +2156,33 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<BillElectricResponseModel> GetAllRORGasByDate(BillElectricRequestModel model)
+        public List<BillGasResponseModel> GetAllRORGasByDate(BillGasRequestModel model)
         {
-            List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
+            List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
-                if (!string.IsNullOrEmpty(model.billElectricDateTime))
+                if (!string.IsNullOrEmpty(model.billGasDateTime))
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var dateEntered = DateTime.ParseExact(model.billElectricDateTime, "dd/MM/yyyy H:mm:ss", CultureInfo.InvariantCulture);
-                        var billsElectric = (from x in db.tbl_billelectric
+                        var dateEntered = DateTime.ParseExact(model.billGasDateTime, "dd/MM/yyyy H:mm:ss", CultureInfo.InvariantCulture);
+                        var billsGas = (from x in db.tbl_billgas
                                              join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                              join l in db.tbl_location on x.fk_location equals l.location_id
-                                             where x.billelectric_datetime == dateEntered
+                                             where x.datetime == dateEntered
                                              select new
                                              {
-                                                 x.billelectric_amount,
-                                                 x.billelectric_currentreading,
-                                                 x.billelectric_datetime,
-                                                 p.paymentstatus_name,
-                                                 x.billelectric_id,
-                                                 x.billelectric_month,
-                                                 x.billelectric_outstanding,
-                                                 x.billelectric_prevreading,
-                                                 x.billelectric_remarks,
-                                                 x.billelectric_tv,
-                                                 x.billelectric_units,
-                                                 x.billelectric_water,
+                                                 x.amount,
+                                                 x.currentreading,
+                                                 x.datetime,
+                                                 x.id,
+                                                 x.month,
+                                                 x.outstanding,
+                                                 x.prevreading,
+                                                 x.remarks,
+                                                 x.units,
                                                  x.fk_location,
                                                  x.fk_paymentstatus,
                                                  x.fk_resident,
@@ -2257,45 +2196,42 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_gassmeter
                                              }).ToList();
-                        if (billsElectric.Count() > 0)
+                        if (billsGas.Count() > 0)
                         {
-                            toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
+                            toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
-                                paymentStatusName = billElectric.paymentstatus_name,
-                                billElectricAmount = billElectric.billelectric_amount.ToString(),
-                                billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
-                                billElectricDateTime = billElectric.billelectric_datetime.ToString(),
-                                billElectricId = billElectric.billelectric_id.ToString(),
-                                billElectricMonth = !String.IsNullOrEmpty(billElectric.billelectric_month) ? billElectric.billelectric_month : "",
-                                billElectricOutstanding = billElectric.billelectric_outstanding.ToString(),
-                                billElectricPrevReading = billElectric.billelectric_prevreading.ToString(),
-                                billElectricRemarks = !string.IsNullOrEmpty(billElectric.billelectric_remarks) ? billElectric.billelectric_remarks : "",
-                                billElectricTv = billElectric.billelectric_tv.ToString(),
-                                billElectricUnits = billElectric.billelectric_units.ToString(),
-                                billElectricWater = billElectric.billelectric_water.ToString(),
-                                pictureData = billElectric.billpicture_date,
-                                pictureSize = billElectric.billpicture_size.ToString(),
-                                pictureType = billElectric.billpicture_type,
-                                residentName = !String.IsNullOrEmpty(billElectric.resident_name) ? billElectric.resident_name : "",
-                                residentPaNo = !string.IsNullOrEmpty(billElectric.resident_panumber) ? billElectric.resident_panumber : "",
-                                residentRank = !string.IsNullOrEmpty(billElectric.resident_rank) ? billElectric.resident_rank : "",
-                                residentRemarks = !string.IsNullOrEmpty(billElectric.resident_remarks) ? billElectric.resident_remarks : "",
-                                residentUnit = !string.IsNullOrEmpty(billElectric.resident_unit) ? billElectric.resident_unit : "",
-                                locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
-                                locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
-                                fk_billPicture = billElectric.fk_billpicture.ToString(),
-                                fk_location = billElectric.fk_location.ToString(),
-                                fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
-                                fk_resident = billElectric.fk_resident.ToString(),
+                                billGasAmount = billGas.amount.ToString(),
+                                billGasCurrentReading = billGas.currentreading.ToString(),
+                                billGasDateTime = billGas.datetime.ToString(),
+                                billGasId = billGas.id.ToString(),
+                                billGasMonth = !String.IsNullOrEmpty(billGas.month) ? billGas.month : "",
+                                billGasOutstanding = billGas.outstanding.ToString(),
+                                billGasPrevReading = billGas.prevreading.ToString(),
+                                billGasRemarks = !string.IsNullOrEmpty(billGas.remarks) ? billGas.remarks : "",
+                                billGasUnits = billGas.units.ToString(),
+                                pictureData = billGas.billpicture_date,
+                                pictureSize = billGas.billpicture_size.ToString(),
+                                pictureType = billGas.billpicture_type,
+                                residentName = !String.IsNullOrEmpty(billGas.resident_name) ? billGas.resident_name : "",
+                                residentPaNo = !string.IsNullOrEmpty(billGas.resident_panumber) ? billGas.resident_panumber : "",
+                                residentRank = !string.IsNullOrEmpty(billGas.resident_rank) ? billGas.resident_rank : "",
+                                residentRemarks = !string.IsNullOrEmpty(billGas.resident_remarks) ? billGas.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(billGas.resident_unit) ? billGas.resident_unit : "",
+                                locationName = !string.IsNullOrEmpty(billGas.location_name) ? billGas.location_name : "",
+                                locationMeterNo = !string.IsNullOrEmpty(billGas.location_gassmeter) ? billGas.location_gassmeter : "",
+                                fk_billPicture = billGas.fk_billpicture.ToString(),
+                                fk_location = billGas.fk_location.ToString(),
+                                fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
+                                fk_resident = billGas.fk_resident.ToString(),
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             }).ToList();
                         }
                         else
                         {
-                            toReturn.Add(new BillElectricResponseModel()
+                            toReturn.Add(new BillGasResponseModel()
                             {
                                 resultCode = "No Record Found",
                                 remarks = "1200"
@@ -2305,7 +2241,7 @@ namespace BillingManagementSystem.DataHelpers
                 }
                 else
                 {
-                    toReturn.Add(new BillElectricResponseModel()
+                    toReturn.Add(new BillGasResponseModel()
                     {
                         remarks = "Please Provide Date",
                         resultCode = "1300"
@@ -2314,7 +2250,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             catch (Exception Ex)
             {
-                toReturn.Add(new BillElectricResponseModel()
+                toReturn.Add(new BillGasResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"

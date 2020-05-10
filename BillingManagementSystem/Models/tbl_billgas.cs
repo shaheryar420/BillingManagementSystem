@@ -20,7 +20,7 @@ namespace BillingManagementSystem.Models
         public int fk_paymentstatus { get; set; }
         public int fk_location { get; set; }
         public int fk_resident { get; set; }
-        public double billgas_prevreading { get; set; }
+        public double prevreading { get; set; }
         public double currentreading { get; set; }
         public double units { get; set; }
         public string remarks { get; set; }

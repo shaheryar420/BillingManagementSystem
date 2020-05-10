@@ -321,7 +321,7 @@ namespace BillingManagementSystem.DataHelpers
                                     var outstanding = "";
                                     if (previousPendingBill != null)
                                     {
-                                        outstanding = previousPendingBill.billgas_prevreading.ToString();
+                                        outstanding = previousPendingBill.prevreading.ToString();
                                         previousPendingBill.fk_paymentstatus = 3;
                                         db.SaveChanges();
                                         var newPaymentHistory = new tbl_paymenthistory();
@@ -358,7 +358,7 @@ namespace BillingManagementSystem.DataHelpers
                                             currentreading = readingGas.reading_currentreading,
                                             month = readingGas.reading_month,
                                             outstanding = 0,
-                                            billgas_prevreading = readingGas.reading_prevreading,
+                                            prevreading = readingGas.reading_prevreading,
                                             units = readingGas.reading_units,
                                             datetime = readingGas.reading_datetime,
                                             remarks = readingGas.reading_remarks
