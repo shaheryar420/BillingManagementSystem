@@ -400,5 +400,91 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
+        public List<LocationResponseModel> GetAllAvailableLocationsByArea(LocationRequestModel model)
+        {
+            List<LocationResponseModel> toReturn = new List<LocationResponseModel>();
+            try
+            {
+                using (db_bmsEntities db = new db_bmsEntities())
+                {
+                    if (new ModelsValidatorHelper().validateint(model.fk_area))
+                    {
+                        int areaId = int.Parse(model.fk_area);
+                        var residentBuildings = (from x in db.tbl_residentbuilding select x).ToList();
+                        var locations = (from x in db.tbl_location
+                                         join y in db.tbl_area on x.fk_area equals y.area_id
+                                         where x.fk_area == areaId
+                                         select new
+                                         {
+                                             x.fk_area,
+                                             x.location_electricmeter,
+                                             x.location_gassmeter,
+                                             x.location_id,
+                                             x.location_name,
+                                             x.location_wapdameter,
+                                             y.area_name
+                                         }).ToList();
+                        if (locations.Count() > 0)
+                        {
+                            toReturn = locations.Select(location => new LocationResponseModel()
+                            {
+                                fk_area = location.fk_area.ToString(),
+                                locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
+                                locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
+                                locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
+                                locationWapdaMeter = !string.IsNullOrEmpty(location.location_wapdameter) ? location.location_wapdameter : "",
+                                locationId = location.location_id.ToString(),
+                                remarks = "Successfully Location Found",
+                                resultCode = "1100"
+                            }).ToList();
+                            foreach (var location in toReturn)
+                            {
+                                int locationId = int.Parse(location.locationId);
+                                foreach (var residentBuilding in residentBuildings)
+                                {
+                                    if (locationId == residentBuilding.fk_building)
+                                    {
+                                        toReturn.Remove(location);
+                                    }
+                                }
+                            }
+                            if (toReturn.Count == 0)
+                            {
+                                toReturn.Add(new LocationResponseModel()
+                                {
+                                    remarks = "No Available location Found",
+                                    resultCode = "1200"
+                                });
+                            }
+                        }
+                        else
+                        {
+                            toReturn.Add(new LocationResponseModel()
+                            {
+                                resultCode = "1200",
+                                remarks = "No Record Found"
+                            });
+                        }
+                    }
+                    else
+                    {
+                        toReturn.Add(new LocationResponseModel()
+                        {
+                            resultCode = "1300",
+                            remarks = "Please Provide Area"
+                        });
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn.Add(new LocationResponseModel()
+                {
+                    remarks = "There Was a Fatal Error " + Ex.ToString(),
+                    resultCode = "1000"
+                });
+            }
+            return toReturn;
+        }
     }
 }

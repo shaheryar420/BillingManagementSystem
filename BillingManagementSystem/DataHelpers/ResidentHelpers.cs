@@ -33,21 +33,35 @@ namespace BillingManagementSystem.DataHelpers
                                         resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : "",
                                         resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : ""
                                     };
-                                    db.tbl_residents.Add(resident);
-                                    db.SaveChanges();
-                                    toReturn = new ResidentResponseModel()
+                                    var residentExistingBuilding = (from x in db.tbl_residentbuilding where x.fk_building == locationId select x).FirstOrDefault();
+                                    if(residentExistingBuilding != null)
                                     {
-                                        residentId = resident.resident_id.ToString(),
-                                        remarks = "Successfully Added",
-                                        resultCode = "1100"
-                                    };
-                                    var resdidentBuilding = new tbl_residentbuilding()
+                                        db.tbl_residents.Add(resident);
+                                        db.SaveChanges();
+                                        toReturn = new ResidentResponseModel()
+                                        {
+                                            residentId = resident.resident_id.ToString(),
+                                            remarks = "Successfully Added",
+                                            resultCode = "1100"
+                                        };
+                                        var resdidentBuilding = new tbl_residentbuilding()
+                                        {
+                                            fk_building = locationId,
+                                            fk_resident = resident.resident_id
+                                        };
+                                        db.tbl_residentbuilding.Add(resdidentBuilding);
+                                        db.SaveChanges();
+                                       
+                                    }
+                                    else
                                     {
-                                        fk_building = locationId,
-                                        fk_resident =resident.resident_id
-                                    };
-                                    db.tbl_residentbuilding.Add(resdidentBuilding);
-                                    db.SaveChanges();
+                                        toReturn = new ResidentResponseModel()
+                                        {
+                                            remarks = "Please select Different building as it is already occupied",
+                                            resultCode = "1300"
+                                        };
+                                    }
+                                   
                                 }
                                 else
                                 {
@@ -183,8 +197,14 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         var residentId = int.Parse(model.residentId);
                         tbl_residents resident = (from x in db.tbl_residents where x.resident_id == residentId select x).FirstOrDefault();
+                        var residentBuilding = (from x in db.tbl_residentbuilding where x.fk_resident == residentId select x).FirstOrDefault();
                         if (resident != null)
                         {
+                            if (residentBuilding != null)
+                            {
+                                db.tbl_residentbuilding.Remove(residentBuilding);
+                                db.SaveChanges();
+                            }
                             db.tbl_residents.Remove(resident);
                             db.SaveChanges();
                             toReturn = new ResidentResponseModel()
