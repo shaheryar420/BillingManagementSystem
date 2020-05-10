@@ -107,6 +107,11 @@ namespace BillingManagementSystem.DataHelpers
                                 var billPending = (from x in db.tbl_billgas where x.fk_resident == residentId && x.fk_paymentstatus == 2 select x).FirstOrDefault();
                                 billPending.fk_paymentstatus = 1;
                                 db.SaveChanges();
+                                toReturn = new PaymentResponseModel()
+                                {
+                                    resultCode = "1100",
+                                    remarks = "Succesfully Added"
+                                };
                             }
                             else
                             {
