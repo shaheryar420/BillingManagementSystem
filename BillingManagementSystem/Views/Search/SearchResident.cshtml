@@ -166,251 +166,52 @@
             $('#btn_search_paNo').click(function () {
                 var paNo = $('#paNo').val();
                 if (paNo == "") {
-                    filterResidentPaNoGrid("/Management/GetAllResidents", null);
+                    filterResidentGrid("/Management/GetAllResidentsDetailInfo", null);
                     swal("Filterion Completed", "", "success");
                 }
                 else {
-                    filterResidentPaNoGrid("/Management/GetAllResidentsForSearchByPaNo", paNo);
+                    filterResidentGrid("/Management/GetAllResidentsForSearchByPaNo", paNo);
                     swal("Filterion Completed", "", "success");
                 }
             });
-            $('#btn_search_area').click(function () {
-                var area = $('#area').val();
-                if (area == "") {
-                    filterResidentAreaGrid("/Management/GetAllResidents", null);
-                    swal("Filterion Completed", "", "success");
-                }
-                else {
-                    filterResidentAreaGrid("/Management/GetAllResidentsForSearchByPaNo", area);
-                    swal("Filterion Completed", "", "success");
-                }
-            });
+  
              $('#btn_search_unit').click(function () {
                 var unit = $('#unit').val();
                 if (unit == "") {
-                    filterResidentUnitGrid("/Management/GetAllResidents", null);
+                    filterResidentGrid("/Management/GetAllResidentsDetailInfo", null);
                     swal("Filterion Completed", "", "success");
                 }
                 else {
-                    filterResidentUnitGrid("/Management/GetAllResidentsForSearchByPaNo", unit);
+                    filterResidentGrid("/Management/GetAllResidentsForSearchByUnit", unit);
                     swal("Filterion Completed", "", "success");
                 }
              });
              $('#btn_search_rank').click(function () {
                 var rank = $('#rank').val();
                 if (rank == "") {
-                    filterResidentRankGrid("/Management/GetAllResidents", null);
+                    filterResidentGrid("/Management/GetAllResidentsDetailInfo", null);
                     swal("Filterion Completed", "", "success");
                 }
                 else {
-                    filterResidentRankGrid("/Management/GetAllResidentsForSearchByPaNo", rank);
+                    filterResidentGrid("/Management/GetAllResidentsForSearchByRank", rank);
                     swal("Filterion Completed", "", "success");
                 }
             });
 
-        }
-        function filterResidentPaNoGrid(url, id) {
-            Dtable = $(".residentGrid").DataTable({
-                scrollX: true,
-                destroy: true,
-                "ajax": {
-                    "url": url,
-                    "type": 'POST',
-                    "data":
-                    {
-                        residentPaNumber: id
-                    },
-                    "dataSrc": function (data) {
-                       
-                        if (data.length > 0) {
-                            if (data[0].resultCode == '1100') {
-                                return data;
-                            }
-                            }
-                            else {
-
-                                return [];
-                            }
-                        
-                        },
-                        "error": function (a, b, c) {
-                            swal({
-                                title: "Error",
-                                text: a.status + ": " + c,
-                                type: "error"
-                            });
-                        }
-                    
-                    },
-                    "columns": [
-                        {
-                            title: 'Action',
-                            render: function (data, type, row, meta) {
-                                return "<div class='btn-group'><a href='#' class='btn btn-sm btn-success viewResident'><i class='psi-eye icon-2x'></i></a></div>";
-                            }
-                        },
-                        {
-                            title: 'Sr. #',
-                            render: function (data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            }
-                        },
-                        { "title": "Id", "data": "residentId", className: "hidden" },
-                        { "title": "PaNumber", "data": "residentPaNumber" },
-                        { "title": "Rank", "data": "residentRank" },
-                        { "title": "Name", "data": "residentName" },
-                        { "title": "Unit", "data": "residentUnit" },
-                        { "title": "Remarks", "data": "residentRemarks" },
-                        { "title": "Totat Out Standings", "data": "totatOutStandings" },
-                        { "title": "Out Standing", "data": "outstanding" },
-                        { "title": "Meter #", "data": "meterNo" },
-                        { "title": "Previous Reading", "data": "previousReading" },
-
-
-
-                    ]
-               
+            $('#btn_search_area').click(function () {
+                var area = $('#area').val();
+                if (area == "") {
+                    filterResidentGrid("/Management/GetAllResidentsDetailInfo", null);
+                    swal("Filterion Completed", "", "success");
+                }
+                else {
+                    filterResidentGrid("/Management/GetAllResidentsByArea", area);
+                    swal("Filterion Completed", "", "success");
+                }
             });
-            Dtable.columns.adjust();
-            $("div.tableTop").addClass("pull-left");
-            $("div.tableBottom").addClass("pull-left");
-            $("div.html5Buttons").addClass("pull-right");
         }
-        function filterResidentAreaGrid(url, id) {
-            Dtable = $(".residentGrid").DataTable({
-                scrollX: true,
-                destroy: true,
-                "ajax": {
-                    "url": url,
-                    "type": 'POST',
-                    "data":
-                    {
-                        residentPaNumber: id
-                    },
-                    "dataSrc": function (data) {
-                       
-                        if (data.length > 0) {
-                            if (data[0].resultCode == '1100') {
-                                return data;
-                            }
-                            }
-                            else {
 
-                                return [];
-                            }
-                        
-                        },
-                        "error": function (a, b, c) {
-                            swal({
-                                title: "Error",
-                                text: a.status + ": " + c,
-                                type: "error"
-                            });
-                        }
-                    
-                    },
-                    "columns": [
-                        {
-                            title: 'Action',
-                            render: function (data, type, row, meta) {
-                                return "<div class='btn-group'><a href='#' class='btn btn-sm btn-success viewResident'><i class='psi-eye icon-2x'></i></a></div>";
-                            }
-                        },
-                        {
-                            title: 'Sr. #',
-                            render: function (data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            }
-                        },
-                        { "title": "Id", "data": "residentId", className: "hidden" },
-                        { "title": "PaNumber", "data": "residentPaNumber" },
-                        { "title": "Rank", "data": "residentRank" },
-                        { "title": "Name", "data": "residentName" },
-                        { "title": "Unit", "data": "residentUnit" },
-                        { "title": "Remarks", "data": "residentRemarks" },
-                        { "title": "Totat Out Standings", "data": "totatOutStandings" },
-                        { "title": "Out Standing", "data": "outstanding" },
-                        { "title": "Meter #", "data": "meterNo" },
-                        { "title": "Previous Reading", "data": "previousReading" },
-
-
-
-                    ]
-               
-            });
-            Dtable.columns.adjust();
-            $("div.tableTop").addClass("pull-left");
-            $("div.tableBottom").addClass("pull-left");
-            $("div.html5Buttons").addClass("pull-right");
-        }
-        function filterResidentUnitGrid(url, id) {
-            Dtable = $(".residentGrid").DataTable({
-                scrollX: true,
-                destroy: true,
-                "ajax": {
-                    "url": url,
-                    "type": 'POST',
-                    "data":
-                    {
-                        residentUnit: id
-                    },
-                    "dataSrc": function (data) {
-                       
-                        if (data.length > 0) {
-                            if (data[0].resultCode == '1100') {
-                                return data;
-                            }
-                            }
-                            else {
-
-                                return [];
-                            }
-                        
-                        },
-                        "error": function (a, b, c) {
-                            swal({
-                                title: "Error",
-                                text: a.status + ": " + c,
-                                type: "error"
-                            });
-                        }
-                    
-                    },
-                    "columns": [
-                        {
-                            title: 'Action',
-                            render: function (data, type, row, meta) {
-                                return "<div class='btn-group'><a href='#' class='btn btn-sm btn-success viewResident'><i class='psi-eye icon-2x'></i></a></div>";
-                            }
-                        },
-                        {
-                            title: 'Sr. #',
-                            render: function (data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            }
-                        },
-                        { "title": "Id", "data": "residentId", className: "hidden" },
-                        { "title": "PaNumber", "data": "residentPaNumber" },
-                        { "title": "Rank", "data": "residentRank" },
-                        { "title": "Name", "data": "residentName" },
-                        { "title": "Unit", "data": "residentUnit" },
-                        { "title": "Remarks", "data": "residentRemarks" },
-                        { "title": "Totat Out Standings", "data": "totatOutStandings" },
-                        { "title": "Out Standing", "data": "outstanding" },
-                        { "title": "Meter #", "data": "meterNo" },
-                        { "title": "Previous Reading", "data": "previousReading" },
-
-
-
-                    ]
-               
-            });
-            Dtable.columns.adjust();
-            $("div.tableTop").addClass("pull-left");
-            $("div.tableBottom").addClass("pull-left");
-            $("div.html5Buttons").addClass("pull-right");
-        }
-        function filterResidentRankGrid(url, id) {
+         function filterResidentGrid(url, id) {
             Dtable2 = $(".residentGrid").DataTable({
                 scrollX: true,
                 destroy: true,
@@ -419,7 +220,7 @@
                     "type": 'POST',
                     "data":
                     {
-                        residentRank: id
+                        residentId: id
                     },
                     "dataSrc": function (data) {
                        
@@ -477,6 +278,8 @@
             $("div.tableBottom").addClass("pull-left");
             $("div.html5Buttons").addClass("pull-right");
         }
+
+       
     </script>
 
 }

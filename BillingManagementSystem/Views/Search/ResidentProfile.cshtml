@@ -28,7 +28,7 @@
             $(".datepick").datepicker({
                 format: "dd-mm-yyyy"
             });
-          fetchResidentDetails(residentId);
+           fetchResidentDetails(residentId);
             initResidentDetails(residentId);
            
         });
@@ -82,6 +82,9 @@
 
                                 return [];
                             }
+                        }
+                        else {
+                            return [];
                         }
                         
                         },

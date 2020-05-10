@@ -37,7 +37,7 @@
                 scrollX: true,
                 destroy: true,
                 "ajax": {
-                    "url": '/ROR/GetAllRORElectric',
+                    "url": '/Recovery/GetAllPayments',
                     "type": 'POST',
                     "dataSrc": function (data) {
 
@@ -75,25 +75,11 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { "title": "Id", "data": "billElectricId", className: "hidden" },
-                    { "title": "Meter #", "data": "locationMeterNo" },
-                    { "title": "Location", "data": "locationName" },
-                    { "title": "Name", "data": "residentName" },
-                    { "title": "PA No", "data": "residentPaNo" },
-                    { "title": "Rank", "data": "residentRank" },
-                    { "title": "Unit/FMN", "data": "residentUnit" },
-                    { "title": "Previous Reading", "data": "billElectricPrevReading" },
-                    { "title": "Present Reading", "data": "billElectricCurrentReading" },
-                    { "title": "Units", "data": "billElectricUnits" },
-                    { "title": "Amount", "data": "billElectricAmount" },
-                    { "title": "Water", "data": "billElectricWater" },
-                    { "title": "TV", "data": "billElectricTv" },
-                    {
-                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
-                            return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
-                        }
-                    },
-                    { "title": "Remarks", "data": "billElectricRemarks" }
+                    { "title": "Id", "data": "paymenthistoryId", className: "hidden" },
+                    { "title": "Datetime", "data": "paymenthistoryDatetime" },
+                    { "title": "Amount", "data": "paymentAmount" },
+                    { "title": "Month", "data": "paymentMonth" },
+                    
                 ]
             });
             Dtable.columns.adjust();

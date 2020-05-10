@@ -292,14 +292,18 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllResidentsForSearchByPaNo([FromBody] ResidentRequestModel model)
         {
+            model.residentPaNumber = model.residentId;
+            model.residentId = null;
             ResidentHelpers helper = new ResidentHelpers();
             var response = helper.GetAllResidentsForSearchByPaNo(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-        public ActionResult GetAllResidentsForSearchByUnit([FromBody] ResidentRequestModel model)
+        public ActionResult GetAllResidentsForSearchByUnit(ResidentRequestModel model)
         {
+            model.residentUnit = model.residentId;
+            model.residentId = null;
             ResidentHelpers helper = new ResidentHelpers();
             var response = helper.GetAllResidentsForSearchByUnit(model);
             var json = Json(response);
@@ -308,6 +312,8 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllResidentsForSearchByRank([FromBody] ResidentRequestModel model)
         {
+            model.residentRank = model.residentId;
+            model.residentId = null;
             ResidentHelpers helper = new ResidentHelpers();
             var response = helper.GetAllResidentsForSearchByRank(model);
             var json = Json(response);
@@ -316,6 +322,7 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllResidentsByArea([FromBody] ResidentRequestModel model)
         {
+            
             ResidentHelpers helper = new ResidentHelpers();
             var response = helper.GetAllResidentsByArea(model);
             var json = Json(response);

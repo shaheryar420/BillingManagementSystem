@@ -52,5 +52,13 @@ namespace BillingManagementSystem.Controllers
             return json;
         }
 
+        public ActionResult GetAllPayments()
+        {
+            RecoveryHelpers helper = new RecoveryHelpers();
+            var response = helper.GetAllPayments();
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
     }
 }
