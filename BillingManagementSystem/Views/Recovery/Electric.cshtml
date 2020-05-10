@@ -339,6 +339,8 @@
                         if (response.resultCode == '1100') {
                             $('#meter_no').val(response.locationElectricMeter);
                             $('#previous_reading').val(response.previousReading);
+                            $('#current_reading').val(response.billElectricCurrentReading);
+                            $('#current_unit').val(response.previousReading);
                         }
                         else {
                             swal("Warning", response.remarks, "warning");
