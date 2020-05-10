@@ -27,7 +27,7 @@ namespace BillingManagementSystem.DataHelpers
                                     paymenthistory_datetime = DateTime.UtcNow.AddHours(5),
                                     paymentmonth = model.paymentMonth,
                                     payment_amount = int.Parse(model.paymentAmount),
-                                    fk_paymenttype = 0
+                                    fk_paymenttype = 0,
                                 };
                                 db.tbl_paymenthistory.Add(newPayment);
                                 db.SaveChanges();
@@ -37,6 +37,11 @@ namespace BillingManagementSystem.DataHelpers
                                     billPending.fk_paymentstatus = 1;
                                     db.SaveChanges();
                                 }
+                                toReturn = new PaymentResponseModel()
+                                {
+                                    resultCode = "1100",
+                                    remarks = "Succesfully Added"
+                                };
                             }
                             else
                             {
