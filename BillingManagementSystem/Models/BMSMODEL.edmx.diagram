@@ -26,6 +26,9 @@
         <EntityTypeShape EntityType="db_bmsModel.tbl_users" Width="1.5" PointX="10.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_usertype" Width="1.5" PointX="10.75" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_paymenthistory" Width="1.5" PointX="7.375" PointY="11.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_billgas" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_readinggas" Width="1.5" PointX="2.75" PointY="12.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_readinggaslog" Width="1.5" PointX="4.75" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

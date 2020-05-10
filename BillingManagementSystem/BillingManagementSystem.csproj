@@ -835,6 +835,9 @@
     <Compile Include="Models\tbl_billelectric.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tbl_billgas.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl_billpicture.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
@@ -863,6 +866,12 @@
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_readingelectriclog.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_readinggas.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_readinggaslog.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_readingpicture.cs">

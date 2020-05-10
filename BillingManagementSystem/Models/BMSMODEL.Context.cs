@@ -46,5 +46,8 @@ namespace BillingManagementSystem.Models
         public DbSet<tbl_users> tbl_users { get; set; }
         public DbSet<tbl_usertype> tbl_usertype { get; set; }
         public DbSet<tbl_paymenthistory> tbl_paymenthistory { get; set; }
+        public DbSet<tbl_billgas> tbl_billgas { get; set; }
+        public DbSet<tbl_readinggas> tbl_readinggas { get; set; }
+        public DbSet<tbl_readinggaslog> tbl_readinggaslog { get; set; }
     }
 }
