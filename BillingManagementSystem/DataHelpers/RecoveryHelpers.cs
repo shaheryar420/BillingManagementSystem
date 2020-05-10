@@ -32,8 +32,11 @@ namespace BillingManagementSystem.DataHelpers
                                 db.tbl_paymenthistory.Add(newPayment);
                                 db.SaveChanges();
                                 var billPending = (from x in db.tbl_billelectric where x.fk_resident == residentId && x.fk_paymentstatus == 2 select x).FirstOrDefault();
-                                billPending.fk_paymentstatus = 1;
-                                db.SaveChanges();
+                                if (billPending != null)
+                                {
+                                    billPending.fk_paymentstatus = 1;
+                                    db.SaveChanges();
+                                }
                             }
                             else
                             {
