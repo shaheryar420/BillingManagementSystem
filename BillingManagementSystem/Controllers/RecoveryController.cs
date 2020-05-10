@@ -1,5 +1,6 @@
 ﻿using BillingManagementSystem.App_Start;
 using BillingManagementSystem.DataHelpers;
+using BillingManagementSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,26 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
-        
+        public ActionResult AddPayment()
+        {
+            string _amount = Request.Form["_amount"].ToString();
+            string _residentId = Request.Form["_residentId"].ToString();
+            string _month = Request.Form["_month"].ToString();
+
+            PaymentRequestModel model = new PaymentRequestModel()
+            {
+                
+                paymentAmount = _amount,
+                residentId = _residentId,
+                paymentMonth = _month
+
+            };
+            RecoveryHelpers helper = new RecoveryHelpers();
+            var response = helper.AddPayment(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
     }
 }

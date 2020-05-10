@@ -16,6 +16,7 @@
     @Scripts.Render("~/bundles/sweetAlert")
 
     <script>
+        var residentId = null;
         $(document).on('nifty.ready', function () {
             $(".monthPicker").datepicker({
                 format: "mm-yyyy",
@@ -29,12 +30,7 @@
     </script>
     <script>
         function clearFields() {
-            $('#electric_area').val('').trigger("change");
-            $("#location_name").val('');
-            $("#location_electricMeter").val('');
-            $("#location_gassMeter").val('');
-            $("#location_wapdaMeter").val('');
-            $("#location_area").val('');
+          
         }
         function initElectricGrid() {
             Dtable = $(".electricGrid").DataTable({
@@ -167,50 +163,26 @@
                     swal("Warning", "Please select a location", "warning");
                 }
             });
-            $('#btn_electric_add').click(function () {
-                var _url = "/Bill/AddReadingElectric";
-                var _meterNo = $("#meter_no").val();
-                var _previousReading = $("#previous_reading").val();
-                var _currentReading = $("#current_reading").val();
-                var _currentUnit = $("#current_unit").val();
-                var _month = $("#month").val();
-                var formdata = new FormData(); //FormData object
-                var fileInput = document.getElementById('online_file');
-                formdata.append(fileInput.files[0].name, fileInput.files[0]);
-                formdata.append("_meterNo", _meterNo);
-                formdata.append("_previousReading", _previousReading);
-                formdata.append("_currentReading", _currentReading);
-                formdata.append("_currentUnit", _currentUnit);
-                formdata.append("_month", _month);
-                $.ajax({
-                    url: _url,
-                    type: "POST",
-                    data: formdata,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function () {
-                        $('.loading').show();
-                    },
-                    complete: function () {
-                        $('.loading').hide();
-                    },
-                    success: function (data) {
-                        if (data.resultCode == "1100") {
-                            swal("Added!", data.remarks, "success");
-                            initElectricGrid();
-                            clearFields();
-                        }
-                        else {
-                            $('.loading').hide();
-                            swal("Not Added", data.remarks, "error");
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorMessage) {
-                        console.log(errorMessage);
-                    }
-                });
 
-            });
+            // $('#btn_electric_update').click(function () {
+            //    var url = "/Recovery/AddPayment";
+            //    var _amount = $("#Amount").val();
+            //    var _month = $("#month").val();
+            //    $.post(url, { paymentAmount: _amount, paymentMonth: _month, residentId: residentId, }, function (data) {
+            //        if (data.resultCode == "1100") {
+            //            swal("Added!", data.remarks, "success");
+            //            initLocationGrid();
+            //            clearFields();
+            //        }
+            //        else {
+            //            $('.loading').hide();
+            //            swal("Not Added", data.remarks, "error");
+            //        }
+            //    });
+            //});
+
+           
+
             $(document).on('click', '#btn_electric_update', function (e) {
                 e.preventDefault();
                 var _locationId = $('#location_id').val();
@@ -263,7 +235,45 @@
                 }
             });
         }
+         $('#btn_electric_add').click(function () {
+                console.log('ok');
+                var _url = "/Recovery/AddPayment";
+                var _amount = $("#Amount").val();
+                var _month = $("#month").val();
+                var formdata = new FormData(); //FormData object
 
+                formdata.append("_amount", _amount);
+                formdata.append("_residentId", residentId);
+                formdata.append("_month", _month);
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        $('.loading').show();
+                    },
+                    complete: function () {
+                        $('.loading').hide();
+                    },
+                    success: function (data) {
+                        if (data.resultCode == "1100") {
+                            swal("Added!", data.remarks, "success");
+                            initElectricGrid();
+                            clearFields();
+                        }
+                        else {
+                            $('.loading').hide();
+                            swal("Not Added", data.remarks, "error");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorMessage) {
+                        console.log(errorMessage);
+                    }
+                });
+
+            });
         function initDropDowns() {
             $.ajax({
                 url: '/Management/GetAllAreas',
@@ -339,8 +349,12 @@
                         if (response.resultCode == '1100') {
                             $('#meter_no').val(response.locationElectricMeter);
                             $('#previous_reading').val(response.previousReading);
-                            $('#current_reading').val(response.billElectricCurrentReading);
-                            $('#current_unit').val(response.previousReading);
+                            $('#current_reading').val(response.currentReading);
+                            $('#current_unit').val(response.currentUnit);
+                            $('#total_outstanding').val(response.outstanding);
+                            $('#month').val(response.billMonth);
+                            residentId = response.residentId;
+                            console.log(residentId);
                         }
                         else {
                             swal("Warning", response.remarks, "warning");
@@ -369,49 +383,53 @@
                     <h1 class="panel-title">Add Bill Recovery</h1>
                 </div>
                 <div class="panel-body">
-                        <div class="form-group">
-                            <label class="control-label">Select Area</label>
-                            <select class="form-control dropdownlist" id="electric_area"></select>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Select Location</label>
-                            <select class="form-control dropdownlist" id="electric_resident"></select>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Meter No.</label>
-                            <input type="number" value="" readonly class="form-control" id="meter_no" />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Outstandings</label>
-                            <input type="number" value="" readonly class="form-control" id="total_outstanding" />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Previous Reading</label>
-                            <input type="number" value="" readonly class="form-control" id="previous_reading" />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Enter Current Reading</label>
-                            <input type="hidden" id="electric_id" value="" />
-                            <input type="number" value="" readonly class="form-control" id="current_reading" />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Current Units</label>
-                            <input type="number" value="" readonly class="form-control" id="current_unit" />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Upload Picture</label>
-                            <input type="file" id="online_file" value="" class="form-control" accept=".jpg,.png,.jpeg,.pdf" />
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label">Select Month</label>
-                            <input type="text" value="" class="form-control monthPicker" id="month" />
-                        </div>
-                        <div class="form-group">
-                            <a href="#" id="btn_electric_add" class="btn btn-success pull-right">Submit</a>
-                            <a href="#" id="btn_electric_update" class="btn btn-success pull-right">Submit</a>
-                        </div>
+                    <div class="form-group">
+                        <label class="control-label">Select Area</label>
+                        <select class="form-control dropdownlist" id="electric_area"></select>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label">Select Location</label>
+                        <select class="form-control dropdownlist" id="electric_resident"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Meter No.</label>
+                        <input type="number" value="" readonly class="form-control" id="meter_no" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Outstandings</label>
+                        <input type="number" value="" readonly class="form-control" id="total_outstanding" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Previous Reading</label>
+                        <input type="number" value="" readonly class="form-control" id="previous_reading" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Enter Current Reading</label>
+                        <input type="hidden" id="electric_id" value="" />
+                        <input type="number" value="" readonly class="form-control" id="current_reading" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Current Units</label>
+                        <input type="number" value="" readonly class="form-control" id="current_unit" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Select Month</label>
+                        <input type="text" value="" readonly class="form-control monthPicker" id="month" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Upload Picture</label>
+                        <input type="file" id="online_file" value="" class="form-control" accept=".jpg,.png,.jpeg,.pdf" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Amount</label>
+                        <input type="number" value=""  class="form-control" id="Amount" />
+                    </div>
+
+                    <div class="form-group">
+                        <a href="#" id="btn_electric_add" class="btn btn-success pull-right">Submit</a>
+                        <a href="#" id="btn_electric_update" class="btn btn-success pull-right">Sbmit</a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-8">
