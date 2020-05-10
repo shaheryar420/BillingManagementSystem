@@ -215,6 +215,7 @@ namespace BillingManagementSystem.DataHelpers
                         int locationId = int.Parse(model.locationId);
                         var location = (from x in db.tbl_location
                                         join y in db.tbl_area on x.fk_area equals y.area_id
+                                        join rb in db.tbl_residentbuilding on x.location_id equals rb.fk_building
                                         where x.location_id == locationId 
                                         select new 
                                         {
@@ -224,6 +225,7 @@ namespace BillingManagementSystem.DataHelpers
                                             x.location_id,
                                             x.location_name,
                                             x.location_wapdameter,
+                                            rb.fk_resident,
                                             y.area_name
                                         }).FirstOrDefault();
                         if (location != null)
@@ -236,6 +238,7 @@ namespace BillingManagementSystem.DataHelpers
                                 locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
                                 locationWapdaMeter = !string.IsNullOrEmpty(location.location_wapdameter) ? location.location_wapdameter : "",
                                 locationId = location.location_id.ToString(),
+                                residentId = location.fk_resident.ToString(),
                                 remarks ="Successfully Location Found",
                                 resultCode= "1100"
                             };
