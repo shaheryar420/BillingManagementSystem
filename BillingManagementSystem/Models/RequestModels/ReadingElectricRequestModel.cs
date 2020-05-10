@@ -7,6 +7,7 @@ namespace BillingManagementSystem.Models
 {
     public class ReadingElectricRequestModel
     {
+        public string userId { get; set; }
         public string amount { get; set; }
         public string readingpicture_data { get; set; }
         public string readingpicture_type { get; set; }
