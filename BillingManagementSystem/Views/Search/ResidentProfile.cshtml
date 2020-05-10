@@ -28,40 +28,40 @@
             $(".datepick").datepicker({
                 format: "dd-mm-yyyy"
             });
-           fetchResidentDetails(residentId);
+           //fetchResidentDetails(residentId);
             initResidentDetails(residentId);
            
         });
     </script>
     <script>
-        function fetchResidentDetails(_id) {
-            if (_id) {
-                $.ajax({
-                    url: '/Management/GetResidentById',
-                    type: 'POST',
-                    data: { residentId: _id },
-                    success: function (response) {
-                        if (response.resultCode == "1100") {
+        //function fetchResidentDetails(_id) {
+        //    if (_id) {
+        //        $.ajax({
+        //            url: '/Management/GetResidentById',
+        //            type: 'POST',
+        //            data: { residentId: _id },
+        //            success: function (response) {
+        //                if (response.resultCode == "1100") {
 
-                            $("#resident_pano").text(response.residentPaNumber);
-                            $("#resident_rank").text(response.residentRank);
-                            $("#resident_name").text(response.residentName);
-                            $("#resident_unit").text(response.residentUnit);
-                            $("#resident_Os").text(response.totatOutStandings);
+        //                    $("#resident_pano").text(response.residentPaNumber);
+        //                    $("#resident_rank").text(response.residentRank);
+        //                    $("#resident_name").text(response.residentName);
+        //                    $("#resident_unit").text(response.residentUnit);
+        //                    $("#resident_Os").text(response.totatOutStandings);
                             
-                        }
-                        else {
-                            swal('Warning', response.remarks, 'warning');
-                        }
-                    },
-                    error: function (a, b, c) {
-                        swal('Error', a + b + c, 'error');
-                    }
+        //                }
+        //                else {
+        //                    swal('Warning', response.remarks, 'warning');
+        //                }
+        //            },
+        //            error: function (a, b, c) {
+        //                swal('Error', a + b + c, 'error');
+        //            }
 
-                });
-            }
+        //        });
+        //    }
 
-        };
+        //};
         function initResidentDetails(_id) {
             Dtable = $(".residentGrid").DataTable({
                 scrollX: true,

@@ -322,7 +322,8 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllResidentsByArea([FromBody] ResidentRequestModel model)
         {
-            
+            model.areaId = model.residentId;
+            model.residentId = null;
             ResidentHelpers helper = new ResidentHelpers();
             var response = helper.GetAllResidentsByArea(model);
             var json = Json(response);
