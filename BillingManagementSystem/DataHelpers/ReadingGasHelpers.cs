@@ -336,8 +336,7 @@ namespace BillingManagementSystem.DataHelpers
                                     {
                                         outstanding = "0";
                                     }
-                                    var fixedRatesWater = (from x in db.tbl_fixedrates where x.fixedrates_name == "Water Charges" select x).FirstOrDefault();
-                                    var fixedRatesTv = (from x in db.tbl_fixedrates where x.fixedrates_name == "Tv Charges" select x).FirstOrDefault();
+
                                     var readingPicture = (from x in db.tbl_readingpicture where x.readingpicture_id == readingGas.fk_readingpicture select x).FirstOrDefault();
                                     if (readingPicture != null)
                                     {
@@ -359,8 +358,6 @@ namespace BillingManagementSystem.DataHelpers
                                             currentreading = readingGas.reading_currentreading,
                                             month = readingGas.reading_month,
                                             outstanding = 0,
-                                            tv = fixedRatesTv.fixedrates_amount,
-                                            water = fixedRatesWater.fixedrates_amount,
                                             prevreading = readingGas.reading_prevreading,
                                             units = readingGas.reading_units,
                                             datetime = readingGas.reading_datetime,

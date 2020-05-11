@@ -48,7 +48,8 @@ namespace BillingManagementSystem.Models
         public DbSet<tbl_paymenthistory> tbl_paymenthistory { get; set; }
         public DbSet<tbl_readinggas> tbl_readinggas { get; set; }
         public DbSet<tbl_readinggaslog> tbl_readinggaslog { get; set; }
-        public DbSet<tbl_billgas> tbl_billgas { get; set; }
         public DbSet<tbl_paymentgashistory> tbl_paymentgashistory { get; set; }
+        public DbSet<tbl_billgas> tbl_billgas { get; set; }
+        public DbSet<tbl_residentpayments> tbl_residentpayments { get; set; }
     }
 }
