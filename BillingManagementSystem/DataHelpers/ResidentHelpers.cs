@@ -679,6 +679,83 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
+        public List<ResidentResponseModel> GetAllResidentsForSearchByLastPayment(ResidentRequestModel model)
+        {
+            List<ResidentResponseModel> toReturn = new List<ResidentResponseModel>();
+            try
+            {
+                if (!string.IsNullOrEmpty(model.residentUnit))
+                {
+                    using (db_bmsEntities db = new db_bmsEntities())
+                    {
+                        var residents = (from x in db.tbl_residents
+                                         join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
+                                         join z in db.tbl_location on y.fk_building equals z.location_id
+                                         join a in db.tbl_area on z.fk_area equals a.area_id
+                                         where x.resident_unit == model.residentUnit
+                                         select new
+                                         {
+                                             x.resident_id,
+                                             x.resident_name,
+                                             x.resident_panumber,
+                                             x.resident_rank,
+                                             x.resident_remarks,
+                                             x.resident_unit,
+                                             z.location_id,
+                                             z.location_name,
+                                             a.area_id,
+                                             a.area_name
+
+                                         }).ToList();
+                        if (residents.Count() > 0)
+                        {
+                            toReturn = residents.Select(resident => new ResidentResponseModel()
+                            {
+                                residentName = resident.resident_name,
+                                residentPaNumber = resident.resident_panumber,
+                                residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
+                                residentId = resident.resident_id.ToString(),
+                                residentRemarks = !string.IsNullOrEmpty(resident.resident_remarks) ? resident.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(resident.resident_unit) ? resident.resident_unit : "",
+                                remarks = "Successfully Found",
+                                resultCode = "1100"
+                            }).ToList();
+                            foreach (var resident in residents)
+                            {
+                                var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
+                                var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
+                                _resdient.totatOutStandings = outstanding.ToString();
+                            }
+                        }
+                        else
+                        {
+                            toReturn.Add(new ResidentResponseModel()
+                            {
+                                remarks = "No Record Found",
+                                resultCode = "1200"
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    toReturn.Add(new ResidentResponseModel()
+                    {
+                        remarks = "Please Provide Unit",
+                        resultCode = "1300"
+                    });
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn.Add(new ResidentResponseModel()
+                {
+                    remarks = "There Was A fatal Error" + Ex.ToString(),
+                    resultCode = "1000"
+                });
+            }
+            return toReturn;
+        }
         public List<ResidentResponseModel> GetAllResidentsByArea(ResidentRequestModel model)
         {
             List<ResidentResponseModel> toReturn = new List<ResidentResponseModel>();
@@ -696,9 +773,17 @@ namespace BillingManagementSystem.DataHelpers
                                          where a.area_id == areaId
                                          select new 
                                          {
-                                             r.resident_name,
                                              r.resident_id,
-                                             
+                                             r.resident_name,
+                                             r.resident_panumber,
+                                             r.resident_rank,
+                                             r.resident_remarks,
+                                             r.resident_unit,
+                                             l.location_id,
+                                             l.location_name,
+                                             a.area_id,
+                                             a.area_name
+
                                          }).ToList();
 
                         if (residents.Count() > 0)
@@ -706,9 +791,11 @@ namespace BillingManagementSystem.DataHelpers
                             toReturn = residents.Select(resident => new ResidentResponseModel()
                             {
                                 residentName = resident.resident_name,
+                                residentPaNumber = resident.resident_panumber,
+                                residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
                                 residentId = resident.resident_id.ToString(),
-                                remarks = "Successfully Found",
-                                resultCode = "1100"
+                                residentRemarks = !string.IsNullOrEmpty(resident.resident_remarks) ? resident.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(resident.resident_unit) ? resident.resident_unit : "",
                             }).ToList();
                         }
                         else
