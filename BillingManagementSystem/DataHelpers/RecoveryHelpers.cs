@@ -34,7 +34,16 @@ namespace BillingManagementSystem.DataHelpers
                                 var billPending = (from x in db.tbl_billelectric where x.fk_resident == residentId && x.fk_paymentstatus == 2 select x).FirstOrDefault();
                                 if (billPending != null)
                                 {
-                                    billPending.fk_paymentstatus = 1;
+                                    if (billPending.billelectric_outstanding == int.Parse(model.paymentAmount))
+                                    {
+                                        billPending.fk_paymentstatus = 1;
+                                        billPending.billelectric_outstanding = 0;
+                                    }
+                                    else
+                                    {
+                                        billPending.billelectric_outstanding = billPending.billelectric_outstanding - int.Parse(model.paymentAmount);
+                                    }
+                                   
                                     db.SaveChanges();
                                 }
                                 toReturn = new PaymentResponseModel()

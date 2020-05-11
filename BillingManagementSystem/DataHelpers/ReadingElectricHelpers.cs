@@ -41,7 +41,7 @@ namespace BillingManagementSystem.DataHelpers
                                                 {
                                                     fk_readingpicture = newReadingPicture.readingpicture_id,
                                                     readingelectric_addedby = int.Parse(model.readingElectricAddedby),
-                                                    readingelectric_units = double.Parse(model.readingElectricCurrentReading) - double.Parse(model.readingElectricPrevReading),
+                                                    readingelectric_units = int.Parse(model.readingElectricUnits),
                                                     readingelectric_month = model.readingElectricMonth,
                                                     readingelectric_currentreading = double.Parse(model.readingElectricCurrentReading),
                                                     readingelectric_datetime = DateTime.UtcNow.AddHours(5),
@@ -348,6 +348,8 @@ namespace BillingManagementSystem.DataHelpers
                                         };
                                         db.tbl_billpicture.Add(newBillPicture);
                                         db.SaveChanges();
+                                        var fixedRatesWater = (from x in db.tbl_fixedrates where x.fixedrates_name == "Water Charges" select x).FirstOrDefault();
+                                        var fixedRatesTv = (from x in db.tbl_fixedrates where x.fixedrates_name == "Tv Charges" select x).FirstOrDefault();
                                         var newBill = new tbl_billelectric()
                                         {
                                             fk_billpicture = newBillPicture.billpicture_id,
@@ -360,8 +362,8 @@ namespace BillingManagementSystem.DataHelpers
                                             billelectric_outstanding = 0,
                                             billelectric_prevreading = readingElectric.readingelectric_prevreading,
                                             billelectric_units = readingElectric.readingelectric_units,
-                                            billelectric_tv = 0,
-                                            billelectric_water = 0,
+                                            billelectric_tv = fixedRatesTv.fixedrates_amount,
+                                            billelectric_water = fixedRatesWater.fixedrates_amount,
                                             billelectric_datetime = readingElectric.readingelectric_datetime,
                                             billelectric_remarks = readingElectric.readingelectric_remarks
                                         };
