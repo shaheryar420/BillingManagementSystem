@@ -72,20 +72,18 @@
                     "data":
                     { residentId: _id },
                     "dataSrc": function (data) {
-                        if (data) {
-                            if (data.resultCode == '1100') {
+                        if (data.resultCode == '1100') {
+                            return data;
+                                swal('Warning', data.resultCode, 'warning');
                                 console.log(data);
-                                return data;
+                                
+                                
 
                             }
                             else {
-
+                                swal('Warning', data.remarks, 'warning');
                                 return [];
                             }
-                        }
-                        else {
-                            return [];
-                        }
                         
                         },
                         "error": function (a, b, c) {
@@ -97,31 +95,28 @@
                         }
                     
                 },
-                
-                 "columns": [
-
-                     
-                     {
-                         title: 'Sr. #',
-                         render: function (data, type, row, meta) {
-                             return meta.row + meta.settings._iDisplayStart + 1;
-                         }
-                     },
-                     { "title": "Id", "data": "residentId", className: "hidden" },
-                     { "title": "PaNumber", "data": "residentPaNumber" },
-                     { "title": "Rank", "data": "residentRank" },
-                     { "title": "Name", "data": "residentName" },
-                     { "title": "Unit", "data": "residentUnit" },
-                     { "title": "Remarks", "data": "residentRemarks" },
-                     { "title": "Totat Out Standings", "data": "totatOutStandings" },
-                     { "title": "Out Standing", "data": "outstanding" },
-                     { "title": "Meter #", "data": "meterNo" },
-                     { "title": "Previous Reading", "data": "previousReading" },
+                "columns": [
+                        
+                        {
+                            title: 'Sr. #',
+                            render: function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
+                        },
+                        { "title": "Id", "data": "residentId", className: "hidden" },
+                        { "title": "PaNumber", "data": "residentPaNumber" },
+                        { "title": "Rank", "data": "residentRank" },
+                        { "title": "Name", "data": "residentName" },
+                        { "title": "Unit", "data": "residentUnit" },
+                        { "title": "Remarks", "data": "residentRemarks" },
+                        { "title": "Totat Out Standings", "data": "totatOutStandings" },
+                        { "title": "Out Standing", "data": "outstanding" },
+                        { "title": "Meter #", "data": "meterNo" },
+                        { "title": "Previous Reading", "data": "previousReading" },
 
 
 
-                 ]
-             
+                    ]
                
             });
             Dtable.columns.adjust();
