@@ -35,7 +35,7 @@ namespace BillingManagementSystem.DataHelpers
                                         resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : ""
                                     };
                                     var residentExistingBuilding = (from x in db.tbl_residentbuilding where x.fk_building == locationId select x).FirstOrDefault();
-                                    if(residentExistingBuilding != null)
+                                    if(residentExistingBuilding == null)
                                     {
                                         db.tbl_residents.Add(resident);
                                         db.SaveChanges();
