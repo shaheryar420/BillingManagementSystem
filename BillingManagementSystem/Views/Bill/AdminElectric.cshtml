@@ -111,7 +111,7 @@
             $("div.html5Buttons").addClass("pull-right");
         }
         function initElectricGridActions() {
-            $(document).on('click', '.btn_electric_edit', function (e) {
+         $(document).on('click', '.btn_electric_edit', function (e) {
                 e.preventDefault();
                 $('#btn_electric_update').show();
                 $('#btn_electric_add').hide();
@@ -126,7 +126,7 @@
                 $("#current_unit").val(rowData.readingElectricUnits);
                 $("#month").val(rowData.readingElectricMonth);
             });
-            $(document).on('click', '.btn_electric_delete', function (e) {
+         $(document).on('click', '.btn_electric_delete', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 var _id = rowData.readingElectricId;
@@ -172,26 +172,51 @@
                     swal("Warning", "Please select a location", "warning");
                 }
             });
-            $('#btn_electric_add').click(function () {
-                var url = "/Bill/AddReadingElectric";
+         $('#btn_electric_add').click(function () {
+                var _url = "/Bill/AddReadingElectric";
                 var _meterNo = $("#meter_no").val();
                 var _previousReading = $("#previous_reading").val();
                 var _currentReading = $("#current_reading").val();
                 var _currentUnit = $("#current_unit").val();
                 var _month = $("#month").val();
-                $.post(url, { readingElectricMonth: _month, readingElectricUnits: _currentUnit, readingElectricCurrentReading: _currentReading, readingElectricPrevReading: _previousReading, readingElectricMeterNo: _meterNo }, function (data) {
-                    if (data.resultCode == "1100") {
-                        swal("Added!", data.remarks, "success");
-                        initElectricGrid();
-                        clearFields();
-                    }
-                    else {
+                var formdata = new FormData(); //FormData object
+                var fileInput = document.getElementById('online_file');
+                formdata.append(fileInput.files[0].name, fileInput.files[0]);
+                formdata.append("_meterNo", _meterNo);
+                formdata.append("_previousReading", _previousReading);
+                formdata.append("_currentReading", _currentReading);
+                formdata.append("_currentUnit", _currentUnit);
+                formdata.append("_month", _month);
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        $('.loading').show();
+                    },
+                    complete: function () {
                         $('.loading').hide();
-                        swal("Not Added", data.remarks, "error");
+                    },
+                    success: function (data) {
+                        if (data.resultCode == "1100") {
+                            swal("Added!", data.remarks, "success");
+                            initElectricGrid();
+                            clearFields();
+                        }
+                        else {
+                            $('.loading').hide();
+                            swal("Not Added", data.remarks, "error");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorMessage) {
+                        console.log(errorMessage);
                     }
                 });
+
             });
-            $(document).on('click', '.btn_electric_approvel', function (e) {
+         $(document).on('click', '.btn_electric_approvel', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 _id = rowData.readingElectricId;
@@ -222,52 +247,57 @@
                 });
             });
            
-        
-            $(document).on('click', '#btn_electric_update', function (e) {
+         $(document).on('click', '#btn_electric_update', function (e) {
                 e.preventDefault();
-                var _locationId = $('#location_id').val();
-                if (_locationId) {
+                var _electricId = $('#electric_id').val();
+                if (_electricId) {
+                    var _url = "/Bill/EditReadingElectric";
                     var _electricId = $("#electric_id").val();
                     var _meterNo = $("#meter_no").val();
                     var _previousReading = $("#previous_reading").val();
                     var _currentReading = $("#current_reading").val();
                     var _currentUnit = $("#current_unit").val();
                     var _month = $("#month").val();
-                    $.ajax({
-                        url: '/Management/EditLocation',
-                        type: 'POST',
-                        data: {
-                            readingElectricId: _electricId,
-                            readingElectricMonth: _month,
-                            readingElectricUnits: _currentUnit,
-                            readingElectricCurrentReading: _currentReading,
-                            readingElectricPrevReading: _previousReading,
-                            readingElectricMeterNo: _meterNo
-                        },
-                        beforeSend: function () {
-                            $('.loading').show();
-                        },
-                        complete: function () {
-                            $('.loading').hide();
-                        },
-                        success: function (response) {
-                            if (response.resultCode == '1100') {
-                                swal("Updated!", response.remarks, "success");
+                    var formdata = new FormData(); //FormData object
+                var fileInput = document.getElementById('online_file');
+                formdata.append(fileInput.files[0].name, fileInput.files[0]);
+                formdata.append("_id", _electricId);
+                formdata.append("_meterNo", _meterNo);
+                formdata.append("_previousReading", _previousReading);
+                formdata.append("_currentReading", _currentReading);
+                formdata.append("_currentUnit", _currentUnit);
+                formdata.append("_month", _month);
+                 $.ajax({
+                    url: _url,
+                    type: "POST",
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        $('.loading').show();
+                    },
+                    complete: function () {
+                        $('.loading').hide();
+                    },
+                    success: function (data) {
+                        if (data.resultCode == "1100") {
+                            swal("Updated!", data.remarks, "success");
                                 initElectricGrid();
-                                $('#btn_location_update').hide();
-                                $('#btn_location_add').show();
+                                $('#btn_electric_update').hide();
+                                $('#btn_electric_add').show();
                                 $('#addTitle').show();
                                 $('#editTitle').hide();
                                 clearFields();
-                            }
-                            else {
-                                swal('Warning', response.remarks, 'warning');
-                            }
-                        },
-                        error: function (a, b, c) {
-                            swal('Error', a + b + c, 'error');
                         }
-                    });
+                        else {
+                            $('.loading').hide();
+                            swal("Not Updated", data.remarks, "error");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorMessage) {
+                        console.log(errorMessage);
+                    }
+                });
 
                 }
                 else {
@@ -364,6 +394,14 @@
 
             });
         }
+                $("#current_reading").change(function () {
+             
+            previousReading = $('#previous_reading').val();
+            currentReading = $('#current_reading').val();
+            var unit = currentReading - previousReading;
+            $('#current_unit').val(unit);
+        });
+
         function initApprovel() {
             $.ajax({
                 url: '/Bill/ApproveReadingElectric',
@@ -438,7 +476,7 @@
                     </div>
                     <div class="form-group">
                         <a href="#" id="btn_electric_add" class="btn btn-success pull-right">Submit</a>
-                        <a href="#" id="btn_electric_update" class="btn btn-success pull-right">Submit</a>
+                        <a href="#" id="btn_electric_update" class="btn btn-success pull-right">Update</a>
                     </div>
                 </div>
             </div>

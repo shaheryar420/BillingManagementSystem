@@ -39,6 +39,8 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllRORElectricByMonth([FromBody] BillElectricRequestModel model)
         {
+            model.billElectricMonth = model.billElectricId;
+            model.billElectricId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORElectricByMonth(model);
             var json = Json(response);
@@ -47,6 +49,8 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllRORElectricByAmount([FromBody] BillElectricRequestModel model)
         {
+            model.billElectricAmount = model.billElectricId;
+            model.billElectricId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORElectricByAmount(model);
             var json = Json(response);
@@ -55,6 +59,8 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllRORElectricByMeterNo([FromBody] BillElectricRequestModel model)
         {
+            model.meterNo = model.billElectricId;
+            model.billElectricId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORElectricByMeterNo(model);
             var json = Json(response);
@@ -63,6 +69,8 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllRORElectricByArea([FromBody] BillElectricRequestModel model)
         {
+            model.areaName = model.billElectricId;
+            model.billElectricId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORElectricByArea(model);
             var json = Json(response);
@@ -71,6 +79,8 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllRORElectricByResident([FromBody] BillElectricRequestModel model)
         {
+            model.fk_resident = model.billElectricId;
+            model.billElectricId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORElectricByResident(model);
             var json = Json(response);
@@ -79,6 +89,8 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllRORElectricByPaNo([FromBody] BillElectricRequestModel model)
         {
+            model.paNo = model.billElectricId;
+            model.billElectricId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORElectricByPaNo(model);
             var json = Json(response);
@@ -87,6 +99,8 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllRORElectricByUnit([FromBody] BillElectricRequestModel model)
         {
+            model.unit = model.billElectricId;
+            model.billElectricId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORElectricByUnit(model);
             var json = Json(response);
@@ -95,6 +109,8 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllRORElectricByRank([FromBody] BillElectricRequestModel model)
         {
+            model.rank = model.billElectricId;
+            model.billElectricId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORElectricByRank(model);
             var json = Json(response);
@@ -103,6 +119,8 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllRORElectricByDateEntered([FromBody] BillElectricRequestModel model)
         {
+            model.billElectricDateTime = model.billElectricId;
+            model.billElectricId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORElectricByDate(model);
             var json = Json(response);

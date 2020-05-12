@@ -369,41 +369,7 @@
             var unit = currentReading - previousReading;
             $('#current_unit').val(unit);
         });
-                            //$.ajax({
-                    //    url: '/Management/EditLocation',
-                    //    type: 'POST',
-                    //    data: {
-                    //        readingElectricId: _electricId,
-                    //        readingElectricMonth: _month,
-                    //        readingElectricUnits: _currentUnit,
-                    //        readingElectricCurrentReading: _currentReading,
-                    //        readingElectricPrevReading: _previousReading,
-                    //        readingElectricMeterNo: _meterNo
-                    //    },
-                    //    beforeSend: function () {
-                    //        $('.loading').show();
-                    //    },
-                    //    complete: function () {
-                    //        $('.loading').hide();
-                    //    },
-                    //    success: function (response) {
-                    //        if (response.resultCode == '1100') {
-                    //            swal("Updated!", response.remarks, "success");
-                    //            initElectricGrid();
-                    //            $('#btn_location_update').hide();
-                    //            $('#btn_location_add').show();
-                    //            $('#addTitle').show();
-                    //            $('#editTitle').hide();
-                    //            clearFields();
-                    //        }
-                    //        else {
-                    //            swal('Warning', response.remarks, 'warning');
-                    //        }
-                    //    },
-                    //    error: function (a, b, c) {
-                    //        swal('Error', a + b + c, 'error');
-                    //    }
-                    //});
+                       
     </script>
 }
 <div id="page-head">

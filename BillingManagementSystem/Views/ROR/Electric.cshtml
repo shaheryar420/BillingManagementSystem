@@ -16,6 +16,8 @@
     @Scripts.Render("~/bundles/sweetAlert")
 
     <script>
+        var Dtable2 = null;
+        var Dtable = null;
         $(document).on('nifty.ready', function () {
             $(".monthPicker").datepicker({
                 format: "mm-yyyy",
@@ -26,6 +28,8 @@
                 format: "dd-mm-yyyy"
             });
             initElectricGrid();
+            initfilters();
+            initDropDowns();
         });
     </script>
     <script>
@@ -95,99 +99,205 @@
         }
          function initfilters() {
             
-
             $('#btn_search_paNo').click(function () {
                 var paNo = $('#paNo').val();
                 if (paNo == "") {
-                    filterResidentPaNoGrid("/ROR/GetAllRORElectric", null);
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
                     swal("Filterion Completed", "", "success");
                 }
                 else {
-                    filterResidentPaNoGrid("/ROR/GetAllRORElectricByPaNo", paNo);
+                    filterElectricGrid("/ROR/GetAllRORElectricByPaNo", paNo);
                     swal("Filterion Completed", "", "success");
                 }
             });
             $('#btn_search_area').click(function () {
                 var area = $('#area').val();
                 if (area == "") {
-                    filterResidentAreaGrid("/ROR/GetAllRORElectric", null);
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
                     swal("Filterion Completed", "", "success");
                 }
                 else {
-                    filterResidentAreaGrid("/ROR/GetAllResidentsForSearchByPaNo", area);
+                    filterElectricGrid("/ROR/GetAllRORElectricByArea", area);
                     swal("Filterion Completed", "", "success");
                 }
             });
-             $('#btn_search_unit').click(function () {
+            $('#btn_search_unit').click(function () {
                 var unit = $('#unit').val();
                 if (unit == "") {
-                    filterResidentUnitGrid("/ROR/GetAllRORElectric", null);
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
                     swal("Filterion Completed", "", "success");
                 }
                 else {
-                    filterResidentUnitGrid("/ROR/GetAllResidentsForSearchByPaNo", unit);
+                    filterElectricGrid("/ROR/GetAllRORElectricByUnit", unit);
                     swal("Filterion Completed", "", "success");
                 }
              });
-             $('#btn_search_rank').click(function () {
+            $('#btn_search_rank').click(function () {
                 var rank = $('#rank').val();
                 if (rank == "") {
-                    filterResidentRankGrid("/ROR/GetAllRORElectric", null);
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
                     swal("Filterion Completed", "", "success");
                 }
                 else {
-                    filterResidentRankGrid("/ROR/GetAllResidentsForSearchByPaNo", rank);
+                    filterElectricGrid("/ROR/GetAllRORElectricByRank", rank);
                     swal("Filterion Completed", "", "success");
                 }
              });
-             $('#btn_search_month').click(function () {
-                var rank = $('#rank').val();
+            $('#btn_search_month').click(function () {
+                var month = $('#month').val();
                 if (rank == "") {
-                    filterResidentRankGrid("/ROR/GetAllRORElectric", null);
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
                     swal("Filterion Completed", "", "success");
                 }
                 else {
-                    filterResidentRankGrid("/ROR/GetAllResidentsForSearchByPaNo", rank);
+                    filterElectricGrid("/ROR/GetAllRORElectricByMonth", month);
                     swal("Filterion Completed", "", "success");
                 }
              });
-             $('#btn_search_date').click(function () {
-                var rank = $('#rank').val();
-                if (rank == "") {
-                    filterResidentRankGrid("/ROR/GetAllRORElectric", null);
+            $('#btn_search_date').click(function () {
+                var date = $('#date').val();
+                if (date == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
                     swal("Filterion Completed", "", "success");
                 }
                 else {
-                    filterResidentRankGrid("/ROR/GetAllResidentsForSearchByPaNo", rank);
+                    filterElectricGrid("/ROR/GetAllRORElectricByDateEntered", date);
                     swal("Filterion Completed", "", "success");
                 }
              });
-             $('#btn_search_amount').click(function () {
-                var rank = $('#rank').val();
-                if (rank == "") {
-                    filterResidentRankGrid("/ROR/GetAllRORElectric", null);
+            $('#btn_search_amount').click(function () {
+                var amount = $('#amount').val();
+                if (amount == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
                     swal("Filterion Completed", "", "success");
                 }
                 else {
-                    filterResidentRankGrid("/ROR/GetAllResidentsForSearchByPaNo", rank);
+                    filterElectricGrid("/ROR/GetAllRORElectricByAmount", amount);
                     swal("Filterion Completed", "", "success");
                 }
              });
-             $('#btn_search_rank').click(function () {
-                var rank = $('#rank').val();
-                if (rank == "") {
-                    filterResidentRankGrid("/ROR/GetAllRORElectric", null);
+            $('#btn_search_meterNo').click(function () {
+                var meterNo = $('#meterNo').val();
+                if (meterNo == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
                     swal("Filterion Completed", "", "success");
                 }
                 else {
-                    filterResidentRankGrid("/ROR/GetAllResidentsForSearchByPaNo", rank);
+                    filterElectricGrid("/ROR/GetAllRORElectricByMeterNo", meterNo);
                     swal("Filterion Completed", "", "success");
                 }
              });
-
+            $('#btn_search_resident').click(function () {
+                var resident = $('#resident').val();
+                if (resident == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
+                    swal("Filterion Completed", "", "success");
+                }
+                else {
+                    filterElectricGrid("/ROR/GetAllRORElectricByResident", resident);
+                    swal("Filterion Completed", "", "success");
+                }
+             });
 
         }
+        function filterElectricGrid(url, id) {
+            Dtable2 = $(".rorGrid").DataTable({
+                scrollX: true,
+                destroy: true,
+                "ajax": {
+                    "url": url,
+                    "type": 'POST',
+                    "data":
+                    {
+                        billElectricId: id
+                    },
+                    "dataSrc": function (data) {
+                       
+                        if (data.length > 0) {
+                            if (data[0].resultCode == '1100') {
+                                return data;
+                            }
+                            }
+                            else {
 
+                                return [];
+                            }
+                        
+                        },
+                        "error": function (a, b, c) {
+                            swal({
+                                title: "Error",
+                                text: a.status + ": " + c,
+                                type: "error"
+                            });
+                        }
+                    
+                    },
+                     "columns": [
+                   
+                    {
+                        title: 'Sr. #',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "title": "Id", "data": "billElectricId", className: "hidden" },
+                    { "title": "Meter #", "data": "locationMeterNo" },
+                    { "title": "Location", "data": "locationName" },
+                    { "title": "Name", "data": "residentName" },
+                    { "title": "PA No", "data": "residentPaNo" },
+                    { "title": "Rank", "data": "residentRank" },
+                    { "title": "Unit/FMN", "data": "residentUnit" },
+                    { "title": "Previous Reading", "data": "billElectricPrevReading" },
+                    { "title": "Present Reading", "data": "billElectricCurrentReading" },
+                    { "title": "Units", "data": "billElectricUnits" },
+                    { "title": "Amount", "data": "billElectricAmount" },
+                    { "title": "Water", "data": "billElectricWater" },
+                    { "title": "TV", "data": "billElectricTv" },
+                    {
+                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
+                    { "title": "Remarks", "data": "billElectricRemarks" }
+                ]
+               
+            });
+            Dtable2.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+        }
+        function initDropDowns() {
+            
+            $.ajax({
+                url: '/Management/GetAllAreas',
+                type: 'POST',
+                success: function (response) {
+                    if (response) {
+                        if (response[0].resultCode == '1100') {
+                            var list = [];
+                            for (var i = 0; i < response.length; i++) {
+                                list.push({ text: response[i].areaName, id: response[i].areaId });
+                            }
+                            list.push({ text: "All", id: "all" });
+                            $('#area').select2({ data: list }).trigger('change');
+                            $('#area').val('all').trigger('change');
+                        }
+                        else {
+                            $('#area').select2({
+                                        placeholder: "area not found ",
+                                allowClear: true
+                            }).trigger('change');
+                            swal("Warning", response[0].remarks, "warning");
+                        }
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
+            });
+        }
     </script>
 
 }
@@ -231,7 +341,7 @@
                         <div class="form-group">
                             <label class="control-label">Search By Area</label>
                             <div class="input-group">
-                                <input type="text" value="" placeholder="Select Area" class="form-control " id="area" />
+                                <select class="form-control dropdownlist"  id="area"></select>
                                 <span class="input-group-addon btn btn-info" id="btn_search_area"><i class="psi-magnifi-glass"></i></span>
                             </div>
                         </div>
