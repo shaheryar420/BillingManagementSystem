@@ -204,7 +204,7 @@ namespace BillingManagementSystem.DataHelpers
             try
             {
                 if (!string.IsNullOrEmpty(model.billElectricMonth))
-                {
+                { 
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
                         var billsElectric = (from x in db.tbl_billelectric
@@ -525,8 +525,9 @@ namespace BillingManagementSystem.DataHelpers
             List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
             try
             {
-                if (!string.IsNullOrEmpty(model.areaName))
+                if (!string.IsNullOrEmpty(model.areaid))
                 {
+                    int areaId = int.Parse(model.areaid);
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
                         var billsElectric = (from x in db.tbl_billelectric
@@ -535,7 +536,7 @@ namespace BillingManagementSystem.DataHelpers
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                              join l in db.tbl_location on x.fk_location equals l.location_id
                                              join a in db.tbl_area on l.fk_area equals a.area_id
-                                             where a.area_name == model.areaName
+                                             where a.area_id == areaId
                                              select new
                                              {
                                                  x.billelectric_amount,
@@ -633,9 +634,8 @@ namespace BillingManagementSystem.DataHelpers
             List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
             try
             {
-                if (!string.IsNullOrEmpty(model.fk_resident))
+                if (!string.IsNullOrEmpty(model.residentName))
                 {
-                    int residentId = int.Parse(model.fk_resident);
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
                         var billsElectric = (from x in db.tbl_billelectric
@@ -643,7 +643,7 @@ namespace BillingManagementSystem.DataHelpers
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                              join l in db.tbl_location on x.fk_location equals l.location_id
-                                             where x.fk_resident == residentId
+                                             where z.resident_name == model.residentName
                                              select new
                                              {
                                                  x.billelectric_amount,
@@ -1066,7 +1066,7 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var dateEntered = DateTime.ParseExact(model.billElectricDateTime, "dd/MM/yyyy H:mm:ss", CultureInfo.InvariantCulture);
+                        var dateEntered = DateTime.ParseExact(model.billElectricDateTime, "dd-MM-yyyy", CultureInfo.InvariantCulture);
                         var billsElectric = (from x in db.tbl_billelectric
                                              join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
@@ -1654,8 +1654,9 @@ namespace BillingManagementSystem.DataHelpers
             List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
-                if (!string.IsNullOrEmpty(model.areaName))
+                if (!string.IsNullOrEmpty(model.areaId))
                 {
+                    int areaId = int.Parse(model.areaId);
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
                         var billsGas = (from x in db.tbl_billgas
@@ -1664,7 +1665,7 @@ namespace BillingManagementSystem.DataHelpers
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                              join l in db.tbl_location on x.fk_location equals l.location_id
                                              join a in db.tbl_area on l.fk_area equals a.area_id
-                                             where a.area_name == model.areaName
+                                             where a.area_id == areaId
                                              select new
                                              {
                                                  x.amount,
@@ -1756,9 +1757,8 @@ namespace BillingManagementSystem.DataHelpers
             List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
-                if (!string.IsNullOrEmpty(model.fk_resident))
+                if (!string.IsNullOrEmpty(model.residentName))
                 {
-                    int residentId = int.Parse(model.fk_resident);
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
                         var billsGas = (from x in db.tbl_billgas
@@ -1766,7 +1766,7 @@ namespace BillingManagementSystem.DataHelpers
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                              join l in db.tbl_location on x.fk_location equals l.location_id
-                                             where x.fk_resident == residentId
+                                             where z.resident_name == model.residentName
                                              select new
                                              {
                                                  x.amount,
@@ -2165,7 +2165,7 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var dateEntered = DateTime.ParseExact(model.billGasDateTime, "dd/MM/yyyy H:mm:ss", CultureInfo.InvariantCulture);
+                        var dateEntered = DateTime.ParseExact(model.billGasDateTime, "dd-MM-yyyy", CultureInfo.InvariantCulture);
                         var billsGas = (from x in db.tbl_billgas
                                              join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id

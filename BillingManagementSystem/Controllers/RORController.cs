@@ -69,7 +69,7 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllRORElectricByArea([FromBody] BillElectricRequestModel model)
         {
-            model.areaName = model.billElectricId;
+            model.areaid = model.billElectricId;
             model.billElectricId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORElectricByArea(model);

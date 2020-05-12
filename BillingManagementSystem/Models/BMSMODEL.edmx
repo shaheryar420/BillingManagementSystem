@@ -25,7 +25,7 @@
             <PropertyRef Name="billelectric_id" />
           </Key>
           <Property Name="billelectric_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="billelectric_datetime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="billelectric_datetime" Type="date" Nullable="false" />
           <Property Name="billelectric_amount" Type="double" Nullable="false" />
           <Property Name="fk_paymentstatus" Type="int" Nullable="false" />
           <Property Name="fk_location" Type="int" Nullable="false" />
@@ -45,7 +45,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="datetime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="datetime" Type="date" Nullable="false" />
           <Property Name="amount" Type="double" Nullable="false" />
           <Property Name="fk_paymentstatus" Type="int" Nullable="false" />
           <Property Name="fk_location" Type="int" Nullable="false" />
@@ -335,26 +335,6 @@
           <Property Name="area_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="area_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="tbl_billelectric">
-          <Key>
-            <PropertyRef Name="billelectric_id" />
-          </Key>
-          <Property Name="billelectric_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="billelectric_datetime" Type="DateTime" Nullable="false" />
-          <Property Name="billelectric_amount" Type="Double" Nullable="false" />
-          <Property Name="fk_paymentstatus" Type="Int32" Nullable="false" />
-          <Property Name="fk_location" Type="Int32" Nullable="false" />
-          <Property Name="fk_resident" Type="Int32" Nullable="false" />
-          <Property Name="billelectric_prevreading" Type="Double" Nullable="false" />
-          <Property Name="billelectric_currentreading" Type="Double" Nullable="false" />
-          <Property Name="billelectric_units" Type="Double" Nullable="false" />
-          <Property Name="billelectric_water" Type="Double" Nullable="false" />
-          <Property Name="billelectric_tv" Type="Double" Nullable="false" />
-          <Property Name="billelectric_remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="fk_billpicture" Type="Int32" />
-          <Property Name="billelectric_month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="billelectric_outstanding" Type="Double" />
-        </EntityType>
         <EntityType Name="tbl_billpicture">
           <Key>
             <PropertyRef Name="billpicture_id" />
@@ -523,7 +503,6 @@
         <EntityContainer Name="db_bmsEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="tbl_action" EntityType="Self.tbl_action" />
           <EntitySet Name="tbl_area" EntityType="Self.tbl_area" />
-          <EntitySet Name="tbl_billelectric" EntityType="Self.tbl_billelectric" />
           <EntitySet Name="tbl_billpicture" EntityType="Self.tbl_billpicture" />
           <EntitySet Name="tbl_controller" EntityType="Self.tbl_controller" />
           <EntitySet Name="tbl_fixedrates" EntityType="Self.tbl_fixedrates" />
@@ -545,8 +524,9 @@
           <EntitySet Name="tbl_readinggas" EntityType="db_bmsModel.tbl_readinggas" />
           <EntitySet Name="tbl_readinggaslog" EntityType="db_bmsModel.tbl_readinggaslog" />
           <EntitySet Name="tbl_paymentgashistory" EntityType="db_bmsModel.tbl_paymentgashistory" />
-          <EntitySet Name="tbl_billgas" EntityType="db_bmsModel.tbl_billgas" />
           <EntitySet Name="tbl_residentpayments" EntityType="db_bmsModel.tbl_residentpayments" />
+          <EntitySet Name="tbl_billelectric" EntityType="db_bmsModel.tbl_billelectric" />
+          <EntitySet Name="tbl_billgas" EntityType="db_bmsModel.tbl_billgas" />
         </EntityContainer>
         <EntityType Name="tbl_paymenthistory">
           <Key>
@@ -601,6 +581,38 @@
           <Property Name="paymentmonth" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="fk_resident" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="tbl_residentpayments">
+          <Key>
+            <PropertyRef Name="payment_id" />
+          </Key>
+          <Property Name="payment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="payment_datetime" Type="DateTime" Nullable="false" />
+          <Property Name="payment_amount" Type="Double" Nullable="false" />
+          <Property Name="fk_paymenttype" Type="Int32" Nullable="false" />
+          <Property Name="paymentmonth" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="fk_resident" Type="Int32" Nullable="false" />
+          <Property Name="meter_no" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tbl_billelectric">
+          <Key>
+            <PropertyRef Name="billelectric_id" />
+          </Key>
+          <Property Name="billelectric_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="billelectric_datetime" Type="DateTime" Nullable="false" />
+          <Property Name="billelectric_amount" Type="Double" Nullable="false" />
+          <Property Name="fk_paymentstatus" Type="Int32" Nullable="false" />
+          <Property Name="fk_location" Type="Int32" Nullable="false" />
+          <Property Name="fk_resident" Type="Int32" Nullable="false" />
+          <Property Name="billelectric_prevreading" Type="Double" Nullable="false" />
+          <Property Name="billelectric_currentreading" Type="Double" Nullable="false" />
+          <Property Name="billelectric_units" Type="Double" Nullable="false" />
+          <Property Name="billelectric_water" Type="Double" Nullable="false" />
+          <Property Name="billelectric_tv" Type="Double" Nullable="false" />
+          <Property Name="billelectric_remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="fk_billpicture" Type="Int32" />
+          <Property Name="billelectric_month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="billelectric_outstanding" Type="Double" />
+        </EntityType>
         <EntityType Name="tbl_billgas">
           <Key>
             <PropertyRef Name="id" />
@@ -618,18 +630,6 @@
           <Property Name="fk_billpicture" Type="Int32" />
           <Property Name="month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="outstanding" Type="Double" />
-        </EntityType>
-        <EntityType Name="tbl_residentpayments">
-          <Key>
-            <PropertyRef Name="payment_id" />
-          </Key>
-          <Property Name="payment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="payment_datetime" Type="DateTime" Nullable="false" />
-          <Property Name="payment_amount" Type="Double" Nullable="false" />
-          <Property Name="fk_paymenttype" Type="Int32" Nullable="false" />
-          <Property Name="paymentmonth" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="fk_resident" Type="Int32" Nullable="false" />
-          <Property Name="meter_no" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -651,27 +651,6 @@
               <MappingFragment StoreEntitySet="tbl_area">
                 <ScalarProperty Name="area_id" ColumnName="area_id" />
                 <ScalarProperty Name="area_name" ColumnName="area_name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_billelectric">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_billelectric">
-              <MappingFragment StoreEntitySet="tbl_billelectric">
-                <ScalarProperty Name="billelectric_id" ColumnName="billelectric_id" />
-                <ScalarProperty Name="billelectric_datetime" ColumnName="billelectric_datetime" />
-                <ScalarProperty Name="billelectric_amount" ColumnName="billelectric_amount" />
-                <ScalarProperty Name="fk_paymentstatus" ColumnName="fk_paymentstatus" />
-                <ScalarProperty Name="fk_location" ColumnName="fk_location" />
-                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
-                <ScalarProperty Name="billelectric_prevreading" ColumnName="billelectric_prevreading" />
-                <ScalarProperty Name="billelectric_currentreading" ColumnName="billelectric_currentreading" />
-                <ScalarProperty Name="billelectric_units" ColumnName="billelectric_units" />
-                <ScalarProperty Name="billelectric_water" ColumnName="billelectric_water" />
-                <ScalarProperty Name="billelectric_tv" ColumnName="billelectric_tv" />
-                <ScalarProperty Name="billelectric_remarks" ColumnName="billelectric_remarks" />
-                <ScalarProperty Name="fk_billpicture" ColumnName="fk_billpicture" />
-                <ScalarProperty Name="billelectric_month" ColumnName="billelectric_month" />
-                <ScalarProperty Name="billelectric_outstanding" ColumnName="billelectric_outstanding" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -914,6 +893,40 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tbl_residentpayments">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_residentpayments">
+              <MappingFragment StoreEntitySet="tbl_residentpayments">
+                <ScalarProperty Name="meter_no" ColumnName="meter_no" />
+                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
+                <ScalarProperty Name="paymentmonth" ColumnName="paymentmonth" />
+                <ScalarProperty Name="fk_paymenttype" ColumnName="fk_paymenttype" />
+                <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />
+                <ScalarProperty Name="payment_datetime" ColumnName="payment_datetime" />
+                <ScalarProperty Name="payment_id" ColumnName="payment_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_billelectric">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_billelectric">
+              <MappingFragment StoreEntitySet="tbl_billelectric">
+                <ScalarProperty Name="billelectric_outstanding" ColumnName="billelectric_outstanding" />
+                <ScalarProperty Name="billelectric_month" ColumnName="billelectric_month" />
+                <ScalarProperty Name="fk_billpicture" ColumnName="fk_billpicture" />
+                <ScalarProperty Name="billelectric_remarks" ColumnName="billelectric_remarks" />
+                <ScalarProperty Name="billelectric_tv" ColumnName="billelectric_tv" />
+                <ScalarProperty Name="billelectric_water" ColumnName="billelectric_water" />
+                <ScalarProperty Name="billelectric_units" ColumnName="billelectric_units" />
+                <ScalarProperty Name="billelectric_currentreading" ColumnName="billelectric_currentreading" />
+                <ScalarProperty Name="billelectric_prevreading" ColumnName="billelectric_prevreading" />
+                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
+                <ScalarProperty Name="fk_location" ColumnName="fk_location" />
+                <ScalarProperty Name="fk_paymentstatus" ColumnName="fk_paymentstatus" />
+                <ScalarProperty Name="billelectric_amount" ColumnName="billelectric_amount" />
+                <ScalarProperty Name="billelectric_datetime" ColumnName="billelectric_datetime" />
+                <ScalarProperty Name="billelectric_id" ColumnName="billelectric_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tbl_billgas">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_billgas">
               <MappingFragment StoreEntitySet="tbl_billgas">
@@ -930,19 +943,6 @@
                 <ScalarProperty Name="amount" ColumnName="amount" />
                 <ScalarProperty Name="datetime" ColumnName="datetime" />
                 <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_residentpayments">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_residentpayments">
-              <MappingFragment StoreEntitySet="tbl_residentpayments">
-                <ScalarProperty Name="meter_no" ColumnName="meter_no" />
-                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
-                <ScalarProperty Name="paymentmonth" ColumnName="paymentmonth" />
-                <ScalarProperty Name="fk_paymenttype" ColumnName="fk_paymenttype" />
-                <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />
-                <ScalarProperty Name="payment_datetime" ColumnName="payment_datetime" />
-                <ScalarProperty Name="payment_id" ColumnName="payment_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

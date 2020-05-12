@@ -10,7 +10,7 @@ namespace BillingManagementSystem.Models
         public string rank { get; set; }
         public string unit { get; set; }
         public string paNo { get; set; }
-        public string areaName { get; set; }
+        public string areaId { get; set; }
         public string meterNo { get; set; }
         public string billGasId { get; set; }
         public string billGasDateTime { get; set; }
@@ -27,5 +27,6 @@ namespace BillingManagementSystem.Models
         public string fk_billPicture { get; set; }
         public string billGasMonth { get; set; }
         public string billGasOutstanding { get; set; }
+        public string residentName { get; set; }
     }
 }

@@ -27,7 +27,6 @@ namespace BillingManagementSystem.Models
     
         public DbSet<tbl_action> tbl_action { get; set; }
         public DbSet<tbl_area> tbl_area { get; set; }
-        public DbSet<tbl_billelectric> tbl_billelectric { get; set; }
         public DbSet<tbl_billpicture> tbl_billpicture { get; set; }
         public DbSet<tbl_controller> tbl_controller { get; set; }
         public DbSet<tbl_fixedrates> tbl_fixedrates { get; set; }
@@ -49,7 +48,8 @@ namespace BillingManagementSystem.Models
         public DbSet<tbl_readinggas> tbl_readinggas { get; set; }
         public DbSet<tbl_readinggaslog> tbl_readinggaslog { get; set; }
         public DbSet<tbl_paymentgashistory> tbl_paymentgashistory { get; set; }
-        public DbSet<tbl_billgas> tbl_billgas { get; set; }
         public DbSet<tbl_residentpayments> tbl_residentpayments { get; set; }
+        public DbSet<tbl_billelectric> tbl_billelectric { get; set; }
+        public DbSet<tbl_billgas> tbl_billgas { get; set; }
     }
 }
