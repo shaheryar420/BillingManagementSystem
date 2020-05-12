@@ -106,12 +106,12 @@
             $(document).on('click', '.btn_electric_delete', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
-                var _id = rowData.readingElectricId;
+                var _id = rowData.paymenthistoryId;
                 console.log(_id);
                 if (_id) {
                     swal({
                         title: "Are you sure?",
-                        text: "Your will not be able to recover this readingElectric record!",
+                        text: "Your will not be able to recover this Recovery Electric record!",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger",
@@ -120,7 +120,7 @@
                     },
                         function () {
                             $.ajax({
-                                url: '/Bill/DeleteReadingElectric',
+                                url: '/Recovery/DeleteReadingElectric',
                                 type: 'POST',
                                 data: { readingElectricId: _id },
                                 beforeSend: function () {

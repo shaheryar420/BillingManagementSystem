@@ -987,6 +987,7 @@
     <Content Include="Views\Bill\AdminElectric.cshtml" />
     <Content Include="Views\Management\Resident.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Views\Recovery\RecoveryApproval.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

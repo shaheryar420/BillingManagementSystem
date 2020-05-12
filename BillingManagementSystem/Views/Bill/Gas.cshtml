@@ -16,14 +16,352 @@
     @Scripts.Render("~/bundles/sweetAlert")
 
     <script>
+         var Id = null;
+        var fileCounter = 0;
+        var dataSet = [];
         $(document).on('nifty.ready', function () {
+            $('.dropdownlist').select2();
+            $('#btn_gas_update').hide();
+            $('editTitle').hide();
             $(".monthPicker").datepicker({
                 format: "mm-yyyy",
                 startView: "months",
                 minViewMode: "months"
             });
-            $('.grid').dataTable();
+             $('#btn_online_upload').on('click', function (e) {
+                e.preventDefault();
+                 addFile($("#online_file")[0].files[0]);
+                   });
+                initGasGrid();
+                initDropDowns();
+                initGasGridActions();
         });
+    </script>
+
+    <script>
+        function initGasGrid() {
+            Dtable = $(".gasGrid").DataTable({
+                autoWidth: true,
+                destroy: true,
+                "ajax": {
+                    "url": '/Bill/GetAllReadingsGas',
+                    "type": 'POST',
+                    "dataSrc": function (data) {
+
+                        if (data.length > 0) {
+                            if (data[0].resultCode == '1100') {
+                                return data;
+                            }
+                            {
+                                return [];
+                            }
+                        }
+                        else {
+
+
+                        }
+                    },
+                    "error": function (a, b, c) {
+                        swal({
+                            title: "Error",
+                            text: a.status + ": " + c,
+                            type: "error"
+                        });
+                    }
+                },
+                "columns": [
+                    {
+                        title: 'Action',
+                        render: function (data, type, row, meta) {
+                            return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_gas_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_gas_delete'><i class='fa fa-trash'></i></a></div>";
+                        }
+                    },
+                    {
+                        title: 'Sr. #',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "title": "Id", "data": "readingGasId", className: "hidden" },
+                    { "title": "Billing Month", "data": "readingGasMonth" },
+                    { "title": "Meter #", "data": "readingGasMeterNo" },
+                    { "title": "Previous Reading", "data": "readingGasPrevReading" },
+                    { "title": "Current Reading", "data": "readingGasCurrentReading" },
+                    { "title": "MM BTU", "data": "readingGasUnits" },
+                    { "title": "Date Added", "data": "readingGasDatetime" },
+                     { "title": "Added By", "data": "readingGasAddedby" },
+                    {
+                        "title": "Picture", "data": "fk_readingPicture", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.readingpicture_type + ";base64, " + row.readingpicture_data + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
+
+                ]
+            });
+            Dtable.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+            }
+        function initGasGridActions() {
+            $(document).on('click', '.btn_gas_edit', function (e) {
+                e.preventDefault();
+                $('#btn_gas_update').show();
+                $('#btn_gas_add').hide();
+                $('#addTitle').hide();
+                $('#editTitle').show();
+                var rowData = Dtable.row($(this).parents('tr')).data();
+                var _id = rowData.readingGasId;
+                $('#gas_id').val(_id);
+                $("#gas_meterNo").val(rowData.readingGasMeterNo);
+                $("#previous_reading").val(rowData.readingGasPrevReading);
+                $("#current_reading").val(rowData.readingGasCurrentReading);
+                $("#current_unit").val(rowData.readingGasUnits);
+                $("#month").val(rowData.readingGasMonth);
+            });
+            $(document).on('click', '.btn_gas_delete', function (e) {
+                e.preventDefault();
+                var rowData = Dtable.row($(this).parents('tr')).data();
+                var _id = rowData.readingGasId;
+                if (_id) {
+                    swal({
+                        title: "Are you sure?",
+                        text: "Your will not be able to recover this readingGas record!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Delete",
+                        closeOnConfirm: false
+                    },
+                        function () {
+                            $.ajax({
+                                url: '/Bill/DeleteReadingGas',
+                                type: 'POST',
+                                data: { readingGasId: _id },
+                                beforeSend: function () {
+                                    $('.loading').show();
+                                },
+                                complete: function () {
+                                    $('.loading').hide();
+                                },
+                                success: function (response) {
+                                    if (response.resultCode == '1100') {
+                                        swal("Deleted!", response.remarks, "success");
+                                        initGasGrid();
+                                    }
+                                    else {
+                                        swal('Warning', response.remarks, 'warning');
+                                    }
+                                },
+                                error: function (a, b, c) {
+                                    swal('Error', a + b + c, 'error');
+                                }
+                            });
+
+                        });
+                }
+                else {
+                    swal("Warning", "Please select a Reading", "warning");
+                }
+            });
+            $('#btn_gas_add').click(function () {
+                var _url = "/Bill/AddReadingGas";
+                var _meterNo = $("#gas_meterNo").val();
+                var _previousReading = $("#previous_reading").val();
+                var _currentReading = $("#current_reading").val();
+                var _currentUnit = $("#current_unit").val();
+                var _month = $("#month").val();
+                var formdata = new FormData(); //FormData object
+                var fileInput = document.getElementById('online_file');
+                formdata.append(fileInput.files[0].name, fileInput.files[0]);
+                formdata.append("_meterNo", _meterNo);
+                formdata.append("_previousReading", _previousReading);
+                formdata.append("_currentReading", _currentReading);
+                formdata.append("_currentUnit", _currentUnit);
+                formdata.append("_month", _month);
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        $('.loading').show();
+                    },
+                    complete: function () {
+                        $('.loading').hide();
+                    },
+                    success: function (data) {
+                        if (data.resultCode == "1100") {
+                            swal("Added!", data.remarks, "success");
+                            initElectricGrid();
+                            clearFields();
+                        }
+                        else {
+                            $('.loading').hide();
+                            swal("Not Added", data.remarks, "error");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorMessage) {
+                        console.log(errorMessage);
+                    }
+                });
+
+            });
+            $(document).on('click', '#btn_gas_update', function (e) {
+                e.preventDefault();
+                var _gasId = $('#gas_id').val();
+                if (_gasId) {
+                    var _url = "/Bill/EditReadingGas";
+                    var _gasId = $("#gas_id").val();
+                    var _meterNo = $("#gas_meterNo").val();
+                    var _previousReading = $("#previous_reading").val();
+                    var _currentReading = $("#current_reading").val();
+                    var _currentUnit = $("#current_unit").val();
+                    var _month = $("#month").val();
+                    var formdata = new FormData(); //FormData object
+                var fileInput = document.getElementById('online_file');
+                formdata.append(fileInput.files[0].name, fileInput.files[0]);
+                formdata.append("_id", _electricId);
+                formdata.append("_meterNo", _meterNo);
+                formdata.append("_previousReading", _previousReading);
+                formdata.append("_currentReading", _currentReading);
+                formdata.append("_currentUnit", _currentUnit);
+                formdata.append("_month", _month);
+                 $.ajax({
+                    url: _url,
+                    type: "POST",
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        $('.loading').show();
+                    },
+                    complete: function () {
+                        $('.loading').hide();
+                    },
+                    success: function (data) {
+                        if (data.resultCode == "1100") {
+                            swal("Updated!", data.remarks, "success");
+                                initGasGrid();
+                                $('#btn_gas_update').hide();
+                                $('#btn_gas_add').show();
+                                $('#addTitle').show();
+                                $('#editTitle').hide();
+                                clearFields();
+                        }
+                        else {
+                            $('.loading').hide();
+                            swal("Not Updated", data.remarks, "error");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorMessage) {
+                        console.log(errorMessage);
+                    }
+                });
+
+                }
+                else {
+                    swal("Warning", "Please select a location", "warning");
+                }
+            });
+        }
+
+            function initDropDowns() {
+            $.ajax({
+                url: '/Management/GetAllAreasByUser',
+                type: 'POST',
+                success: function (response) {
+                    if (response) {
+                        if (response[0].resultCode == '1100') {
+                            var list = [];
+                            for (var i = 0; i < response.length; i++) {
+                                list.push({ text: response[i].areaName, id: response[i].areaId });
+                            }
+                            $('#gas_area').select2({ data: list }).trigger('change');
+
+
+                        }
+                        else {
+                            $('#gas_area').select2({
+                                placeholder: "area not found ",
+                                allowClear: true
+                            }).trigger('change');
+                        }
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
+
+            });
+
+            $("#gas_area").change(function () {
+                var _areaId = $("#gas_area").val();
+                $.ajax({
+                    url: '/Management/GetAllLocationsByArea',
+                    type: 'POST',
+                    data: { fk_area: _areaId },
+                    success: function (response) {
+                        if (response) {
+                            if (response[0].resultCode == '1100') {
+                                var list = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    list.push({ text: response[i].locationName, id: response[i].locationId });
+
+                                }
+                                $('#gas_location').select2().empty();
+                                $('#gas_location').select2({ data: list }).trigger('change');
+                                Id = $('#gas_location').val();
+                                initmeterNo(Id);
+                            }
+                            else {
+                                $('#gas_location').select2().empty();
+                                $('#gas_location').select2({
+                                    placeholder: "resident not found ",
+                                    allowClear: true
+                                }).trigger('change');
+                            }
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            });
+        }
+        function initmeterNo(Id) {
+            $.ajax({
+                url: '/Management/GetLocationById',
+                type: 'POST',
+                data: { locationId: Id },
+                success: function (response) {
+                    if (response) {
+                        if (response.resultCode == '1100') {
+                            $('#gas_meterNo').val(response.locationGassMeter);
+                            $('#previous_reading').val(response.previousGasReading);
+                        }
+                        else {
+                            swal("Warning", response.remarks, "warning");
+                        }
+
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
+
+            });
+             
+        }
+        $("#current_reading").change(function () {
+             
+            previousReading = $('#previous_reading').val();
+            currentReading = $('#current_reading').val();
+            var unit = currentReading - previousReading;
+            $('#current_unit').val(unit);
+        });
+
     </script>
 
 }
@@ -42,53 +380,51 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="control-label">Select Area</label>
-                        <select class="form-control"></select>
+                        <select class="form-control dropdownlist" id="gas_area"></select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Select Resident</label>
-                        <select class="form-control"></select>
+                        <label class="control-label">Select Location</label>
+                        <select class="form-control dropdownlist" id="gas_location"></select>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Meter No.</label>
-                        <input type="number" value="" readonly class="form-control" />
+                        <input type="hidden" id="gas_id" value="" />
+                        <input type="number" value="" readonly class="form-control" id="gas_meterNo" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Previous Reading</label>
-                        <input type="number" value="" readonly class="form-control" />
+                        <input type="number" value="" readonly class="form-control" id="previous_reading" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Enter Current Reading</label>
-                        <input type="number" value="" class="form-control" />
+                        <input type="number" value="" class="form-control" id="current_reading" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">MM BTU</label>
-                        <input type="number" value="" class="form-control" />
+                        <input type="number" value="" class="form-control" id="current_unit" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Upload Picture</label>
-                        <input type="file" value="" class="form-control" />
+                        <input type="file" id="online_file" value="" class="form-control" accept=".jpg,.png,.jpeg,.pdf" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select Month</label>
-                        <input type="text" value="" class="form-control monthPicker" />
+                        <input type="text" value="" class="form-control monthPicker" id="month" />
                     </div>
                     <div class="form-group">
-                        <a href="#" id="btn-add" class="btn btn-success pull-right">Submit</a>
+                        <a href="#" id="btn_gas_add" class="btn btn-success pull-right">Submit</a>
+                        <a href="#" id="btn_gas_update" class="btn btn-success pull-right">Update</a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-8">
             <div class="panel panel-bordered-info panel-colorful">
-                <div class="panel-head">
+                <div class="panel-heading">
                     <h1 class="panel-title">Bills Generated</h1>
                 </div>
                 <div class="panel-body">
-                    <table class="table table-bordered table-responsive table-hover grid">
-                        <thead>
-                            <tr><th>Sr.</th><th>Billing Month</th><th>Meter #</th><th>Previous Reading</th><th>Current Reading</th><th>Current Units</th><th>Date Added</th><th>Picture</th></tr>
-                        </thead>
-                    </table>
+                    <table class="table table-bordered table-responsive table-hover gasGrid"></table>
                 </div>
             </div>
         </div>

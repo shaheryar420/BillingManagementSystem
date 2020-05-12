@@ -28,6 +28,8 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
+
+        #endregion
         #region Actions
         public ActionResult GetAllRORElectric([FromBody] BillElectricRequestModel model)
         {
@@ -79,7 +81,7 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllRORElectricByResident([FromBody] BillElectricRequestModel model)
         {
-            model.fk_resident = model.billElectricId;
+            model.residentName = model.billElectricId;
             model.billElectricId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORElectricByResident(model);
@@ -127,7 +129,6 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-        #endregion
         #endregion
     }
 }
