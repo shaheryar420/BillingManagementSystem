@@ -19,6 +19,8 @@
     <script>
         var residentId = null;
         $(document).on('nifty.ready', function () {
+             $('#btn_electric_update').hide();
+            $('editTitle').hide();
             $(".monthPicker").datepicker({
                 format: "mm-yyyy",
                 startView: "months",
@@ -97,13 +99,10 @@
                 $('#addTitle').hide();
                 $('#editTitle').show();
                 var rowData = Dtable.row($(this).parents('tr')).data();
-                var _id = rowData.readingElectricId;
+                var _id = rowData.paymenthistoryId;
                 $('#electric_id').val(_id);
-                $("#meter_no").val(rowData.readingElectricMeterNo);
-                $("#previous_reading").val(rowData.readingElectricPrevReading);
-                $("#current_reading").val(rowData.readingElectricCurrentReading);
-                $("#current_unit").val(rowData.readingElectricUnits);
-                $("#month").val(rowData.readingElectricMonth);
+                $("#Amount").val(rowData.paymentAmount);             
+                $("#month").val(rowData.paymentMonth);
             });
             $(document).on('click', '.btn_electric_delete', function (e) {
                 e.preventDefault();
@@ -178,29 +177,19 @@
                 });
             });
             
-
-
-
             $(document).on('click', '#btn_electric_update', function (e) {
                 e.preventDefault();
-                var _locationId = $('#location_id').val();
-                if (_locationId) {
-                    var _electricId = $("#electric_id").val();
-                    var _meterNo = $("#meter_no").val();
-                    var _previousReading = $("#previous_reading").val();
-                    var _currentReading = $("#current_reading").val();
-                    var _currentUnit = $("#current_unit").val();
-                    var _month = $("#month").val();
+                var _paymentId = $('#electric_id').val();
+                if (_paymentId) {
+                    var _paymentId = $("#electric_id").val();
+                    var _amount = $("#Amount").val();
                     $.ajax({
-                        url: '/Management/EditLocation',
+                        url: '/Recovery/EditPayment',
                         type: 'POST',
                         data: {
-                            readingElectricId: _electricId,
-                            readingElectricMonth: _month,
-                            readingElectricUnits: _currentUnit,
-                            readingElectricCurrentReading: _currentReading,
-                            readingElectricPrevReading: _previousReading,
-                            readingElectricMeterNo: _meterNo
+                            paymenthistoryId: _paymentId,
+                            paymentAmount: _amount,
+                           
                         },
                         beforeSend: function () {
                             $('.loading').show();
@@ -212,8 +201,8 @@
                             if (response.resultCode == '1100') {
                                 swal("Updated!", response.remarks, "success");
                                 initElectricGrid();
-                                $('#btn_location_update').hide();
-                                $('#btn_location_add').show();
+                                $('#btn_electric_update').hide();
+                                $('#btn_electric_add').show();
                                 $('#addTitle').show();
                                 $('#editTitle').hide();
                                 clearFields();
@@ -425,7 +414,7 @@
 
                     <div class="form-group">
                         <a href="#" id="btn_electric_add" class="btn btn-success pull-right">Submit</a>
-                        <a href="#" id="btn_electric_update" class="btn btn-success pull-right">Sbmit</a>
+                        <a href="#" id="btn_electric_update" class="btn btn-success pull-right">Update</a>
                     </div>
                 </div>
             </div>

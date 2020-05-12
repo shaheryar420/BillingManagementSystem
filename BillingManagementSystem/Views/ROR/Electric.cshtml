@@ -112,7 +112,7 @@
             });
             $('#btn_search_area').click(function () {
                 var area = $('#area').val();
-                if (area == "") {
+                if (area == "all") {
                     filterElectricGrid("/ROR/GetAllRORElectric", null);
                     swal("Filterion Completed", "", "success");
                 }
@@ -145,7 +145,7 @@
              });
             $('#btn_search_month').click(function () {
                 var month = $('#month').val();
-                if (rank == "") {
+                if (month == "") {
                     filterElectricGrid("/ROR/GetAllRORElectric", null);
                     swal("Filterion Completed", "", "success");
                 }

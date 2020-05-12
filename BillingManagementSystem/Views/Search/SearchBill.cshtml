@@ -26,6 +26,8 @@
                 format: "dd-mm-yyyy"
             });
             initElectricGrid();
+             initfilters();
+            initDropDowns();
         });
     </script>
     <script>
@@ -94,6 +96,218 @@
             $("div.tableBottom").addClass("pull-left");
             $("div.html5Buttons").addClass("pull-right");
         }
+        function initfilters() {
+            
+            $('#btn_search_paNo').click(function () {
+                var paNo = $('#paNo').val();
+                if (paNo == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
+                    swal("Filterion Completed", "", "success");
+                }
+                else {
+                    filterElectricGrid("/ROR/GetAllRORElectricByPaNo", paNo);
+                    swal("Filterion Completed", "", "success");
+                }
+            });
+            $('#btn_search_area').click(function () {
+                var area = $('#area').val();
+                if (area == "all") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
+                    swal("Filterion Completed", "", "success");
+                }
+                else {
+                    filterElectricGrid("/ROR/GetAllRORElectricByArea", area);
+                    swal("Filterion Completed", "", "success");
+                }
+            });
+            $('#btn_search_unit').click(function () {
+                var unit = $('#unit').val();
+                if (unit == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
+                    swal("Filterion Completed", "", "success");
+                }
+                else {
+                    filterElectricGrid("/ROR/GetAllRORElectricByUnit", unit);
+                    swal("Filterion Completed", "", "success");
+                }
+             });
+            $('#btn_search_rank').click(function () {
+                var rank = $('#rank').val();
+                if (rank == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
+                    swal("Filterion Completed", "", "success");
+                }
+                else {
+                    filterElectricGrid("/ROR/GetAllRORElectricByRank", rank);
+                    swal("Filterion Completed", "", "success");
+                }
+             });
+            $('#btn_search_month').click(function () {
+                var month = $('#month').val();
+                if (month == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
+                    swal("Filterion Completed", "", "success");
+                }
+                else {
+                    filterElectricGrid("/ROR/GetAllRORElectricByMonth", month);
+                    swal("Filterion Completed", "", "success");
+                }
+             });
+            $('#btn_search_date').click(function () {
+                var date = $('#date').val();
+                if (date == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
+                    swal("Filterion Completed", "", "success");
+                }
+                else {
+                    filterElectricGrid("/ROR/GetAllRORElectricByDateEntered", date);
+                    swal("Filterion Completed", "", "success");
+                }
+             });
+            $('#btn_search_amount').click(function () {
+                var amount = $('#amount').val();
+                if (amount == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
+                    swal("Filterion Completed", "", "success");
+                }
+                else {
+                    filterElectricGrid("/ROR/GetAllRORElectricByAmount", amount);
+                    swal("Filterion Completed", "", "success");
+                }
+             });
+            $('#btn_search_meterNo').click(function () {
+                var meterNo = $('#meterNo').val();
+                if (meterNo == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
+                    swal("Filterion Completed", "", "success");
+                }
+                else {
+                    filterElectricGrid("/ROR/GetAllRORElectricByMeterNo", meterNo);
+                    swal("Filterion Completed", "", "success");
+                }
+             });
+            $('#btn_search_resident').click(function () {
+                var resident = $('#resident').val();
+                if (resident == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
+                    swal("Filterion Completed", "", "success");
+                }
+                else {
+                    filterElectricGrid("/ROR/GetAllRORElectricByResident", resident);
+                    swal("Filterion Completed", "", "success");
+                }
+            });
+            $('#btn_search_name').click(function () {
+                var name = $('#name').val();
+                if (name == "") {
+                    filterElectricGrid("/ROR/GetAllRORElectric", null);
+                    swal("Filterion Completed", "", "success");
+                }
+                else {
+                    filterElectricGrid("/ROR/GetAllRORElectricByResident", name);
+                    swal("Filterion Completed", "", "success");
+                }
+             });
+
+        }
+        function filterElectricGrid(url, id) {
+            Dtable2 = $(".electricGrid").DataTable({
+                scrollX: true,
+                destroy: true,
+                "ajax": {
+                    "url": url,
+                    "type": 'POST',
+                    "data":
+                    {
+                        billElectricId: id
+                    },
+                    "dataSrc": function (data) {
+                       
+                        if (data.length > 0) {
+                            if (data[0].resultCode == '1100') {
+                                return data;
+                            }
+                            }
+                            else {
+
+                                return [];
+                            }
+                        
+                        },
+                        "error": function (a, b, c) {
+                            swal({
+                                title: "Error",
+                                text: a.status + ": " + c,
+                                type: "error"
+                            });
+                        }
+                    
+                    },
+                     "columns": [
+                   
+                    {
+                        title: 'Sr. #',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "title": "Id", "data": "billElectricId", className: "hidden" },
+                    { "title": "Meter #", "data": "locationMeterNo" },
+                    { "title": "Location", "data": "locationName" },
+                    { "title": "Name", "data": "residentName" },
+                    { "title": "PA No", "data": "residentPaNo" },
+                    { "title": "Rank", "data": "residentRank" },
+                    { "title": "Unit/FMN", "data": "residentUnit" },
+                    { "title": "Previous Reading", "data": "billElectricPrevReading" },
+                    { "title": "Present Reading", "data": "billElectricCurrentReading" },
+                    { "title": "Units", "data": "billElectricUnits" },
+                    { "title": "Amount", "data": "billElectricAmount" },
+                    { "title": "Water", "data": "billElectricWater" },
+                    { "title": "TV", "data": "billElectricTv" },
+                    {
+                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
+                    { "title": "Remarks", "data": "billElectricRemarks" }
+                ]
+               
+            });
+            Dtable2.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+        }
+        function initDropDowns() {
+            
+            $.ajax({
+                url: '/Management/GetAllAreas',
+                type: 'POST',
+                success: function (response) {
+                    if (response) {
+                        if (response[0].resultCode == '1100') {
+                            var list = [];
+                            for (var i = 0; i < response.length; i++) {
+                                list.push({ text: response[i].areaName, id: response[i].areaId });
+                            }
+                            list.push({ text: "All", id: "all" });
+                            $('#area').select2({ data: list }).trigger('change');
+                            $('#area').val('all').trigger('change');
+                        }
+                        else {
+                            $('#area').select2({
+                                        placeholder: "area not found ",
+                                allowClear: true
+                            }).trigger('change');
+                            swal("Warning", response[0].remarks, "warning");
+                        }
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
+            });
+        }
     </script>
 }
 <div id="page-head">
@@ -113,22 +327,22 @@
                         <div class="form-group">
                             <label class="control-label">Search By Month</label>
                             <div class="input-group">
-                                <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" />
-                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" id="month"/>
+                                <span class="input-group-addon btn btn-info" id="btn_search_month"><i class="psi-magnifi-glass"></i></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Search By Amount</label>
                             <div class="input-group">
-                                <input type="text" value="" placeholder="Enter Amount" class="form-control" />
-                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                <input type="text" value="" placeholder="Enter Amount" class="form-control" id="amount"/>
+                                <span class="input-group-addon btn btn-info" id="btn_search_amount"><i class="psi-magnifi-glass"></i></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Search By Meter#</label>
                             <div class="input-group">
-                                <input type="text" value="" placeholder="Select Meter#" class="form-control" />
-                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                <input type="text" value="" placeholder="Select Meter#" class="form-control" id="meterNo" />
+                                <span class="input-group-addon btn btn-info" id="btn_search_meterNo"><i class="psi-magnifi-glass"></i></span>
                             </div>
                         </div>
                     </div>
@@ -136,22 +350,22 @@
                         <div class="form-group">
                             <label class="control-label">Search By Area</label>
                             <div class="input-group">
-                                <input type="text" value="" placeholder="Select Area" class="form-control" />
-                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                <select class="form-control dropdownlist" id="area"></select>
+                                <span class="input-group-addon btn btn-info" id="btn_search_area"><i class="psi-magnifi-glass"></i></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Search By Resident</label>
                             <div class="input-group">
                                 <input type="text" value="" placeholder="Select Resident" class="form-control" />
-                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                <span class="input-group-addon btn btn-info" ><i class="psi-magnifi-glass"></i></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Search By Name</label>
                             <div class="input-group">
-                                <input type="text" value="" placeholder="Enter Name" class="form-control" />
-                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                <input type="text" value="" placeholder="Enter Name" class="form-control" id="name" />
+                                <span class="input-group-addon btn btn-info" id="btn_search_name"><i class="psi-magnifi-glass"></i></span>
                             </div>
                         </div>
                     </div>
@@ -159,22 +373,22 @@
                         <div class="form-group">
                             <label class="control-label">Search By PANo</label>
                             <div class="input-group">
-                                <input type="text" value="" placeholder="Enter PA No" class="form-control " />
-                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                <input type="text" value="" placeholder="Enter PA No" class="form-control " id="paNo" />
+                                <span class="input-group-addon btn btn-info" id="btn_search_paNo"><i class="psi-magnifi-glass"></i></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Search By Unit/Fmn</label>
                             <div class="input-group">
-                                <input type="text" value="" placeholder="Select Unit/Fmn" class="form-control " />
-                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                <input type="text" value="" placeholder="Select Unit/Fmn" class="form-control "  id="unit" />
+                                <span class="input-group-addon btn btn-info" id="btn_search_unit"><i class="psi-magnifi-glass"></i></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Search By Rank</label>
                             <div class="input-group">
-                                <input type="text" value="" placeholder="Select Rank" class="form-control " />
-                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                <input type="text" value="" placeholder="Select Rank" class="form-control " id="rank"/>
+                                <span class="input-group-addon btn btn-info" id="btn_search_rank"><i class="psi-magnifi-glass"></i></span>
                             </div>
                         </div>
                     </div>
@@ -182,15 +396,15 @@
                         <div class="form-group">
                             <label class="control-label">Search By Date Entered</label>
                             <div class="input-group">
-                                <input type="text" value="" placeholder="Select Date" class="form-control datepick" />
-                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                <input type="text" value="" placeholder="Select Date" class="form-control datepick"  id="date"/>
+                                <span class="input-group-addon btn btn-info" id="btn_search_date"><i class="psi-magnifi-glass"></i></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Search By Entered By</label>
                             <div class="input-group">
-                                <input type="text" value="" placeholder="Select Meter Readed" class="form-control " />
-                                <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                <input type="text" value="" placeholder="Select Meter Readed" class="form-control " id="enterBy"/>
+                                <span class="input-group-addon btn btn-info" id="btn_search_enterBy"><i class="psi-magnifi-glass"></i></span>
                             </div>
                         </div>
                     </div>

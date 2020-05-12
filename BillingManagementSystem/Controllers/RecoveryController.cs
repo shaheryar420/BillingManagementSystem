@@ -68,5 +68,13 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult EditPayment(PaymentRequestModel model)
+        {
+            RecoveryHelpers helper = new RecoveryHelpers();
+            var response = helper.EditPayment(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
     }
 }
