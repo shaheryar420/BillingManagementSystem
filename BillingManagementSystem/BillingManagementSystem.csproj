@@ -765,6 +765,7 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\RORController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="DataHelpers\ApprovePaymentHelpers.cs" />
     <Compile Include="DataHelpers\AreaHelpers.cs" />
     <Compile Include="DataHelpers\DashBoardHelpers.cs" />
     <Compile Include="DataHelpers\FixedRatesHelpers.cs" />
@@ -815,6 +816,7 @@
     <Compile Include="Models\RequestModels\ResidentRequestModel.cs" />
     <Compile Include="Models\RequestModels\UserRequestModel.cs" />
     <Compile Include="Models\RequestModels\UserTypeRequestModel.cs" />
+    <Compile Include="Models\ResponseModels\ApprovePaymentResponseModel.cs" />
     <Compile Include="Models\ResponseModels\AreaResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillElectricResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillGasResponseModel.cs" />
