@@ -256,6 +256,9 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 toReturn.previousReading = "0";
                                 toReturn.outstanding = "0";
+                                toReturn.billMonth = "0";
+                                toReturn.currentReading = "0";
+                                toReturn.currentUnit = "0";
 
                             }
                             if(billGas!= null)
@@ -268,7 +271,11 @@ namespace BillingManagementSystem.DataHelpers
                             }
                             else
                             {
-
+                                toReturn.previousGasReading = "0";
+                                toReturn.gasOutstanding = "0";
+                                toReturn.billGasMonth = "0";
+                                toReturn.currentGasReading = "0";
+                                toReturn.currentGasUnit = "0";
                             }
                         }
                         else 

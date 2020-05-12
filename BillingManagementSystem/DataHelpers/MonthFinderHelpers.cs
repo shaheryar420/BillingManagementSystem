@@ -30,5 +30,12 @@ namespace BillingManagementSystem.DataHelpers
             int year = currentDate.Year;
             return month > 9 ? month + "-" + year : "0" + month + "-" + year;
         }
+        public string GetMonth(DateTime dateTime)
+        {
+            DateTime currentDate = dateTime;
+            int month = currentDate.Month;
+            int year = currentDate.Year;
+            return month > 9 ? month + "-" + year : "0" + month + "-" + year;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using BillingManagementSystem.Models;
@@ -684,8 +685,10 @@ namespace BillingManagementSystem.DataHelpers
             List<ResidentResponseModel> toReturn = new List<ResidentResponseModel>();
             try
             {
-                if (!string.IsNullOrEmpty(model.residentUnit))
+                if (!string.IsNullOrEmpty(model.paymentMonth))
                 {
+                    var date = DateTime.ParseExact(model.paymentMonth, "dd/MM/yyyy H:mm:ss", CultureInfo.InvariantCulture);
+                    var month = new MonthFinderHelpers().GetMonth(date);
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
                         var residents = (from x in db.tbl_residents
@@ -693,6 +696,177 @@ namespace BillingManagementSystem.DataHelpers
                                          join z in db.tbl_location on y.fk_building equals z.location_id
                                          join a in db.tbl_area on z.fk_area equals a.area_id
                                          where x.resident_unit == model.residentUnit
+                                         select new
+                                         {
+                                             x.resident_id,
+                                             x.resident_name,
+                                             x.resident_panumber,
+                                             x.resident_rank,
+                                             x.resident_remarks,
+                                             x.resident_unit,
+                                             z.location_id,
+                                             z.location_name,
+                                             a.area_id,
+                                             a.area_name,
+                                         }).ToList();
+                        if (residents.Count() > 0)
+                        {
+                            foreach (var resident in residents)
+                            {
+                                var residentLastPayment = (from x in db.tbl_residentpayments
+                                                           where x.fk_resident == resident.resident_id
+                                                           select x).OrderByDescending(x => x.payment_datetime).FirstOrDefault();
+                                if (residentLastPayment.paymentmonth == month)
+                                {
+                                    toReturn.Add(new ResidentResponseModel()
+                                    {
+                                        residentName = resident.resident_name,
+                                        residentPaNumber = resident.resident_panumber,
+                                        residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
+                                        residentId = resident.resident_id.ToString(),
+                                        residentRemarks = !string.IsNullOrEmpty(resident.resident_remarks) ? resident.resident_remarks : "",
+                                        residentUnit = !string.IsNullOrEmpty(resident.resident_unit) ? resident.resident_unit : "",
+                                        remarks = "Successfully Found",
+                                        resultCode = "1100"
+                                    });
+                                }
+                            }
+                            foreach (var resident in residents)
+                            {
+                                var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
+                                var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
+                                _resdient.totatOutStandings = outstanding.ToString();
+                            }
+                        }
+                        else
+                        {
+                            toReturn.Add(new ResidentResponseModel()
+                            {
+                                remarks = "No Record Found",
+                                resultCode = "1200"
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    toReturn.Add(new ResidentResponseModel()
+                    {
+                        remarks = "Please Provide Month",
+                        resultCode = "1300"
+                    });
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn.Add(new ResidentResponseModel()
+                {
+                    remarks = "There Was A fatal Error" + Ex.ToString(),
+                    resultCode = "1000"
+                });
+            }
+            return toReturn;
+        }
+        public List<ResidentResponseModel> GetAllResidentsForSearchByAmount(ResidentRequestModel model)
+        {
+            List<ResidentResponseModel> toReturn = new List<ResidentResponseModel>();
+            try
+            {
+                if (!string.IsNullOrEmpty(model.paymentAmount))
+                {
+                    double amount = double.Parse(model.paymentAmount);
+                    using (db_bmsEntities db = new db_bmsEntities())
+                    {
+                        var residents = (from x in db.tbl_residents
+                                         join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
+                                         join z in db.tbl_location on y.fk_building equals z.location_id
+                                         join a in db.tbl_area on z.fk_area equals a.area_id
+                                         where x.resident_unit == model.residentUnit
+                                         select new
+                                         {
+                                             x.resident_id,
+                                             x.resident_name,
+                                             x.resident_panumber,
+                                             x.resident_rank,
+                                             x.resident_remarks,
+                                             x.resident_unit,
+                                             z.location_id,
+                                             z.location_name,
+                                             a.area_id,
+                                             a.area_name,
+                                         }).ToList();
+                        if (residents.Count() > 0)
+                        {
+                            foreach (var resident in residents)
+                            {
+                                var residentLastPayment = (from x in db.tbl_residentpayments
+                                                           where x.fk_resident == resident.resident_id
+                                                           select x).OrderByDescending(x => x.payment_datetime).FirstOrDefault();
+                                if (residentLastPayment.payment_amount == amount)
+                                {
+                                    toReturn.Add(new ResidentResponseModel()
+                                    {
+                                        residentName = resident.resident_name,
+                                        residentPaNumber = resident.resident_panumber,
+                                        residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
+                                        residentId = resident.resident_id.ToString(),
+                                        residentRemarks = !string.IsNullOrEmpty(resident.resident_remarks) ? resident.resident_remarks : "",
+                                        residentUnit = !string.IsNullOrEmpty(resident.resident_unit) ? resident.resident_unit : "",
+                                        remarks = "Successfully Found",
+                                        resultCode = "1100"
+                                    });
+                                }
+                            }
+                            foreach (var resident in residents)
+                            {
+                                var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
+                                var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
+                                _resdient.totatOutStandings = outstanding.ToString();
+                            }
+                        }
+                        else
+                        {
+                            toReturn.Add(new ResidentResponseModel()
+                            {
+                                remarks = "No Record Found",
+                                resultCode = "1200"
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    toReturn.Add(new ResidentResponseModel()
+                    {
+                        remarks = "Please Provide Month",
+                        resultCode = "1300"
+                    });
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn.Add(new ResidentResponseModel()
+                {
+                    remarks = "There Was A fatal Error" + Ex.ToString(),
+                    resultCode = "1000"
+                });
+            }
+            return toReturn;
+        }
+        public List<ResidentResponseModel> GetAllResidentsForSearchByName(ResidentRequestModel model)
+        {
+            List<ResidentResponseModel> toReturn = new List<ResidentResponseModel>();
+            try
+            {
+                if (!string.IsNullOrEmpty(model.residentName))
+                {
+                    using (db_bmsEntities db = new db_bmsEntities())
+                    {
+                        var residents = (from x in db.tbl_residents
+                                         join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
+                                         join z in db.tbl_location on y.fk_building equals z.location_id
+                                         join a in db.tbl_area on z.fk_area equals a.area_id
+                                         where x.resident_panumber == model.residentName
                                          select new
                                          {
                                              x.resident_id,
@@ -741,7 +915,161 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     toReturn.Add(new ResidentResponseModel()
                     {
-                        remarks = "Please Provide Unit",
+                        remarks = "Please Provide Name",
+                        resultCode = "1300"
+                    });
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn.Add(new ResidentResponseModel()
+                {
+                    remarks = "There Was A fatal Error" + Ex.ToString(),
+                    resultCode = "1000"
+                });
+            }
+            return toReturn;
+        }
+        public List<ResidentResponseModel> GetAllResidentsForSearchByElectricMeterNo(ResidentRequestModel model)
+        {
+            List<ResidentResponseModel> toReturn = new List<ResidentResponseModel>();
+            try
+            {
+                if (!string.IsNullOrEmpty(model.meterNo))
+                {
+                    using (db_bmsEntities db = new db_bmsEntities())
+                    {
+                        var residents = (from x in db.tbl_residents
+                                         join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
+                                         join z in db.tbl_location on y.fk_building equals z.location_id
+                                         join a in db.tbl_area on z.fk_area equals a.area_id
+                                         where z.location_electricmeter == model.meterNo
+                                         select new
+                                         {
+                                             x.resident_id,
+                                             x.resident_name,
+                                             x.resident_panumber,
+                                             x.resident_rank,
+                                             x.resident_remarks,
+                                             x.resident_unit,
+                                             z.location_id,
+                                             z.location_name,
+                                             a.area_id,
+                                             a.area_name
+
+                                         }).ToList();
+                        if (residents.Count() > 0)
+                        {
+                            toReturn = residents.Select(resident => new ResidentResponseModel()
+                            {
+                                residentName = resident.resident_name,
+                                residentPaNumber = resident.resident_panumber,
+                                residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
+                                residentId = resident.resident_id.ToString(),
+                                residentRemarks = !string.IsNullOrEmpty(resident.resident_remarks) ? resident.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(resident.resident_unit) ? resident.resident_unit : "",
+                                remarks = "Successfully Found",
+                                resultCode = "1100"
+                            }).ToList();
+                            foreach (var resident in residents)
+                            {
+                                var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
+                                var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
+                                _resdient.totatOutStandings = outstanding.ToString();
+                            }
+                        }
+                        else
+                        {
+                            toReturn.Add(new ResidentResponseModel()
+                            {
+                                remarks = "No Record Found",
+                                resultCode = "1200"
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    toReturn.Add(new ResidentResponseModel()
+                    {
+                        remarks = "Please Provide Name",
+                        resultCode = "1300"
+                    });
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn.Add(new ResidentResponseModel()
+                {
+                    remarks = "There Was A fatal Error" + Ex.ToString(),
+                    resultCode = "1000"
+                });
+            }
+            return toReturn;
+        }
+        public List<ResidentResponseModel> GetAllResidentsForSearchByGasMeterNo(ResidentRequestModel model)
+        {
+            List<ResidentResponseModel> toReturn = new List<ResidentResponseModel>();
+            try
+            {
+                if (!string.IsNullOrEmpty(model.meterNo))
+                {
+                    using (db_bmsEntities db = new db_bmsEntities())
+                    {
+                        var residents = (from x in db.tbl_residents
+                                         join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
+                                         join z in db.tbl_location on y.fk_building equals z.location_id
+                                         join a in db.tbl_area on z.fk_area equals a.area_id
+                                         where z.location_gassmeter == model.meterNo
+                                         select new
+                                         {
+                                             x.resident_id,
+                                             x.resident_name,
+                                             x.resident_panumber,
+                                             x.resident_rank,
+                                             x.resident_remarks,
+                                             x.resident_unit,
+                                             z.location_id,
+                                             z.location_name,
+                                             a.area_id,
+                                             a.area_name
+
+                                         }).ToList();
+                        if (residents.Count() > 0)
+                        {
+                            toReturn = residents.Select(resident => new ResidentResponseModel()
+                            {
+                                residentName = resident.resident_name,
+                                residentPaNumber = resident.resident_panumber,
+                                residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
+                                residentId = resident.resident_id.ToString(),
+                                residentRemarks = !string.IsNullOrEmpty(resident.resident_remarks) ? resident.resident_remarks : "",
+                                residentUnit = !string.IsNullOrEmpty(resident.resident_unit) ? resident.resident_unit : "",
+                                remarks = "Successfully Found",
+                                resultCode = "1100"
+                            }).ToList();
+                            foreach (var resident in residents)
+                            {
+                                var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
+                                var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
+                                _resdient.totatOutStandings = outstanding.ToString();
+                            }
+                        }
+                        else
+                        {
+                            toReturn.Add(new ResidentResponseModel()
+                            {
+                                remarks = "No Record Found",
+                                resultCode = "1200"
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    toReturn.Add(new ResidentResponseModel()
+                    {
+                        remarks = "Please Provide Name",
                         resultCode = "1300"
                     });
                 }

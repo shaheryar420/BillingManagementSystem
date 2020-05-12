@@ -15,5 +15,8 @@ namespace BillingManagementSystem.Models
         public string residentName { get; set; }
         public string residentUnit { get; set; }
         public string residentRemarks { get; set; }
+        public string paymentMonth { get; set; }
+        public string paymentAmount { get; set; }
+        public string meterNo { get; set; }
     }
 }

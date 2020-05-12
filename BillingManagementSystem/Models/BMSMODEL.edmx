@@ -239,6 +239,7 @@
           <Property Name="fk_paymenttype" Type="int" Nullable="false" />
           <Property Name="paymentmonth" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="fk_resident" Type="int" Nullable="false" />
+          <Property Name="meter_no" Type="varchar" MaxLength="45" />
         </EntityType>
         <EntityType Name="tbl_residents">
           <Key>
@@ -628,6 +629,7 @@
           <Property Name="fk_paymenttype" Type="Int32" Nullable="false" />
           <Property Name="paymentmonth" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="fk_resident" Type="Int32" Nullable="false" />
+          <Property Name="meter_no" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -934,6 +936,7 @@
           <EntitySetMapping Name="tbl_residentpayments">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_residentpayments">
               <MappingFragment StoreEntitySet="tbl_residentpayments">
+                <ScalarProperty Name="meter_no" ColumnName="meter_no" />
                 <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
                 <ScalarProperty Name="paymentmonth" ColumnName="paymentmonth" />
                 <ScalarProperty Name="fk_paymenttype" ColumnName="fk_paymenttype" />

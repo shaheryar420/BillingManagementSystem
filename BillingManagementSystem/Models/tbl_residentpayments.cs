@@ -20,5 +20,6 @@ namespace BillingManagementSystem.Models
         public int fk_paymenttype { get; set; }
         public string paymentmonth { get; set; }
         public int fk_resident { get; set; }
+        public string meter_no { get; set; }
     }
 }
