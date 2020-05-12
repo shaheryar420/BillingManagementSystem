@@ -112,6 +112,7 @@
           <Property Name="payment_amount" Type="double" Nullable="false" />
           <Property Name="fk_paymenttype" Type="int" Nullable="false" />
           <Property Name="paymentmonth" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="fk_resident" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_paymenthistory">
           <Key>
@@ -122,6 +123,7 @@
           <Property Name="payment_amount" Type="double" Nullable="false" />
           <Property Name="fk_paymenttype" Type="int" Nullable="false" />
           <Property Name="paymentmonth" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="fk_resident" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_paymentstatus">
           <Key>
@@ -225,6 +227,7 @@
           <Property Name="fk_location" Type="int" Nullable="false" />
           <Property Name="residenthistory_dateofoccupation" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="residenthistory_dateofvocation" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="meter_no" Type="varchar" MaxLength="45" />
         </EntityType>
         <EntityType Name="tbl_residentpayments">
           <Key>
@@ -467,6 +470,7 @@
           <Property Name="fk_location" Type="Int32" Nullable="false" />
           <Property Name="residenthistory_dateofoccupation" Type="DateTime" Nullable="false" />
           <Property Name="residenthistory_dateofvocation" Type="DateTime" Nullable="false" />
+          <Property Name="meter_no" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tbl_residents">
           <Key>
@@ -552,6 +556,7 @@
           <Property Name="payment_amount" Type="Double" Nullable="false" />
           <Property Name="fk_paymenttype" Type="Int32" Nullable="false" />
           <Property Name="paymentmonth" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="fk_resident" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_readinggas">
           <Key>
@@ -593,6 +598,7 @@
           <Property Name="payment_amount" Type="Double" Nullable="false" />
           <Property Name="fk_paymenttype" Type="Int32" Nullable="false" />
           <Property Name="paymentmonth" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="fk_resident" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_billgas">
           <Key>
@@ -788,6 +794,7 @@
           <EntitySetMapping Name="tbl_residenthistory">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_residenthistory">
               <MappingFragment StoreEntitySet="tbl_residenthistory">
+                <ScalarProperty Name="meter_no" ColumnName="meter_no" />
                 <ScalarProperty Name="residenthistory_id" ColumnName="residenthistory_id" />
                 <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
                 <ScalarProperty Name="fk_location" ColumnName="fk_location" />
@@ -851,6 +858,7 @@
           <EntitySetMapping Name="tbl_paymenthistory">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_paymenthistory">
               <MappingFragment StoreEntitySet="tbl_paymenthistory">
+                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
                 <ScalarProperty Name="paymentmonth" ColumnName="paymentmonth" />
                 <ScalarProperty Name="fk_paymenttype" ColumnName="fk_paymenttype" />
                 <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />
@@ -895,6 +903,7 @@
           <EntitySetMapping Name="tbl_paymentgashistory">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_paymentgashistory">
               <MappingFragment StoreEntitySet="tbl_paymentgashistory">
+                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
                 <ScalarProperty Name="paymentmonth" ColumnName="paymentmonth" />
                 <ScalarProperty Name="fk_paymenttype" ColumnName="fk_paymenttype" />
                 <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />

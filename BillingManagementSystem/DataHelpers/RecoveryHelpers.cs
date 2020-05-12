@@ -24,6 +24,7 @@ namespace BillingManagementSystem.DataHelpers
                                 int residentId = int.Parse(model.residentId);
                                 var newPayment = new tbl_paymenthistory()
                                 {
+                                    fk_resident = residentId,
                                     paymenthistory_datetime = DateTime.UtcNow.AddHours(5),
                                     paymentmonth = model.paymentMonth,
                                     payment_amount = int.Parse(model.paymentAmount),
@@ -106,6 +107,7 @@ namespace BillingManagementSystem.DataHelpers
                                 int residentId = int.Parse(model.residentId);
                                 var newPayment = new tbl_paymentgashistory()
                                 {
+                                    fk_resident = residentId,
                                     paymenthistory_datetime = DateTime.UtcNow.AddHours(5),
                                     paymentmonth = model.paymentMonth,
                                     payment_amount = int.Parse(model.paymentAmount),
@@ -198,6 +200,62 @@ namespace BillingManagementSystem.DataHelpers
                     resultCode = "1000"
                 });
             }
+            return toReturn;
+        }
+        public PaymentResponseModel ApproveElectricPayment(PaymentRequestModel model)
+        {
+            PaymentResponseModel toReturn = new PaymentResponseModel();
+            try
+            {
+                if(new ModelsValidatorHelper().validateint(model.paymenthistoryId))
+                {
+                    int paymentId = int.Parse(model.paymenthistoryId);
+                    using (db_bmsEntities db = new db_bmsEntities())
+                    {
+                        var payment = (from x in db.tbl_paymenthistory where x.paymenthistory_id == paymentId select x).FirstOrDefault();
+                        if(payment!= null)
+                        {
+                            var meterNo = (from x in db.tbl_location
+                                           join rb in db.tbl_residentbuilding on x.location_id equals rb.fk_building
+                                           where rb.fk_resident == payment.fk_resident
+                                           select x.location_electricmeter).FirstOrDefault();
+                            var newApprovedPayment = new tbl_residentpayments()
+                            {
+                                fk_resident =payment.fk_resident,
+                                fk_paymenttype = 0,
+                                paymentmonth = payment.paymentmonth,
+                                payment_amount = payment.payment_amount,
+                                payment_datetime = payment.paymenthistory_datetime,
+                                
+                            };
+                        }
+                        else
+                        {
+                            toReturn = new PaymentResponseModel()
+                            {
+                                remarks = "No Record Found",
+                                resultCode = "1200"
+                            };
+                        }
+                    }
+                }
+                else
+                {
+                    toReturn = new PaymentResponseModel()
+                    {
+                        remarks = "Please Provide Payment",
+                        resultCode = "1300"
+                    };
+                }
+            }
+            catch(Exception Ex)
+            {
+                toReturn = new PaymentResponseModel()
+                {
+                    remarks = "There Was A Fatal Error " + Ex.ToString(),
+                    resultCode = "1000"
+                };
+            };
             return toReturn;
         }
         public List<PaymentResponseModel> GetAllGasPayments()

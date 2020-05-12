@@ -19,5 +19,6 @@ namespace BillingManagementSystem.Models
         public double payment_amount { get; set; }
         public int fk_paymenttype { get; set; }
         public string paymentmonth { get; set; }
+        public int fk_resident { get; set; }
     }
 }
