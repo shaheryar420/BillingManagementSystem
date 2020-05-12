@@ -28,40 +28,40 @@
             $(".datepick").datepicker({
                 format: "dd-mm-yyyy"
             });
-           fetchResidentDetails(residentId);
+           //fetchResidentDetails(residentId);
             initResidentDetails(residentId);
            
         });
     </script>
     <script>
-        function fetchResidentDetails(_id) {
-            if (_id) {
-                $.ajax({
-                    url: '/Management/GetResidentById',
-                    type: 'POST',
-                    data: { residentId: _id },
-                    success: function (response) {
-                        if (response.resultCode == "1100") {
+        //function fetchResidentDetails(_id) {
+        //    if (_id) {
+        //        $.ajax({
+        //            url: '/Management/GetResidentById',
+        //            type: 'POST',
+        //            data: { residentId: _id },
+        //            success: function (response) {
+        //                if (response.resultCode == "1100") {
 
-                            $("#resident_pano").text(response.residentPaNumber);
-                            $("#resident_rank").text(response.residentRank);
-                            $("#resident_name").text(response.residentName);
-                            $("#resident_unit").text(response.residentUnit);
-                            $("#resident_Os").text(response.totatOutStandings);
+        //                    $("#resident_pano").text(response.residentPaNumber);
+        //                    $("#resident_rank").text(response.residentRank);
+        //                    $("#resident_name").text(response.residentName);
+        //                    $("#resident_unit").text(response.residentUnit);
+        //                    $("#resident_Os").text(response.totatOutStandings);
                             
-                        }
-                        else {
-                            swal('Warning', response.remarks, 'warning');
-                        }
-                    },
-                    error: function (a, b, c) {
-                        swal('Error', a + b + c, 'error');
-                    }
+        //                }
+        //                else {
+        //                    swal('Warning', response.remarks, 'warning');
+        //                }
+        //            },
+        //            error: function (a, b, c) {
+        //                swal('Error', a + b + c, 'error');
+        //            }
 
-                });
-            }
+        //        });
+        //    }
 
-        };
+        //};
         function initResidentDetails(_id) {
             Dtable = $(".residentGrid").DataTable({
                 scrollX: true,
@@ -72,20 +72,18 @@
                     "data":
                     { residentId: _id },
                     "dataSrc": function (data) {
-                        if (data) {
-                            if (data.resultCode == '1100') {
+                        if (data.resultCode == '1100') {
+                            return data;
+                                swal('Warning', data.resultCode, 'warning');
                                 console.log(data);
-                                return data;
+                                
+                                
 
                             }
                             else {
-
+                                swal('Warning', data.remarks, 'warning');
                                 return [];
                             }
-                        }
-                        else {
-                            return [];
-                        }
                         
                         },
                         "error": function (a, b, c) {
@@ -97,31 +95,28 @@
                         }
                     
                 },
-                
-                 "columns": [
-
-                     
-                     {
-                         title: 'Sr. #',
-                         render: function (data, type, row, meta) {
-                             return meta.row + meta.settings._iDisplayStart + 1;
-                         }
-                     },
-                     { "title": "Id", "data": "residentId", className: "hidden" },
-                     { "title": "PaNumber", "data": "residentPaNumber" },
-                     { "title": "Rank", "data": "residentRank" },
-                     { "title": "Name", "data": "residentName" },
-                     { "title": "Unit", "data": "residentUnit" },
-                     { "title": "Remarks", "data": "residentRemarks" },
-                     { "title": "Totat Out Standings", "data": "totatOutStandings" },
-                     { "title": "Out Standing", "data": "outstanding" },
-                     { "title": "Meter #", "data": "meterNo" },
-                     { "title": "Previous Reading", "data": "previousReading" },
+                "columns": [
+                        
+                        {
+                            title: 'Sr. #',
+                            render: function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
+                        },
+                        { "title": "Id", "data": "residentId", className: "hidden" },
+                        { "title": "PaNumber", "data": "residentPaNumber" },
+                        { "title": "Rank", "data": "residentRank" },
+                        { "title": "Name", "data": "residentName" },
+                        { "title": "Unit", "data": "residentUnit" },
+                        { "title": "Remarks", "data": "residentRemarks" },
+                        { "title": "Totat Out Standings", "data": "totatOutStandings" },
+                        { "title": "Out Standing", "data": "outstanding" },
+                        { "title": "Meter #", "data": "meterNo" },
+                        { "title": "Previous Reading", "data": "previousReading" },
 
 
 
-                 ]
-             
+                    ]
                
             });
             Dtable.columns.adjust();
