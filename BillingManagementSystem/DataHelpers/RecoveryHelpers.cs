@@ -32,21 +32,6 @@ namespace BillingManagementSystem.DataHelpers
                                 };
                                 db.tbl_paymenthistory.Add(newPayment);
                                 db.SaveChanges();
-                                var billPending = (from x in db.tbl_billelectric where x.fk_resident == residentId && x.fk_paymentstatus == 2 select x).FirstOrDefault();
-                                if (billPending != null)
-                                {
-                                    if (billPending.billelectric_outstanding == int.Parse(model.paymentAmount))
-                                    {
-                                        billPending.fk_paymentstatus = 1;
-                                        billPending.billelectric_outstanding = 0;
-                                    }
-                                    else
-                                    {
-                                        billPending.billelectric_outstanding = billPending.billelectric_outstanding - int.Parse(model.paymentAmount);
-                                    }
-                                   
-                                    db.SaveChanges();
-                                }
                                 toReturn = new PaymentResponseModel()
                                 {
                                     resultCode = "1100",
@@ -91,6 +76,114 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
+        public PaymentResponseModel EditPayment(PaymentRequestModel model)
+        {
+            PaymentResponseModel toReturn = new PaymentResponseModel();
+            try
+            {
+                using (db_bmsEntities db = new db_bmsEntities())
+                {
+                    if (new ModelsValidatorHelper().validateint(model.paymenthistoryId))
+                    {
+                        int paymentId = int.Parse(model.paymenthistoryId);
+                        var payment = (from x in db.tbl_paymenthistory where x.paymenthistory_id == paymentId select x).FirstOrDefault();
+                        if(payment!= null)
+                        {
+                            payment.fk_resident = !string.IsNullOrEmpty(model.residentId)?int.Parse(model.residentId):payment.fk_resident;
+                            payment.paymentmonth = !string.IsNullOrEmpty(model.paymentMonth)?model.paymentMonth :payment.paymentmonth;
+                            payment.payment_amount = !string.IsNullOrEmpty(model.paymentAmount)?int.Parse(model.paymentAmount):payment.payment_amount;
+                            payment.fk_paymenttype = 0;
+                            db.SaveChanges();
+                            toReturn = new PaymentResponseModel()
+                            {
+                                resultCode = "1100",
+                                remarks = "Succesfully Added"
+                            };
+                        }
+                        else
+                        {
+                            toReturn = new PaymentResponseModel()
+                            {
+                                remarks = "No Record Found",
+                                resultCode = "1200"
+                            };
+                        }
+                    }
+                    else
+                    {
+                        toReturn = new PaymentResponseModel()
+                        {
+                            remarks = "Please Select Payment",
+                            resultCode = "1300"
+                        };
+                    }
+                       
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn = new PaymentResponseModel()
+                {
+                    remarks = "There Was A Fatal Error " + Ex.ToString(),
+                    resultCode = "1000"
+                };
+            }
+            return toReturn;
+        }
+        public PaymentResponseModel EditGasPayment(PaymentRequestModel model)
+        {
+            PaymentResponseModel toReturn = new PaymentResponseModel();
+            try
+            {
+                using (db_bmsEntities db = new db_bmsEntities())
+                {
+                    if (new ModelsValidatorHelper().validateint(model.paymenthistoryId))
+                    {
+                        int paymentId = int.Parse(model.paymenthistoryId);
+                        var payment = (from x in db.tbl_paymentgashistory where x.paymenthistory_id == paymentId select x).FirstOrDefault();
+                        if (payment != null)
+                        {
+                            payment.fk_resident = !string.IsNullOrEmpty(model.residentId) ? int.Parse(model.residentId) : payment.fk_resident;
+                            payment.paymentmonth = !string.IsNullOrEmpty(model.paymentMonth) ? model.paymentMonth : payment.paymentmonth;
+                            payment.payment_amount = !string.IsNullOrEmpty(model.paymentAmount) ? int.Parse(model.paymentAmount) : payment.payment_amount;
+                            payment.fk_paymenttype = 0;
+                            db.SaveChanges();
+                            toReturn = new PaymentResponseModel()
+                            {
+                                resultCode = "1100",
+                                remarks = "Succesfully Added"
+                            };
+                        }
+                        else
+                        {
+                            toReturn = new PaymentResponseModel()
+                            {
+                                remarks = "No Record Found",
+                                resultCode = "1200"
+                            };
+                        }
+                    }
+                    else
+                    {
+                        toReturn = new PaymentResponseModel()
+                        {
+                            remarks = "Please Select Payment",
+                            resultCode = "1300"
+                        };
+                    }
+
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn = new PaymentResponseModel()
+                {
+                    remarks = "There Was A Fatal Error " + Ex.ToString(),
+                    resultCode = "1000"
+                };
+            }
+            return toReturn;
+        }
         public PaymentResponseModel AddPaymentGas(PaymentRequestModel model)
         {
             PaymentResponseModel toReturn = new PaymentResponseModel();
@@ -114,9 +207,6 @@ namespace BillingManagementSystem.DataHelpers
                                     fk_paymenttype = 0
                                 };
                                 db.tbl_paymentgashistory.Add(newPayment);
-                                db.SaveChanges();
-                                var billPending = (from x in db.tbl_billgas where x.fk_resident == residentId && x.fk_paymentstatus == 2 select x).FirstOrDefault();
-                                billPending.fk_paymentstatus = 1;
                                 db.SaveChanges();
                                 toReturn = new PaymentResponseModel()
                                 {
@@ -235,6 +325,23 @@ namespace BillingManagementSystem.DataHelpers
                                 remarks = "Payment Successfully Approved",
                                 resultCode = "1100"
                             };
+                            var billPending = (from x in db.tbl_billelectric where x.fk_resident == payment.fk_resident && x.fk_paymentstatus == 2 select x).FirstOrDefault();
+                            if (billPending != null)
+                            {
+                                if (billPending.billelectric_outstanding == int.Parse(model.paymentAmount))
+                                {
+                                    billPending.fk_paymentstatus = 1;
+                                    billPending.billelectric_outstanding = 0;
+                                }
+                                else
+                                {
+                                    billPending.billelectric_outstanding = billPending.billelectric_outstanding - int.Parse(model.paymentAmount);
+                                }
+
+                                db.SaveChanges();
+                            }
+                            db.tbl_paymenthistory.Remove(payment);
+                            db.SaveChanges();
                         }
                         else
                         {
@@ -275,7 +382,7 @@ namespace BillingManagementSystem.DataHelpers
                     int paymentId = int.Parse(model.paymenthistoryId);
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var payment = (from x in db.tbl_paymenthistory where x.paymenthistory_id == paymentId select x).FirstOrDefault();
+                        var payment = (from x in db.tbl_paymentgashistory where x.paymenthistory_id == paymentId select x).FirstOrDefault();
                         if (payment != null)
                         {
                             var meterNo = (from x in db.tbl_location
@@ -298,6 +405,23 @@ namespace BillingManagementSystem.DataHelpers
                                 remarks = "Payment Successfully Approved",
                                 resultCode = "1100"
                             };
+                            var billPending = (from x in db.tbl_billgas where x.fk_resident == payment.fk_resident && x.fk_paymentstatus == 2 select x).FirstOrDefault();
+                            if (billPending != null)
+                            {
+                                if (billPending.outstanding == int.Parse(model.paymentAmount))
+                                {
+                                    billPending.fk_paymentstatus = 1;
+                                    billPending.outstanding = 0;
+                                }
+                                else
+                                {
+                                    billPending.outstanding = billPending.outstanding - int.Parse(model.paymentAmount);
+                                }
+
+                                db.SaveChanges();
+                            }
+                            db.tbl_paymentgashistory.Remove(payment);
+                            db.SaveChanges();
                         }
                         else
                         {

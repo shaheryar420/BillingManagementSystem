@@ -87,8 +87,8 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         toReturn.Add(new BillElectricResponseModel()
                         {
-                            resultCode = "No Record Found",
-                            remarks="1200"
+                            remarks = "No Record Found",
+                            resultCode = "1200"
                         });
                     }
                 }
@@ -182,8 +182,8 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         toReturn.Add(new BillElectricResponseModel()
                         {
-                            resultCode = "No Record Found",
-                            remarks = "1200"
+                            remarks = "No Record Found",
+                            resultCode = "1200"
                         });
                     }
                 }
@@ -280,8 +280,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillElectricResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                remarks = "No Record Found",
+                                resultCode = "1200"
                             });
                         }
                     }
@@ -388,8 +388,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillElectricResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                remarks = "No Record Found",
+                                resultCode = "1200"
                             });
                         }
                     }
@@ -495,8 +495,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillElectricResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                remarks = "No Record Found",
+                                resultCode = "1200"
                             });
                         }
                     }
@@ -604,8 +604,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillElectricResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                remarks = "No Record Found",
+                                resultCode = "1200"
                             });
                         }
                     }
@@ -711,8 +711,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillElectricResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                remarks = "No Record Found",
+                                resultCode = "1200"
                             });
                         }
                     }
@@ -818,8 +818,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillElectricResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                remarks = "No Record Found",
+                                resultCode = "1200"
                             });
                         }
                     }
@@ -925,8 +925,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillElectricResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                remarks = "No Record Found",
+                                resultCode = "1200"
                             });
                         }
                     }
@@ -1032,8 +1032,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillElectricResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                remarks = "No Record Found",
+                                resultCode = "1200"
                             });
                         }
                     }
@@ -1140,8 +1140,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillElectricResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                remarks = "No Record Found",
+                                resultCode = "1200"
                             });
                         }
                     }
@@ -1240,8 +1240,8 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         toReturn.Add(new BillGasResponseModel()
                         {
-                            resultCode = "No Record Found",
-                            remarks = "1200"
+                            resultCode = "1200",
+                            remarks = "No Record Found"
                         });
                     }
                 }
@@ -1329,8 +1329,8 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         toReturn.Add(new BillGasResponseModel()
                         {
-                            resultCode = "No Record Found",
-                            remarks = "1200"
+                            resultCode = "1200",
+                            remarks = "No Record Found"
                         });
                     }
                 }
@@ -1421,8 +1421,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillGasResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                resultCode = "1200",
+                                remarks = "No Record Found"
                             });
                         }
                     }
@@ -1523,8 +1523,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillGasResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                resultCode = "1200",
+                                remarks = "No Record Found"
                             });
                         }
                     }
@@ -1624,8 +1624,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillGasResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                resultCode = "1200",
+                                remarks = "No Record Found"
                             });
                         }
                     }
@@ -1727,8 +1727,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillGasResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                resultCode = "1200",
+                                remarks = "No Record Found"
                             });
                         }
                     }
@@ -1828,8 +1828,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillGasResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                resultCode = "1200",
+                                remarks = "No Record Found"
                             });
                         }
                     }
@@ -1929,8 +1929,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillGasResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                resultCode = "1200",
+                                remarks = "No Record Found"
                             });
                         }
                     }
@@ -2030,8 +2030,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillGasResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                resultCode = "1200",
+                                remarks = "No Record Found"
                             });
                         }
                     }
@@ -2131,8 +2131,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillGasResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                resultCode = "1200",
+                                remarks = "No Record Found"
                             });
                         }
                     }
@@ -2233,8 +2233,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn.Add(new BillGasResponseModel()
                             {
-                                resultCode = "No Record Found",
-                                remarks = "1200"
+                                resultCode = "1200",
+                                remarks = "No Record Found"
                             });
                         }
                     }
