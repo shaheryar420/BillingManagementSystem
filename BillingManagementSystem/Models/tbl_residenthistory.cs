@@ -19,5 +19,6 @@ namespace BillingManagementSystem.Models
         public int fk_location { get; set; }
         public System.DateTime residenthistory_dateofoccupation { get; set; }
         public System.DateTime residenthistory_dateofvocation { get; set; }
+        public string meter_no { get; set; }
     }
 }
