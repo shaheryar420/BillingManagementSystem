@@ -18,6 +18,7 @@
 
     <script>
         var Dtable = null;
+        var Dtable2 = null;
         var residentId = '@{ var cId = "";  if (Model != null) { cId = Model.resident_id; } }@cId';
         $(document).on('nifty.ready', function () {
             $(".monthPicker").datepicker({
@@ -29,8 +30,8 @@
                 format: "dd-mm-yyyy"
             });
            fetchResidentDetails(residentId);
-            initResidentDetails(residentId);
-
+            initResidentElectricDetails(residentId);
+            initResidentGasDetails(residentId);
         });
     </script>
     <script>
@@ -64,67 +65,75 @@
             }
 
         };
-        function initResidentDetails(_id) {
-            Dtable = $(".residentGrid").DataTable({
+        function initResidentElectricDetails(_id) {
+            Dtable = $(".electricGrid").DataTable({
                 scrollX: true,
                 destroy: true,
                 "ajax": {
-                    "url": '/ROR/GetAllRORElectricByResident',
+                    "url": '/ROR/GetAllRORElectricByResidentId',
                     "type": 'POST',
-                    "data":
-                    { residentId: _id },
+                   "data":
+                    {
+                        fk_resident: _id
+                    },
                     "dataSrc": function (data) {
-                        if (data.resultCode == '1100') {
-                            return data;
-                                swal('Warning', data.resultCode, 'warning');
-                                console.log(data);
 
-
-
-                            }
-                            else {
-                                swal('Warning', data.remarks, 'warning');
+                        if (data.length > 0) {
+                                if (data[i].resultCode == '1100') {
+                                return data;
+                                }
+                                else
+                                {
                                 return [];
                             }
-
-                        },
-                        "error": function (a, b, c) {
-                            swal({
-                                title: "Error",
-                                text: a.status + ": " + c,
-                                type: "error"
-                            });
+                            
+                            
+                            
                         }
+                        else {
 
+                            return [];
+                        }
+                    },
+                    "error": function (a, b, c) {
+                        swal({
+                            title: "Error",
+                            text: a.status + ": " + c,
+                            type: "error"
+                        });
+                    }
                 },
                 "columns": [
 
-                        {
-                            title: 'Sr. #',
-                            render: function (data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            }
-                        },
-                        { "title": "Id", "data": "residentId", className: "hidden" },
-                        { "title": "Meter #", "data": "locationMeterNo" },
-                        { "title": "Billing Month", "data": "billElectricMonth" },
-                        { "title": "Location", "data": "locationName" },
-                        { "title": "Previous Reading", "data": "billElectricPrevReading" },
-                        { "title": "Present Reading", "data": "billElectricCurrentReading" },
-                        { "title": "Unit", "data": "billElectricUnits" },
-                        { "title": "Energy Charges", "data": "residentName" },
-                        { "title": "Amount", "data": "billElectricAmount" },
-                        { "title": "Water", "data": "billElectricWater" },
-                        { "title": "TV", "data": "billElectricTv" },
-                        { "title": "Picture", "data": "residentRemarks" },
-                        { "title": "Remarks", "data": "billElectricRemarks" },
-                        { "title": "Payment", "data": "residentRemarks" },
-                        { "title": "Payment Date", "data": "residentRemarks" },
-                        { "title": "Totat Out Standings", "data": "billElectricOutstanding" },                        
+                    {
+                        title: 'Sr. #',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "title": "Id", "data": "billElectricId", className: "hidden" },
+                    { "title": "Meter #", "data": "locationMeterNo" },
+                    { "title": "Billing Month", "data": "billElectricMonth" },
+                    { "title": "Location", "data": "locationName" },
+                    { "title": "Previous Reading", "data": "billElectricPrevReading" },
+                    { "title": "Present Reading", "data": "billElectricCurrentReading" },
+                    { "title": "Unit", "data": "billElectricUnits" },
+                    { "title": "Energy Charges", "data": "electricCharges" },
+                    { "title": "Amount", "data": "billElectricAmount" },
+                    { "title": "Water", "data": "billElectricWater" },
+                    { "title": "TV", "data": "billElectricTv" },
+                    {
+                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },                    { "title": "Remarks", "data": "billElectricRemarks" },
+                    { "title": "Payment", "data": "payment" },
+                    { "title": "Payment Date", "data": "paymentMonth" },
+                    { "title": "Totat Out Standings", "data": "billElectricOutstanding" },
 
 
 
-                    ]
+                ]
 
             });
             Dtable.columns.adjust();
@@ -132,6 +141,83 @@
             $("div.tableBottom").addClass("pull-left");
             $("div.html5Buttons").addClass("pull-right");
         }
+
+        function initResidentGasDetails(_id) {
+            Dtable2 = $(".gasGrid").DataTable({
+                scrollX: true,
+                destroy: true,
+                "ajax": {
+                    "url": '/ROR/GetAllRORGasByResidentId',
+                    "type": 'POST',
+                   "data":
+                    {
+                        fk_resident: _id
+                    },
+                    "dataSrc": function (data) {
+
+                        if (data.length > 0) {
+                                if (data[i].resultCode == '1100') {
+                                return data;
+                                }
+                                else
+                                {
+                                return [];
+                            }
+                            
+                            
+                            
+                        }
+                        else {
+
+                            return [];
+                        }
+                    },
+                    "error": function (a, b, c) {
+                        swal({
+                            title: "Error",
+                            text: a.status + ": " + c,
+                            type: "error"
+                        });
+                    }
+                },
+                "columns": [
+
+                    {
+                        title: 'Sr. #',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "title": "Id", "data": "billGasId", className: "hidden" },
+                    { "title": "Meter #", "data": "locationMeterNo" },
+                    { "title": "Billing Month", "data": "billGasMonth" },
+                    { "title": "Location", "data": "locationName" },
+                    { "title": "Previous Reading", "data": "billGasPrevReading" },
+                    { "title": "Present Reading", "data": "billGasCurrentReading" },
+                    { "title": "MM BTU", "data": "billGasUnits" },
+                    { "title": "Energy Charges", "data": "gasCharges" },
+                    { "title": "Amount", "data": "billGasAmount" },
+                    { "title": "Difference", "data": "billGasUnits" },
+                    { "title": "M/Rent", "data": "gasCharges" },
+                    {
+                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
+                    { "title": "Remarks", "data": "billGasRemarks" },
+                    { "title": "Payment", "data": "payment" },
+                    { "title": "Payment Date", "data": "paymentMonth" },
+                    { "title": "Totat Out Standings", "data": "billGasOutstanding" },
+
+                ]
+
+            });
+            Dtable2.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+        }
+
     </script>
 
 }
@@ -203,9 +289,8 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <table class="table table-bordered table-striped table-hover residentGrid"></table>
+                                <table class="table table-bordered table-striped table-hover electricGrid"></table>
 
-                                @*<tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Units</th><th>Energy Charges</th><th>Amount</th><th>Water</th><th>TV</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>*@
 
                             </div>
                         </div>
@@ -240,11 +325,8 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <table class="table table-bordered table-responsive table-hover grid">
-                                    <thead>
-                                        <tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Difference</th><th>MM BTU</th><th>M/Rent</th><th>Amount</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>
-                                    </thead>
-                                </table>
+                                <table class="table table-bordered table-striped table-hover gasGrid"></table>
+
                             </div>
                         </div>
                     </div>

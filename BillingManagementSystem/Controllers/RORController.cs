@@ -89,6 +89,15 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult GetAllRORElectricByResidentId([FromBody] BillElectricRequestModel model)
+        {
+
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORElectricByResidentId(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         public ActionResult GetAllRORElectricByPaNo([FromBody] BillElectricRequestModel model)
         {
             model.paNo = model.billElectricId;
@@ -185,6 +194,15 @@ namespace BillingManagementSystem.Controllers
             model.billGasId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORGasByResident(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORGasByResidentId([FromBody] BillGasRequestModel model)
+        {
+            
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORGasByResidentId(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;
