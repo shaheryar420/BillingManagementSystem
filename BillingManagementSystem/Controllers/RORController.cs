@@ -30,7 +30,7 @@ namespace BillingManagementSystem.Controllers
         }
 
         #endregion
-        #region Actions
+        #region Electric Actions
         public ActionResult GetAllRORElectric([FromBody] BillElectricRequestModel model)
         {
             RORHelpers helper = new RORHelpers();
@@ -125,6 +125,106 @@ namespace BillingManagementSystem.Controllers
             model.billElectricId = null;
             RORHelpers helper = new RORHelpers();
             var response = helper.GetAllRORElectricByDate(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        #endregion
+        #region Gas Actions
+        public ActionResult GetAllRORGas([FromBody] BillGasRequestModel model)
+        {
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllGas(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORGasByMonth([FromBody] BillGasRequestModel model)
+        {
+            model.billGasMonth = model.billGasId;
+            model.billGasId = null;
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllGasByMonth(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORGasByAmount([FromBody] BillGasRequestModel model)
+        {
+            model.billGasAmount = model.billGasId;
+            model.billGasId = null;
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllGasByAmount(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORGasByMeterNo([FromBody] BillGasRequestModel model)
+        {
+            model.meterNo = model.billGasId;
+            model.billGasId = null;
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllGasByMeterNo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORGasByArea([FromBody] BillGasRequestModel model)
+        {
+            model.areaId = model.billGasId;
+            model.billGasId = null;
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORGasByArea(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORGasByResident([FromBody] BillGasRequestModel model)
+        {
+            model.residentName = model.billGasId;
+            model.billGasId = null;
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORGasByResident(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORGasByPaNo([FromBody] BillGasRequestModel model)
+        {
+            model.paNo = model.billGasId;
+            model.billGasId = null;
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORGasByPaNo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORGasByUnit([FromBody] BillGasRequestModel model)
+        {
+            model.unit = model.billGasId;
+            model.billGasId = null;
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORGasByUnit(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORGasByRank([FromBody] BillGasRequestModel model)
+        {
+            model.rank = model.billGasId;
+            model.billGasId = null;
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORGasByRank(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllRORGasByDateEntered([FromBody] BillGasRequestModel model)
+        {
+            model.billGasDateTime = model.billGasId;
+            model.billGasId = null;
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetAllRORGasByDate(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;

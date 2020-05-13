@@ -52,6 +52,9 @@
                                 <li class="@Html.IsSelected(action: "Gas", controller:"Bill")  @Html.IsAllowed(controller:"Bill", action: "Gas")">
                                     <a href="@Url.Action("Gas","Bill")">SUI Gas</a>
                                 </li>
+                                <li class="@Html.IsSelected(action: "AdminGas", controller:"Bill")  @Html.IsAllowed(controller:"Bill", action: "AdminGas")">
+                                    <a href="@Url.Action("AdminGas","Bill")">SUI Gas / Admin</a>
+                                </li>
                                 <li class="@Html.IsSelected(action: "Wapda", controller:"Bill")  @Html.IsAllowed(controller:"Bill", action: "Wapda")">
                                     <a href="@Url.Action("Wapda","Bill")">Wapda</a>
                                 </li>
@@ -77,6 +80,9 @@
                                 </li>
                                 <li class="@Html.IsSelected(action: "RecoveryApproval", controller:"Recovery")" @Html.IsAllowed(controller: "Recovery", action: "RecoveryApproval")>
                                     <a href="@Url.Action("RecoveryApproval","Recovery")">RecoveryApproval</a>
+                                </li>
+                                <li class="@Html.IsSelected(action: "RecoveryApprovalGas", controller:"Recovery")" @Html.IsAllowed(controller: "Recovery", action: "RecoveryApprovalGas")>
+                                    <a href="@Url.Action("RecoveryApprovalGas","Recovery")">RecoveryApprovalGas</a>
                                 </li>
                             </ul>
 

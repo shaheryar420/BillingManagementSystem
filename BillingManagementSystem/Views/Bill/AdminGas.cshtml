@@ -1,6 +1,8 @@
-﻿@{
-    ViewBag.Title = "Bill Generation";
+﻿
+@{
+    ViewBag.Title = "AdminGas";
 }
+
 @section Styles
 {
     @Styles.Render("~/plugins/select2")
@@ -16,7 +18,7 @@
     @Scripts.Render("~/bundles/sweetAlert")
 
     <script>
-         var Id = null;
+        var Id = null;
         var fileCounter = 0;
         var dataSet = [];
         $(document).on('nifty.ready', function () {
@@ -28,13 +30,13 @@
                 startView: "months",
                 minViewMode: "months"
             });
-             $('#btn_online_upload').on('click', function (e) {
+            $('#btn_online_upload').on('click', function (e) {
                 e.preventDefault();
-                 addFile($("#online_file")[0].files[0]);
-                   });
-                initGasGrid();
-                initDropDowns();
-                initGasGridActions();
+                addFile($("#online_file")[0].files[0]);
+            });
+            initGasGrid();
+            initDropDowns();
+            initGasGridActions();
         });
     </script>
 
@@ -73,7 +75,7 @@
                     {
                         title: 'Action',
                         render: function (data, type, row, meta) {
-                            return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_gas_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_gas_delete'><i class='fa fa-trash'></i></a></div>";
+                            return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_gas_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-success btn_gas_approvel'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_gas_delete'><i class='fa fa-trash'></i></a></div>";
                         }
                     },
                     {
@@ -89,7 +91,7 @@
                     { "title": "Current Reading", "data": "readingGasCurrentReading" },
                     { "title": "MM BTU", "data": "readingGasUnits" },
                     { "title": "Date Added", "data": "readingGasDatetime" },
-                     { "title": "Added By", "data": "readingGasAddedby" },
+                    { "title": "Added By", "data": "readingGasAddedby" },
                     {
                         "title": "Picture", "data": "fk_readingPicture", render: function (data, type, row, meta) {
                             return "<img src='data:" + row.readingpicture_type + ";base64, " + row.readingpicture_data + "' class='img-sm img-thumbnail'/>";
@@ -102,7 +104,7 @@
             $("div.tableTop").addClass("pull-left");
             $("div.tableBottom").addClass("pull-left");
             $("div.html5Buttons").addClass("pull-right");
-            }
+        }
         function initGasGridActions() {
             $(document).on('click', '.btn_gas_edit', function (e) {
                 e.preventDefault();
@@ -193,8 +195,8 @@
                     },
                     success: function (data) {
                         if (data.resultCode == "1100") {
-                            initGasGrid();
                             swal("Added!", data.remarks, "success");
+                            initGasGrid();
                         }
                         else {
                             $('.loading').hide();
@@ -206,6 +208,36 @@
                     }
                 });
 
+            });
+            $(document).on('click', '.btn_gas_approvel', function (e) {
+                e.preventDefault();
+                var rowData = Dtable.row($(this).parents('tr')).data();
+                _id = rowData.readingGasId;
+                var _unit = rowData.readingGasUnits;
+                $.ajax({
+                    url: '/Management/GetFixedRateByName',
+                    type: 'POST',
+                    data: { fixedRatesName: 'Gas Charges' },
+                    success: function (response) {
+                        if (response) {
+                            if (response.resultCode == '1100') {
+                                gasrate = response.fixedRatesAmount;
+                                console.log(gasrate);
+                                gasrate = _unit * gasrate;
+                                console.log(gasrate);
+                                initApprovel();
+                            }
+                            else {
+                                swal("Warning", response.remarks, "warning");
+                            }
+
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+
+                });
             });
             $(document).on('click', '#btn_gas_update', function (e) {
                 e.preventDefault();
@@ -219,44 +251,44 @@
                     var _currentUnit = $("#current_unit").val();
                     var _month = $("#month").val();
                     var formdata = new FormData(); //FormData object
-                var fileInput = document.getElementById('online_file');
-                formdata.append(fileInput.files[0].name, fileInput.files[0]);
-                formdata.append("_id", _gasId);
-                formdata.append("_meterNo", _meterNo);
-                formdata.append("_previousReading", _previousReading);
-                formdata.append("_currentReading", _currentReading);
-                formdata.append("_currentUnit", _currentUnit);
-                formdata.append("_month", _month);
-                 $.ajax({
-                    url: _url,
-                    type: "POST",
-                    data: formdata,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function () {
-                        $('.loading').show();
-                    },
-                    complete: function () {
-                        $('.loading').hide();
-                    },
-                    success: function (data) {
-                        if (data.resultCode == "1100") {
-                            swal("Updated!", data.remarks, "success");
+                    var fileInput = document.getElementById('online_file');
+                    formdata.append(fileInput.files[0].name, fileInput.files[0]);
+                    formdata.append("_id", _gasId);
+                    formdata.append("_meterNo", _meterNo);
+                    formdata.append("_previousReading", _previousReading);
+                    formdata.append("_currentReading", _currentReading);
+                    formdata.append("_currentUnit", _currentUnit);
+                    formdata.append("_month", _month);
+                    $.ajax({
+                        url: _url,
+                        type: "POST",
+                        data: formdata,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function () {
+                            $('.loading').show();
+                        },
+                        complete: function () {
+                            $('.loading').hide();
+                        },
+                        success: function (data) {
+                            if (data.resultCode == "1100") {
+                                swal("Updated!", data.remarks, "success");
                                 initGasGrid();
                                 $('#btn_gas_update').hide();
                                 $('#btn_gas_add').show();
                                 $('#addTitle').show();
                                 $('#editTitle').hide();
+                            }
+                            else {
+                                $('.loading').hide();
+                                swal("Not Updated", data.remarks, "error");
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorMessage) {
+                            console.log(errorMessage);
                         }
-                        else {
-                            $('.loading').hide();
-                            swal("Not Updated", data.remarks, "error");
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorMessage) {
-                        console.log(errorMessage);
-                    }
-                });
+                    });
 
                 }
                 else {
@@ -265,7 +297,7 @@
             });
         }
 
-            function initDropDowns() {
+        function initDropDowns() {
             $.ajax({
                 url: '/Management/GetAllAreasByUser',
                 type: 'POST',
@@ -350,16 +382,39 @@
                 }
 
             });
-             
+
         }
         $("#current_reading").change(function () {
-             
+
             previousReading = $('#previous_reading').val();
             currentReading = $('#current_reading').val();
             var unit = currentReading - previousReading;
             $('#current_unit').val(unit);
         });
 
+        function initApprovel() {
+            $.ajax({
+                url: '/Bill/ApproveReadingGas',
+                type: 'POST',
+                data: { readingGasId: _id, amount: gasrate },
+                success: function (response) {
+                    if (response) {
+                        if (response.resultCode == '1100') {
+                            initGasGrid();
+                            swal("Success", "Approved Successfully.", "success");
+                        }
+                        else {
+                            swal("Warning", response.remarks, "warning");
+                        }
+
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
+
+            });
+        }
     </script>
 
 }

@@ -990,6 +990,8 @@
     <Content Include="Views\Management\Resident.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\Recovery\RecoveryApproval.cshtml" />
+    <Content Include="Views\Bill\AdminGas.cshtml" />
+    <Content Include="Views\Recovery\RecoveryApprovalGas.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

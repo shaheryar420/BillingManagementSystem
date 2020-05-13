@@ -41,7 +41,11 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
-
+        [SetPermissions]
+        public ActionResult AdminGas()
+        {
+            return View();
+        }
         #endregion
         #region  Electric Reading
         public ActionResult AddReadingElectric()
@@ -264,8 +268,11 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-        public ActionResult ApproveReadingElectric([FromBody] ReadingGasRequestModel model)
+        public ActionResult ApproveReadingGas([FromBody] ReadingGasRequestModel model)
         {
+            string userId = Request.Cookies["bms_data"]["id"].ToString();
+            model.userId = userId;
+
             ReadingGasHelpers helper = new ReadingGasHelpers();
             var response = helper.ApproveReadingGas(model);
             var json = Json(response);

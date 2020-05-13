@@ -31,6 +31,11 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
+        public ActionResult RecoveryApprovalGas()
+        {
+            return View();
+        }
+        #region Electric
         public ActionResult AddPayment()
         {
             string _amount = Request.Form["_amount"].ToString();
@@ -76,5 +81,53 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        #endregion
+        #region Gas
+        public ActionResult AddPaymentGas()
+        {
+            string _amount = Request.Form["_amount"].ToString();
+            string _residentId = Request.Form["_residentId"].ToString();
+            string _month = Request.Form["_month"].ToString();
+
+            PaymentRequestModel model = new PaymentRequestModel()
+            {
+
+                paymentAmount = _amount,
+                residentId = _residentId,
+                paymentMonth = _month
+
+            };
+            RecoveryHelpers helper = new RecoveryHelpers();
+            var response = helper.AddPaymentGas(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        public ActionResult GetAllGasPayments()
+        {
+            RecoveryHelpers helper = new RecoveryHelpers();
+            var response = helper.GetAllGasPayments();
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult ApproveGasPayment(PaymentRequestModel model)
+        {
+            RecoveryHelpers helper = new RecoveryHelpers();
+            var response = helper.ApproveGasPayment(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult EditGasPayment(PaymentRequestModel model)
+        {
+            RecoveryHelpers helper = new RecoveryHelpers();
+            var response = helper.EditGasPayment(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        #endregion
     }
 }
