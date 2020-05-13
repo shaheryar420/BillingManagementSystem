@@ -328,14 +328,14 @@ namespace BillingManagementSystem.DataHelpers
                             var billPending = (from x in db.tbl_billelectric where x.fk_resident == payment.fk_resident && x.fk_paymentstatus == 2 select x).FirstOrDefault();
                             if (billPending != null)
                             {
-                                if (billPending.billelectric_outstanding == int.Parse(model.paymentAmount))
+                                if (billPending.billelectric_outstanding == payment.payment_amount)
                                 {
                                     billPending.fk_paymentstatus = 1;
                                     billPending.billelectric_outstanding = 0;
                                 }
                                 else
                                 {
-                                    billPending.billelectric_outstanding = billPending.billelectric_outstanding - int.Parse(model.paymentAmount);
+                                    billPending.billelectric_outstanding = billPending.billelectric_outstanding - payment.payment_amount;
                                 }
 
                                 db.SaveChanges();
@@ -408,14 +408,14 @@ namespace BillingManagementSystem.DataHelpers
                             var billPending = (from x in db.tbl_billgas where x.fk_resident == payment.fk_resident && x.fk_paymentstatus == 2 select x).FirstOrDefault();
                             if (billPending != null)
                             {
-                                if (billPending.outstanding == int.Parse(model.paymentAmount))
+                                if (billPending.outstanding == payment.payment_amount)
                                 {
                                     billPending.fk_paymentstatus = 1;
                                     billPending.outstanding = 0;
                                 }
                                 else
                                 {
-                                    billPending.outstanding = billPending.outstanding - int.Parse(model.paymentAmount);
+                                    billPending.outstanding = billPending.outstanding - payment.payment_amount;
                                 }
 
                                 db.SaveChanges();
