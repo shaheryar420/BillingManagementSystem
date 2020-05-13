@@ -28,46 +28,48 @@
             $(".datepick").datepicker({
                 format: "dd-mm-yyyy"
             });
-           //fetchResidentDetails(residentId);
+           fetchResidentDetails(residentId);
             initResidentDetails(residentId);
-           
+
         });
     </script>
     <script>
-        //function fetchResidentDetails(_id) {
-        //    if (_id) {
-        //        $.ajax({
-        //            url: '/Management/GetResidentById',
-        //            type: 'POST',
-        //            data: { residentId: _id },
-        //            success: function (response) {
-        //                if (response.resultCode == "1100") {
+        function fetchResidentDetails(_id) {
+            if (_id) {
+                $.ajax({
+                    url: '/Management/GetResidentById',
+                    type: 'POST',
+                    data: { residentId: _id },
+                    success: function (response) {
+                        if (response.resultCode == "1100") {
 
-        //                    $("#resident_pano").text(response.residentPaNumber);
-        //                    $("#resident_rank").text(response.residentRank);
-        //                    $("#resident_name").text(response.residentName);
-        //                    $("#resident_unit").text(response.residentUnit);
-        //                    $("#resident_Os").text(response.totatOutStandings);
-                            
-        //                }
-        //                else {
-        //                    swal('Warning', response.remarks, 'warning');
-        //                }
-        //            },
-        //            error: function (a, b, c) {
-        //                swal('Error', a + b + c, 'error');
-        //            }
+                            $("#resident_pano").text(response.residentPaNumber);
+                            $("#resident_rank").text(response.residentRank);
+                            $("#resident_name").text(response.residentName);
+                            $("#resident_unit").text(response.residentUnit);
+                            $("#resident_Os").text(response.totatOutStandings);
+                            $("#resident_area").text(response.areaName);
+                            $("#resident_location").text(response.locationName);
 
-        //        });
-        //    }
+                        }
+                        else {
+                            swal('Warning', response.remarks, 'warning');
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
 
-        //};
+                });
+            }
+
+        };
         function initResidentDetails(_id) {
             Dtable = $(".residentGrid").DataTable({
                 scrollX: true,
                 destroy: true,
                 "ajax": {
-                    "url": '/Management/GetResidentById',
+                    "url": '/ROR/GetAllRORElectricByResident',
                     "type": 'POST',
                     "data":
                     { residentId: _id },
@@ -76,15 +78,15 @@
                             return data;
                                 swal('Warning', data.resultCode, 'warning');
                                 console.log(data);
-                                
-                                
+
+
 
                             }
                             else {
                                 swal('Warning', data.remarks, 'warning');
                                 return [];
                             }
-                        
+
                         },
                         "error": function (a, b, c) {
                             swal({
@@ -93,10 +95,10 @@
                                 type: "error"
                             });
                         }
-                    
+
                 },
                 "columns": [
-                        
+
                         {
                             title: 'Sr. #',
                             render: function (data, type, row, meta) {
@@ -104,20 +106,26 @@
                             }
                         },
                         { "title": "Id", "data": "residentId", className: "hidden" },
-                        { "title": "PaNumber", "data": "residentPaNumber" },
-                        { "title": "Rank", "data": "residentRank" },
-                        { "title": "Name", "data": "residentName" },
-                        { "title": "Unit", "data": "residentUnit" },
-                        { "title": "Remarks", "data": "residentRemarks" },
-                        { "title": "Totat Out Standings", "data": "totatOutStandings" },
-                        { "title": "Out Standing", "data": "outstanding" },
-                        { "title": "Meter #", "data": "meterNo" },
-                        { "title": "Previous Reading", "data": "previousReading" },
+                        { "title": "Meter #", "data": "locationMeterNo" },
+                        { "title": "Billing Month", "data": "billElectricMonth" },
+                        { "title": "Location", "data": "locationName" },
+                        { "title": "Previous Reading", "data": "billElectricPrevReading" },
+                        { "title": "Present Reading", "data": "billElectricCurrentReading" },
+                        { "title": "Unit", "data": "billElectricUnits" },
+                        { "title": "Energy Charges", "data": "residentName" },
+                        { "title": "Amount", "data": "billElectricAmount" },
+                        { "title": "Water", "data": "billElectricWater" },
+                        { "title": "TV", "data": "billElectricTv" },
+                        { "title": "Picture", "data": "residentRemarks" },
+                        { "title": "Remarks", "data": "billElectricRemarks" },
+                        { "title": "Payment", "data": "residentRemarks" },
+                        { "title": "Payment Date", "data": "residentRemarks" },
+                        { "title": "Totat Out Standings", "data": "billElectricOutstanding" },                        
 
 
 
                     ]
-               
+
             });
             Dtable.columns.adjust();
             $("div.tableTop").addClass("pull-left");
@@ -139,31 +147,31 @@
                 <div class="panel-body text-center">
                     <p class="text-bold">
                         Area :
-                        <i class="text-uppercase" id="resident_area">Ares</i>
+                        <i class="text-uppercase" id="resident_area"></i>
                     </p>
                     <p class="text-bold">
                         Location :
-                        <i class="text-uppercase" id="resident_location">Building Flat #</i>
+                        <i class="text-uppercase" id="resident_location"></i>
                     </p>
                     <p class="text-bold">
                         Rank :
-                        <i class="text-uppercase"  id="resident_rank">Officer</i>
+                        <i class="text-uppercase" id="resident_rank"></i>
                     </p>
                     <p class="text-bold">
                         Name :
-                        <i class="text-uppercase" id="resident_name">XYZ</i>
+                        <i class="text-uppercase" id="resident_name"></i>
                     </p>
                     <p class="text-bold">
                         PA No. :
-                        <i class="text-uppercase" id="resident_pano">12-12313123</i>
+                        <i class="text-uppercase" id="resident_pano"></i>
                     </p>
                     <p class="text-bold">
                         Unit / FMN :
-                        <i class="text-uppercase" id="resident_unit">FMN</i>
+                        <i class="text-uppercase" id="resident_unit"></i>
                     </p>
                     <p class="text-bold">
                         Total Outstanding :
-                        <span id="resident_Os">  /-Rs</span>
+                        <span id="resident_Os"></span>
                     </p>
                     <button id="btnEditDetails" class="btn btn-primary">Edit Resident Details</button>
                     <button id="btnEditLocation" class="btn btn-warning">Create Vocation</button>
@@ -171,77 +179,77 @@
             </div>
         </div>
         <div class="col-md-8">
-                <div class="tab-base">
-                    <ul class="nav nav-tabs">
-                        <li class="active">
-                            <a href="#tab0" data-toggle="tab" aria-expanded="true">Electric Bill</a>
-                        </li>
-                        <li>
-                            <a href="#tab1" data-toggle="tab" aria-expanded="true">Gas Bill</a>
-                        </li>
-                        <li>
-                            <a href="#tab2" data-toggle="tab" aria-expanded="true">Wapda Bill</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="tab0" class="tab-pane fade active in">
-                            <div class="row">
-                                <div class="col-md-3 pull-right">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" />
-                                            <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
-                                        </div>
+            <div class="tab-base">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab0" data-toggle="tab" aria-expanded="true">Electric Bill</a>
+                    </li>
+                    <li>
+                        <a href="#tab1" data-toggle="tab" aria-expanded="true">Gas Bill</a>
+                    </li>
+                    <li>
+                        <a href="#tab2" data-toggle="tab" aria-expanded="true">Wapda Bill</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab0" class="tab-pane fade active in">
+                        <div class="row">
+                            <div class="col-md-3 pull-right">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" />
+                                        <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
                                     </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <table class="table table-bordered table-striped table-hover residentGrid"></table>
-
-                                    @*<tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Units</th><th>Energy Charges</th><th>Amount</th><th>Water</th><th>TV</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>*@
-
                                 </div>
                             </div>
-                        </div>
-                        <div id="tab2" class="tab-pane fade">
-                            <div class="row">
-                                <div class="col-md-3 pull-right">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" />
-                                            <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <table class="table table-bordered table-responsive table-hover grid">
-                                        <thead>
-                                            <tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Units</th><th>Energy Charges</th><th>Amount</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>
-                                        </thead>
-                                    </table>
-                                </div>
+                            <div class="col-md-12">
+                                <table class="table table-bordered table-striped table-hover residentGrid"></table>
+
+                                @*<tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Units</th><th>Energy Charges</th><th>Amount</th><th>Water</th><th>TV</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>*@
+
                             </div>
                         </div>
-                        <div id="tab1" class="tab-pane fade">
-                            <div class="row">
-                                <div class="col-md-3 pull-right">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" />
-                                            <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
-                                        </div>
+                    </div>
+                    <div id="tab2" class="tab-pane fade">
+                        <div class="row">
+                            <div class="col-md-3 pull-right">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" />
+                                        <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <table class="table table-bordered table-responsive table-hover grid">
-                                        <thead>
-                                            <tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Difference</th><th>MM BTU</th><th>M/Rent</th><th>Amount</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>
-                                        </thead>
-                                    </table>
+                            </div>
+                            <div class="col-md-12">
+                                <table class="table table-bordered table-responsive table-hover grid">
+                                    <thead>
+                                        <tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Units</th><th>Energy Charges</th><th>Amount</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab1" class="tab-pane fade">
+                        <div class="row">
+                            <div class="col-md-3 pull-right">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" value="" placeholder="Select Month" class="form-control monthPicker" />
+                                        <span class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="col-md-12">
+                                <table class="table table-bordered table-responsive table-hover grid">
+                                    <thead>
+                                        <tr><th>Sr.</th><th>Meter #</th><th>Billing Month</th><th>Location</th><th>Previous Reading</th><th>Present Reading</th><th>Difference</th><th>MM BTU</th><th>M/Rent</th><th>Amount</th><th>Picture</th><th>Remarks</th><th>Payment</th><th>Payment Date</th></tr>
+                                    </thead>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
     </div>
 </div>
