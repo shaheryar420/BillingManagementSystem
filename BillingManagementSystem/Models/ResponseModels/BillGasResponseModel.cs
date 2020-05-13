@@ -8,6 +8,9 @@ namespace BillingManagementSystem.Models
     public class BillGasResponseModel
     {
         public string billGasId { get; set; }
+        public string gasCharges { get; set; }
+        public string payment { get; set; }
+        public string paymentMonth { get; set; }
         public string billGasDateTime { get; set; }
         public string billGasAmount { get; set; }
         public string fk_paymentStatus { get; set; }

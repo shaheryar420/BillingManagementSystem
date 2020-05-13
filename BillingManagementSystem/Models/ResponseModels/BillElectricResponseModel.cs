@@ -35,5 +35,8 @@ namespace BillingManagementSystem.Models
         public string residentUnit { get; set; }
         public string locationName { get; set; }
         public string locationMeterNo { get; set; }
+        public string electricCharges { get; set; }
+        public string payment { get; set; }
+        public string paymentMonth { get; set; }
     }
 }

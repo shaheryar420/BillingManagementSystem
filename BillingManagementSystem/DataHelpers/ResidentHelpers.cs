@@ -288,6 +288,21 @@ namespace BillingManagementSystem.DataHelpers
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             };
+                            var billElectric = (from x in db.tbl_billelectric where x.fk_paymentstatus == 2 select x).FirstOrDefault();
+                            var billGas = (from x in db.tbl_billgas where x.fk_paymentstatus == 2 select x).FirstOrDefault();
+                            toReturn.totatOutStandings = "0";
+                            double totalOutStandings =0;
+                            if ( billElectric != null)
+                            {
+                                var electricOutstanding = billElectric.billelectric_outstanding.ToString();
+                                 totalOutStandings = totalOutStandings + double.Parse(electricOutstanding);
+                            }
+                            if( billGas != null)
+                            {
+                                var gasOutstanding = billGas.outstanding.ToString();
+                                totalOutStandings = totalOutStandings + double.Parse(gasOutstanding);
+                            }
+                            toReturn.totatOutStandings = totalOutStandings.ToString();
                         }
                         else
                         {

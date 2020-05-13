@@ -1165,21 +1165,22 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public BillElectricResponseModel GetAllRORElectricByResidentID(BillElectricRequestModel model)
+        public List<BillElectricResponseModel> GetAllRORElectricByResidentId(BillElectricRequestModel model)
         {
-            BillElectricResponseModel toReturn = new BillElectricResponseModel();
+            List<BillElectricResponseModel> toReturn = new List<BillElectricResponseModel>();
             try
             {
-                if (!string.IsNullOrEmpty(model.residentName))
+                if (new ModelsValidatorHelper().validateint(model.fk_resident))
                 {
+                    int residentId = int.Parse(model.fk_resident);
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var billElectric = (from x in db.tbl_billelectric
+                        var billsElectric = (from x in db.tbl_billelectric
                                              join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                              join l in db.tbl_location on x.fk_location equals l.location_id
-                                             where z.resident_name == model.residentName
+                                             where z.resident_id == residentId
                                              select new
                                              {
                                                  x.billelectric_amount,
@@ -1208,10 +1209,11 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_unit,
                                                  l.location_name,
                                                  l.location_electricmeter
-                                             }).FirstOrDefault();
-                        if (billElectric!= null)
+                                             }).ToList();
+                        if (billsElectric.Count() > 0)
                         {
-                            toReturn = new BillElectricResponseModel()
+                            var fixedRatesElectric = (from x in db.tbl_fixedrates where x.fixedrates_name == "Electric Charges" select x.fixedrates_amount).FirstOrDefault();
+                            toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
                                 paymentStatusName = billElectric.paymentstatus_name,
                                 billElectricAmount = billElectric.billelectric_amount.ToString(),
@@ -1236,42 +1238,51 @@ namespace BillingManagementSystem.DataHelpers
                                 locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
                                 locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
                                 fk_billPicture = billElectric.fk_billpicture.ToString(),
+                                electricCharges = fixedRatesElectric.ToString(),
                                 fk_location = billElectric.fk_location.ToString(),
                                 fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
                                 fk_resident = billElectric.fk_resident.ToString(),
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
-                            };
+                            }).ToList();
+                            foreach (var bill in toReturn)
+                            {
+                                var month = new MonthFinderHelpers().GetNextMonth(bill.billElectricMonth);
+                                var payment = (from x in db.tbl_residentpayments where x.paymentmonth == month && x.fk_resident == residentId select x).FirstOrDefault();
+                                bill.payment = payment.payment_amount.ToString();
+                                bill.paymentMonth = payment.paymentmonth;
+                            }
                         }
                         else
                         {
-                            toReturn= new BillElectricResponseModel()
+                            toReturn.Add(new BillElectricResponseModel()
                             {
                                 remarks = "No Record Found",
                                 resultCode = "1200"
-                            };
+                            });
                         }
                     }
                 }
                 else
                 {
-                    toReturn= new BillElectricResponseModel()
+                    toReturn.Add(new BillElectricResponseModel()
                     {
                         remarks = "Please Provide Resident",
                         resultCode = "1300"
-                    };
+                    });
                 }
             }
             catch (Exception Ex)
             {
-                toReturn = new BillElectricResponseModel()
+                toReturn.Add(new BillElectricResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
-                };
+                });
             }
             return toReturn;
         }
+
         #endregion
         #region ROR Gas
         public List<BillGasResponseModel> GetAllBillGasByPaymentStatus(BillGasRequestModel model)
@@ -1960,50 +1971,52 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public BillGasResponseModel GetAllRORGasByResidentId(BillGasRequestModel model)
+        public List<BillGasResponseModel> GetAllRORGasByResidentId(BillGasRequestModel model)
         {
-            BillGasResponseModel toReturn = new BillGasResponseModel();
+            List<BillGasResponseModel> toReturn = new List<BillGasResponseModel>();
             try
             {
-                if (!string.IsNullOrEmpty(model.residentName))
+                if (new ModelsValidatorHelper().validateint(model.fk_resident))
                 {
+                    int residentId = int.Parse(model.fk_resident);
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var billGas = (from x in db.tbl_billgas
-                                       join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
-                                       join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
-                                       join z in db.tbl_residents on x.fk_resident equals z.resident_id
-                                       join l in db.tbl_location on x.fk_location equals l.location_id
-                                       where z.resident_name == model.residentName
-                                       select new
-                                       {
-                                           x.amount,
-                                           x.currentreading,
-                                           x.datetime,
-                                           x.id,
-                                           x.month,
-                                           x.outstanding,
-                                           x.prevreading,
-                                           x.remarks,
-                                           x.units,
-                                           x.fk_location,
-                                           x.fk_paymentstatus,
-                                           x.fk_resident,
-                                           x.fk_billpicture,
-                                           y.billpicture_date,
-                                           y.billpicture_size,
-                                           y.billpicture_type,
-                                           z.resident_name,
-                                           z.resident_panumber,
-                                           z.resident_rank,
-                                           z.resident_remarks,
-                                           z.resident_unit,
-                                           l.location_name,
-                                           l.location_gassmeter
-                                       }).FirstOrDefault();
-                        if (billGas!= null)
+                        var billsGas = (from x in db.tbl_billgas
+                                        join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
+                                        join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
+                                        join z in db.tbl_residents on x.fk_resident equals z.resident_id
+                                        join l in db.tbl_location on x.fk_location equals l.location_id
+                                        where z.resident_id == residentId
+                                        select new
+                                        {
+                                            x.amount,
+                                            x.currentreading,
+                                            x.datetime,
+                                            x.id,
+                                            x.month,
+                                            x.outstanding,
+                                            x.prevreading,
+                                            x.remarks,
+                                            x.units,
+                                            x.fk_location,
+                                            x.fk_paymentstatus,
+                                            x.fk_resident,
+                                            x.fk_billpicture,
+                                            y.billpicture_date,
+                                            y.billpicture_size,
+                                            y.billpicture_type,
+                                            z.resident_name,
+                                            z.resident_panumber,
+                                            z.resident_rank,
+                                            z.resident_remarks,
+                                            z.resident_unit,
+                                            l.location_name,
+                                            l.location_gassmeter
+                                        }).ToList();
+                        if (billsGas.Count() > 0)
                         {
-                            toReturn = new BillGasResponseModel()
+                            var fixedRatesGas = (from x in db.tbl_fixedrates where x.fixedrates_name == "Gas Charges" select x.fixedrates_amount).FirstOrDefault();
+                            toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
                                 billGasAmount = billGas.amount.ToString(),
                                 billGasCurrentReading = billGas.currentreading.ToString(),
@@ -2027,37 +2040,45 @@ namespace BillingManagementSystem.DataHelpers
                                 fk_billPicture = billGas.fk_billpicture.ToString(),
                                 fk_location = billGas.fk_location.ToString(),
                                 fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
+                                gasCharges = fixedRatesGas.ToString(),
                                 fk_resident = billGas.fk_resident.ToString(),
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
-                            };
+                            }).ToList();
+                            foreach(var bill in toReturn)
+                            {
+                                var month = new MonthFinderHelpers().GetNextMonth(bill.billGasMonth);
+                                var payment = (from x in db.tbl_residentpayments where x.paymentmonth == month && x.fk_resident == residentId select x).FirstOrDefault();
+                                bill.payment = payment.payment_amount.ToString();
+                                bill.paymentMonth = payment.paymentmonth;
+                            }
                         }
                         else
                         {
-                            toReturn= new BillGasResponseModel()
+                            toReturn.Add(new BillGasResponseModel()
                             {
                                 resultCode = "1200",
                                 remarks = "No Record Found"
-                            };
+                            });
                         }
                     }
                 }
                 else
                 {
-                    toReturn =new BillGasResponseModel()
+                    toReturn.Add(new BillGasResponseModel()
                     {
                         remarks = "Please Provide Resident",
                         resultCode = "1300"
-                    };
+                    });
                 }
             }
             catch (Exception Ex)
             {
-                toReturn= new BillGasResponseModel()
+                toReturn.Add(new BillGasResponseModel()
                 {
                     remarks = "There Was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
-                };
+                });
             }
             return toReturn;
         }

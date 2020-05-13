@@ -23,6 +23,22 @@ namespace BillingManagementSystem.DataHelpers
             }
             return month > 9 ? month + "-" + year : "0" + month + "-" + year;
         }
+        public string GetNextMonth(string x)
+        {
+            string[] monthYear = x.Split('_');
+            int month = int.Parse(monthYear[0]);
+            int year = int.Parse(monthYear[1]);
+            if (month == 12)
+            {
+                month = 1;
+                year = year + 1;
+            }
+            else
+            {
+                month = month + 1;
+            }
+            return month > 9 ? month + "-" + year : "0" + month + "-" + year;
+        }
         public string GetCurrentMonth()
         {
             DateTime currentDate = DateTime.UtcNow.AddHours(5);
