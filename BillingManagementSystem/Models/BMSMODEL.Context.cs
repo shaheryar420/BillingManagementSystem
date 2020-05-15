@@ -27,29 +27,30 @@ namespace BillingManagementSystem.Models
     
         public DbSet<tbl_action> tbl_action { get; set; }
         public DbSet<tbl_area> tbl_area { get; set; }
+        public DbSet<tbl_billelectric> tbl_billelectric { get; set; }
+        public DbSet<tbl_billgas> tbl_billgas { get; set; }
         public DbSet<tbl_billpicture> tbl_billpicture { get; set; }
         public DbSet<tbl_controller> tbl_controller { get; set; }
         public DbSet<tbl_fixedrates> tbl_fixedrates { get; set; }
         public DbSet<tbl_fixedratetype> tbl_fixedratetype { get; set; }
         public DbSet<tbl_location> tbl_location { get; set; }
+        public DbSet<tbl_paymentgashistory> tbl_paymentgashistory { get; set; }
+        public DbSet<tbl_paymenthistory> tbl_paymenthistory { get; set; }
         public DbSet<tbl_paymentstatus> tbl_paymentstatus { get; set; }
         public DbSet<tbl_paymenttype> tbl_paymenttype { get; set; }
         public DbSet<tbl_readingelectric> tbl_readingelectric { get; set; }
         public DbSet<tbl_readingelectriclog> tbl_readingelectriclog { get; set; }
+        public DbSet<tbl_readinggas> tbl_readinggas { get; set; }
+        public DbSet<tbl_readinggaslog> tbl_readinggaslog { get; set; }
         public DbSet<tbl_readingpicture> tbl_readingpicture { get; set; }
         public DbSet<tbl_residentbuilding> tbl_residentbuilding { get; set; }
         public DbSet<tbl_residenthistory> tbl_residenthistory { get; set; }
+        public DbSet<tbl_residentpayments> tbl_residentpayments { get; set; }
         public DbSet<tbl_residents> tbl_residents { get; set; }
+        public DbSet<tbl_subarea> tbl_subarea { get; set; }
         public DbSet<tbl_userareas> tbl_userareas { get; set; }
         public DbSet<tbl_userpermissions> tbl_userpermissions { get; set; }
         public DbSet<tbl_users> tbl_users { get; set; }
         public DbSet<tbl_usertype> tbl_usertype { get; set; }
-        public DbSet<tbl_paymenthistory> tbl_paymenthistory { get; set; }
-        public DbSet<tbl_readinggas> tbl_readinggas { get; set; }
-        public DbSet<tbl_readinggaslog> tbl_readinggaslog { get; set; }
-        public DbSet<tbl_paymentgashistory> tbl_paymentgashistory { get; set; }
-        public DbSet<tbl_residentpayments> tbl_residentpayments { get; set; }
-        public DbSet<tbl_billelectric> tbl_billelectric { get; set; }
-        public DbSet<tbl_billgas> tbl_billgas { get; set; }
     }
 }

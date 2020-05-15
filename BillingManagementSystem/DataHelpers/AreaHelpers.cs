@@ -17,14 +17,14 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     if (!string.IsNullOrEmpty(model.areaName))
                     {
-                        var existingArea = (from x in db.tbl_area where x.area_name == model.areaName select x).FirstOrDefault();
+                        var existingArea = (from x in db.tbl_subarea where x.subarea_name == model.areaName select x).FirstOrDefault();
                         if (existingArea == null)
                         {
-                            var area = new tbl_area()
+                            var area = new tbl_subarea()
                             {
-                                area_name = model.areaName
+                                subarea_name = model.areaName
                             };
-                            db.tbl_area.Add(area);
+                            db.tbl_subarea.Add(area);
                             db.SaveChanges();
                             toReturn = new AreaResponseModel()
                             {
@@ -71,13 +71,13 @@ namespace BillingManagementSystem.DataHelpers
                     if (new ModelsValidatorHelper().validateint(model.areaId))
                     {
                         int areaId = int.Parse(model.areaId);
-                        var area = (from x in db.tbl_area where x.area_id == areaId select x).FirstOrDefault();
+                        var area = (from x in db.tbl_subarea where x.subarea_id == areaId select x).FirstOrDefault();
                         if (area != null)
                         {
-                            var existingArea = new tbl_area();
+                            var existingArea = new tbl_subarea();
                             if(!string.IsNullOrEmpty(model.areaName))
                             {
-                                existingArea = (from x in db.tbl_area where x.area_name == model.areaName && x.area_id!= areaId select x).FirstOrDefault(); 
+                                existingArea = (from x in db.tbl_subarea where x.subarea_name == model.areaName && x.subarea_id!= areaId select x).FirstOrDefault(); 
                             }
                             else
                             {
@@ -85,7 +85,7 @@ namespace BillingManagementSystem.DataHelpers
                             }
                             if (existingArea == null)
                             {
-                                area.area_name = !string.IsNullOrEmpty(model.areaName) ? model.areaName : area.area_name;
+                                area.subarea_name = !string.IsNullOrEmpty(model.areaName) ? model.areaName : area.subarea_name;
                                 db.SaveChanges();
                                 toReturn = new AreaResponseModel()
                                 {
@@ -141,10 +141,10 @@ namespace BillingManagementSystem.DataHelpers
                     if (new ModelsValidatorHelper().validateint(model.areaId))
                     {
                         int areaId = int.Parse(model.areaId);
-                        var area = (from x in db.tbl_area where x.area_id == areaId select x).FirstOrDefault();
+                        var area = (from x in db.tbl_subarea where x.subarea_id == areaId select x).FirstOrDefault();
                         if (area != null)
                         {
-                            db.tbl_area.Remove(area);
+                            db.tbl_subarea.Remove(area);
                             db.SaveChanges();
                             toReturn = new AreaResponseModel()
                             {
@@ -191,16 +191,16 @@ namespace BillingManagementSystem.DataHelpers
                     if (new ModelsValidatorHelper().validateint(model.areaId))
                     {
                         int areaId = int.Parse(model.areaId);
-                        var area = (from x in db.tbl_area
-                                    where x.area_id == areaId
+                        var area = (from x in db.tbl_subarea
+                                    where x.subarea_id == areaId
                                     select x
                                     ).FirstOrDefault();
                         if (area != null)
                         {
                             toReturn = new AreaResponseModel()
                             {
-                                areaId = area.area_id.ToString(),
-                                areaName = !string.IsNullOrEmpty(area.area_name)?area.area_name:"",
+                                areaId = area.subarea_id.ToString(),
+                                areaName = !string.IsNullOrEmpty(area.subarea_name)?area.subarea_name:"",
                                 remarks = "Area Found SuccessFully",
                                 resultCode = "1100"
                             };
@@ -241,13 +241,13 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    var areas = (from x in db.tbl_area select x).ToList();
+                    var areas = (from x in db.tbl_subarea select x).ToList();
                     if (areas.Count() > 0)
                     {
                         toReturn = areas.Select(area => new AreaResponseModel()
                         {
-                            areaId = area.area_id.ToString(),
-                            areaName = !string.IsNullOrEmpty(area.area_name) ? area.area_name : "",
+                            areaId = area.subarea_id.ToString(),
+                            areaName = !string.IsNullOrEmpty(area.subarea_name) ? area.subarea_name : "",
                             remarks = "Area Found SuccessFully",
                             resultCode = "1100"
                         }).ToList();
@@ -280,16 +280,16 @@ namespace BillingManagementSystem.DataHelpers
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
                     int userId = int.Parse(model.userId);
-                    var areas = (from x in db.tbl_area 
-                                 join y in db.tbl_userareas on x.area_id equals y.fk_area
+                    var areas = (from x in db.tbl_subarea
+                                 join y in db.tbl_userareas on x.subarea_id equals y.fk_subarea
                                  where y.fk_user == userId
                                  select x).ToList();
                     if (areas.Count() > 0)
                     {
                         toReturn = areas.Select(area => new AreaResponseModel()
                         {
-                            areaId = area.area_id.ToString(),
-                            areaName = !string.IsNullOrEmpty(area.area_name) ? area.area_name : "",
+                            areaId = area.subarea_id.ToString(),
+                            areaName = !string.IsNullOrEmpty(area.subarea_name) ? area.subarea_name : "",
                             remarks = "Area Found SuccessFully",
                             resultCode = "1100"
                         }).ToList();

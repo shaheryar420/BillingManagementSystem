@@ -155,6 +155,7 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult ApproveReadingElectric([FromBody] ReadingElectricRequestModel model)
         {
+            model.userId = Request.Cookies["bms_data"]["id"].ToString();
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
             var response = helper.ApproveReadingElectric(model);
             var json = Json(response);

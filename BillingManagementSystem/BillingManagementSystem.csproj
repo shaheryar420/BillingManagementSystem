@@ -899,6 +899,9 @@
     <Compile Include="Models\tbl_residents.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tbl_subarea.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl_userareas.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>

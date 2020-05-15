@@ -12,10 +12,10 @@ namespace BillingManagementSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tbl_userareas
+    public partial class tbl_subarea
     {
-        public int userareas_id { get; set; }
-        public int fk_user { get; set; }
-        public int fk_subarea { get; set; }
+        public int subarea_id { get; set; }
+        public string subarea_name { get; set; }
+        public int fk_area { get; set; }
     }
 }

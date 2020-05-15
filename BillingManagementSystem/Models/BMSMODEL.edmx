@@ -98,7 +98,7 @@
           </Key>
           <Property Name="location_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="location_name" Type="varchar" MaxLength="400" />
-          <Property Name="fk_area" Type="int" Nullable="false" />
+          <Property Name="fk_subarea" Type="int" Nullable="false" />
           <Property Name="location_electricmeter" Type="varchar" MaxLength="45" />
           <Property Name="location_gassmeter" Type="varchar" MaxLength="45" />
           <Property Name="location_wapdameter" Type="varchar" MaxLength="45" />
@@ -252,13 +252,21 @@
           <Property Name="resident_unit" Type="varchar" MaxLength="400" />
           <Property Name="resident_remarks" Type="varchar" MaxLength="400" />
         </EntityType>
+        <EntityType Name="tbl_subarea">
+          <Key>
+            <PropertyRef Name="subarea_id" />
+          </Key>
+          <Property Name="subarea_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="subarea_name" Type="varchar" MaxLength="45" />
+          <Property Name="fk_area" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="tbl_userareas">
           <Key>
             <PropertyRef Name="userareas_id" />
           </Key>
           <Property Name="userareas_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fk_user" Type="int" Nullable="false" />
-          <Property Name="fk_area" Type="int" Nullable="false" />
+          <Property Name="fk_subarea" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_userpermissions">
           <Key>
@@ -311,6 +319,7 @@
           <EntitySet Name="tbl_residenthistory" EntityType="Self.tbl_residenthistory" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_residentpayments" EntityType="Self.tbl_residentpayments" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_residents" EntityType="Self.tbl_residents" Schema="db_bms" store:Type="Tables" />
+          <EntitySet Name="tbl_subarea" EntityType="Self.tbl_subarea" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_userareas" EntityType="Self.tbl_userareas" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_userpermissions" EntityType="Self.tbl_userpermissions" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_users" EntityType="Self.tbl_users" Schema="db_bms" store:Type="Tables" />
@@ -320,6 +329,35 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="db_bmsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="db_bmsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_action" EntityType="db_bmsModel.tbl_action" />
+          <EntitySet Name="tbl_area" EntityType="db_bmsModel.tbl_area" />
+          <EntitySet Name="tbl_billelectric" EntityType="db_bmsModel.tbl_billelectric" />
+          <EntitySet Name="tbl_billgas" EntityType="db_bmsModel.tbl_billgas" />
+          <EntitySet Name="tbl_billpicture" EntityType="db_bmsModel.tbl_billpicture" />
+          <EntitySet Name="tbl_controller" EntityType="db_bmsModel.tbl_controller" />
+          <EntitySet Name="tbl_fixedrates" EntityType="db_bmsModel.tbl_fixedrates" />
+          <EntitySet Name="tbl_fixedratetype" EntityType="db_bmsModel.tbl_fixedratetype" />
+          <EntitySet Name="tbl_location" EntityType="db_bmsModel.tbl_location" />
+          <EntitySet Name="tbl_paymentgashistory" EntityType="db_bmsModel.tbl_paymentgashistory" />
+          <EntitySet Name="tbl_paymenthistory" EntityType="db_bmsModel.tbl_paymenthistory" />
+          <EntitySet Name="tbl_paymentstatus" EntityType="db_bmsModel.tbl_paymentstatus" />
+          <EntitySet Name="tbl_paymenttype" EntityType="db_bmsModel.tbl_paymenttype" />
+          <EntitySet Name="tbl_readingelectric" EntityType="db_bmsModel.tbl_readingelectric" />
+          <EntitySet Name="tbl_readingelectriclog" EntityType="db_bmsModel.tbl_readingelectriclog" />
+          <EntitySet Name="tbl_readinggas" EntityType="db_bmsModel.tbl_readinggas" />
+          <EntitySet Name="tbl_readinggaslog" EntityType="db_bmsModel.tbl_readinggaslog" />
+          <EntitySet Name="tbl_readingpicture" EntityType="db_bmsModel.tbl_readingpicture" />
+          <EntitySet Name="tbl_residentbuilding" EntityType="db_bmsModel.tbl_residentbuilding" />
+          <EntitySet Name="tbl_residenthistory" EntityType="db_bmsModel.tbl_residenthistory" />
+          <EntitySet Name="tbl_residentpayments" EntityType="db_bmsModel.tbl_residentpayments" />
+          <EntitySet Name="tbl_residents" EntityType="db_bmsModel.tbl_residents" />
+          <EntitySet Name="tbl_subarea" EntityType="db_bmsModel.tbl_subarea" />
+          <EntitySet Name="tbl_userareas" EntityType="db_bmsModel.tbl_userareas" />
+          <EntitySet Name="tbl_userpermissions" EntityType="db_bmsModel.tbl_userpermissions" />
+          <EntitySet Name="tbl_users" EntityType="db_bmsModel.tbl_users" />
+          <EntitySet Name="tbl_usertype" EntityType="db_bmsModel.tbl_usertype" />
+        </EntityContainer>
         <EntityType Name="tbl_action">
           <Key>
             <PropertyRef Name="action_id" />
@@ -334,6 +372,44 @@
           </Key>
           <Property Name="area_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="area_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tbl_billelectric">
+          <Key>
+            <PropertyRef Name="billelectric_id" />
+          </Key>
+          <Property Name="billelectric_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="billelectric_datetime" Type="DateTime" Nullable="false" />
+          <Property Name="billelectric_amount" Type="Double" Nullable="false" />
+          <Property Name="fk_paymentstatus" Type="Int32" Nullable="false" />
+          <Property Name="fk_location" Type="Int32" Nullable="false" />
+          <Property Name="fk_resident" Type="Int32" Nullable="false" />
+          <Property Name="billelectric_prevreading" Type="Double" Nullable="false" />
+          <Property Name="billelectric_currentreading" Type="Double" Nullable="false" />
+          <Property Name="billelectric_units" Type="Double" Nullable="false" />
+          <Property Name="billelectric_water" Type="Double" Nullable="false" />
+          <Property Name="billelectric_tv" Type="Double" Nullable="false" />
+          <Property Name="billelectric_remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="fk_billpicture" Type="Int32" />
+          <Property Name="billelectric_month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="billelectric_outstanding" Type="Double" />
+        </EntityType>
+        <EntityType Name="tbl_billgas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="datetime" Type="DateTime" Nullable="false" />
+          <Property Name="amount" Type="Double" Nullable="false" />
+          <Property Name="fk_paymentstatus" Type="Int32" Nullable="false" />
+          <Property Name="fk_location" Type="Int32" Nullable="false" />
+          <Property Name="fk_resident" Type="Int32" Nullable="false" />
+          <Property Name="prevreading" Type="Double" Nullable="false" />
+          <Property Name="currentreading" Type="Double" Nullable="false" />
+          <Property Name="units" Type="Double" Nullable="false" />
+          <Property Name="remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="fk_billpicture" Type="Int32" />
+          <Property Name="month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="outstanding" Type="Double" />
         </EntityType>
         <EntityType Name="tbl_billpicture">
           <Key>
@@ -375,10 +451,32 @@
           </Key>
           <Property Name="location_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="location_name" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
-          <Property Name="fk_area" Type="Int32" Nullable="false" />
+          <Property Name="fk_subarea" Type="Int32" Nullable="false" />
           <Property Name="location_electricmeter" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="location_gassmeter" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="location_wapdameter" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tbl_paymentgashistory">
+          <Key>
+            <PropertyRef Name="paymenthistory_id" />
+          </Key>
+          <Property Name="paymenthistory_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="paymenthistory_datetime" Type="DateTime" Nullable="false" />
+          <Property Name="payment_amount" Type="Double" Nullable="false" />
+          <Property Name="fk_paymenttype" Type="Int32" Nullable="false" />
+          <Property Name="paymentmonth" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="fk_resident" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_paymenthistory">
+          <Key>
+            <PropertyRef Name="paymenthistory_id" />
+          </Key>
+          <Property Name="paymenthistory_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="paymenthistory_datetime" Type="DateTime" Nullable="false" />
+          <Property Name="payment_amount" Type="Double" Nullable="false" />
+          <Property Name="fk_paymenttype" Type="Int32" Nullable="false" />
+          <Property Name="paymentmonth" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="fk_resident" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_paymentstatus">
           <Key>
@@ -425,120 +523,6 @@
           <Property Name="readingelectriclog_archivedon" Type="DateTime" Nullable="false" />
           <Property Name="readingelectriclog_archivedby" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="tbl_readingpicture">
-          <Key>
-            <PropertyRef Name="readingpicture_id" />
-          </Key>
-          <Property Name="readingpicture_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="readingpicture_data" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
-          <Property Name="readingpicture_type" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="readingpicture_size" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tbl_residentbuilding">
-          <Key>
-            <PropertyRef Name="residentbuilding_id" />
-          </Key>
-          <Property Name="residentbuilding_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fk_resident" Type="Int32" Nullable="false" />
-          <Property Name="fk_building" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tbl_residenthistory">
-          <Key>
-            <PropertyRef Name="residenthistory_id" />
-          </Key>
-          <Property Name="residenthistory_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fk_resident" Type="Int32" Nullable="false" />
-          <Property Name="fk_location" Type="Int32" Nullable="false" />
-          <Property Name="residenthistory_dateofoccupation" Type="DateTime" Nullable="false" />
-          <Property Name="residenthistory_dateofvocation" Type="DateTime" Nullable="false" />
-          <Property Name="meter_no" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="tbl_residents">
-          <Key>
-            <PropertyRef Name="resident_id" />
-          </Key>
-          <Property Name="resident_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="resident_panumber" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="resident_rank" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
-          <Property Name="resident_name" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
-          <Property Name="resident_unit" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
-          <Property Name="resident_remarks" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="tbl_userareas">
-          <Key>
-            <PropertyRef Name="userareas_id" />
-          </Key>
-          <Property Name="userareas_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fk_user" Type="Int32" Nullable="false" />
-          <Property Name="fk_area" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tbl_userpermissions">
-          <Key>
-            <PropertyRef Name="userpermissions_id" />
-          </Key>
-          <Property Name="userpermissions_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fk_action" Type="Int32" />
-          <Property Name="fk_user" Type="Int32" />
-          <Property Name="userpermissions_action" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="userpermissions_controller" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="tbl_users">
-          <Key>
-            <PropertyRef Name="users_id" />
-          </Key>
-          <Property Name="users_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="users_username" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="users_fullname" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="users_password" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="fk_usertype" Type="Int32" Nullable="false" />
-          <Property Name="users_isActive" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tbl_usertype">
-          <Key>
-            <PropertyRef Name="usertype_id" />
-          </Key>
-          <Property Name="usertype_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="usertype_name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityContainer Name="db_bmsEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="tbl_action" EntityType="Self.tbl_action" />
-          <EntitySet Name="tbl_area" EntityType="Self.tbl_area" />
-          <EntitySet Name="tbl_billpicture" EntityType="Self.tbl_billpicture" />
-          <EntitySet Name="tbl_controller" EntityType="Self.tbl_controller" />
-          <EntitySet Name="tbl_fixedrates" EntityType="Self.tbl_fixedrates" />
-          <EntitySet Name="tbl_fixedratetype" EntityType="Self.tbl_fixedratetype" />
-          <EntitySet Name="tbl_location" EntityType="Self.tbl_location" />
-          <EntitySet Name="tbl_paymentstatus" EntityType="Self.tbl_paymentstatus" />
-          <EntitySet Name="tbl_paymenttype" EntityType="Self.tbl_paymenttype" />
-          <EntitySet Name="tbl_readingelectric" EntityType="Self.tbl_readingelectric" />
-          <EntitySet Name="tbl_readingelectriclog" EntityType="Self.tbl_readingelectriclog" />
-          <EntitySet Name="tbl_readingpicture" EntityType="Self.tbl_readingpicture" />
-          <EntitySet Name="tbl_residentbuilding" EntityType="Self.tbl_residentbuilding" />
-          <EntitySet Name="tbl_residenthistory" EntityType="Self.tbl_residenthistory" />
-          <EntitySet Name="tbl_residents" EntityType="Self.tbl_residents" />
-          <EntitySet Name="tbl_userareas" EntityType="Self.tbl_userareas" />
-          <EntitySet Name="tbl_userpermissions" EntityType="Self.tbl_userpermissions" />
-          <EntitySet Name="tbl_users" EntityType="Self.tbl_users" />
-          <EntitySet Name="tbl_usertype" EntityType="Self.tbl_usertype" />
-          <EntitySet Name="tbl_paymenthistory" EntityType="db_bmsModel.tbl_paymenthistory" />
-          <EntitySet Name="tbl_readinggas" EntityType="db_bmsModel.tbl_readinggas" />
-          <EntitySet Name="tbl_readinggaslog" EntityType="db_bmsModel.tbl_readinggaslog" />
-          <EntitySet Name="tbl_paymentgashistory" EntityType="db_bmsModel.tbl_paymentgashistory" />
-          <EntitySet Name="tbl_residentpayments" EntityType="db_bmsModel.tbl_residentpayments" />
-          <EntitySet Name="tbl_billelectric" EntityType="db_bmsModel.tbl_billelectric" />
-          <EntitySet Name="tbl_billgas" EntityType="db_bmsModel.tbl_billgas" />
-        </EntityContainer>
-        <EntityType Name="tbl_paymenthistory">
-          <Key>
-            <PropertyRef Name="paymenthistory_id" />
-          </Key>
-          <Property Name="paymenthistory_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="paymenthistory_datetime" Type="DateTime" Nullable="false" />
-          <Property Name="payment_amount" Type="Double" Nullable="false" />
-          <Property Name="fk_paymenttype" Type="Int32" Nullable="false" />
-          <Property Name="paymentmonth" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="fk_resident" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityType Name="tbl_readinggas">
           <Key>
             <PropertyRef Name="reading_id" />
@@ -570,16 +554,33 @@
           <Property Name="readinglog_archivedon" Type="DateTime" Nullable="false" />
           <Property Name="readinglog_archivedby" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="tbl_paymentgashistory">
+        <EntityType Name="tbl_readingpicture">
           <Key>
-            <PropertyRef Name="paymenthistory_id" />
+            <PropertyRef Name="readingpicture_id" />
           </Key>
-          <Property Name="paymenthistory_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="paymenthistory_datetime" Type="DateTime" Nullable="false" />
-          <Property Name="payment_amount" Type="Double" Nullable="false" />
-          <Property Name="fk_paymenttype" Type="Int32" Nullable="false" />
-          <Property Name="paymentmonth" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="readingpicture_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="readingpicture_data" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="readingpicture_type" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="readingpicture_size" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_residentbuilding">
+          <Key>
+            <PropertyRef Name="residentbuilding_id" />
+          </Key>
+          <Property Name="residentbuilding_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="fk_resident" Type="Int32" Nullable="false" />
+          <Property Name="fk_building" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_residenthistory">
+          <Key>
+            <PropertyRef Name="residenthistory_id" />
+          </Key>
+          <Property Name="residenthistory_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_resident" Type="Int32" Nullable="false" />
+          <Property Name="fk_location" Type="Int32" Nullable="false" />
+          <Property Name="residenthistory_dateofoccupation" Type="DateTime" Nullable="false" />
+          <Property Name="residenthistory_dateofvocation" Type="DateTime" Nullable="false" />
+          <Property Name="meter_no" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tbl_residentpayments">
           <Key>
@@ -593,45 +594,62 @@
           <Property Name="fk_resident" Type="Int32" Nullable="false" />
           <Property Name="meter_no" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="tbl_billelectric">
+        <EntityType Name="tbl_residents">
           <Key>
-            <PropertyRef Name="billelectric_id" />
+            <PropertyRef Name="resident_id" />
           </Key>
-          <Property Name="billelectric_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="billelectric_datetime" Type="DateTime" Nullable="false" />
-          <Property Name="billelectric_amount" Type="Double" Nullable="false" />
-          <Property Name="fk_paymentstatus" Type="Int32" Nullable="false" />
-          <Property Name="fk_location" Type="Int32" Nullable="false" />
-          <Property Name="fk_resident" Type="Int32" Nullable="false" />
-          <Property Name="billelectric_prevreading" Type="Double" Nullable="false" />
-          <Property Name="billelectric_currentreading" Type="Double" Nullable="false" />
-          <Property Name="billelectric_units" Type="Double" Nullable="false" />
-          <Property Name="billelectric_water" Type="Double" Nullable="false" />
-          <Property Name="billelectric_tv" Type="Double" Nullable="false" />
-          <Property Name="billelectric_remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="fk_billpicture" Type="Int32" />
-          <Property Name="billelectric_month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="billelectric_outstanding" Type="Double" />
+          <Property Name="resident_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="resident_panumber" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="resident_rank" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="resident_name" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="resident_unit" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="resident_remarks" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="tbl_billgas">
+        <EntityType Name="tbl_subarea">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="subarea_id" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="datetime" Type="DateTime" Nullable="false" />
-          <Property Name="amount" Type="Double" Nullable="false" />
-          <Property Name="fk_paymentstatus" Type="Int32" Nullable="false" />
-          <Property Name="fk_location" Type="Int32" Nullable="false" />
-          <Property Name="fk_resident" Type="Int32" Nullable="false" />
-          <Property Name="prevreading" Type="Double" Nullable="false" />
-          <Property Name="currentreading" Type="Double" Nullable="false" />
-          <Property Name="units" Type="Double" Nullable="false" />
-          <Property Name="remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="fk_billpicture" Type="Int32" />
-          <Property Name="month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="outstanding" Type="Double" />
+          <Property Name="subarea_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="subarea_name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="fk_area" Type="Int32" Nullable="false" />
         </EntityType>
-      </Schema>
+        <EntityType Name="tbl_userareas">
+          <Key>
+            <PropertyRef Name="userareas_id" />
+          </Key>
+          <Property Name="userareas_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_user" Type="Int32" Nullable="false" />
+          <Property Name="fk_subarea" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_userpermissions">
+          <Key>
+            <PropertyRef Name="userpermissions_id" />
+          </Key>
+          <Property Name="userpermissions_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_action" Type="Int32" />
+          <Property Name="fk_user" Type="Int32" />
+          <Property Name="userpermissions_action" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="userpermissions_controller" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tbl_users">
+          <Key>
+            <PropertyRef Name="users_id" />
+          </Key>
+          <Property Name="users_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="users_username" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="users_fullname" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="users_password" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="fk_usertype" Type="Int32" Nullable="false" />
+          <Property Name="users_isActive" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_usertype">
+          <Key>
+            <PropertyRef Name="usertype_id" />
+          </Key>
+          <Property Name="usertype_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="usertype_name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -640,269 +658,17 @@
           <EntitySetMapping Name="tbl_action">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_action">
               <MappingFragment StoreEntitySet="tbl_action">
-                <ScalarProperty Name="action_id" ColumnName="action_id" />
-                <ScalarProperty Name="action_name" ColumnName="action_name" />
                 <ScalarProperty Name="action_description" ColumnName="action_description" />
+                <ScalarProperty Name="action_name" ColumnName="action_name" />
+                <ScalarProperty Name="action_id" ColumnName="action_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tbl_area">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_area">
               <MappingFragment StoreEntitySet="tbl_area">
-                <ScalarProperty Name="area_id" ColumnName="area_id" />
                 <ScalarProperty Name="area_name" ColumnName="area_name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_billpicture">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_billpicture">
-              <MappingFragment StoreEntitySet="tbl_billpicture">
-                <ScalarProperty Name="billpicture_id" ColumnName="billpicture_id" />
-                <ScalarProperty Name="billpicture_date" ColumnName="billpicture_date" />
-                <ScalarProperty Name="billpicture_type" ColumnName="billpicture_type" />
-                <ScalarProperty Name="billpicture_size" ColumnName="billpicture_size" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_controller">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_controller">
-              <MappingFragment StoreEntitySet="tbl_controller">
-                <ScalarProperty Name="controller_id" ColumnName="controller_id" />
-                <ScalarProperty Name="controller_name" ColumnName="controller_name" />
-                <ScalarProperty Name="controller_description" ColumnName="controller_description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_fixedrates">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_fixedrates">
-              <MappingFragment StoreEntitySet="tbl_fixedrates">
-                <ScalarProperty Name="fixedrates_id" ColumnName="fixedrates_id" />
-                <ScalarProperty Name="fixedrates_name" ColumnName="fixedrates_name" />
-                <ScalarProperty Name="fixedrates_amount" ColumnName="fixedrates_amount" />
-                <ScalarProperty Name="fk_type" ColumnName="fk_type" />
-                <ScalarProperty Name="fixedrates_unit" ColumnName="fixedrates_unit" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_fixedratetype">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_fixedratetype">
-              <MappingFragment StoreEntitySet="tbl_fixedratetype">
-                <ScalarProperty Name="fixedratetype_id" ColumnName="fixedratetype_id" />
-                <ScalarProperty Name="fixedratetype_name" ColumnName="fixedratetype_name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_location">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_location">
-              <MappingFragment StoreEntitySet="tbl_location">
-                <ScalarProperty Name="location_id" ColumnName="location_id" />
-                <ScalarProperty Name="location_name" ColumnName="location_name" />
-                <ScalarProperty Name="fk_area" ColumnName="fk_area" />
-                <ScalarProperty Name="location_electricmeter" ColumnName="location_electricmeter" />
-                <ScalarProperty Name="location_gassmeter" ColumnName="location_gassmeter" />
-                <ScalarProperty Name="location_wapdameter" ColumnName="location_wapdameter" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_paymentstatus">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_paymentstatus">
-              <MappingFragment StoreEntitySet="tbl_paymentstatus">
-                <ScalarProperty Name="paymentstatus_id" ColumnName="paymentstatus_id" />
-                <ScalarProperty Name="paymentstatus_name" ColumnName="paymentstatus_name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_paymenttype">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_paymenttype">
-              <MappingFragment StoreEntitySet="tbl_paymenttype">
-                <ScalarProperty Name="paymenttype_id" ColumnName="paymenttype_id" />
-                <ScalarProperty Name="paymenttype_name" ColumnName="paymenttype_name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_readingelectric">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_readingelectric">
-              <MappingFragment StoreEntitySet="tbl_readingelectric">
-                <ScalarProperty Name="readingelectric_id" ColumnName="readingelectric_id" />
-                <ScalarProperty Name="readingelectric_datetime" ColumnName="readingelectric_datetime" />
-                <ScalarProperty Name="readingelectric_remarks" ColumnName="readingelectric_remarks" />
-                <ScalarProperty Name="readingelectric_meterno" ColumnName="readingelectric_meterno" />
-                <ScalarProperty Name="readingelectric_prevreading" ColumnName="readingelectric_prevreading" />
-                <ScalarProperty Name="readingelectric_currentreading" ColumnName="readingelectric_currentreading" />
-                <ScalarProperty Name="fk_readingpicture" ColumnName="fk_readingpicture" />
-                <ScalarProperty Name="readingelectric_units" ColumnName="readingelectric_units" />
-                <ScalarProperty Name="readingelectric_addedby" ColumnName="readingelectric_addedby" />
-                <ScalarProperty Name="readingelectric_month" ColumnName="readingelectric_month" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_readingelectriclog">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_readingelectriclog">
-              <MappingFragment StoreEntitySet="tbl_readingelectriclog">
-                <ScalarProperty Name="readingelectriclog_id" ColumnName="readingelectriclog_id" />
-                <ScalarProperty Name="readingelectriclog_datetime" ColumnName="readingelectriclog_datetime" />
-                <ScalarProperty Name="readingelectriclog_remarks" ColumnName="readingelectriclog_remarks" />
-                <ScalarProperty Name="readingelectriclog_meterno" ColumnName="readingelectriclog_meterno" />
-                <ScalarProperty Name="readingelectriclog_prevreading" ColumnName="readingelectriclog_prevreading" />
-                <ScalarProperty Name="readingelectriclog_currentreading" ColumnName="readingelectriclog_currentreading" />
-                <ScalarProperty Name="readingelectriclog_units" ColumnName="readingelectriclog_units" />
-                <ScalarProperty Name="readingelectriclog_addedby" ColumnName="readingelectriclog_addedby" />
-                <ScalarProperty Name="readingelectriclog_month" ColumnName="readingelectriclog_month" />
-                <ScalarProperty Name="readingelectriclog_archivedon" ColumnName="readingelectriclog_archivedon" />
-                <ScalarProperty Name="readingelectriclog_archivedby" ColumnName="readingelectriclog_archivedby" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_readingpicture">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_readingpicture">
-              <MappingFragment StoreEntitySet="tbl_readingpicture">
-                <ScalarProperty Name="readingpicture_id" ColumnName="readingpicture_id" />
-                <ScalarProperty Name="readingpicture_data" ColumnName="readingpicture_data" />
-                <ScalarProperty Name="readingpicture_type" ColumnName="readingpicture_type" />
-                <ScalarProperty Name="readingpicture_size" ColumnName="readingpicture_size" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_residentbuilding">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_residentbuilding">
-              <MappingFragment StoreEntitySet="tbl_residentbuilding">
-                <ScalarProperty Name="residentbuilding_id" ColumnName="residentbuilding_id" />
-                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
-                <ScalarProperty Name="fk_building" ColumnName="fk_building" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_residenthistory">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_residenthistory">
-              <MappingFragment StoreEntitySet="tbl_residenthistory">
-                <ScalarProperty Name="meter_no" ColumnName="meter_no" />
-                <ScalarProperty Name="residenthistory_id" ColumnName="residenthistory_id" />
-                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
-                <ScalarProperty Name="fk_location" ColumnName="fk_location" />
-                <ScalarProperty Name="residenthistory_dateofoccupation" ColumnName="residenthistory_dateofoccupation" />
-                <ScalarProperty Name="residenthistory_dateofvocation" ColumnName="residenthistory_dateofvocation" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_residents">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_residents">
-              <MappingFragment StoreEntitySet="tbl_residents">
-                <ScalarProperty Name="resident_id" ColumnName="resident_id" />
-                <ScalarProperty Name="resident_panumber" ColumnName="resident_panumber" />
-                <ScalarProperty Name="resident_rank" ColumnName="resident_rank" />
-                <ScalarProperty Name="resident_name" ColumnName="resident_name" />
-                <ScalarProperty Name="resident_unit" ColumnName="resident_unit" />
-                <ScalarProperty Name="resident_remarks" ColumnName="resident_remarks" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_userareas">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_userareas">
-              <MappingFragment StoreEntitySet="tbl_userareas">
-                <ScalarProperty Name="userareas_id" ColumnName="userareas_id" />
-                <ScalarProperty Name="fk_user" ColumnName="fk_user" />
-                <ScalarProperty Name="fk_area" ColumnName="fk_area" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_userpermissions">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_userpermissions">
-              <MappingFragment StoreEntitySet="tbl_userpermissions">
-                <ScalarProperty Name="userpermissions_id" ColumnName="userpermissions_id" />
-                <ScalarProperty Name="fk_action" ColumnName="fk_action" />
-                <ScalarProperty Name="fk_user" ColumnName="fk_user" />
-                <ScalarProperty Name="userpermissions_action" ColumnName="userpermissions_action" />
-                <ScalarProperty Name="userpermissions_controller" ColumnName="userpermissions_controller" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_users">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_users">
-              <MappingFragment StoreEntitySet="tbl_users">
-                <ScalarProperty Name="users_id" ColumnName="users_id" />
-                <ScalarProperty Name="users_username" ColumnName="users_username" />
-                <ScalarProperty Name="users_fullname" ColumnName="users_fullname" />
-                <ScalarProperty Name="users_password" ColumnName="users_password" />
-                <ScalarProperty Name="fk_usertype" ColumnName="fk_usertype" />
-                <ScalarProperty Name="users_isActive" ColumnName="users_isActive" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_usertype">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_usertype">
-              <MappingFragment StoreEntitySet="tbl_usertype">
-                <ScalarProperty Name="usertype_id" ColumnName="usertype_id" />
-                <ScalarProperty Name="usertype_name" ColumnName="usertype_name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_paymenthistory">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_paymenthistory">
-              <MappingFragment StoreEntitySet="tbl_paymenthistory">
-                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
-                <ScalarProperty Name="paymentmonth" ColumnName="paymentmonth" />
-                <ScalarProperty Name="fk_paymenttype" ColumnName="fk_paymenttype" />
-                <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />
-                <ScalarProperty Name="paymenthistory_datetime" ColumnName="paymenthistory_datetime" />
-                <ScalarProperty Name="paymenthistory_id" ColumnName="paymenthistory_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_readinggas">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_readinggas">
-              <MappingFragment StoreEntitySet="tbl_readinggas">
-                <ScalarProperty Name="reading_month" ColumnName="reading_month" />
-                <ScalarProperty Name="reading_addedby" ColumnName="reading_addedby" />
-                <ScalarProperty Name="reading_units" ColumnName="reading_units" />
-                <ScalarProperty Name="fk_readingpicture" ColumnName="fk_readingpicture" />
-                <ScalarProperty Name="reading_currentreading" ColumnName="reading_currentreading" />
-                <ScalarProperty Name="reading_prevreading" ColumnName="reading_prevreading" />
-                <ScalarProperty Name="reading_meterno" ColumnName="reading_meterno" />
-                <ScalarProperty Name="reading_remarks" ColumnName="reading_remarks" />
-                <ScalarProperty Name="reading_datetime" ColumnName="reading_datetime" />
-                <ScalarProperty Name="reading_id" ColumnName="reading_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_readinggaslog">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_readinggaslog">
-              <MappingFragment StoreEntitySet="tbl_readinggaslog">
-                <ScalarProperty Name="readinglog_archivedby" ColumnName="readinglog_archivedby" />
-                <ScalarProperty Name="readinglog_archivedon" ColumnName="readinglog_archivedon" />
-                <ScalarProperty Name="readinglog_month" ColumnName="readinglog_month" />
-                <ScalarProperty Name="readinglog_addedby" ColumnName="readinglog_addedby" />
-                <ScalarProperty Name="readinglog_units" ColumnName="readinglog_units" />
-                <ScalarProperty Name="readinglog_currentreading" ColumnName="readinglog_currentreading" />
-                <ScalarProperty Name="readinglog_prevreading" ColumnName="readinglog_prevreading" />
-                <ScalarProperty Name="readinglog_meterno" ColumnName="readinglog_meterno" />
-                <ScalarProperty Name="readinglog_remarks" ColumnName="readinglog_remarks" />
-                <ScalarProperty Name="readinglog_datetime" ColumnName="readinglog_datetime" />
-                <ScalarProperty Name="readinglog_id" ColumnName="readinglog_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_paymentgashistory">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_paymentgashistory">
-              <MappingFragment StoreEntitySet="tbl_paymentgashistory">
-                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
-                <ScalarProperty Name="paymentmonth" ColumnName="paymentmonth" />
-                <ScalarProperty Name="fk_paymenttype" ColumnName="fk_paymenttype" />
-                <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />
-                <ScalarProperty Name="paymenthistory_datetime" ColumnName="paymenthistory_datetime" />
-                <ScalarProperty Name="paymenthistory_id" ColumnName="paymenthistory_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_residentpayments">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_residentpayments">
-              <MappingFragment StoreEntitySet="tbl_residentpayments">
-                <ScalarProperty Name="meter_no" ColumnName="meter_no" />
-                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
-                <ScalarProperty Name="paymentmonth" ColumnName="paymentmonth" />
-                <ScalarProperty Name="fk_paymenttype" ColumnName="fk_paymenttype" />
-                <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />
-                <ScalarProperty Name="payment_datetime" ColumnName="payment_datetime" />
-                <ScalarProperty Name="payment_id" ColumnName="payment_id" />
+                <ScalarProperty Name="area_id" ColumnName="area_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -943,6 +709,267 @@
                 <ScalarProperty Name="amount" ColumnName="amount" />
                 <ScalarProperty Name="datetime" ColumnName="datetime" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_billpicture">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_billpicture">
+              <MappingFragment StoreEntitySet="tbl_billpicture">
+                <ScalarProperty Name="billpicture_size" ColumnName="billpicture_size" />
+                <ScalarProperty Name="billpicture_type" ColumnName="billpicture_type" />
+                <ScalarProperty Name="billpicture_date" ColumnName="billpicture_date" />
+                <ScalarProperty Name="billpicture_id" ColumnName="billpicture_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_controller">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_controller">
+              <MappingFragment StoreEntitySet="tbl_controller">
+                <ScalarProperty Name="controller_description" ColumnName="controller_description" />
+                <ScalarProperty Name="controller_name" ColumnName="controller_name" />
+                <ScalarProperty Name="controller_id" ColumnName="controller_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_fixedrates">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_fixedrates">
+              <MappingFragment StoreEntitySet="tbl_fixedrates">
+                <ScalarProperty Name="fixedrates_unit" ColumnName="fixedrates_unit" />
+                <ScalarProperty Name="fk_type" ColumnName="fk_type" />
+                <ScalarProperty Name="fixedrates_amount" ColumnName="fixedrates_amount" />
+                <ScalarProperty Name="fixedrates_name" ColumnName="fixedrates_name" />
+                <ScalarProperty Name="fixedrates_id" ColumnName="fixedrates_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_fixedratetype">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_fixedratetype">
+              <MappingFragment StoreEntitySet="tbl_fixedratetype">
+                <ScalarProperty Name="fixedratetype_name" ColumnName="fixedratetype_name" />
+                <ScalarProperty Name="fixedratetype_id" ColumnName="fixedratetype_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_location">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_location">
+              <MappingFragment StoreEntitySet="tbl_location">
+                <ScalarProperty Name="location_wapdameter" ColumnName="location_wapdameter" />
+                <ScalarProperty Name="location_gassmeter" ColumnName="location_gassmeter" />
+                <ScalarProperty Name="location_electricmeter" ColumnName="location_electricmeter" />
+                <ScalarProperty Name="fk_subarea" ColumnName="fk_subarea" />
+                <ScalarProperty Name="location_name" ColumnName="location_name" />
+                <ScalarProperty Name="location_id" ColumnName="location_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_paymentgashistory">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_paymentgashistory">
+              <MappingFragment StoreEntitySet="tbl_paymentgashistory">
+                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
+                <ScalarProperty Name="paymentmonth" ColumnName="paymentmonth" />
+                <ScalarProperty Name="fk_paymenttype" ColumnName="fk_paymenttype" />
+                <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />
+                <ScalarProperty Name="paymenthistory_datetime" ColumnName="paymenthistory_datetime" />
+                <ScalarProperty Name="paymenthistory_id" ColumnName="paymenthistory_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_paymenthistory">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_paymenthistory">
+              <MappingFragment StoreEntitySet="tbl_paymenthistory">
+                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
+                <ScalarProperty Name="paymentmonth" ColumnName="paymentmonth" />
+                <ScalarProperty Name="fk_paymenttype" ColumnName="fk_paymenttype" />
+                <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />
+                <ScalarProperty Name="paymenthistory_datetime" ColumnName="paymenthistory_datetime" />
+                <ScalarProperty Name="paymenthistory_id" ColumnName="paymenthistory_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_paymentstatus">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_paymentstatus">
+              <MappingFragment StoreEntitySet="tbl_paymentstatus">
+                <ScalarProperty Name="paymentstatus_name" ColumnName="paymentstatus_name" />
+                <ScalarProperty Name="paymentstatus_id" ColumnName="paymentstatus_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_paymenttype">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_paymenttype">
+              <MappingFragment StoreEntitySet="tbl_paymenttype">
+                <ScalarProperty Name="paymenttype_name" ColumnName="paymenttype_name" />
+                <ScalarProperty Name="paymenttype_id" ColumnName="paymenttype_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_readingelectric">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_readingelectric">
+              <MappingFragment StoreEntitySet="tbl_readingelectric">
+                <ScalarProperty Name="readingelectric_month" ColumnName="readingelectric_month" />
+                <ScalarProperty Name="readingelectric_addedby" ColumnName="readingelectric_addedby" />
+                <ScalarProperty Name="readingelectric_units" ColumnName="readingelectric_units" />
+                <ScalarProperty Name="fk_readingpicture" ColumnName="fk_readingpicture" />
+                <ScalarProperty Name="readingelectric_currentreading" ColumnName="readingelectric_currentreading" />
+                <ScalarProperty Name="readingelectric_prevreading" ColumnName="readingelectric_prevreading" />
+                <ScalarProperty Name="readingelectric_meterno" ColumnName="readingelectric_meterno" />
+                <ScalarProperty Name="readingelectric_remarks" ColumnName="readingelectric_remarks" />
+                <ScalarProperty Name="readingelectric_datetime" ColumnName="readingelectric_datetime" />
+                <ScalarProperty Name="readingelectric_id" ColumnName="readingelectric_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_readingelectriclog">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_readingelectriclog">
+              <MappingFragment StoreEntitySet="tbl_readingelectriclog">
+                <ScalarProperty Name="readingelectriclog_archivedby" ColumnName="readingelectriclog_archivedby" />
+                <ScalarProperty Name="readingelectriclog_archivedon" ColumnName="readingelectriclog_archivedon" />
+                <ScalarProperty Name="readingelectriclog_month" ColumnName="readingelectriclog_month" />
+                <ScalarProperty Name="readingelectriclog_addedby" ColumnName="readingelectriclog_addedby" />
+                <ScalarProperty Name="readingelectriclog_units" ColumnName="readingelectriclog_units" />
+                <ScalarProperty Name="readingelectriclog_currentreading" ColumnName="readingelectriclog_currentreading" />
+                <ScalarProperty Name="readingelectriclog_prevreading" ColumnName="readingelectriclog_prevreading" />
+                <ScalarProperty Name="readingelectriclog_meterno" ColumnName="readingelectriclog_meterno" />
+                <ScalarProperty Name="readingelectriclog_remarks" ColumnName="readingelectriclog_remarks" />
+                <ScalarProperty Name="readingelectriclog_datetime" ColumnName="readingelectriclog_datetime" />
+                <ScalarProperty Name="readingelectriclog_id" ColumnName="readingelectriclog_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_readinggas">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_readinggas">
+              <MappingFragment StoreEntitySet="tbl_readinggas">
+                <ScalarProperty Name="reading_month" ColumnName="reading_month" />
+                <ScalarProperty Name="reading_addedby" ColumnName="reading_addedby" />
+                <ScalarProperty Name="reading_units" ColumnName="reading_units" />
+                <ScalarProperty Name="fk_readingpicture" ColumnName="fk_readingpicture" />
+                <ScalarProperty Name="reading_currentreading" ColumnName="reading_currentreading" />
+                <ScalarProperty Name="reading_prevreading" ColumnName="reading_prevreading" />
+                <ScalarProperty Name="reading_meterno" ColumnName="reading_meterno" />
+                <ScalarProperty Name="reading_remarks" ColumnName="reading_remarks" />
+                <ScalarProperty Name="reading_datetime" ColumnName="reading_datetime" />
+                <ScalarProperty Name="reading_id" ColumnName="reading_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_readinggaslog">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_readinggaslog">
+              <MappingFragment StoreEntitySet="tbl_readinggaslog">
+                <ScalarProperty Name="readinglog_archivedby" ColumnName="readinglog_archivedby" />
+                <ScalarProperty Name="readinglog_archivedon" ColumnName="readinglog_archivedon" />
+                <ScalarProperty Name="readinglog_month" ColumnName="readinglog_month" />
+                <ScalarProperty Name="readinglog_addedby" ColumnName="readinglog_addedby" />
+                <ScalarProperty Name="readinglog_units" ColumnName="readinglog_units" />
+                <ScalarProperty Name="readinglog_currentreading" ColumnName="readinglog_currentreading" />
+                <ScalarProperty Name="readinglog_prevreading" ColumnName="readinglog_prevreading" />
+                <ScalarProperty Name="readinglog_meterno" ColumnName="readinglog_meterno" />
+                <ScalarProperty Name="readinglog_remarks" ColumnName="readinglog_remarks" />
+                <ScalarProperty Name="readinglog_datetime" ColumnName="readinglog_datetime" />
+                <ScalarProperty Name="readinglog_id" ColumnName="readinglog_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_readingpicture">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_readingpicture">
+              <MappingFragment StoreEntitySet="tbl_readingpicture">
+                <ScalarProperty Name="readingpicture_size" ColumnName="readingpicture_size" />
+                <ScalarProperty Name="readingpicture_type" ColumnName="readingpicture_type" />
+                <ScalarProperty Name="readingpicture_data" ColumnName="readingpicture_data" />
+                <ScalarProperty Name="readingpicture_id" ColumnName="readingpicture_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_residentbuilding">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_residentbuilding">
+              <MappingFragment StoreEntitySet="tbl_residentbuilding">
+                <ScalarProperty Name="fk_building" ColumnName="fk_building" />
+                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
+                <ScalarProperty Name="residentbuilding_id" ColumnName="residentbuilding_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_residenthistory">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_residenthistory">
+              <MappingFragment StoreEntitySet="tbl_residenthistory">
+                <ScalarProperty Name="meter_no" ColumnName="meter_no" />
+                <ScalarProperty Name="residenthistory_dateofvocation" ColumnName="residenthistory_dateofvocation" />
+                <ScalarProperty Name="residenthistory_dateofoccupation" ColumnName="residenthistory_dateofoccupation" />
+                <ScalarProperty Name="fk_location" ColumnName="fk_location" />
+                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
+                <ScalarProperty Name="residenthistory_id" ColumnName="residenthistory_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_residentpayments">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_residentpayments">
+              <MappingFragment StoreEntitySet="tbl_residentpayments">
+                <ScalarProperty Name="meter_no" ColumnName="meter_no" />
+                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
+                <ScalarProperty Name="paymentmonth" ColumnName="paymentmonth" />
+                <ScalarProperty Name="fk_paymenttype" ColumnName="fk_paymenttype" />
+                <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />
+                <ScalarProperty Name="payment_datetime" ColumnName="payment_datetime" />
+                <ScalarProperty Name="payment_id" ColumnName="payment_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_residents">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_residents">
+              <MappingFragment StoreEntitySet="tbl_residents">
+                <ScalarProperty Name="resident_remarks" ColumnName="resident_remarks" />
+                <ScalarProperty Name="resident_unit" ColumnName="resident_unit" />
+                <ScalarProperty Name="resident_name" ColumnName="resident_name" />
+                <ScalarProperty Name="resident_rank" ColumnName="resident_rank" />
+                <ScalarProperty Name="resident_panumber" ColumnName="resident_panumber" />
+                <ScalarProperty Name="resident_id" ColumnName="resident_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_subarea">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_subarea">
+              <MappingFragment StoreEntitySet="tbl_subarea">
+                <ScalarProperty Name="fk_area" ColumnName="fk_area" />
+                <ScalarProperty Name="subarea_name" ColumnName="subarea_name" />
+                <ScalarProperty Name="subarea_id" ColumnName="subarea_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_userareas">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_userareas">
+              <MappingFragment StoreEntitySet="tbl_userareas">
+                <ScalarProperty Name="fk_subarea" ColumnName="fk_subarea" />
+                <ScalarProperty Name="fk_user" ColumnName="fk_user" />
+                <ScalarProperty Name="userareas_id" ColumnName="userareas_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_userpermissions">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_userpermissions">
+              <MappingFragment StoreEntitySet="tbl_userpermissions">
+                <ScalarProperty Name="userpermissions_controller" ColumnName="userpermissions_controller" />
+                <ScalarProperty Name="userpermissions_action" ColumnName="userpermissions_action" />
+                <ScalarProperty Name="fk_user" ColumnName="fk_user" />
+                <ScalarProperty Name="fk_action" ColumnName="fk_action" />
+                <ScalarProperty Name="userpermissions_id" ColumnName="userpermissions_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_users">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_users">
+              <MappingFragment StoreEntitySet="tbl_users">
+                <ScalarProperty Name="users_isActive" ColumnName="users_isActive" />
+                <ScalarProperty Name="fk_usertype" ColumnName="fk_usertype" />
+                <ScalarProperty Name="users_password" ColumnName="users_password" />
+                <ScalarProperty Name="users_fullname" ColumnName="users_fullname" />
+                <ScalarProperty Name="users_username" ColumnName="users_username" />
+                <ScalarProperty Name="users_id" ColumnName="users_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_usertype">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_usertype">
+              <MappingFragment StoreEntitySet="tbl_usertype">
+                <ScalarProperty Name="usertype_name" ColumnName="usertype_name" />
+                <ScalarProperty Name="usertype_id" ColumnName="usertype_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

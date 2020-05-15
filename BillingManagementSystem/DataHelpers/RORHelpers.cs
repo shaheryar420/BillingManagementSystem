@@ -535,8 +535,8 @@ namespace BillingManagementSystem.DataHelpers
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                              join l in db.tbl_location on x.fk_location equals l.location_id
-                                             join a in db.tbl_area on l.fk_area equals a.area_id
-                                             where a.area_id == areaId
+                                             join a in db.tbl_subarea on l.fk_subarea equals a.subarea_id
+                                             where a.subarea_id == areaId
                                              select new
                                              {
                                                  x.billelectric_amount,
@@ -1245,13 +1245,13 @@ namespace BillingManagementSystem.DataHelpers
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             }).ToList();
-                            foreach (var bill in toReturn)
-                            {
-                                var month = new MonthFinderHelpers().GetNextMonth(bill.billElectricMonth);
-                                var payment = (from x in db.tbl_residentpayments where x.paymentmonth == month && x.fk_resident == residentId select x).FirstOrDefault();
-                                bill.payment = payment.payment_amount.ToString();
-                                bill.paymentMonth = payment.paymentmonth;
-                            }
+                            //foreach (var bill in toReturn)
+                            //{
+                            //    var month = new MonthFinderHelpers().GetNextMonth(bill.billElectricMonth);
+                            //    var payment = (from x in db.tbl_residentpayments where x.paymentmonth == month && x.fk_resident == residentId select x).FirstOrDefault();
+                            //    bill.payment = payment.payment_amount.ToString();
+                            //    bill.paymentMonth = payment.paymentmonth;
+                            //}
                         }
                         else
                         {
@@ -1782,8 +1782,8 @@ namespace BillingManagementSystem.DataHelpers
                                              join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                              join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                              join l in db.tbl_location on x.fk_location equals l.location_id
-                                             join a in db.tbl_area on l.fk_area equals a.area_id
-                                             where a.area_id == areaId
+                                             join a in db.tbl_subarea on l.fk_subarea equals a.subarea_id
+                                             where a.subarea_id == areaId
                                              select new
                                              {
                                                  x.amount,

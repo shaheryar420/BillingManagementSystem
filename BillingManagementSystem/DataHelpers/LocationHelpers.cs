@@ -24,7 +24,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 var newLocation = new tbl_location()
                                 {
-                                    fk_area = int.Parse(model.fk_area),
+                                    fk_subarea = int.Parse(model.fk_area),
                                     location_electricmeter = !string.IsNullOrEmpty(model.locationElectricMeter) ? model.locationElectricMeter : "",
                                     location_gassmeter = !string.IsNullOrEmpty(model.locationGassMeter) ? model.locationGassMeter : "",
                                     location_name = model.locationName,
@@ -101,7 +101,7 @@ namespace BillingManagementSystem.DataHelpers
                             }
                             if (existingLocation == null)
                             {
-                                location.fk_area = !string.IsNullOrEmpty(model.fk_area) ? int.Parse(model.fk_area) : location.fk_area;
+                                location.fk_subarea = !string.IsNullOrEmpty(model.fk_area) ? int.Parse(model.fk_area) : location.fk_subarea;
                                 location.location_electricmeter = !string.IsNullOrEmpty(model.locationElectricMeter) ? model.locationElectricMeter : location.location_electricmeter;
                                 location.location_gassmeter = !string.IsNullOrEmpty(model.locationGassMeter) ? model.locationGassMeter : location.location_gassmeter;
                                 location.location_name = !string.IsNullOrEmpty(model.locationName) ? model.locationName : location.location_name;
@@ -214,25 +214,25 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         int locationId = int.Parse(model.locationId);
                         var location = (from x in db.tbl_location
-                                        join y in db.tbl_area on x.fk_area equals y.area_id
+                                        join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
                                         join rb in db.tbl_residentbuilding on x.location_id equals rb.fk_building
                                         where x.location_id == locationId 
                                         select new 
                                         {
-                                            x.fk_area,
+                                            x.fk_subarea,
                                             x.location_electricmeter,
                                             x.location_gassmeter,
                                             x.location_id,
                                             x.location_name,
                                             x.location_wapdameter,
                                             rb.fk_resident,
-                                            y.area_name
+                                            y.subarea_name
                                         }).FirstOrDefault();
                         if (location != null)
                         {
                             toReturn = new LocationResponseModel()
                             {
-                                fk_area = location.fk_area.ToString(),
+                                fk_area = location.fk_subarea.ToString(),
                                 locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                                 locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
                                 locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
@@ -318,23 +318,23 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         int areaId = int.Parse(model.fk_area);
                         var locations = (from x in db.tbl_location
-                                        join y in db.tbl_area on x.fk_area equals y.area_id
-                                        where x.fk_area == areaId
+                                        join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
+                                        where x.fk_subarea == areaId
                                         select new
                                         {
-                                            x.fk_area,
+                                            x.fk_subarea,
                                             x.location_electricmeter,
                                             x.location_gassmeter,
                                             x.location_id,
                                             x.location_name,
                                             x.location_wapdameter,
-                                            y.area_name
+                                            y.subarea_name
                                         }).ToList();
                         if (locations.Count()>0)
                         {
                             toReturn= locations.Select(location => new LocationResponseModel()
                             {
-                                fk_area = location.fk_area.ToString(),
+                                fk_area = location.fk_subarea.ToString(),
                                 locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                                 locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
                                 locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
@@ -381,22 +381,22 @@ namespace BillingManagementSystem.DataHelpers
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
                     var locations = (from x in db.tbl_location
-                                        join y in db.tbl_area on x.fk_area equals y.area_id
+                                        join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
                                         select new
                                         {
-                                            x.fk_area,
+                                            x.fk_subarea,
                                             x.location_electricmeter,
                                             x.location_gassmeter,
                                             x.location_id,
                                             x.location_name,
                                             x.location_wapdameter,
-                                            y.area_name
+                                            y.subarea_name
                                         }).ToList();
                     if (locations.Count() > 0)
                     {
                         toReturn = locations.Select(location => new LocationResponseModel()
                         {
-                            fk_area = location.fk_area.ToString(),
+                            fk_area = location.fk_subarea.ToString(),
                             locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                             locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
                             locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
@@ -438,23 +438,23 @@ namespace BillingManagementSystem.DataHelpers
                         int areaId = int.Parse(model.fk_area);
                         var residentBuildings = (from x in db.tbl_residentbuilding select x).ToList();
                         var locations = (from x in db.tbl_location
-                                         join y in db.tbl_area on x.fk_area equals y.area_id
-                                         where x.fk_area == areaId
+                                         join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
+                                         where x.fk_subarea == areaId
                                          select new
                                          {
-                                             x.fk_area,
+                                             x.fk_subarea,
                                              x.location_electricmeter,
                                              x.location_gassmeter,
                                              x.location_id,
                                              x.location_name,
                                              x.location_wapdameter,
-                                             y.area_name
+                                             y.subarea_name
                                          }).ToList();
                         if (locations.Count() > 0)
                         {
                             toReturn = locations.Select(location => new LocationResponseModel()
                             {
-                                fk_area = location.fk_area.ToString(),
+                                fk_area = location.fk_subarea.ToString(),
                                 locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                                 locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
                                 locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",

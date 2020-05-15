@@ -455,7 +455,7 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     int user = int.Parse(model.readingGasAddedby);
                     var meters = (from x in db.tbl_userareas
-                                  join y in db.tbl_location on x.fk_area equals y.fk_area
+                                  join y in db.tbl_location on x.fk_subarea equals y.fk_subarea
                                   where x.fk_user == user
                                   select y.location_gassmeter).ToList();
                     var readings = (from x in db.tbl_readinggas
