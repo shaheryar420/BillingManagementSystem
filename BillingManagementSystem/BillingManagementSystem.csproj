@@ -780,6 +780,7 @@
     <Compile Include="DataHelpers\ResidentBuildingHelper.cs" />
     <Compile Include="DataHelpers\ResidentHelpers.cs" />
     <Compile Include="DataHelpers\RORHelpers.cs" />
+    <Compile Include="DataHelpers\SubAreaHelpers.cs" />
     <Compile Include="DataHelpers\UserHelpers.cs" />
     <Compile Include="DataHelpers\UserTypeHelpers.cs" />
     <Compile Include="Global.asax.cs">
@@ -814,6 +815,7 @@
     <Compile Include="Models\RequestModels\ReadingGasRequestModel.cs" />
     <Compile Include="Models\RequestModels\ResidentBuildingRequestModel.cs" />
     <Compile Include="Models\RequestModels\ResidentRequestModel.cs" />
+    <Compile Include="Models\RequestModels\SubAreaRequestModel.cs" />
     <Compile Include="Models\RequestModels\UserRequestModel.cs" />
     <Compile Include="Models\RequestModels\UserTypeRequestModel.cs" />
     <Compile Include="Models\ResponseModels\ApprovePaymentResponseModel.cs" />
@@ -831,6 +833,7 @@
     <Compile Include="Models\ResponseModels\ReadingGasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ResidentBuildingResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ResidentResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\SubAreaResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserTypeResponseModel.cs" />
     <Compile Include="Models\tbl_action.cs">
