@@ -32,19 +32,18 @@
     </script>
     <script>
         function clearFields() {
-            $('#location_id').val('');
-            $("#location_name").val('');
-            $("#location_electricMeter").val('');
-            $("#location_gassMeter").val('');
-            $("#location_wapdaMeter").val('');
+            $('#subarea_id').val('');
+            $("#subarea_name").val('');
+           
             $("#subarea_area").val('');
         }
+
         function initSubAreaGrid() {
             Dtable = $(".subareaGrid").DataTable({
                 autoWidth: true,
                 destroy: true,
                 "ajax": {
-                    "url": '/Management/GetAllLocations',
+                    "url": '/Management/GetAllSubAreas',
                     "type": 'POST',
                     "dataSrc": function (data) {
 
@@ -73,7 +72,7 @@
                     {
                         title: 'Action',
                         render: function (data, type, row, meta) {
-                            return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_location_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_location_delete'><i class='fa fa-trash'></i></a></div>";
+                            return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_subarea_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_subarea_delete'><i class='fa fa-trash'></i></a></div>";
                         }
                     },
                     {
@@ -82,15 +81,10 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { "title": "Id", "data": "locationId", className: "hidden" },
+                    { "title": "Id", "data": "subAreaId", className: "hidden" },
                     { "title": "areaId", "data": "fk_area", className: "hidden" },
-                    { "title": "location Name", "data": "locationName" },
-                    { "title": "locationElectricMeter", "data": "locationElectricMeter" },
-                    { "title": "locationGassMeter", "data": "locationGassMeter" },
-                    { "title": "locationWapdaMeter", "data": "locationWapdaMeter" },
-
-
-
+                    { "title": "SubAres Name", "data": "subAreaName" },
+                    
                 ]
             });
             Dtable.columns.adjust();
@@ -98,31 +92,30 @@
             $("div.tableBottom").addClass("pull-left");
             $("div.html5Buttons").addClass("pull-right");
         }
-        function initSubAreaActions() {
-            $(document).on('click', '.btn_location_edit', function (e) {
+
+        function initSubAreaGridActions() {
+            $(document).on('click', '.btn_subarea_edit', function (e) {
                 e.preventDefault();
                 $('#btn_subarea_update').show();
                 $('#btn_subarea_add').hide();
                 $('#addTitle').hide();
                 $('#editTitle').show();
                 var rowData = Dtable.row($(this).parents('tr')).data();
-                var _id = rowData.locationId;
-                $('#location_id').val(_id);
-                $("#location_name").val(rowData.locationName);
-                $("#location_electricMeter").val(rowData.locationElectricMeter);
-                $("#location_gassMeter").val(rowData.locationGassMeter);
-                $("#location_wapdaMeter").val(rowData.locationWapdaMeter);
+                var _id = rowData.subAreaId;
+                $('#subarea_id').val(_id);
+                $("#subarea_name").val(rowData.subAreaName);
                 $("#subarea_area").val(rowData.fk_area).trigger('change');
             });
-            $(document).on('click', '.btn_location_delete', function (e) {
+
+            $(document).on('click', '.btn_subarea_delete', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
-                var _id = rowData.locationId;
+                var _id = rowData.subAreaId;
                 console.log(_id);
                 if (_id) {
                     swal({
                         title: "Are you sure?",
-                        text: "Your will not be able to recover this location record!",
+                        text: "Your will not be able to recover this SubArea record!",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger",
@@ -131,9 +124,9 @@
                     },
                         function () {
                             $.ajax({
-                                url: '/Management/DeleteLocation',
+                                url: '/Management/DeleteSubArea',
                                 type: 'POST',
-                                data: { locationId: _id },
+                                data: { subAreaId: _id },
                                 beforeSend: function () {
                                     $('.loading').show();
                                 },
@@ -157,17 +150,16 @@
                         });
                 }
                 else {
-                    swal("Warning", "Please select a location", "warning");
+                    swal("Warning", "Please select a SubArea", "warning");
                 }
             });
+
             $('#btn_subarea_add').click(function () {
-                var url = "/Management/AddLocation";
+                var url = "/Management/AddSubArea";
                 var _areaId = $("#subarea_area").val();
-                var _locationName = $("#location_name").val();
-                var _locationElectricMeter = $("#location_electricMeter").val();
-                var _locationGassMeter = $("#location_gassMeter").val();
-                var _locationWapdaMeter = $("#location_wapdaMeter").val();
-                $.post(url, { locationName: _locationName, locationElectricMeter: _locationElectricMeter, locationGassMeter: _locationGassMeter, locationWapdaMeter: _locationWapdaMeter, fk_area: _areaId }, function (data) {
+                var _subAreaName = $("#subarea_name").val();
+                
+                $.post(url, { fk_area: _areaId, subAreaName: _subAreaName }, function (data) {
                     if (data.resultCode == "1100") {
                         swal("Added!", data.remarks, "success");
                         initSubAreaGrid();
@@ -179,25 +171,22 @@
                     }
                 });
             });
+
             $(document).on('click', '#btn_subarea_update', function (e) {
                 e.preventDefault();
-                var _locationId = $('#location_id').val();
-                if (_locationId) {
+                var _subAreaId = $('#subarea_id').val();
+                if (_subAreaId) {
                     var _areaId = $("#subarea_area").val();
-                    var _locationName = $("#location_name").val();
-                    var _locationElectricMeter = $("#location_electricMeter").val();
-                    var _locationGassMeter = $("#location_gassMeter").val();
-                    var _locationWapdaMeter = $("#location_wapdaMeter").val();
+                    var _subAreaName = $("#subarea_name").val();
+
                     $.ajax({
-                        url: '/Management/EditLocation',
+                        url: '/Management/EditSubArea',
                         type: 'POST',
                         data: {
-                            locationId: _locationId,
+                            subAreaId: _subAreaId,
                             fk_area: _areaId,
-                            locationName: _locationName,
-                            locationElectricMeter: _locationElectricMeter,
-                            locationGassMeter: _locationGassMeter,
-                            locationWapdaMeter: _locationWapdaMeter
+                            subAreaName: _subAreaName,
+
                         },
                         beforeSend: function () {
                             $('.loading').show();
@@ -226,10 +215,11 @@
 
                 }
                 else {
-                    swal("Warning", "Please select a location", "warning");
+                    swal("Warning", "Please select a SubArea", "warning");
                 }
             });
         }
+
         function initDropDowns() {
 
             $.ajax({
@@ -290,8 +280,8 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">SubArea Name</span>
-                                    <input type="hidden" id="location_id" value="" />
-                                    <input type="text" value="" placeholder="" id="location_name" class="form-control" />
+                                    <input type="hidden" id="subarea_id" value="" />
+                                    <input type="text" value="" id="subarea_name" class="form-control" />
                                 </div>
                             </div>
 
@@ -300,31 +290,6 @@
                                     <span class="input-group-addon bg-primary">Area</span>
                                     <select class="form-control dropdownlist" id="subarea_area">
                                     </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon bg-primary">SubArea</span>
-                                    <select class="form-control dropdownlist" id="location_subarea">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon bg-primary">locationElectricMeter</span>
-                                    <input type="text" value="" placeholder="XXXXXXXXX" id="location_electricMeter" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon bg-primary">locationGassMeter</span>
-                                    <input type="text" value="" placeholder="XXXXXXXXX" id="location_gassMeter" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon bg-primary">locationWapdaMeter</span>
-                                    <input type="text" value="" placeholder="XXXXXXXXX" id="location_wapdaMeter" class="form-control" />
                                 </div>
                             </div>
 

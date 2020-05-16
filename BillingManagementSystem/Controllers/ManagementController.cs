@@ -29,6 +29,10 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
+        public ActionResult SubArea()
+        {
+            return View();
+        }
         [SetPermissions]
         public ActionResult Location()
         {
@@ -185,6 +189,70 @@ namespace BillingManagementSystem.Controllers
             return json;
         }
         #endregion
+        #region Sub Area
+        public ActionResult AddSubArea([FromBody] SubAreaRequestModel model)
+        {
+            SubAreaHelpers helper = new SubAreaHelpers();
+            var response = helper.AddSubArea(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult EditSubArea([FromBody] SubAreaRequestModel model)
+        {
+            SubAreaHelpers helper = new SubAreaHelpers();
+            var response = helper.EditSubArea(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult DeleteSubArea([FromBody] SubAreaRequestModel model)
+        {
+            SubAreaHelpers helper = new SubAreaHelpers();
+            var response = helper.DeleteSubArea(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetSubAreaById([FromBody] SubAreaRequestModel model)
+        {
+            SubAreaHelpers helper = new SubAreaHelpers();
+            var response = helper.GetSubAreaById(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllSubAreas()
+        {
+            SubAreaHelpers helper = new SubAreaHelpers();
+            var response = helper.GetAllSubAreas();
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllSubAreasByUser()
+        {
+            string userId = Request.Cookies["bms_data"]["id"].ToString();
+            SubAreaRequestModel model = new SubAreaRequestModel()
+            {
+                userId = userId
+            };
+            SubAreaHelpers helper = new SubAreaHelpers();
+            var response = helper.GetAllSubAreasByUser(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllSubAreasByArea([FromBody] SubAreaRequestModel model)
+        {
+            model.userId = Request.Cookies["bms_data"]["id"].ToString();
+            SubAreaHelpers helper = new SubAreaHelpers();
+            var response = helper.GetAllSubAreasByArea(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        #endregion
         #region Area
         public ActionResult AddArea([FromBody] AreaRequestModel model)
         {
@@ -226,19 +294,7 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-        public ActionResult GetAllAreasByUser()
-        {
-            string userId = Request.Cookies["bms_data"]["id"].ToString();
-            AreaRequestModel model = new AreaRequestModel()
-            {
-                userId = userId
-            };
-            AreaHelpers helper = new AreaHelpers();
-            var response = helper.GetAllAreasByUser(model);
-            var json = Json(response);
-            json.MaxJsonLength = int.MaxValue;
-            return json;
-        }
+        
 
         #endregion
         #region Resident

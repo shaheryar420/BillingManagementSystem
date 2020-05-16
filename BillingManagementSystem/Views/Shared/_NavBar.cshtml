@@ -142,15 +142,18 @@
                                 <i class="arrow"></i>
                             </a>
                             <ul class="collapse">
-                                <li class="@Html.IsSelected(controller: "Management", action:"Management")"@Html.IsAllowed(controller:"Management", action: "Management")>
+                                <li class="@Html.IsSelected(controller: "Management", action:"Management")" @Html.IsAllowed(controller: "Management", action: "Management")>
                                     <a href="@Url.Action("FixedRates","Management")">Manage Fixed Rates</a>
                                 </li>
-                                <li class="@Html.IsSelected(controller: "Management", action:"Users")"@Html.IsAllowed(controller:"Management", action: "Users")>
+                                <li class="@Html.IsSelected(controller: "Management", action:"Users")" @Html.IsAllowed(controller: "Management", action: "Users")>
                                     <a href="@Url.Action("Users","Management")">Manage Users</a>
                                 </li>
-                                
-                                <li class="@Html.IsSelected(controller: "Management", action:"Area")"@Html.IsAllowed(controller:"Management", action: "Area")>
+
+                                <li class="@Html.IsSelected(controller: "Management", action:"Area")" @Html.IsAllowed(controller: "Management", action: "Area")>
                                     <a href="@Url.Action("Area","Management")">Manage Areas</a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "Management", action:"SubArea")" @Html.IsAllowed(controller: "Management", action: "SubArea")>
+                                    <a href="@Url.Action("SubArea","Management")">Manage SubAreas</a>
                                 </li>
                                 <li class="@Html.IsSelected(controller: "Management", action:"Location")@Html.IsAllowed(controller:"Management", action: "Location")">
                                     <a href="@Url.Action("Location","Management")">Manage Locations</a>

@@ -272,47 +272,6 @@ namespace BillingManagementSystem.DataHelpers
             };
             return toReturn;
         }
-        public List<AreaResponseModel> GetAllAreasByUser(AreaRequestModel model)
-        {
-            List<AreaResponseModel> toReturn = new List<AreaResponseModel>();
-            try
-            {
-                using (db_bmsEntities db = new db_bmsEntities())
-                {
-                    int userId = int.Parse(model.userId);
-                    var areas = (from x in db.tbl_area 
-                                 join y in db.tbl_userareas on x.area_id equals y.fk_area
-                                 where y.fk_user == userId
-                                 select x).ToList();
-                    if (areas.Count() > 0)
-                    {
-                        toReturn = areas.Select(area => new AreaResponseModel()
-                        {
-                            areaId = area.area_id.ToString(),
-                            areaName = !string.IsNullOrEmpty(area.area_name) ? area.area_name : "",
-                            remarks = "Area Found SuccessFully",
-                            resultCode = "1100"
-                        }).ToList();
-                    }
-                    else
-                    {
-                        toReturn.Add(new AreaResponseModel()
-                        {
-                            remarks = "No Record Found",
-                            resultCode = "1200"
-                        });
-                    }
-                }
-            }
-            catch (Exception Ex)
-            {
-                toReturn.Add(new AreaResponseModel()
-                {
-                    remarks = "There Was A Fatal Error" + Ex.ToString(),
-                    resultCode = "1000"
-                });
-            };
-            return toReturn;
-        }
+        
     }
 }

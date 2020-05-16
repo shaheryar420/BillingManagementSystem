@@ -163,6 +163,7 @@
             $('#btn_location_add').click(function () {
                 var url = "/Management/AddLocation";
                 var _areaId = $("#location_area").val();
+                var _subAreaId = $("#location_subarea").val();
                 var _locationName = $("#location_name").val();
                 var _locationElectricMeter = $("#location_electricMeter").val();
                 var _locationGassMeter = $("#location_gassMeter").val();
@@ -259,7 +260,7 @@
             $("#location_area").change(function () {
                 var _areaId = $("#location_area").val();
                 $.ajax({
-                    url: '/Management/GetAllLocationsByArea',
+                    url: '/Management/GetAllSubAreasByArea',
                     type: 'POST',
                     data: { fk_area: _areaId },
                     success: function (response) {
@@ -267,7 +268,7 @@
                             if (response[0].resultCode == '1100') {
                                 var list = [];
                                 for (var i = 0; i < response.length; i++) {
-                                    list.push({ text: response[i].locationName, id: response[i].locationId });
+                                    list.push({ text: response[i].subAreaName, id: response[i].subAreaId });
 
                                 }
                                 $('#location_subarea').select2().empty();
@@ -321,7 +322,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">location Name</span>
                                     <input type="hidden" id="location_id" value="" />
-                                    <input type="text" value="" placeholder="" id="location_name" class="form-control" />
+                                    <input type="text" value="" id="location_name" class="form-control" />
                                 </div>
                             </div>
 
@@ -342,19 +343,19 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">locationElectricMeter</span>
-                                    <input type="text" value="" placeholder="XXXXXXXXX" id="location_electricMeter" class="form-control" />
+                                    <input type="text" value="" id="location_electricMeter" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">locationGassMeter</span>
-                                    <input type="text" value="" placeholder="XXXXXXXXX" id="location_gassMeter" class="form-control" />
+                                    <input type="text" value="" id="location_gassMeter" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">locationWapdaMeter</span>
-                                    <input type="text" value="" placeholder="XXXXXXXXX" id="location_wapdaMeter" class="form-control" />
+                                    <input type="text" value="" id="location_wapdaMeter" class="form-control" />
                                 </div>
                             </div>
 

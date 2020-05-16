@@ -270,7 +270,7 @@
             $("#resident_area").change(function () {
                 var _areaId = $("#resident_area").val();
                 $.ajax({
-                    url: '/Management/GetAllLocationsByArea',
+                    url: '/Management/GetAllSubAreasByArea',
                     type: 'POST',
                     data: { fk_area: _areaId },
                     success: function (response) {
@@ -302,7 +302,7 @@
             $("#resident_subarea").change(function () {
                 var _areaId = $("#resident_subarea").val();
                 $.ajax({
-                    url: '/Management/GetAllLocationsByArea',
+                    url: '/Management/GetAllSubAreasByArea',
                     type: 'POST',
                     data: { fk_area: _areaId },
                     success: function (response) {
@@ -364,7 +364,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">Resident PaNumber</span>
                                     <input type="hidden" id="resident_id" value="" />
-                                    <input type="text" value="" placeholder="" id="resident_panumber" class="form-control" />
+                                    <input type="text" value="" id="resident_panumber" class="form-control" />
                                 </div>
                             </div>
 
@@ -372,25 +372,25 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">Resident Rank</span>
-                                    <input type="text" value="" placeholder="XXXXXXXXX" id="resident_rank" class="form-control" />
+                                    <input type="text" value="" id="resident_rank" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">Resident Name</span>
-                                    <input type="text" value="" placeholder="XXXXXXXXX" id="resident_name" class="form-control" />
+                                    <input type="text" value="" id="resident_name" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">Resident Unit</span>
-                                    <input type="text" value="" placeholder="XXXXXXXXX" id="resident_unit" class="form-control" />
+                                    <input type="text" value="" id="resident_unit" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">Resident Remarks</span>
-                                    <input type="text" value="" placeholder="XXXXXXXXX" id="resident_remarks" class="form-control" />
+                                    <input type="text" value="" id="resident_remarks" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group">
