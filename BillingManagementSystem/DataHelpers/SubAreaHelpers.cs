@@ -257,7 +257,7 @@ namespace BillingManagementSystem.DataHelpers
             };
             return toReturn;
         }
-        public List<SubAreaResponseModel> GetAllSubAreas(SubAreaRequestModel model)
+        public List<SubAreaResponseModel> GetAllSubAreas()
         {
             List<SubAreaResponseModel> toReturn = new List<SubAreaResponseModel>();
             try
