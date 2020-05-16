@@ -33,7 +33,7 @@
     <script>
          function initElectricGrid() {
             Dtable = $(".electricGrid").DataTable({
-               autoWidth: true,
+               scrollX: true,
                 destroy: true,
                 "ajax": {
                     "url": '/ROR/GetAllRORElectric',
@@ -72,6 +72,8 @@
                     { "title": "Id", "data": "billElectricId", className: "hidden" },
                     { "title": "Meter #", "data": "locationMeterNo" },
                     { "title": "Location", "data": "locationName" },
+                    { "title": "SubArae", "data": "locationName" },
+                    { "title": "Arae", "data": "locationName" },
                     { "title": "PA No", "data": "residentPaNo" },
                     { "title": "Rank", "data": "residentRank" },
                     { "title": "Name", "data": "residentName" },
@@ -80,6 +82,8 @@
                     { "title": "Units", "data": "billElectricUnits" },
                     { "title": "Energy Charges", "data": "residentUnit" },
                     { "title": "Amount", "data": "billElectricAmount" },
+                    { "title": "PaymentStatus", "data": "paymentStatusName" },
+                    { "title": "Outstanding", "data": "billElectricOutstanding" },
                     { "title": "Water", "data": "billElectricWater" },
                     { "title": "TV", "data": "billElectricTv" },
                     {
@@ -90,7 +94,7 @@
                     { "title": "Remarks", "data": "billElectricRemarks" }
 
                 ]
-            });
+            }); 
             Dtable.columns.adjust();
             $("div.tableTop").addClass("pull-left");
             $("div.tableBottom").addClass("pull-left");
@@ -254,6 +258,8 @@
                     { "title": "Id", "data": "billElectricId", className: "hidden" },
                     { "title": "Meter #", "data": "locationMeterNo" },
                     { "title": "Location", "data": "locationName" },
+                    { "title": "SubArae", "data": "locationName" },
+                    { "title": "Arae", "data": "locationName" },
                     { "title": "Name", "data": "residentName" },
                     { "title": "PA No", "data": "residentPaNo" },
                     { "title": "Rank", "data": "residentRank" },
@@ -262,6 +268,8 @@
                     { "title": "Present Reading", "data": "billElectricCurrentReading" },
                     { "title": "Units", "data": "billElectricUnits" },
                     { "title": "Amount", "data": "billElectricAmount" },
+                    { "title": "PaymentStatus", "data": "paymentStatusName" },
+                    { "title": "Outstanding", "data": "billElectricOutstanding" },
                     { "title": "Water", "data": "billElectricWater" },
                     { "title": "TV", "data": "billElectricTv" },
                     {

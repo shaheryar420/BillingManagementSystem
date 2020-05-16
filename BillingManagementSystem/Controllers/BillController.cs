@@ -55,7 +55,7 @@ namespace BillingManagementSystem.Controllers
             string _currentReading = Request.Form["_currentReading"].ToString();
             string _currentUnit = Request.Form["_currentUnit"].ToString();
             string _month = Request.Form["_month"].ToString();
-            string userId = "1";
+            string userId = Request.Cookies["bms_data"]["id"].ToString();
             HttpPostedFileBase file = Request.Files[0]; //Uploaded file
                                                         //Use the following properties to get file's name, size and MIMEType
             int fileSize = file.ContentLength;
@@ -97,7 +97,7 @@ namespace BillingManagementSystem.Controllers
             string _currentReading = Request.Form["_currentReading"].ToString();
             string _currentUnit = Request.Form["_currentUnit"].ToString();
             string _month = Request.Form["_month"].ToString();
-            string userId = "1";
+            string userId = Request.Cookies["bms_data"]["id"].ToString();
             HttpPostedFileBase file = Request.Files[0]; //Uploaded file
                                                         //Use the following properties to get file's name, size and MIMEType
             int fileSize = file.ContentLength;
@@ -171,7 +171,7 @@ namespace BillingManagementSystem.Controllers
             string _currentReading = Request.Form["_currentReading"].ToString();
             string _currentUnit = Request.Form["_currentUnit"].ToString();
             string _month = Request.Form["_month"].ToString();
-            string userId = "1";
+            string userId = Request.Cookies["bms_data"]["id"].ToString();
             HttpPostedFileBase file = Request.Files[0]; //Uploaded file
                                                         //Use the following properties to get file's name, size and MIMEType
             int fileSize = file.ContentLength;
@@ -213,7 +213,7 @@ namespace BillingManagementSystem.Controllers
             string _currentReading = Request.Form["_currentReading"].ToString();
             string _currentUnit = Request.Form["_currentUnit"].ToString();
             string _month = Request.Form["_month"].ToString();
-            string userId = "1";
+            string userId = Request.Cookies["bms_data"]["id"].ToString();
             HttpPostedFileBase file = Request.Files[0]; //Uploaded file
                                                         //Use the following properties to get file's name, size and MIMEType
             int fileSize = file.ContentLength;

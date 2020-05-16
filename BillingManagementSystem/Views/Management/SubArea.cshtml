@@ -1,8 +1,8 @@
 ﻿
-
 @{
-    ViewBag.Title = "Location";
+    ViewBag.Title = "SubArea";
 }
+
 @section Styles
 {
     @Styles.Render("~/plugins/select2")
@@ -22,10 +22,10 @@
         var Dtable = null;
         $(document).on('nifty.ready', function () {
             $('.dropdownlist').select2();
-            $('#btn_location_update').hide();
+            $('#btn_subarea_update').hide();
             $('editTitle').hide();
-            initLocationGrid();
-            initLocationGridActions();
+            initSubAreaGrid();
+            initSubAreaGridActions();
             initDropDowns();
         });
 
@@ -37,10 +37,10 @@
             $("#location_electricMeter").val('');
             $("#location_gassMeter").val('');
             $("#location_wapdaMeter").val('');
-            $("#location_area").val('');
+            $("#subarea_area").val('');
         }
-        function initLocationGrid() {
-            Dtable = $(".locationGrid").DataTable({
+        function initSubAreaGrid() {
+            Dtable = $(".subareaGrid").DataTable({
                 autoWidth: true,
                 destroy: true,
                 "ajax": {
@@ -58,7 +58,7 @@
                         }
                         else {
 
-                            
+
                         }
                     },
                     "error": function (a, b, c) {
@@ -98,11 +98,11 @@
             $("div.tableBottom").addClass("pull-left");
             $("div.html5Buttons").addClass("pull-right");
         }
-        function initLocationGridActions() {
+        function initSubAreaActions() {
             $(document).on('click', '.btn_location_edit', function (e) {
                 e.preventDefault();
-                $('#btn_location_update').show();
-                $('#btn_location_add').hide();
+                $('#btn_subarea_update').show();
+                $('#btn_subarea_add').hide();
                 $('#addTitle').hide();
                 $('#editTitle').show();
                 var rowData = Dtable.row($(this).parents('tr')).data();
@@ -112,7 +112,7 @@
                 $("#location_electricMeter").val(rowData.locationElectricMeter);
                 $("#location_gassMeter").val(rowData.locationGassMeter);
                 $("#location_wapdaMeter").val(rowData.locationWapdaMeter);
-                $("#location_area").val(rowData.fk_area).trigger('change');
+                $("#subarea_area").val(rowData.fk_area).trigger('change');
             });
             $(document).on('click', '.btn_location_delete', function (e) {
                 e.preventDefault();
@@ -143,7 +143,7 @@
                                 success: function (response) {
                                     if (response.resultCode == '1100') {
                                         swal("Deleted!", response.remarks, "success");
-                                        initLocationGrid();
+                                        initSubAreaGrid();
                                     }
                                     else {
                                         swal('Warning', response.remarks, 'warning');
@@ -160,9 +160,9 @@
                     swal("Warning", "Please select a location", "warning");
                 }
             });
-            $('#btn_location_add').click(function () {
+            $('#btn_subarea_add').click(function () {
                 var url = "/Management/AddLocation";
-                var _areaId = $("#location_area").val();
+                var _areaId = $("#subarea_area").val();
                 var _locationName = $("#location_name").val();
                 var _locationElectricMeter = $("#location_electricMeter").val();
                 var _locationGassMeter = $("#location_gassMeter").val();
@@ -170,7 +170,7 @@
                 $.post(url, { locationName: _locationName, locationElectricMeter: _locationElectricMeter, locationGassMeter: _locationGassMeter, locationWapdaMeter: _locationWapdaMeter, fk_area: _areaId }, function (data) {
                     if (data.resultCode == "1100") {
                         swal("Added!", data.remarks, "success");
-                        initLocationGrid();
+                        initSubAreaGrid();
                         clearFields();
                     }
                     else {
@@ -179,11 +179,11 @@
                     }
                 });
             });
-            $(document).on('click', '#btn_location_update', function (e) {
+            $(document).on('click', '#btn_subarea_update', function (e) {
                 e.preventDefault();
                 var _locationId = $('#location_id').val();
                 if (_locationId) {
-                    var _areaId = $("#location_area").val();
+                    var _areaId = $("#subarea_area").val();
                     var _locationName = $("#location_name").val();
                     var _locationElectricMeter = $("#location_electricMeter").val();
                     var _locationGassMeter = $("#location_gassMeter").val();
@@ -208,9 +208,9 @@
                         success: function (response) {
                             if (response.resultCode == '1100') {
                                 swal("Updated!", response.remarks, "success");
-                                initLocationGrid();
-                                $('#btn_location_update').hide();
-                                $('#btn_location_add').show();
+                                initSubAreaGrid();
+                                $('#btn_subarea_update').hide();
+                                $('#btn_subarea_add').show();
                                 $('#addTitle').show();
                                 $('#editTitle').hide();
                                 clearFields();
@@ -242,7 +242,7 @@
                             for (var i = 0; i < response.length; i++) {
                                 list.push({ text: response[i].areaName, id: response[i].areaId });
                             }
-                            $('#location_area').select2({ data: list }).trigger('change');
+                            $('#subarea_area').select2({ data: list }).trigger('change');
                         }
                         else {
                             swal("Warning", response[0].remarks, "warning");
@@ -256,43 +256,13 @@
                     swal('Error', a + b + c, 'error');
                 }
             });
-            $("#location_area").change(function () {
-                var _areaId = $("#location_area").val();
-                $.ajax({
-                    url: '/Management/GetAllLocationsByArea',
-                    type: 'POST',
-                    data: { fk_area: _areaId },
-                    success: function (response) {
-                        if (response) {
-                            if (response[0].resultCode == '1100') {
-                                var list = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    list.push({ text: response[i].locationName, id: response[i].locationId });
-
-                                }
-                                $('#location_subarea').select2().empty();
-                                $('#location_subarea').select2({ data: list }).trigger('change');
-                            }
-                            else {
-                                $('#location_subarea').select2().empty();
-                                $('#location_subarea').select2({
-                                    placeholder: "subarea not found ",
-                                    allowClear: true
-                                }).trigger('change');
-                            }
-                        }
-                    },
-                    error: function (a, b, c) {
-                        swal('Error', a + b + c, 'error');
-                    }
-                });
-            });
+           
         }
     </script>
 }
 <div id="page-head">
     <div class="pad-all text-center">
-        <h2>Register New Location</h2>
+        <h2>Register New SubArea</h2>
     </div>
 </div>
 <div id="page-content">
@@ -311,15 +281,15 @@
         <div class="col-md-3">
             <div class="panel panel-bordered-warning">
                 <div class="panel-heading">
-                    <h1 id="addTitle" class="panel-title">Location Details</h1>
-                    <h1 id="editTitle" class="panel-title">Edit Location Details</h1>
+                    <h1 id="addTitle" class="panel-title">SubArea Details</h1>
+                    <h1 id="editTitle" class="panel-title">Edit SubArea Details</h1>
                 </div>
                 <div class="panel-body ">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <span class="input-group-addon bg-primary">location Name</span>
+                                    <span class="input-group-addon bg-primary">SubArea Name</span>
                                     <input type="hidden" id="location_id" value="" />
                                     <input type="text" value="" placeholder="" id="location_name" class="form-control" />
                                 </div>
@@ -328,7 +298,7 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">Area</span>
-                                    <select class="form-control dropdownlist" id="location_area">
+                                    <select class="form-control dropdownlist" id="subarea_area">
                                     </select>
                                 </div>
                             </div>
@@ -359,8 +329,8 @@
                             </div>
 
                             <div id="saveUpdateBtn" class="form-group">
-                                <a href="#" id="btn_location_add" class="btn btn-success btn-lg btn-block">Submit</a>
-                                <a href="#" id="btn_location_update" class="btn btn-success btn-lg btn-block">Update</a>
+                                <a href="#" id="btn_subarea_add" class="btn btn-success btn-lg btn-block">Submit</a>
+                                <a href="#" id="btn_subarea_update" class="btn btn-success btn-lg btn-block">Update</a>
                             </div>
                             <div class="form-group">
                                 <div class="alert alert-info hidden" id="errorText"></div>
@@ -373,13 +343,14 @@
         <div class="col-md-9">
             <div class="panel panel-bordered-warning">
                 <div class="panel-heading">
-                    <h1 class="panel-title">Location List</h1>
+                    <h1 class="panel-title">SubArea List</h1>
                 </div>
                 <div class="panel-body">
-                    <table class="table table-bordered table-striped table-hover locationGrid"></table>
+                    <table class="table table-bordered table-striped table-hover subareaGrid"></table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 

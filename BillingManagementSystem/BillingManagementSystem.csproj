@@ -995,6 +995,7 @@
     <Content Include="Views\Recovery\RecoveryApproval.cshtml" />
     <Content Include="Views\Bill\AdminGas.cshtml" />
     <Content Include="Views\Recovery\RecoveryApprovalGas.cshtml" />
+    <Content Include="Views\Management\SubArea.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

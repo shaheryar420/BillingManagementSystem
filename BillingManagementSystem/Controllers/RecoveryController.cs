@@ -67,6 +67,7 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult ApproveElectricPayment(PaymentRequestModel model)
         {
+
             RecoveryHelpers helper = new RecoveryHelpers();
             var response = helper.ApproveElectricPayment(model);
             var json = Json(response);

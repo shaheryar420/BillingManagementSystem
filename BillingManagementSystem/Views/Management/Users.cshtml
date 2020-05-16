@@ -8,6 +8,24 @@
     @Styles.Render("~/plugins/datepicker")
     @Styles.Render("~/plugins/datatable")
     @Styles.Render("~/plugins/sweetAlert")
+<style>
+    .modal-xl {
+            width: 30%;
+        }
+
+        .modal-open .select2-dropdown {
+            z-index: 10060;
+        }
+
+        .modal-open .select2-close-mask {
+            z-index: 10055;
+        }
+
+        .select2-container {
+            width: 100% !important;
+            padding: 0;
+        }
+    </style>
 }
 @section Scripts
 {
@@ -26,6 +44,14 @@
             initUserGrid();
             initUserGridActions();
             initDropDowns();
+            $('#btn_user_area').click(function (e) {
+                e.preventDefault();
+                $('#area-modal').modal('show').on("shown.bs.modal", function () {
+                    
+                     initDropDowns();
+                });
+
+            });
         });
 
     </script>
@@ -254,6 +280,62 @@
                     swal('Error', a + b + c, 'error');
                 }
             });
+
+             $.ajax({
+                url: '/Management/GetAllAreas',
+                type: 'POST',
+                success: function (response) {
+                    if (response) {
+                        if (response[0].resultCode == '1100') {
+                            var list = [];
+                            for (var i = 0; i < response.length; i++) {
+                                list.push({ text: response[i].areaName, id: response[i].areaId });
+                            }
+                            $('#user_area').select2({ data: list }).trigger('change');
+                        }
+                        else {
+                            swal("Warning", response[0].remarks, "warning");
+                        }
+                    }
+                    else {
+                        swal("Warning", 'No response from server', "warning");
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
+            });
+            $("#user_area").change(function () {
+                var _areaId = $("#user_area").val();
+                $.ajax({
+                    url: '/Management/GetAllLocationsByArea',
+                    type: 'POST',
+                    data: { fk_area: _areaId },
+                    success: function (response) {
+                        if (response) {
+                            if (response[0].resultCode == '1100') {
+                                var list = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    list.push({ text: response[i].locationName, id: response[i].locationId });
+
+                                }
+                                $('#user_subarea').select2().empty();
+                                $('#user_subarea').select2({ data: list }).trigger('change');
+                            }
+                            else {
+                                $('#user_subarea').select2().empty();
+                                $('#user_subarea').select2({
+                                    placeholder: "subarea not found ",
+                                    allowClear: true
+                                }).trigger('change');
+                            }
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            });
         }
     </script>
 }
@@ -319,6 +401,9 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <button class="btn btn-info" id="btn_user_area"><i class="psi-pen"></i> Assign Area & SubArea</button>
+                            </div>
                             <div id="saveUpdateBtn" class="form-group">
                                 <a href="#" id="btn_user_add" class="btn btn-success btn-lg btn-block">Submit</a>
                                 <a href="#" id="btn_user_update" class="btn btn-success btn-lg btn-block">Update</a>
@@ -338,6 +423,51 @@
                 </div>
                 <div class="panel-body">
                     <table class="table table-bordered table-striped table-hover userGrid"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="area-modal" role="dialog" aria-labelledby="arae-modal" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!--Modal header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h2 class="modal-title">Assign Area & SubArae</h2>
+            </div>
+
+            <!--Modal body-->
+            <div class="modal-body" id="modal-overlay">
+                <div class="row">
+                    <div class="col-md-12">                     
+
+                        
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon bg-primary">Arae</span>
+                                <select class="form-control dropdownlist" id="user_area">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon bg-primary">Sub Arae</span>
+                                <select class="form-control dropdownlist" id="user_subarea">
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                
+                </div>
+            </div>
+
+            <!--Modal footer-->
+            <div class="modal-footer">
+                <div class="btn-group pull-right">
+                    <a href="#" id="btn_add_area" class="btn btn-success">add</a>
                 </div>
             </div>
         </div>
