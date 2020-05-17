@@ -307,7 +307,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<LocationResponseModel>  GetAllLocationsByArea(LocationRequestModel model)
+        public List<LocationResponseModel>  GetAllLocationsBySubArea(LocationRequestModel model)
         {
             List<LocationResponseModel>  toReturn = new List<LocationResponseModel>();
             try
@@ -426,7 +426,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<LocationResponseModel> GetAllAvailableLocationsByArea(LocationRequestModel model)
+        public List<LocationResponseModel> GetAllAvailableLocationsBySubArea(LocationRequestModel model)
         {
             List<LocationResponseModel> toReturn = new List<LocationResponseModel>();
             try
