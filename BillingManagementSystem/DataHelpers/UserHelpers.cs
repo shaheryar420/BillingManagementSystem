@@ -444,5 +444,111 @@ namespace BillingManagementSystem.DataHelpers
             };
             return toReturn;
         }
+        public UserSubAreasResponseModel AssignSubAreaToUser(UserSubAreasRequestModel model)
+        {
+            UserSubAreasResponseModel toReturn = new UserSubAreasResponseModel();
+            try
+            {
+                if(new ModelsValidatorHelper().validateint(model.fk_user))
+                {
+                    int fkUser = int.Parse(model.fk_user);
+                    if(new ModelsValidatorHelper().validateint(model.fk_subarea))
+                    {
+                        int fkSubArea = int.Parse(model.fk_subarea);
+                        using(db_bmsEntities db = new db_bmsEntities())
+                        {
+                            var newAssignement = new tbl_userareas()
+                            {
+                                fk_subarea = fkSubArea,
+                                fk_user = fkUser
+                            };
+                            db.tbl_userareas.Add(newAssignement);
+                            db.SaveChanges();
+                            toReturn = new UserSubAreasResponseModel()
+                            {
+                                remarks = "Sub Area Successfully Assigned",
+                                resultCode = "1100"
+                            };
+                        }
+                    }
+                    else
+                    {
+                        toReturn = new UserSubAreasResponseModel()
+                        {
+                            remarks = "Please Provide Sub Areas",
+                            resultCode = "1300"
+                        };
+                    }
+                }
+                else
+                {
+                    toReturn = new UserSubAreasResponseModel()
+                    {
+                        resultCode = "1300",
+                        remarks = "Please Provide User"
+                    };
+                }
+            }
+            catch(Exception Ex)
+            {
+                toReturn = new UserSubAreasResponseModel()
+                {
+                    remarks = "There was a Fatal Error " + Ex.ToString(),
+                    resultCode = "1000"
+                };
+            }
+            return toReturn;
+        }
+        public UserSubAreasResponseModel RemoveSubAreaFromUser(UserSubAreasRequestModel model)
+        {
+            UserSubAreasResponseModel toReturn = new UserSubAreasResponseModel();
+            try
+            {
+                if(new ModelsValidatorHelper().validateint(model.userAreasId))
+                {
+                    int userAreasId = int.Parse(model.userAreasId);
+                    using (db_bmsEntities db = new db_bmsEntities())
+                    {
+                        var assignment = (from x in db.tbl_userareas where x.userareas_id == userAreasId select x).FirstOrDefault();
+                        if(assignment != null)
+                        {
+                            db.tbl_userareas.Remove(assignment);
+                            db.SaveChanges();
+                            toReturn = new UserSubAreasResponseModel()
+                            {
+                                remarks = "Sub Area is No Longer Assigned",
+                                resultCode = "1100"
+                            };
+                        }
+                        else
+                        {
+                            toReturn = new UserSubAreasResponseModel()
+                            {
+                                remarks = "No Record Found",
+                                resultCode = "1200"
+                            };
+                        }
+                        
+                    }
+                }
+                else
+                {
+                    toReturn = new UserSubAreasResponseModel()
+                    {
+                        remarks = "Please Select Assigned Area",
+                        resultCode = "1300"
+                    };
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn = new UserSubAreasResponseModel()
+                {
+                    remarks = "There was a Fatal Error " + Ex.ToString(),
+                    resultCode = "1000"
+                };
+            }
+            return toReturn;
+        }
     }
 }

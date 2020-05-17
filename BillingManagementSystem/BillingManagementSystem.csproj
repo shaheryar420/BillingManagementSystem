@@ -781,6 +781,7 @@
     <Compile Include="DataHelpers\ResidentHelpers.cs" />
     <Compile Include="DataHelpers\RORHelpers.cs" />
     <Compile Include="DataHelpers\SubAreaHelpers.cs" />
+    <Compile Include="DataHelpers\UserAreaHelpers.cs" />
     <Compile Include="DataHelpers\UserHelpers.cs" />
     <Compile Include="DataHelpers\UserTypeHelpers.cs" />
     <Compile Include="Global.asax.cs">
@@ -817,6 +818,7 @@
     <Compile Include="Models\RequestModels\ResidentRequestModel.cs" />
     <Compile Include="Models\RequestModels\SubAreaRequestModel.cs" />
     <Compile Include="Models\RequestModels\UserRequestModel.cs" />
+    <Compile Include="Models\RequestModels\UserSubAreasRequestModel.cs" />
     <Compile Include="Models\RequestModels\UserTypeRequestModel.cs" />
     <Compile Include="Models\ResponseModels\ApprovePaymentResponseModel.cs" />
     <Compile Include="Models\ResponseModels\AreaResponseModel.cs" />
@@ -835,6 +837,7 @@
     <Compile Include="Models\ResponseModels\ResidentResponseModel.cs" />
     <Compile Include="Models\ResponseModels\SubAreaResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\UserSubAreasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserTypeResponseModel.cs" />
     <Compile Include="Models\tbl_action.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
