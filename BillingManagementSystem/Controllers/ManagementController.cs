@@ -95,6 +95,22 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult AssignSubAreaToUser([FromBody] UserSubAreasRequestModel model)
+        {
+            UserHelpers helper = new UserHelpers();
+            var response = helper.AssignSubAreaToUser(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult RemoveSubAreaFromUser([FromBody] UserSubAreasRequestModel model)
+        {
+            UserHelpers helper = new UserHelpers();
+            var response = helper.RemoveSubAreaFromUser(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
         #region UserType
         public ActionResult AddUserType([FromBody] UserTypeRequestModel model)
@@ -137,7 +153,17 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-        
+
+        #endregion
+        #region User Area
+        public ActionResult GetAssignedSubAreasByUser(UserSubAreasRequestModel model)
+        {
+            UserAreaHelpers helper = new UserAreaHelpers();
+            var response = helper.GetAssignedSubAreasByUser(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
         #region Location
         public ActionResult AddLocation([FromBody] LocationRequestModel model)
@@ -238,13 +264,9 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-        public ActionResult GetAllSubAreasByUser()
+        public ActionResult GetAllSubAreasByUser(SubAreaRequestModel model)
         {
-            string userId = Request.Cookies["bms_data"]["id"].ToString();
-            SubAreaRequestModel model = new SubAreaRequestModel()
-            {
-                userId = userId
-            };
+            
             SubAreaHelpers helper = new SubAreaHelpers();
             var response = helper.GetAllSubAreasByUser(model);
             var json = Json(response);

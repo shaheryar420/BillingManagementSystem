@@ -47,6 +47,7 @@
             $("#meter_no").val('');
             $("#previous_reading").val('');
             $("#current_reading").val('');
+            $("#prev_read").val('');
             $("#current_unit").val('');
             $("#month").val('');
         }
@@ -121,7 +122,10 @@
                 $('#btn_electric_add').hide();
                 $('#addTitle').hide();
                 $('#editTitle').show();
+                $('#previous_reading').show();
                 $('#prev_read').hide();
+                $('#label_NPR').hide();
+                $('#label_PR').show();
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 var _id = rowData.readingElectricId;
                 $('#electric_id').val(_id);
@@ -130,6 +134,7 @@
                 $("#current_reading").val(rowData.readingElectricCurrentReading);
                 $("#current_unit").val(rowData.readingElectricUnits);
                 $("#month").val(rowData.readingElectricMonth);
+                _prevResd = rowData.readingElectricPrevReading;
             });
             $(document).on('click', '.btn_electric_delete', function (e) {
                 e.preventDefault();
@@ -279,7 +284,7 @@
 
         function initDropDowns() {
             $.ajax({
-                url: '/Management/GetAllAreasByUser',
+                url: '/Management/GetAllAreas',
                 type: 'POST',
                 success: function (response) {
                     if (response) {
@@ -305,13 +310,44 @@
                 }
 
             });
-
-            $("#electric_area").change(function () {
+             $("#electric_area").change(function () {
                 var _areaId = $("#electric_area").val();
                 $.ajax({
-                    url: '/Management/GetAllLocationsByArea',
+                    url: '/Management/GetAllSubAreasByArea',
                     type: 'POST',
                     data: { fk_area: _areaId },
+                    success: function (response) {
+                        if (response) {
+                            if (response[0].resultCode == '1100') {
+                                var list = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    list.push({ text: response[i].subAreaName, id: response[i].subAreaId });
+
+                                }
+                                $('#electric_subarea').select2().empty();
+                                $('#electric_subarea').select2({ data: list }).trigger('change');
+                            }
+                            else {
+                                $('#electric_subarea').select2().empty();
+                                $('#electric_subarea').select2({
+                                    placeholder: "SubArea not found ",
+                                    allowClear: true
+                                }).trigger('change');
+                            }
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            });
+
+            $("#electric_subarea").change(function () {
+                var _subareaId = $("#electric_subarea").val();
+                $.ajax({
+                    url: '/Management/GetAllLocationsBySubArea',
+                    type: 'POST',
+                    data: { fk_subArea: _subareaId },
                     success: function (response) {
                         if (response) {
                             if (response[0].resultCode == '1100') {
@@ -407,6 +443,10 @@
                         <select class="form-control dropdownlist" id="electric_area"></select>
                     </div>
                     <div class="form-group">
+                        <label class="control-label">Select SubArea</label>
+                        <select class="form-control dropdownlist" id="electric_subarea"></select>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">Select Location</label>
                         <select class="form-control dropdownlist" id="electric_resident"></select>
                     </div>
@@ -419,8 +459,8 @@
                         <input type="number" value="" readonly class="form-control" id="previous_reading" />
                     </div>
                     <div class="form-group">
-                        <label class="control-label" id="label_NPR">new Previous Reading</label>
-                        <input type="number" value=""  class="form-control" id="prev_read" />
+                        <label class="control-label" id="label_NPR">Previous Reading</label>
+                        <input type="number" value="" class="form-control" id="prev_read" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Enter Current Reading</label>

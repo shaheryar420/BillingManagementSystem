@@ -22,10 +22,13 @@
         var _id  = null;
         var Dtable = null;
         var electricrate = null;
+        var _prevResd = null;
         $(document).on('nifty.ready', function () {
             $('.dropdownlist').select2();
             $('#btn_electric_update').hide();
             $('editTitle').hide();
+            $('#prev_read').hide();
+            $('#label_NPR').hide();
             $(".monthPicker").datepicker({
                 format: "mm-yyyy",
                 startView: "months",
@@ -38,12 +41,13 @@
     </script>
     <script>
         function clearFields() {
-            $('#location_id').val('');
-            $("#location_name").val('');
-            $("#location_electricMeter").val('');
-            $("#location_gassMeter").val('');
-            $("#location_wapdaMeter").val('');
-            $("#location_area").val('');
+            $('#electric_id').val('');
+            $("#meter_no").val('');
+            $("#previous_reading").val('');
+            $("#current_reading").val('');
+            $("#prev_read").val('');
+            $("#current_unit").val('');
+            $("#month").val('');
         }
         function initElectricGrid() {
             Dtable = $(".electricGrid").DataTable({
@@ -117,6 +121,10 @@
                 $('#btn_electric_add').hide();
                 $('#addTitle').hide();
                 $('#editTitle').show();
+                $('#previous_reading').show();
+                $('#prev_read').hide();
+                $('#label_NPR').hide();
+                $('#label_PR').show();
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 var _id = rowData.readingElectricId;
                 $('#electric_id').val(_id);
@@ -125,12 +133,12 @@
                 $("#current_reading").val(rowData.readingElectricCurrentReading);
                 $("#current_unit").val(rowData.readingElectricUnits);
                 $("#month").val(rowData.readingElectricMonth);
+                _prevResd = rowData.readingElectricPrevReading;
             });
-         $(document).on('click', '.btn_electric_delete', function (e) {
+            $(document).on('click', '.btn_electric_delete', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 var _id = rowData.readingElectricId;
-                console.log(_id);
                 if (_id) {
                     swal({
                         title: "Are you sure?",
@@ -169,13 +177,12 @@
                         });
                 }
                 else {
-                    swal("Warning", "Please select a location", "warning");
+                    swal("Warning", "Please select a Reading", "warning");
                 }
             });
-         $('#btn_electric_add').click(function () {
+            $('#btn_electric_add').click(function () {
                 var _url = "/Bill/AddReadingElectric";
                 var _meterNo = $("#meter_no").val();
-                var _previousReading = $("#previous_reading").val();
                 var _currentReading = $("#current_reading").val();
                 var _currentUnit = $("#current_unit").val();
                 var _month = $("#month").val();
@@ -183,7 +190,7 @@
                 var fileInput = document.getElementById('online_file');
                 formdata.append(fileInput.files[0].name, fileInput.files[0]);
                 formdata.append("_meterNo", _meterNo);
-                formdata.append("_previousReading", _previousReading);
+                formdata.append("_previousReading", _prevResd);
                 formdata.append("_currentReading", _currentReading);
                 formdata.append("_currentUnit", _currentUnit);
                 formdata.append("_month", _month);
@@ -216,6 +223,8 @@
                 });
 
             });
+
+
          $(document).on('click', '.btn_electric_approvel', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
@@ -247,14 +256,13 @@
                 });
             });
            
-         $(document).on('click', '#btn_electric_update', function (e) {
+            $(document).on('click', '#btn_electric_update', function (e) {
                 e.preventDefault();
                 var _electricId = $('#electric_id').val();
                 if (_electricId) {
                     var _url = "/Bill/EditReadingElectric";
                     var _electricId = $("#electric_id").val();
                     var _meterNo = $("#meter_no").val();
-                    var _previousReading = $("#previous_reading").val();
                     var _currentReading = $("#current_reading").val();
                     var _currentUnit = $("#current_unit").val();
                     var _month = $("#month").val();
@@ -263,7 +271,7 @@
                 formdata.append(fileInput.files[0].name, fileInput.files[0]);
                 formdata.append("_id", _electricId);
                 formdata.append("_meterNo", _meterNo);
-                formdata.append("_previousReading", _previousReading);
+                formdata.append("_previousReading", _prevResd);
                 formdata.append("_currentReading", _currentReading);
                 formdata.append("_currentUnit", _currentUnit);
                 formdata.append("_month", _month);
@@ -334,14 +342,44 @@
                 }
 
             });
-
             $("#electric_area").change(function () {
                 var _areaId = $("#electric_area").val();
-                console.log(_areaId);
                 $.ajax({
-                    url: '/Management/GetAllLocationsByArea',
+                    url: '/Management/GetAllSubAreasByArea',
                     type: 'POST',
                     data: { fk_area: _areaId },
+                    success: function (response) {
+                        if (response) {
+                            if (response[0].resultCode == '1100') {
+                                var list = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    list.push({ text: response[i].subAreaName, id: response[i].subAreaId });
+
+                                }
+                                $('#electric_subarea').select2().empty();
+                                $('#electric_subarea').select2({ data: list }).trigger('change');
+                            }
+                            else {
+                                $('#electric_subarea').select2().empty();
+                                $('#electric_subarea').select2({
+                                    placeholder: "SubArea not found ",
+                                    allowClear: true
+                                }).trigger('change');
+                            }
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            });
+
+            $("#electric_subarea").change(function () {
+                var _subareaId = $("#electric_subarea").val();
+                $.ajax({
+                    url: '/Management/GetAllLocationsBySubArea',
+                    type: 'POST',
+                    data: { fk_subArea: _subareaId },
                     success: function (response) {
                         if (response) {
                             if (response[0].resultCode == '1100') {
@@ -353,7 +391,6 @@
                                 $('#electric_resident').select2().empty();
                                 $('#electric_resident').select2({ data: list }).trigger('change');
                                 Id = $('#electric_resident').val();
-                                console.log(Id);
                                 initmeterNo(Id);
                             }
                             else {
@@ -381,6 +418,13 @@
                         if (response.resultCode == '1100') {
                             $('#meter_no').val(response.locationElectricMeter);
                             $('#previous_reading').val(response.previousReading);
+                            _prevResd = $("#previous_reading").val();
+                            if (_prevResd == '0') {
+                                $('#prev_read').show();
+                                $('#label_NPR').show();
+                                $('#label_PR').hide();
+                                $('#previous_reading').hide();
+                            }
                         }
                         else {
                             swal("Warning", response.remarks, "warning");
@@ -393,13 +437,22 @@
                 }
 
             });
+
         }
-                $("#current_reading").change(function () {
-             
-            previousReading = $('#previous_reading').val();
-            currentReading = $('#current_reading').val();
-            var unit = currentReading - previousReading;
-            $('#current_unit').val(unit);
+        $("#current_reading").change(function () {
+            if (_prevResd == "0") {
+                _prevResd = $('#prev_read').val();
+                currentReading = $('#current_reading').val();
+                var unit = currentReading - _prevResd;
+                $('#current_unit').val(unit);
+            }
+            else {
+
+                currentReading = $('#current_reading').val();
+                var unit = currentReading - _prevResd;
+                $('#current_unit').val(unit);
+            }
+
         });
 
         function initApprovel() {
@@ -446,6 +499,10 @@
                         <select class="form-control dropdownlist" id="electric_area"></select>
                     </div>
                     <div class="form-group">
+                        <label class="control-label">Select SubArea</label>
+                        <select class="form-control dropdownlist" id="electric_subarea"></select>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">Select Location</label>
                         <select class="form-control dropdownlist" id="electric_resident"></select>
                     </div>
@@ -454,8 +511,12 @@
                         <input type="number" value="" readonly class="form-control" id="meter_no" />
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Previous Reading</label>
+                        <label class="control-label" id="label_PR">Previous Reading</label>
                         <input type="number" value="" readonly class="form-control" id="previous_reading" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" id="label_NPR">Previous Reading</label>
+                        <input type="number" value="" class="form-control" id="prev_read" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Enter Current Reading</label>
