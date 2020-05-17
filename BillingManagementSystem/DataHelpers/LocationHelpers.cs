@@ -15,7 +15,7 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using(db_bmsEntities db = new db_bmsEntities())
                 {
-                    if(new ModelsValidatorHelper().validateint(model.fk_area))
+                    if(new ModelsValidatorHelper().validateint(model.fk_subArea))
                     {
                         if (!string.IsNullOrEmpty(model.locationName))
                         {
@@ -24,7 +24,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 var newLocation = new tbl_location()
                                 {
-                                    fk_subarea = int.Parse(model.fk_area),
+                                    fk_subarea = int.Parse(model.fk_subArea),
                                     location_electricmeter = !string.IsNullOrEmpty(model.locationElectricMeter) ? model.locationElectricMeter : "",
                                     location_gassmeter = !string.IsNullOrEmpty(model.locationGassMeter) ? model.locationGassMeter : "",
                                     location_name = model.locationName,
@@ -101,7 +101,7 @@ namespace BillingManagementSystem.DataHelpers
                             }
                             if (existingLocation == null)
                             {
-                                location.fk_subarea = !string.IsNullOrEmpty(model.fk_area) ? int.Parse(model.fk_area) : location.fk_subarea;
+                                location.fk_subarea = !string.IsNullOrEmpty(model.fk_subArea) ? int.Parse(model.fk_subArea) : location.fk_subarea;
                                 location.location_electricmeter = !string.IsNullOrEmpty(model.locationElectricMeter) ? model.locationElectricMeter : location.location_electricmeter;
                                 location.location_gassmeter = !string.IsNullOrEmpty(model.locationGassMeter) ? model.locationGassMeter : location.location_gassmeter;
                                 location.location_name = !string.IsNullOrEmpty(model.locationName) ? model.locationName : location.location_name;
@@ -232,7 +232,7 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn = new LocationResponseModel()
                             {
-                                fk_area = location.fk_subarea.ToString(),
+                                fk_subArea = location.fk_subarea.ToString(),
                                 locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                                 locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
                                 locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
@@ -314,9 +314,9 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    if (new ModelsValidatorHelper().validateint(model.fk_area))
+                    if (new ModelsValidatorHelper().validateint(model.fk_subArea))
                     {
-                        int areaId = int.Parse(model.fk_area);
+                        int areaId = int.Parse(model.fk_subArea);
                         var locations = (from x in db.tbl_location
                                         join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
                                         where x.fk_subarea == areaId
@@ -334,7 +334,7 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn= locations.Select(location => new LocationResponseModel()
                             {
-                                fk_area = location.fk_subarea.ToString(),
+                                fk_subArea = location.fk_subarea.ToString(),
                                 locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                                 locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
                                 locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
@@ -382,6 +382,7 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     var locations = (from x in db.tbl_location
                                         join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
+                                        join z in db.tbl_area on y.fk_area equals z.area_id
                                         select new
                                         {
                                             x.fk_subarea,
@@ -390,13 +391,17 @@ namespace BillingManagementSystem.DataHelpers
                                             x.location_id,
                                             x.location_name,
                                             x.location_wapdameter,
-                                            y.subarea_name
+                                            y.subarea_name,
+                                            z.area_id,
+                                            z.area_name
                                         }).ToList();
                     if (locations.Count() > 0)
                     {
                         toReturn = locations.Select(location => new LocationResponseModel()
                         {
-                            fk_area = location.fk_subarea.ToString(),
+                            fk_area = location.area_id.ToString(),
+                            areaName = !string.IsNullOrEmpty(location.area_name)?location.area_name:"",
+                            fk_subArea = location.fk_subarea.ToString(),
                             locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                             locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
                             locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
@@ -433,9 +438,9 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    if (new ModelsValidatorHelper().validateint(model.fk_area))
+                    if (new ModelsValidatorHelper().validateint(model.fk_subArea))
                     {
-                        int areaId = int.Parse(model.fk_area);
+                        int areaId = int.Parse(model.fk_subArea);
                         var residentBuildings = (from x in db.tbl_residentbuilding select x).ToList();
                         var locations = (from x in db.tbl_location
                                          join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
@@ -454,7 +459,7 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn = locations.Select(location => new LocationResponseModel()
                             {
-                                fk_area = location.fk_subarea.ToString(),
+                                fk_subArea = location.fk_subarea.ToString(),
                                 locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                                 locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
                                 locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
