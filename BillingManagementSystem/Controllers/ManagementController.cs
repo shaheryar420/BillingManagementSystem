@@ -183,7 +183,7 @@ namespace BillingManagementSystem.Controllers
         public ActionResult GetAllLocationsByArea([FromBody] LocationRequestModel model)
         {
             LocationHelpers helper = new LocationHelpers();
-            var response = helper.GetAllLocationsByArea(model);
+            var response = helper.GetAllAvailableLocationsBySubArea(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;
