@@ -180,10 +180,18 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-        public ActionResult GetAllLocationsByArea([FromBody] LocationRequestModel model)
+        public ActionResult GetAllAvailableLocationsBySubArea([FromBody] LocationRequestModel model)
         {
             LocationHelpers helper = new LocationHelpers();
             var response = helper.GetAllAvailableLocationsBySubArea(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllLocationsBySubArea([FromBody] LocationRequestModel model)
+        {
+            LocationHelpers helper = new LocationHelpers();
+            var response = helper.GetAllLocationsBySubArea(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;
@@ -287,7 +295,7 @@ namespace BillingManagementSystem.Controllers
             return json;
         }
         public ActionResult GetAllAreas()
-        {
+            {
             AreaHelpers helper = new AreaHelpers();
             var response = helper.GetAllAreas(new AreaRequestModel());
             var json = Json(response);

@@ -38,6 +38,7 @@
             $("#location_gassMeter").val('');
             $("#location_wapdaMeter").val('');
             $("#location_area").val('');
+            $("#location_subarea").val('');
         }
         function initLocationGrid() {
             Dtable = $(".locationGrid").DataTable({
@@ -113,6 +114,7 @@
                 $("#location_gassMeter").val(rowData.locationGassMeter);
                 $("#location_wapdaMeter").val(rowData.locationWapdaMeter);
                 $("#location_area").val(rowData.fk_area).trigger('change');
+                $("#location_subarea").val(rowData.fk_area).trigger('change');
             });
             $(document).on('click', '.btn_location_delete', function (e) {
                 e.preventDefault();
@@ -162,13 +164,12 @@
             });
             $('#btn_location_add').click(function () {
                 var url = "/Management/AddLocation";
-                var _areaId = $("#location_area").val();
                 var _subAreaId = $("#location_subarea").val();
                 var _locationName = $("#location_name").val();
                 var _locationElectricMeter = $("#location_electricMeter").val();
                 var _locationGassMeter = $("#location_gassMeter").val();
                 var _locationWapdaMeter = $("#location_wapdaMeter").val();
-                $.post(url, { locationName: _locationName, locationElectricMeter: _locationElectricMeter, locationGassMeter: _locationGassMeter, locationWapdaMeter: _locationWapdaMeter, fk_area: _areaId }, function (data) {
+                $.post(url, { locationName: _locationName, locationElectricMeter: _locationElectricMeter, locationGassMeter: _locationGassMeter, locationWapdaMeter: _locationWapdaMeter, fk_subArea: _subAreaId }, function (data) {
                     if (data.resultCode == "1100") {
                         swal("Added!", data.remarks, "success");
                         initLocationGrid();
@@ -184,7 +185,7 @@
                 e.preventDefault();
                 var _locationId = $('#location_id').val();
                 if (_locationId) {
-                    var _areaId = $("#location_area").val();
+                    var _subAreaId = $("#location_subarea").val();
                     var _locationName = $("#location_name").val();
                     var _locationElectricMeter = $("#location_electricMeter").val();
                     var _locationGassMeter = $("#location_gassMeter").val();
@@ -194,7 +195,7 @@
                         type: 'POST',
                         data: {
                             locationId: _locationId,
-                            fk_area: _areaId,
+                            fk_subArea: _subAreaId,
                             locationName: _locationName,
                             locationElectricMeter: _locationElectricMeter,
                             locationGassMeter: _locationGassMeter,

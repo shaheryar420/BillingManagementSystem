@@ -152,7 +152,7 @@
                                 <li class="@Html.IsSelected(controller: "Management", action:"Area")" @Html.IsAllowed(controller: "Management", action: "Area")>
                                     <a href="@Url.Action("Area","Management")">Manage Areas</a>
                                 </li>
-                                <li class="@Html.IsSelected(controller: "Management", action:"SubArea")" @Html.IsAllowed(controller: "Management", action: "SubArea")>
+                                <li class="@Html.IsSelected(controller: "Management", action:"SubArea") @Html.IsAllowed(controller: "Management", action: "SubArea")">
                                     <a href="@Url.Action("SubArea","Management")">Manage SubAreas</a>
                                 </li>
                                 <li class="@Html.IsSelected(controller: "Management", action:"Location")@Html.IsAllowed(controller:"Management", action: "Location")">

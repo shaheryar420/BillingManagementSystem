@@ -240,7 +240,7 @@
         }
         function initDropDowns() {
             $.ajax({
-                url: '/Management/GetAllAreasByUser',
+                url: '/Management/GetAllAreas',
                 type: 'POST',
                 success: function (response) {
                     if (response) {
@@ -278,7 +278,7 @@
                             if (response[0].resultCode == '1100') {
                                 var list = [];
                                 for (var i = 0; i < response.length; i++) {
-                                    list.push({ text: response[i].locationName, id: response[i].locationId });
+                                    list.push({ text: response[i].subAreaName, id: response[i].subAreaId });
 
                                 }
                                 $('#resident_subarea').select2().empty();
@@ -287,7 +287,7 @@
                             else {
                                 $('#resident_subarea').select2().empty();
                                 $('#resident_subarea').select2({
-                                    placeholder: "resident not found ",
+                                    placeholder: "SubArea not found ",
                                     allowClear: true
                                 }).trigger('change');
                             }
@@ -300,11 +300,11 @@
             });
 
             $("#resident_subarea").change(function () {
-                var _areaId = $("#resident_subarea").val();
+                var _subareaId = $("#resident_subarea").val();
                 $.ajax({
-                    url: '/Management/GetAllSubAreasByArea',
+                    url: '/Management/GetAllLocationsBySubArea',
                     type: 'POST',
-                    data: { fk_area: _areaId },
+                    data: { fk_subArea: _subareaId },
                     success: function (response) {
                         if (response) {
                             if (response[0].resultCode == '1100') {

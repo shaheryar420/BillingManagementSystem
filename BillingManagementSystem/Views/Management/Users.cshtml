@@ -280,63 +280,64 @@
                     swal('Error', a + b + c, 'error');
                 }
             });
-
-             $.ajax({
-                url: '/Management/GetAllAreas',
-                type: 'POST',
-                success: function (response) {
-                    if (response) {
-                        if (response[0].resultCode == '1100') {
-                            var list = [];
-                            for (var i = 0; i < response.length; i++) {
-                                list.push({ text: response[i].areaName, id: response[i].areaId });
-                            }
-                            $('#user_area').select2({ data: list }).trigger('change');
-                        }
-                        else {
-                            swal("Warning", response[0].remarks, "warning");
-                        }
-                    }
-                    else {
-                        swal("Warning", 'No response from server', "warning");
-                    }
-                },
-                error: function (a, b, c) {
-                    swal('Error', a + b + c, 'error');
-                }
-            });
-            $("#user_area").change(function () {
-                var _areaId = $("#user_area").val();
-                $.ajax({
-                    url: '/Management/GetAllLocationsByArea',
-                    type: 'POST',
-                    data: { fk_area: _areaId },
-                    success: function (response) {
-                        if (response) {
-                            if (response[0].resultCode == '1100') {
-                                var list = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    list.push({ text: response[i].locationName, id: response[i].locationId });
-
-                                }
-                                $('#user_subarea').select2().empty();
-                                $('#user_subarea').select2({ data: list }).trigger('change');
-                            }
-                            else {
-                                $('#user_subarea').select2().empty();
-                                $('#user_subarea').select2({
-                                    placeholder: "subarea not found ",
-                                    allowClear: true
-                                }).trigger('change');
-                            }
-                        }
-                    },
-                    error: function (a, b, c) {
-                        swal('Error', a + b + c, 'error');
-                    }
-                });
-            });
         }
+
+        //     $.ajax({
+        //        url: '/Management/GetAllAreas',
+        //        type: 'POST',
+        //        success: function (response) {
+        //            if (response) {
+        //                if (response[0].resultCode == '1100') {
+        //                    var list = [];
+        //                    for (var i = 0; i < response.length; i++) {
+        //                        list.push({ text: response[i].areaName, id: response[i].areaId });
+        //                    }
+        //                    $('#user_area').select2({ data: list }).trigger('change');
+        //                }
+        //                else {
+        //                    swal("Warning", response[0].remarks, "warning");
+        //                }
+        //            }
+        //            else {
+        //                swal("Warning", 'No response from server', "warning");
+        //            }
+        //        },
+        //        error: function (a, b, c) {
+        //            swal('Error', a + b + c, 'error');
+        //        }
+        //    });
+        //    $("#user_area").change(function () {
+        //        var _areaId = $("#user_area").val();
+        //        $.ajax({
+        //            url: '/Management/GetAllLocationsByArea',
+        //            type: 'POST',
+        //            data: { fk_area: _areaId },
+        //            success: function (response) {
+        //                if (response) {
+        //                    if (response[0].resultCode == '1100') {
+        //                        var list = [];
+        //                        for (var i = 0; i < response.length; i++) {
+        //                            list.push({ text: response[i].locationName, id: response[i].locationId });
+
+        //                        }
+        //                        $('#user_subarea').select2().empty();
+        //                        $('#user_subarea').select2({ data: list }).trigger('change');
+        //                    }
+        //                    else {
+        //                        $('#user_subarea').select2().empty();
+        //                        $('#user_subarea').select2({
+        //                            placeholder: "subarea not found ",
+        //                            allowClear: true
+        //                        }).trigger('change');
+        //                    }
+        //                }
+        //            },
+        //            error: function (a, b, c) {
+        //                swal('Error', a + b + c, 'error');
+        //            }
+        //        });
+        //    });
+        //}
     </script>
 }
 <div id="page-head">
