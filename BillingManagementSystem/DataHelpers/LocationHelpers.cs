@@ -440,11 +440,11 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     if (new ModelsValidatorHelper().validateint(model.fk_subArea))
                     {
-                        int areaId = int.Parse(model.fk_subArea);
+                        int subAreaId = int.Parse(model.fk_subArea);
                         var residentBuildings = (from x in db.tbl_residentbuilding select x).ToList();
                         var locations = (from x in db.tbl_location
                                          join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
-                                         where x.fk_subarea == areaId
+                                         where x.fk_subarea == subAreaId
                                          select new
                                          {
                                              x.fk_subarea,
@@ -468,17 +468,25 @@ namespace BillingManagementSystem.DataHelpers
                                 remarks = "Successfully Location Found",
                                 resultCode = "1100"
                             }).ToList();
-                            //foreach (var location in locations)
-                            //{
-                            //    if (residentBuildings.Contains(new tbl_residentbuilding() { fk_resident = location.location_id });
-                            //    foreach (var residentBuilding in residentBuildings)
-                            //    {
-                            //        if (residentBuilding.fk_building)
-                            //        {
-                            //            toReturn.Remove(location);
-                            //        }
-                            //    }
-                            //}
+                            var alreadyAssignedLocations = new List<LocationResponseModel>();
+                            foreach (var location in toReturn)
+                            {
+                                int locationId = int.Parse(location.locationId);
+                                foreach (var residentBuilding in residentBuildings)
+                                {
+                                    if (residentBuilding.fk_building== locationId)
+                                    {
+                                        alreadyAssignedLocations.Add(location);
+                                    }
+                                }
+                            }
+                            foreach(var location in alreadyAssignedLocations)
+                            {
+                                if (toReturn.Contains(location))
+                                {
+                                    toReturn.Remove(location);
+                                }
+                            }
                             if (toReturn.Count == 0)
                             {
                                 toReturn.Add(new LocationResponseModel()

@@ -465,7 +465,8 @@ namespace BillingManagementSystem.DataHelpers
                             var userAreas = (from x in db.tbl_userareas select x).ToList();
                             if (userAreas.Count() > 0)
                             {
-                                if (!userAreas.Contains(newAssignement))
+                                var existingUserArea = (from x in userAreas where x.fk_subarea == fkSubArea && x.fk_user == fkUser select x).FirstOrDefault();
+                                if (existingUserArea== null)
                                 {
                                     db.tbl_userareas.Add(newAssignement);
                                     db.SaveChanges();
@@ -479,7 +480,7 @@ namespace BillingManagementSystem.DataHelpers
                                 {
                                     toReturn = new UserSubAreasResponseModel()
                                     {
-                                        remarks = "Already Assiagned",
+                                        remarks = "Already Assigned",
                                         resultCode = "1400"
                                     };
                                 }
