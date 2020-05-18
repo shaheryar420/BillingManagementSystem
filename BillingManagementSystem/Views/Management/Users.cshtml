@@ -37,6 +37,7 @@
 
     <script>
         var Dtable = null, Dtable2 = null, Dtable3 = null;
+        var _id = null;
         $(document).on('nifty.ready', function () {
             $('.dropdownlist').select2();
             $('#btn_user_update').hide();
@@ -46,19 +47,19 @@
             initDropDowns();
            $('#btn_add_area').click(function (e) {
                 e.preventDefault();
-                var id = $('#user_id').val();
+                _id = $('#user_id').val();
                 var subarea = $('#user_subarea').val();
                 
-                AddSubArea(id,subarea);
+                AddSubArea(_id,subarea);
 
            });
 
              $('#btn_add_per').click(function (e) {
                 e.preventDefault();
-                var id = $('#user_id').val();
+                _id = $('#user_id').val();
                 var action = $('#user_action').val();
                 
-                AddPermission(id,action);
+                AddPermission(_id,action);
 
            });
 
