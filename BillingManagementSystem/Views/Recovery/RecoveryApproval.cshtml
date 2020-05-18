@@ -288,14 +288,44 @@
                 }
 
             });
-
-            $("#electric_area").change(function () {
+             $("#electric_area").change(function () {
                 var _areaId = $("#electric_area").val();
-                console.log(_areaId);
                 $.ajax({
-                    url: '/Management/GetAllLocationsByArea',
+                    url: '/Management/GetAllSubAreasByArea',
                     type: 'POST',
                     data: { fk_area: _areaId },
+                    success: function (response) {
+                        if (response) {
+                            if (response[0].resultCode == '1100') {
+                                var list = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    list.push({ text: response[i].subAreaName, id: response[i].subAreaId });
+
+                                }
+                                $('#electric_subarea').select2().empty();
+                                $('#electric_subarea').select2({ data: list }).trigger('change');
+                            }
+                            else {
+                                $('#electric_subarea').select2().empty();
+                                $('#electric_subarea').select2({
+                                    placeholder: "SubArea not found ",
+                                    allowClear: true
+                                }).trigger('change');
+                            }
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            });
+
+            $("#electric_subarea").change(function () {
+                var _subareaId = $("#electric_subarea").val();
+                $.ajax({
+                    url: '/Management/GetAllLocationsBySubArea',
+                    type: 'POST',
+                    data: { fk_subArea: _subareaId },
                     success: function (response) {
                         if (response) {
                             if (response[0].resultCode == '1100') {
@@ -307,7 +337,6 @@
                                 $('#electric_resident').select2().empty();
                                 $('#electric_resident').select2({ data: list }).trigger('change');
                                 Id = $('#electric_resident').val();
-                                console.log(Id);
                                 initmeterNo(Id);
                             }
                             else {
@@ -372,6 +401,10 @@
                     <div class="form-group">
                         <label class="control-label">Select Area</label>
                         <select class="form-control dropdownlist" id="electric_area"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Select SubArea</label>
+                        <select class="form-control dropdownlist" id="electric_subarea"></select>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select Location</label>
