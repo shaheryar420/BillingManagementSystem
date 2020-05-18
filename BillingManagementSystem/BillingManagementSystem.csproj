@@ -783,6 +783,7 @@
     <Compile Include="DataHelpers\SubAreaHelpers.cs" />
     <Compile Include="DataHelpers\UserAreaHelpers.cs" />
     <Compile Include="DataHelpers\UserHelpers.cs" />
+    <Compile Include="DataHelpers\UserPermissionHelpers.cs" />
     <Compile Include="DataHelpers\UserTypeHelpers.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -817,13 +818,16 @@
     <Compile Include="Models\RequestModels\ResidentBuildingRequestModel.cs" />
     <Compile Include="Models\RequestModels\ResidentRequestModel.cs" />
     <Compile Include="Models\RequestModels\SubAreaRequestModel.cs" />
+    <Compile Include="Models\RequestModels\UserPermissionRequestModel.cs" />
     <Compile Include="Models\RequestModels\UserRequestModel.cs" />
     <Compile Include="Models\RequestModels\UserSubAreasRequestModel.cs" />
     <Compile Include="Models\RequestModels\UserTypeRequestModel.cs" />
+    <Compile Include="Models\ResponseModels\ActionResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ApprovePaymentResponseModel.cs" />
     <Compile Include="Models\ResponseModels\AreaResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillElectricResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillGasResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\ControllerResponseModel.cs" />
     <Compile Include="Models\ResponseModels\DashBoardResponseModel.cs" />
     <Compile Include="Models\ResponseModels\FixedRatesResponseModel.cs" />
     <Compile Include="Models\ResponseModels\FixedRatesTypeResponseModel.cs" />
@@ -836,6 +840,7 @@
     <Compile Include="Models\ResponseModels\ResidentBuildingResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ResidentResponseModel.cs" />
     <Compile Include="Models\ResponseModels\SubAreaResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\UserPermissionResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserSubAreasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserTypeResponseModel.cs" />
