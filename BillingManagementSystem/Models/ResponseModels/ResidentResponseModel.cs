@@ -8,6 +8,7 @@ namespace BillingManagementSystem.Models
     public class ResidentResponseModel
     {
         public string areaId { get; set; }
+        public string subareaId { get; set; }
         public string areaName { get; set; }
         public string subAreaName { get; set; }
         public string loactionId { get; set; }

@@ -257,6 +257,7 @@ namespace BillingManagementSystem.DataHelpers
                                                   join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident 
                                                   join z in db.tbl_location on y.fk_building equals z.location_id
                                                   join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
+                                                  join aera in db.tbl_area on a.fk_area equals aera.area_id
                                                   where x.resident_id == residentId
                                                   select new 
                                                   {
@@ -269,14 +270,19 @@ namespace BillingManagementSystem.DataHelpers
                                                      z.location_id,
                                                      z.location_name,
                                                      a.subarea_id,
-                                                     a.subarea_name
+                                                     a.subarea_name,
+                                                     aera.area_id,
+                                                     aera.area_name
+                                                     
                                                   }).FirstOrDefault();
                         if (resident != null)
                         {
                             toReturn = new ResidentResponseModel()
                             {
-                                areaId = resident.subarea_id.ToString(),
-                                areaName = resident.subarea_name,
+                                areaId = resident.area_id.ToString(),
+                                areaName = resident.area_name,
+                                subareaId = resident.subarea_id.ToString(),
+                                subAreaName = resident.subarea_name,
                                 locationName = resident.location_name,
                                 loactionId = resident.location_id.ToString(),
                                 residentName = resident.resident_name,
@@ -344,6 +350,7 @@ namespace BillingManagementSystem.DataHelpers
                                      join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
                                      join z in db.tbl_location on y.fk_building equals z.location_id
                                      join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
+                                     join aera in db.tbl_area on a.fk_area equals aera.area_id
                                      select new
                                      {
                                          x.resident_id,
@@ -355,14 +362,19 @@ namespace BillingManagementSystem.DataHelpers
                                          z.location_id,
                                          z.location_name,
                                          a.subarea_id,
-                                         a.subarea_name
+                                         a.subarea_name,
+                                         aera.area_id,
+                                         aera.area_name
+
                                      }).ToList();
-                    if (residents.Count()>0)
+                    if (residents.Count() > 0)
                     {
-                        toReturn =residents.Select(resident=> new ResidentResponseModel()
+                        toReturn = residents.Select(resident => new ResidentResponseModel()
                         {
-                            areaId = resident.subarea_id.ToString(),
-                            areaName = resident.subarea_name,
+                            areaId = resident.area_id.ToString(),
+                            areaName = resident.area_name,
+                            subareaId = resident.subarea_id.ToString(),
+                            subAreaName = resident.subarea_name,
                             locationName = resident.location_name,
                             loactionId = resident.location_id.ToString(),
                             residentName = resident.resident_name,
@@ -406,6 +418,7 @@ namespace BillingManagementSystem.DataHelpers
                                      join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
                                      join z in db.tbl_location on y.fk_building equals z.location_id
                                      join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
+                                     join aera in db.tbl_area on a.fk_area equals aera.area_id
                                      select new 
                                      {
                                          x.resident_id,
@@ -417,15 +430,19 @@ namespace BillingManagementSystem.DataHelpers
                                          z.location_id,
                                          z.location_name,
                                          a.subarea_id,
-                                         a.subarea_name
+                                         a.subarea_name,
+                                         aera.area_id,
+                                         aera.area_name
 
                                      }).ToList();
                     if (residents.Count() > 0)
                     {
                         toReturn = residents.Select(resident => new ResidentResponseModel()
                         {
-                            areaId = resident.subarea_id.ToString(),
-                            areaName = resident.subarea_name,
+                            areaId = resident.area_id.ToString(),
+                            areaName = resident.area_name,
+                            subareaId = resident.subarea_id.ToString(),
+                            subAreaName = resident.subarea_name,
                             locationName = resident.location_name,
                             loactionId = resident.location_id.ToString(),
                             residentName = resident.resident_name,
@@ -478,6 +495,7 @@ namespace BillingManagementSystem.DataHelpers
                                          join z in db.tbl_location on y.fk_building equals z.location_id
                                          join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
                                          where x.resident_panumber == model.residentPaNumber
+                                         join aera in db.tbl_area on a.fk_area equals aera.area_id
                                          select new
                                          {
                                              x.resident_id,
@@ -489,13 +507,19 @@ namespace BillingManagementSystem.DataHelpers
                                              z.location_id,
                                              z.location_name,
                                              a.subarea_id,
-                                             a.subarea_name
+                                             a.subarea_name,
+                                             aera.area_id,
+                                             aera.area_name
 
                                          }).ToList();
                         if (residents.Count() > 0)
                         {
                             toReturn = residents.Select(resident => new ResidentResponseModel()
                             {
+                                areaId = resident.area_id.ToString(),
+                                areaName = resident.area_name,
+                                subareaId = resident.subarea_id.ToString(),
+                                subAreaName = resident.subarea_name,
                                 residentName = resident.resident_name,
                                 residentPaNumber = resident.resident_panumber,
                                 residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
@@ -554,6 +578,7 @@ namespace BillingManagementSystem.DataHelpers
                                          join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
                                          join z in db.tbl_location on y.fk_building equals z.location_id
                                          join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
+                                         join aera in db.tbl_area on a.fk_area equals aera.area_id
                                          where x.resident_rank == model.residentRank
                                          select new
                                          {
@@ -566,13 +591,19 @@ namespace BillingManagementSystem.DataHelpers
                                              z.location_id,
                                              z.location_name,
                                              a.subarea_id,
-                                             a.subarea_name
+                                             a.subarea_name,
+                                             aera.area_id,
+                                             aera.area_name
 
                                          }).ToList();
                         if (residents.Count() > 0)
                         {
                             toReturn = residents.Select(resident => new ResidentResponseModel()
                             {
+                                areaId = resident.area_id.ToString(),
+                                areaName = resident.area_name,
+                                subareaId = resident.subarea_id.ToString(),
+                                subAreaName = resident.subarea_name,
                                 residentName = resident.resident_name,
                                 residentPaNumber = resident.resident_panumber,
                                 residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
@@ -631,6 +662,7 @@ namespace BillingManagementSystem.DataHelpers
                                          join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
                                          join z in db.tbl_location on y.fk_building equals z.location_id
                                          join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
+                                         join aera in db.tbl_area on a.fk_area equals aera.area_id
                                          where x.resident_unit == model.residentUnit
                                          select new
                                          {
@@ -643,13 +675,19 @@ namespace BillingManagementSystem.DataHelpers
                                              z.location_id,
                                              z.location_name,
                                              a.subarea_id,
-                                             a.subarea_name
+                                             a.subarea_name,
+                                             aera.area_id,
+                                             aera.area_name
 
                                          }).ToList();
                         if (residents.Count() > 0)
                         {
                             toReturn = residents.Select(resident => new ResidentResponseModel()
                             {
+                                areaId = resident.area_id.ToString(),
+                                areaName = resident.area_name,
+                                subareaId = resident.subarea_id.ToString(),
+                                subAreaName = resident.subarea_name,
                                 residentName = resident.resident_name,
                                 residentPaNumber = resident.resident_panumber,
                                 residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
@@ -710,6 +748,7 @@ namespace BillingManagementSystem.DataHelpers
                                          join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
                                          join z in db.tbl_location on y.fk_building equals z.location_id
                                          join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
+                                         join aera in db.tbl_area on a.fk_area equals aera.area_id
                                          where x.resident_unit == model.residentUnit
                                          select new
                                          {
@@ -723,6 +762,8 @@ namespace BillingManagementSystem.DataHelpers
                                              z.location_name,
                                              a.subarea_id,
                                              a.subarea_name,
+                                             aera.area_id,
+                                             aera.area_name
                                          }).ToList();
                         if (residents.Count() > 0)
                         {
@@ -735,6 +776,10 @@ namespace BillingManagementSystem.DataHelpers
                                 {
                                     toReturn.Add(new ResidentResponseModel()
                                     {
+                                        areaId = resident.area_id.ToString(),
+                                        subareaId = resident.subarea_id.ToString(),
+                                        areaName = resident.area_name,
+                                        subAreaName = resident.subarea_name,
                                         residentName = resident.resident_name,
                                         residentPaNumber = resident.resident_panumber,
                                         residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
@@ -796,6 +841,7 @@ namespace BillingManagementSystem.DataHelpers
                                          join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
                                          join z in db.tbl_location on y.fk_building equals z.location_id
                                          join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
+                                         join aera in db.tbl_area on a.fk_area equals aera.area_id
                                          where x.resident_unit == model.residentUnit
                                          select new
                                          {
@@ -809,6 +855,8 @@ namespace BillingManagementSystem.DataHelpers
                                              z.location_name,
                                              a.subarea_id,
                                              a.subarea_name,
+                                             aera.area_name,
+                                             aera.area_id
                                          }).ToList();
                         if (residents.Count() > 0)
                         {
@@ -821,6 +869,10 @@ namespace BillingManagementSystem.DataHelpers
                                 {
                                     toReturn.Add(new ResidentResponseModel()
                                     {
+                                        areaId=  resident.area_id.ToString(),
+                                        areaName = resident.area_name,
+                                        subareaId = resident.subarea_id.ToString(),
+                                        subAreaName = resident.subarea_name,
                                         residentName = resident.resident_name,
                                         residentPaNumber = resident.resident_panumber,
                                         residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
@@ -881,6 +933,7 @@ namespace BillingManagementSystem.DataHelpers
                                          join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
                                          join z in db.tbl_location on y.fk_building equals z.location_id
                                          join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
+                                         join aera in db.tbl_area on a.fk_area equals aera.area_id
                                          where x.resident_panumber == model.residentName
                                          select new
                                          {
@@ -893,13 +946,19 @@ namespace BillingManagementSystem.DataHelpers
                                              z.location_id,
                                              z.location_name,
                                              a.subarea_id,
-                                             a.subarea_name
+                                             a.subarea_name,
+                                             aera.area_id,
+                                             aera.area_name
 
                                          }).ToList();
                         if (residents.Count() > 0)
                         {
                             toReturn = residents.Select(resident => new ResidentResponseModel()
                             {
+                                areaId = resident.area_id.ToString(),
+                                areaName = resident.area_name,
+                                subareaId = resident.subarea_id.ToString(),
+                                subAreaName = resident.subarea_name,
                                 residentName = resident.resident_name,
                                 residentPaNumber = resident.resident_panumber,
                                 residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
@@ -958,6 +1017,7 @@ namespace BillingManagementSystem.DataHelpers
                                          join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
                                          join z in db.tbl_location on y.fk_building equals z.location_id
                                          join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
+                                         join aera in db.tbl_area on a.fk_area equals aera.area_id
                                          where z.location_electricmeter == model.meterNo
                                          select new
                                          {
@@ -970,13 +1030,19 @@ namespace BillingManagementSystem.DataHelpers
                                              z.location_id,
                                              z.location_name,
                                              a.subarea_id,
-                                             a.subarea_name
+                                             a.subarea_name,
+                                             aera.area_id,
+                                             aera.area_name
 
                                          }).ToList();
                         if (residents.Count() > 0)
                         {
                             toReturn = residents.Select(resident => new ResidentResponseModel()
                             {
+                                areaId = resident.area_id.ToString(),
+                                areaName = resident.area_name,
+                                subareaId = resident.subarea_id.ToString(),
+                                subAreaName = resident.subarea_name,
                                 residentName = resident.resident_name,
                                 residentPaNumber = resident.resident_panumber,
                                 residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
@@ -1035,6 +1101,7 @@ namespace BillingManagementSystem.DataHelpers
                                          join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
                                          join z in db.tbl_location on y.fk_building equals z.location_id
                                          join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
+                                         join aera in db.tbl_area on a.fk_area equals aera.area_id
                                          where z.location_gassmeter == model.meterNo
                                          select new
                                          {
@@ -1047,13 +1114,19 @@ namespace BillingManagementSystem.DataHelpers
                                              z.location_id,
                                              z.location_name,
                                              a.subarea_id,
-                                             a.subarea_name
+                                             a.subarea_name,
+                                             aera.area_id,
+                                             aera.area_name
 
                                          }).ToList();
                         if (residents.Count() > 0)
                         {
                             toReturn = residents.Select(resident => new ResidentResponseModel()
                             {
+                                areaId = resident.area_id.ToString(),
+                                areaName = resident.area_name,
+                                subareaId = resident.subarea_id.ToString(),
+                                subAreaName = resident.subarea_name,
                                 residentName = resident.resident_name,
                                 residentPaNumber = resident.resident_panumber,
                                 residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
@@ -1099,7 +1172,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<ResidentResponseModel> GetAllResidentsByArea(ResidentRequestModel model)
+        public List<ResidentResponseModel> GetAllResidentsBySubArea(ResidentRequestModel model)
         {
             List<ResidentResponseModel> toReturn = new List<ResidentResponseModel>();
             try
@@ -1113,6 +1186,7 @@ namespace BillingManagementSystem.DataHelpers
                                          join a in db.tbl_subarea on l.fk_subarea equals a.subarea_id
                                          join rl in db.tbl_residentbuilding on l.location_id equals rl.fk_building
                                          join r in db.tbl_residents on rl.fk_resident equals r.resident_id
+                                         join aera in db.tbl_area on a.fk_area equals aera.area_id
                                          where a.subarea_id == areaId
                                          select new 
                                          {
@@ -1125,7 +1199,9 @@ namespace BillingManagementSystem.DataHelpers
                                              l.location_id,
                                              l.location_name,
                                              a.subarea_id,
-                                             a.subarea_name
+                                             a.subarea_name,
+                                             aera.area_id,
+                                             aera.area_name
 
                                          }).ToList();
 
@@ -1133,6 +1209,10 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn = residents.Select(resident => new ResidentResponseModel()
                             {
+                                areaId = resident.area_id.ToString(),
+                                areaName = resident.area_name,
+                                subareaId = resident.subarea_id.ToString(),
+                                subAreaName = resident.subarea_name,
                                 residentName = resident.resident_name,
                                 residentPaNumber = resident.resident_panumber,
                                 residentRank = !string.IsNullOrEmpty(resident.resident_rank) ? resident.resident_rank : "",
@@ -1185,7 +1265,8 @@ namespace BillingManagementSystem.DataHelpers
                                          join a in db.tbl_subarea on l.fk_subarea equals a.subarea_id
                                          join rl in db.tbl_residentbuilding on l.location_id equals rl.fk_building
                                          join r in db.tbl_residents on rl.fk_resident equals r.resident_id
-                                         where a.subarea_id == areaId
+                                        join aera in db.tbl_area on a.fk_area equals aera.area_id
+                                        where a.subarea_id == areaId
                                          select new
                                          {
                                              r.resident_name,
@@ -1249,7 +1330,8 @@ namespace BillingManagementSystem.DataHelpers
                                     join a in db.tbl_subarea on l.fk_subarea equals a.subarea_id
                                     join rl in db.tbl_residentbuilding on l.location_id equals rl.fk_building
                                     join r in db.tbl_residents on rl.fk_resident equals r.resident_id
-                                    select new
+                                     join aera in db.tbl_area on a.fk_area equals aera.area_id
+                                     select new
                                     {
                                         r.resident_name,
                                         r.resident_id,
@@ -1257,13 +1339,21 @@ namespace BillingManagementSystem.DataHelpers
                                         r.resident_panumber,
                                         r.resident_rank,
                                         r.resident_remarks,
-                                        r.resident_unit
+                                        r.resident_unit,
+                                        a.subarea_id,
+                                        a.subarea_name,
+                                        aera.area_id,
+                                        aera.area_name
                                     }).ToList();
 
                     if (residents.Count()> 0)
                     {
                         toReturn = residents.Select(resident => new ResidentResponseModel()
                         {
+                            areaId = resident.area_id.ToString(),
+                            subAreaName = resident.subarea_name,
+                            areaName = resident.area_name,
+                            subareaId = resident.subarea_id.ToString(),
                             residentName = resident.resident_name,
                             residentId = resident.resident_id.ToString(),
                             meterNo = resident.location_electricmeter,
