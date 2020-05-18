@@ -270,7 +270,7 @@
             $("#resident_area").change(function () {
                 var _areaId = $("#resident_area").val();
                 $.ajax({
-                    url: '/Management/GetAllAvailableLocationsBySubArea',
+                    url: '/Management/GetAllSubAreasByArea',
                     type: 'POST',
                     data: { fk_area: _areaId },
                     success: function (response) {
@@ -302,7 +302,7 @@
             $("#resident_subarea").change(function () {
                 var _subareaId = $("#resident_subarea").val();
                 $.ajax({
-                    url: '/Management/GetAllLocationsBySubArea',
+                    url: '/Management/GetAllAvailableLocationsBySubArea',
                     type: 'POST',
                     data: { fk_subArea: _subareaId },
                     success: function (response) {
