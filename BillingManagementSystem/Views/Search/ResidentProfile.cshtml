@@ -50,6 +50,7 @@
                             $("#resident_unit").text(response.residentUnit);
                             $("#resident_Os").text(response.totatOutStandings);
                             $("#resident_area").text(response.areaName);
+                            $("#resident_subarea").text(response.subAreaName);
                             $("#resident_location").text(response.locationName);
                             $("#resident_title").text(response.residentRank + " " + response.residentName);
                             
@@ -120,7 +121,7 @@
                     { "title": "Energy Charges", "data": "electricCharges" },
                     { "title": "Amount", "data": "billElectricAmount" },
                     { "title": "PaymentStatus", "data": "paymentStatusName" },
-                    { "title": "Outstanding", "data": "billElectricOutstanding" }
+                    { "title": "Outstanding", "data": "billElectricOutstanding" },
                     { "title": "Water", "data": "billElectricWater" },
                     { "title": "TV", "data": "billElectricTv" },
                     {

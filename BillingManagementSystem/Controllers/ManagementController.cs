@@ -111,6 +111,22 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult AssignPermissionsToUser([FromBody] UserPermissionRequestModel model)
+        {
+            UserHelpers helper = new UserHelpers();
+            var response = helper.AssignPermissionsToUser(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult RemovePermissionFromUser([FromBody] UserPermissionRequestModel model)
+        {
+            UserHelpers helper = new UserHelpers();
+            var response = helper.RemovePermissionFromUser(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
         #region UserType
         public ActionResult AddUserType([FromBody] UserTypeRequestModel model)
@@ -154,6 +170,36 @@ namespace BillingManagementSystem.Controllers
             return json;
         }
 
+        #endregion
+        #region User permission
+        public ActionResult GetPermissionsByUser([FromBody] UserPermissionRequestModel model)
+        {
+            UserPermissionHelpers helper = new UserPermissionHelpers();
+            var response = helper.GetPermissionsByUser(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+
+        #endregion
+        #region Controller & Action
+        public ActionResult GetAllControllers()
+        {
+            UserPermissionHelpers helper = new UserPermissionHelpers();
+            var response = helper.GetAllControllers();
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllActions()
+        {
+            UserPermissionHelpers helper = new UserPermissionHelpers();
+            var response = helper.GetAllActions();
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
         #region User Area
         public ActionResult GetAssignedSubAreasByUser(UserSubAreasRequestModel model)

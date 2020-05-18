@@ -9,6 +9,7 @@ namespace BillingManagementSystem.Models
     {
         public string areaId { get; set; }
         public string areaName { get; set; }
+        public string subAreaName { get; set; }
         public string loactionId { get; set; }
         public string locationName { get; set; }
         public string outstanding { get; set; }
