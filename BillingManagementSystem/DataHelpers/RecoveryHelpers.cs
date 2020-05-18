@@ -22,8 +22,13 @@ namespace BillingManagementSystem.DataHelpers
                             if (new ModelsValidatorHelper().validateint(model.residentId))
                             {
                                 int residentId = int.Parse(model.residentId);
+                                var meterNo = (from x in db.tbl_location
+                                               join rb in db.tbl_residentbuilding on x.location_id equals rb.fk_building
+                                               where rb.fk_resident == residentId
+                                               select x.location_electricmeter).FirstOrDefault();
                                 var newPayment = new tbl_paymenthistory()
                                 {
+                                    meter_no = meterNo,
                                     fk_resident = residentId,
                                     paymenthistory_datetime = DateTime.UtcNow.AddHours(5),
                                     paymentmonth = model.paymentMonth,
@@ -198,8 +203,13 @@ namespace BillingManagementSystem.DataHelpers
                             if (new ModelsValidatorHelper().validateint(model.residentId))
                             {
                                 int residentId = int.Parse(model.residentId);
+                                var meterNo = (from x in db.tbl_location
+                                               join rb in db.tbl_residentbuilding on x.location_id equals rb.fk_building
+                                               where rb.fk_resident == residentId
+                                               select x.location_gassmeter).FirstOrDefault();
                                 var newPayment = new tbl_paymentgashistory()
                                 {
+                                    meter_no = meterNo,
                                     fk_resident = residentId,
                                     paymenthistory_datetime = DateTime.UtcNow.AddHours(5),
                                     paymentmonth = model.paymentMonth,
@@ -259,18 +269,48 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    var payments = (from x in db.tbl_paymenthistory select x).ToList();
+                    var payments = (from x in db.tbl_paymenthistory 
+                                    join y in db.tbl_location on x.meter_no equals y.location_electricmeter
+                                    join r in db.tbl_residents on x.fk_resident equals r.resident_id
+                                    join s in db.tbl_subarea on y.fk_subarea equals s.subarea_id
+                                    join a in db.tbl_area on s.fk_area equals a.area_id
+                                    select new 
+                                    {
+                                        r.resident_name,
+                                        y.location_id,
+                                        y.location_name,
+                                        s.subarea_name,
+                                        a.area_name,
+                                        x.paymentmonth,
+                                        x.paymenthistory_id,
+                                        x.payment_amount,
+                                        x.paymenthistory_datetime
+
+                                        
+                                    }).ToList();
                     if(payments.Count() > 0)
                     {
                         toReturn = payments.Select(payment => new PaymentResponseModel()
                         {
+                            locationId = payment.location_id.ToString(),
                             paymentAmount = payment.payment_amount.ToString(),
                             paymenthistoryDatetime = payment.paymenthistory_datetime.ToString(),
                             paymenthistoryId = payment.paymenthistory_id.ToString(),
                             paymentMonth = !String.IsNullOrEmpty( payment.paymentmonth)?payment.paymentmonth:"",
+                            residentName = payment.resident_name,
+                            locationName = payment.location_name,
+                            subAreaName = payment.subarea_name,
+                            areaName = payment.area_name,
                             remarks = "Successfully Found",
                             resultCode = "1100"
                         }).ToList();
+                        foreach (var payment in toReturn)
+                        {
+                            int locationId = int.Parse(payment.locationId);
+                            var bill = (from x in db.tbl_billelectric where x.fk_location == locationId select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
+                            payment.outstanding = bill.billelectric_outstanding.ToString();
+                        }
+                        
                     }
                     else
                     {
@@ -305,10 +345,7 @@ namespace BillingManagementSystem.DataHelpers
                         var payment = (from x in db.tbl_paymenthistory where x.paymenthistory_id == paymentId select x).FirstOrDefault();
                         if(payment!= null)
                         {
-                            var meterNo = (from x in db.tbl_location
-                                           join rb in db.tbl_residentbuilding on x.location_id equals rb.fk_building
-                                           where rb.fk_resident == payment.fk_resident
-                                           select x.location_electricmeter).FirstOrDefault();
+                           
                             var newApprovedPayment = new tbl_residentpayments()
                             {
                                 fk_resident =payment.fk_resident,
@@ -316,7 +353,7 @@ namespace BillingManagementSystem.DataHelpers
                                 paymentmonth = payment.paymentmonth,
                                 payment_amount = payment.payment_amount,
                                 payment_datetime = payment.paymenthistory_datetime,
-                                meter_no = meterNo
+                                meter_no = payment.meter_no
                             };
                             db.tbl_residentpayments.Add(newApprovedPayment);
                             db.SaveChanges();
@@ -385,10 +422,6 @@ namespace BillingManagementSystem.DataHelpers
                         var payment = (from x in db.tbl_paymentgashistory where x.paymenthistory_id == paymentId select x).FirstOrDefault();
                         if (payment != null)
                         {
-                            var meterNo = (from x in db.tbl_location
-                                           join rb in db.tbl_residentbuilding on x.location_id equals rb.fk_building
-                                           where rb.fk_resident == payment.fk_resident
-                                           select x.location_gassmeter).FirstOrDefault();
                             var newApprovedPayment = new tbl_residentpayments()
                             {
                                 fk_resident = payment.fk_resident,
@@ -396,7 +429,7 @@ namespace BillingManagementSystem.DataHelpers
                                 paymentmonth = payment.paymentmonth,
                                 payment_amount = payment.payment_amount,
                                 payment_datetime = payment.paymenthistory_datetime,
-                                meter_no = meterNo
+                                meter_no = payment.meter_no
                             };
                             db.tbl_residentpayments.Add(newApprovedPayment);
                             db.SaveChanges();
@@ -459,18 +492,47 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    var payments = (from x in db.tbl_paymentgashistory select x).ToList();
+                    var payments = (from x in db.tbl_paymentgashistory
+                                    join y in db.tbl_location on x.meter_no equals y.location_gassmeter
+                                    join r in db.tbl_residents on x.fk_resident equals r.resident_id
+                                    join s in db.tbl_subarea on y.fk_subarea equals s.subarea_id
+                                    join a in db.tbl_area on s.fk_area equals a.area_id
+                                    select new
+                                    {
+                                        r.resident_name,
+                                        y.location_id,
+                                        y.location_name,
+                                        s.subarea_name,
+                                        a.area_name,
+                                        x.paymentmonth,
+                                        x.paymenthistory_id,
+                                        x.payment_amount,
+                                        x.paymenthistory_datetime
+
+
+                                    }).ToList();
                     if (payments.Count() > 0)
                     {
                         toReturn = payments.Select(payment => new PaymentResponseModel()
                         {
+                            locationId = payment.location_id.ToString(),
                             paymentAmount = payment.payment_amount.ToString(),
                             paymenthistoryDatetime = payment.paymenthistory_datetime.ToString(),
                             paymenthistoryId = payment.paymenthistory_id.ToString(),
                             paymentMonth = !String.IsNullOrEmpty(payment.paymentmonth) ? payment.paymentmonth : "",
+                            residentName = payment.resident_name,
+                            locationName = payment.location_name,
+                            subAreaName = payment.subarea_name,
+                            areaName = payment.area_name,
                             remarks = "Successfully Found",
                             resultCode = "1100"
                         }).ToList();
+                        foreach (var payment in toReturn)
+                        {
+                            int locationId = int.Parse(payment.locationId);
+                            var bill = (from x in db.tbl_billgas where x.fk_location == locationId select x).OrderByDescending(x => x.datetime).FirstOrDefault();
+                            payment.outstanding = bill.outstanding.ToString();
+                        }
                     }
                     else
                     {
