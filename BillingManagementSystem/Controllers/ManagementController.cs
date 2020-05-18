@@ -457,7 +457,7 @@ namespace BillingManagementSystem.Controllers
             model.areaId = model.residentId;
             model.residentId = null;
             ResidentHelpers helper = new ResidentHelpers();
-            var response = helper.GetAllResidentsByArea(model);
+            var response = helper.GetAllResidentsBySubArea(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;
