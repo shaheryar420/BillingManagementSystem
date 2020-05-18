@@ -20,7 +20,8 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         var userAreas = (from x in db.tbl_userareas
                                          join y in db.tbl_users on x.fk_user equals y.users_id
-                                         join z in db.tbl_subarea on x.fk_subarea equals z.fk_area
+                                         join z in db.tbl_subarea on x.fk_subarea equals z.subarea_id
+                                         where x.fk_user == userId
                                          select new
                                          {
                                              x.userareas_id,
@@ -29,7 +30,7 @@ namespace BillingManagementSystem.DataHelpers
                                              y.users_fullname,
                                              y.users_username,
                                              z.subarea_name,
-                                         }).ToList();
+                                         }).Distinct().ToList();
                         if (userAreas.Count() > 0)
                         {
                             toReturn = userAreas.Select(userArea => new UserSubAreasResponseModel()

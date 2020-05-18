@@ -468,17 +468,17 @@ namespace BillingManagementSystem.DataHelpers
                                 remarks = "Successfully Location Found",
                                 resultCode = "1100"
                             }).ToList();
-                            foreach (var location in toReturn)
-                            {
-                                int locationId = int.Parse(location.locationId);
-                                foreach (var residentBuilding in residentBuildings)
-                                {
-                                    if (locationId == residentBuilding.fk_building)
-                                    {
-                                        toReturn.Remove(location);
-                                    }
-                                }
-                            }
+                            //foreach (var location in locations)
+                            //{
+                            //    if (residentBuildings.Contains(new tbl_residentbuilding() { fk_resident = location.location_id });
+                            //    foreach (var residentBuilding in residentBuildings)
+                            //    {
+                            //        if (residentBuilding.fk_building)
+                            //        {
+                            //            toReturn.Remove(location);
+                            //        }
+                            //    }
+                            //}
                             if (toReturn.Count == 0)
                             {
                                 toReturn.Add(new LocationResponseModel()
@@ -502,7 +502,7 @@ namespace BillingManagementSystem.DataHelpers
                         toReturn.Add(new LocationResponseModel()
                         {
                             resultCode = "1300",
-                            remarks = "Please Provide Area"
+                            remarks = "Please Provide Sub Area"
                         });
                     }
                 }

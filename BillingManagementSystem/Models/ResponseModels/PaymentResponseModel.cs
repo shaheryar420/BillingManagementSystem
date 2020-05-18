@@ -9,6 +9,11 @@ namespace BillingManagementSystem.Models
     {
         public string paymenthistoryId { get; set; }
         public string paymenthistoryDatetime { get; set; }
+        public string residentName { get; set; }
+        public string locationId { get; set; }
+        public string subAreaId { get; set; }
+        public string areaId { get; set; }
+        public string outstanding { get; set; }
         public string paymentAmount { get; set; }
         public string fk_paymentType { get; set; }
         public string paymentMonth { get; set; }

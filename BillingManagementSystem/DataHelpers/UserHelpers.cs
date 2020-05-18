@@ -462,13 +462,39 @@ namespace BillingManagementSystem.DataHelpers
                                 fk_subarea = fkSubArea,
                                 fk_user = fkUser
                             };
-                            db.tbl_userareas.Add(newAssignement);
-                            db.SaveChanges();
-                            toReturn = new UserSubAreasResponseModel()
+                            var userAreas = (from x in db.tbl_userareas select x).ToList();
+                            if (userAreas.Count() > 0)
                             {
-                                remarks = "Sub Area Successfully Assigned",
-                                resultCode = "1100"
-                            };
+                                if (!userAreas.Contains(newAssignement))
+                                {
+                                    db.tbl_userareas.Add(newAssignement);
+                                    db.SaveChanges();
+                                    toReturn = new UserSubAreasResponseModel()
+                                    {
+                                        remarks = "Sub Area Successfully Assigned",
+                                        resultCode = "1100"
+                                    };
+                                }
+                                else
+                                {
+                                    toReturn = new UserSubAreasResponseModel()
+                                    {
+                                        remarks = "Already Assiagned",
+                                        resultCode = "1400"
+                                    };
+                                }
+                            }
+                            else
+                            {
+                                db.tbl_userareas.Add(newAssignement);
+                                db.SaveChanges();
+                                toReturn = new UserSubAreasResponseModel()
+                                {
+                                    remarks = "Sub Area Successfully Assigned",
+                                    resultCode = "1100"
+                                };
+                            }
+                           
                         }
                     }
                     else
