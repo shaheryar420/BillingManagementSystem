@@ -353,7 +353,7 @@
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
-                            fetchSubAraeGrid(_id)
+                            fetchSubAraeGrid(_id);
                             swal("Success", "SubArea Assigned to User Successfully.", "success");
                         }
                         else {
@@ -377,8 +377,9 @@
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
-                            fetchSubAraeGrid(_id);
                             swal("Success", "SubArea Removed Successfully.", "success");
+                            fetchSubAraeGrid(_id);
+                            
                         }
                         else {
                             swal("Warning", response.remarks, "warning");
