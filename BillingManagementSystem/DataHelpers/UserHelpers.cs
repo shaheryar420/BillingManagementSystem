@@ -669,13 +669,13 @@ namespace BillingManagementSystem.DataHelpers
             {
                 if (new ModelsValidatorHelper().validateint(model.userpermissions_id))
                 {
-                    int userAreasId = int.Parse(model.userpermissions_id);
+                    int userPermissionId = int.Parse(model.userpermissions_id);
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var assignment = (from x in db.tbl_userareas where x.userareas_id == userAreasId select x).FirstOrDefault();
+                        var assignment = (from x in db.tbl_userpermissions where x.userpermissions_id == userPermissionId select x).FirstOrDefault();
                         if (assignment != null)
                         {
-                            db.tbl_userareas.Remove(assignment);
+                            db.tbl_userpermissions.Remove(assignment);
                             db.SaveChanges();
                             toReturn = new UserPermissionResponseModel()
                             {
