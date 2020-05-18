@@ -42,6 +42,15 @@
     </script>
 
     <script>
+        function clearFields() {
+            $('#gas_id').val('');
+            $("#meter_no").val('');
+            $("#previous_reading").val('');
+            $("#current_reading").val('');
+            $("#prev_read").val('');
+            $("#current_unit").val('');
+            $("#month").val('');
+        }
         function initGasGrid() {
             Dtable = $(".gasGrid").DataTable({
                 autoWidth: true,
@@ -201,6 +210,7 @@
                     success: function (data) {
                         if (data.resultCode == "1100") {
                             initGasGrid();
+                             clearFields();
                             swal("Added!", data.remarks, "success");
                         }
                         else {
@@ -253,7 +263,8 @@
                                 $('#btn_gas_update').hide();
                                 $('#btn_gas_add').show();
                                 $('#addTitle').show();
-                                $('#editTitle').hide();
+                            $('#editTitle').hide();
+                            clearFields();
                         }
                         else {
                             $('.loading').hide();

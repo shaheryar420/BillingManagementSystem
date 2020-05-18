@@ -281,6 +281,7 @@
             });
 
         });
+
         function initDropDowns() {
             $.ajax({
                 url: '/Management/GetAllAreas',
@@ -309,14 +310,44 @@
                 }
 
             });
-
-            $("#gas_area").change(function () {
+                 $("#gas_area").change(function () {
                 var _areaId = $("#gas_area").val();
-                console.log(_areaId);
                 $.ajax({
-                    url: '/Management/GetAllLocationsByArea',
+                    url: '/Management/GetAllSubAreasByArea',
                     type: 'POST',
                     data: { fk_area: _areaId },
+                    success: function (response) {
+                        if (response) {
+                            if (response[0].resultCode == '1100') {
+                                var list = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    list.push({ text: response[i].subAreaName, id: response[i].subAreaId });
+
+                                }
+                                $('#gas_subarea').select2().empty();
+                                $('#gas_subarea').select2({ data: list }).trigger('change');
+                            }
+                            else {
+                                $('#gas_subarea').select2().empty();
+                                $('#gas_subarea').select2({
+                                    placeholder: "SubArea not found ",
+                                    allowClear: true
+                                }).trigger('change');
+                            }
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            });
+
+            $("#gas_subarea").change(function () {
+                var _subareaId = $("#gas_subarea").val();
+                $.ajax({
+                    url: '/Management/GetAllLocationsBySubArea',
+                    type: 'POST',
+                    data: { fk_subArea: _subareaId },
                     success: function (response) {
                         if (response) {
                             if (response[0].resultCode == '1100') {
@@ -325,15 +356,14 @@
                                     list.push({ text: response[i].locationName, id: response[i].locationId });
 
                                 }
-                                $('#gas_resident').select2().empty();
-                                $('#gas_resident').select2({ data: list }).trigger('change');
-                                Id = $('#gas_resident').val();
-                                console.log(Id);
+                                $('#gas_location').select2().empty();
+                                $('#gas_location').select2({ data: list }).trigger('change');
+                                Id = $('#gas_location').val();
                                 initmeterNo(Id);
                             }
                             else {
-                                $('#gas_resident').select2().empty();
-                                $('#gas_resident').select2({
+                                $('#gas_location').select2().empty();
+                                $('#gas_location').select2({
                                     placeholder: "resident not found ",
                                     allowClear: true
                                 }).trigger('change');
@@ -346,6 +376,7 @@
                 });
             });
         }
+
         function initmeterNo(Id) {
             $.ajax({
                 url: '/Management/GetLocationById',
@@ -395,8 +426,12 @@
                         <select class="form-control dropdownlist" id="gas_area"></select>
                     </div>
                     <div class="form-group">
+                        <label class="control-label">Select SubArea</label>
+                        <select class="form-control dropdownlist" id="gas_subarea"></select>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">Select Location</label>
-                        <select class="form-control dropdownlist" id="gas_resident"></select>
+                        <select class="form-control dropdownlist" id="gas_location"></select>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Meter No.</label>
