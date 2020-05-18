@@ -232,6 +232,7 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn = new LocationResponseModel()
                             {
+                                subAreaName = location.subarea_name,
                                 fk_subArea = location.fk_subarea.ToString(),
                                 locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                                 locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
@@ -334,6 +335,7 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn= locations.Select(location => new LocationResponseModel()
                             {
+                                subAreaName = location.subarea_name,
                                 fk_subArea = location.fk_subarea.ToString(),
                                 locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                                 locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
@@ -399,6 +401,7 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         toReturn = locations.Select(location => new LocationResponseModel()
                         {
+                            subAreaName = location.subarea_name,
                             fk_area = location.area_id.ToString(),
                             areaName = !string.IsNullOrEmpty(location.area_name)?location.area_name:"",
                             fk_subArea = location.fk_subarea.ToString(),
@@ -459,6 +462,7 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn = locations.Select(location => new LocationResponseModel()
                             {
+                                subAreaName = location.subarea_name,
                                 fk_subArea = location.fk_subarea.ToString(),
                                 locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                                 locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
