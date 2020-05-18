@@ -491,7 +491,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 toReturn.Add(new LocationResponseModel()
                                 {
-                                    remarks = "No Available location Found",
+                                    remarks = "No Available Building Found",
                                     resultCode = "1200"
                                 });
                             }
@@ -501,7 +501,7 @@ namespace BillingManagementSystem.DataHelpers
                             toReturn.Add(new LocationResponseModel()
                             {
                                 resultCode = "1200",
-                                remarks = "No Record Found"
+                                remarks = "No Building Found"
                             });
                         }
                     }

@@ -18,6 +18,7 @@ namespace BillingManagementSystem.DataHelpers
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
                     var billsElectric = (from x in db.tbl_billelectric
+                                        join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
                                         join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                         join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                         join l in db.tbl_location on x.fk_location equals l.location_id
@@ -48,12 +49,14 @@ namespace BillingManagementSystem.DataHelpers
                                             z.resident_remarks,
                                             z.resident_unit,
                                             l.location_name,
-                                            l.location_electricmeter
+                                            l.location_electricmeter,
+                                            p.paymentstatus_name
                                         }).ToList();
                     if (billsElectric.Count() > 0)
                     {
                         toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                         {
+                            paymentStatusName = billElectric.paymentstatus_name,
                             billElectricAmount = billElectric.billelectric_amount.ToString(),
                             billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
                             billElectricDateTime = billElectric.billelectric_datetime.ToString(),
@@ -1293,7 +1296,9 @@ namespace BillingManagementSystem.DataHelpers
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
                     var billsGas = (from x in db.tbl_billgas
-                                         join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
+
+                                    join p in db.tbl_paymentstatus on x.fk_paymentstatus equals p.paymentstatus_id
+                                    join y in db.tbl_billpicture on x.fk_billpicture equals y.billpicture_id
                                          join z in db.tbl_residents on x.fk_resident equals z.resident_id
                                          join l in db.tbl_location on x.fk_location equals l.location_id
                                          where x.fk_paymentstatus == 2
@@ -1321,12 +1326,14 @@ namespace BillingManagementSystem.DataHelpers
                                              z.resident_remarks,
                                              z.resident_unit,
                                              l.location_name,
-                                             l.location_gassmeter
+                                             l.location_gassmeter,
+                                             p.paymentstatus_name
                                          }).ToList();
                     if (billsGas.Count() > 0)
                     {
                         toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                         {
+                            paymentStatusName = billGas.paymentstatus_name,
                             billGasAmount = billGas.amount.ToString(),
                             billGasCurrentReading = billGas.currentreading.ToString(),
                             billGasDateTime = billGas.datetime.ToString(),
