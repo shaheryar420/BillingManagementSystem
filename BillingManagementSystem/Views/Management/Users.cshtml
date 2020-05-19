@@ -158,10 +158,10 @@
                     },
                     { "title": "Id", "data": "usersId", className: "hidden" },
                     { "title": "UserTypeId", "data": "fk_userType", className: "hidden" },
-                    { "title": "UserName", "data": "usersUsername" },
-                    { "title": "FullName", "data": "usersFullName" },
+                    { "title": "User Name", "data": "usersUsername" },
+                    { "title": "Full Name", "data": "usersFullName" },
                     { "title": "Password", "data": "usersPassword" },
-                    { "title": "UserType", "data": "userTypeName" }
+                    { "title": "User Type", "data": "userTypeName" }
 
                 ]
             });
@@ -368,7 +368,7 @@
                     { "title": "fk_user", "data": "fk_user", className: "hidden" },
                     { "title": "fk_subarea", "data": "fk_subarea", className: "hidden" },
                     { "title": "User Name", "data": "userUserName" },
-                    { "title": "SubArea", "data": "subAreaName" },
+                    { "title": "Sub Area", "data": "subAreaName" },
                     
 
                 ]
@@ -517,7 +517,7 @@
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
-                            swal("Success", "userpermission Removed Successfully.", "success");
+                            swal("Success", "User Permission Removed Successfully.", "success");
                             fetchPermissionGrid(_id);
                             
                         }
@@ -715,7 +715,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <span class="input-group-addon bg-primary">Username</span>
+                                    <span class="input-group-addon bg-primary">User Name</span>
                                     <input type="text" value="" id="user_username" class="form-control" />
                                 </div>
                             </div>
@@ -784,28 +784,28 @@
 
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon bg-primary">Arae</span>
+                                <span class="input-group-addon bg-primary">Area</span>
                                 <select class="form-control dropdownlist" id="user_area">
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon bg-primary">Sub Arae</span>
+                                <span class="input-group-addon bg-primary">Sub Area</span>
                                 <select class="form-control dropdownlist" id="user_subarea">
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
-                                <a href="#" id="btn_add_area" class="btn btn-success">add</a>
+                                <a href="#" id="btn_add_area" class="btn btn-success">Add</a>
 
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label class="control-label">Subaraes</label>
+                            <label class="control-label">Sub Area</label>
                             <table class="table table-bordered table-striped table-hover subareaGrid"></table>
                         </div>
                     </div>

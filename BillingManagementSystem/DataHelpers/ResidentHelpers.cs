@@ -296,7 +296,7 @@ namespace BillingManagementSystem.DataHelpers
                             };
                             var billElectric = (from x in db.tbl_billelectric where x.fk_paymentstatus == 2 select x).FirstOrDefault();
                             var billGas = (from x in db.tbl_billgas where x.fk_paymentstatus == 2 select x).FirstOrDefault();
-                            toReturn.totatOutStandings = "0";
+                            toReturn.outstanding = "0";
                             double totalOutStandings =0;
                             if ( billElectric != null)
                             {
@@ -308,7 +308,7 @@ namespace BillingManagementSystem.DataHelpers
                                 var gasOutstanding = billGas.outstanding.ToString();
                                 totalOutStandings = totalOutStandings + double.Parse(gasOutstanding);
                             }
-                            toReturn.totatOutStandings = totalOutStandings.ToString();
+                            toReturn.outstanding = totalOutStandings.ToString();
                         }
                         else
                         {
@@ -458,7 +458,7 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus== 2 select x.billelectric_outstanding).FirstOrDefault();
                             var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
-                            _resdient.totatOutStandings = outstanding.ToString();
+                            _resdient.outstanding = outstanding.ToString();
                         }
                     }
                     else
@@ -533,7 +533,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
                                 var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
-                                _resdient.totatOutStandings = outstanding.ToString();
+                                _resdient.outstanding = outstanding.ToString();
                             }
                         }
                         else
@@ -617,7 +617,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
                                 var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
-                                _resdient.totatOutStandings = outstanding.ToString();
+                                _resdient.outstanding = outstanding.ToString();
                             }
                         }
                         else
@@ -701,7 +701,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
                                 var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
-                                _resdient.totatOutStandings = outstanding.ToString();
+                                _resdient.outstanding = outstanding.ToString();
                             }
                         }
                         else
@@ -795,7 +795,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
                                 var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
-                                _resdient.totatOutStandings = outstanding.ToString();
+                                _resdient.outstanding = outstanding.ToString();
                             }
                         }
                         else
@@ -888,7 +888,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
                                 var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
-                                _resdient.totatOutStandings = outstanding.ToString();
+                                _resdient.outstanding = outstanding.ToString();
                             }
                         }
                         else
@@ -972,7 +972,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
                                 var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
-                                _resdient.totatOutStandings = outstanding.ToString();
+                                _resdient.outstanding = outstanding.ToString();
                             }
                         }
                         else
@@ -1056,7 +1056,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
                                 var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
-                                _resdient.totatOutStandings = outstanding.ToString();
+                                _resdient.outstanding = outstanding.ToString();
                             }
                         }
                         else
@@ -1140,7 +1140,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 var outstanding = (from x in db.tbl_billelectric where x.fk_resident == resident.resident_id && x.fk_paymentstatus == 2 select x.billelectric_outstanding).FirstOrDefault();
                                 var _resdient = (from x in toReturn where x.residentId == resident.resident_id.ToString() select x).FirstOrDefault();
-                                _resdient.totatOutStandings = outstanding.ToString();
+                                _resdient.outstanding = outstanding.ToString();
                             }
                         }
                         else

@@ -37,8 +37,7 @@
             $("#location_electricMeter").val('');
             $("#location_gassMeter").val('');
             $("#location_wapdaMeter").val('');
-            $("#location_area").val('');
-            $("#location_subarea").val('');
+            $("#location_area").val(1).trigger('change');
         }
         function initLocationGrid() {
             Dtable = $(".locationGrid").DataTable({
@@ -86,11 +85,11 @@
                     { "title": "Id", "data": "locationId", className: "hidden" },
                     { "title": "areaId", "data": "fk_area", className: "hidden" },
                     { "title": "Area Name", "data": "areaName" },
-                    { "title": "SubArea Name", "data": "subAreaName" },
+                    { "title": "Sub Area Name", "data": "subAreaName" },
                     { "title": "location Name", "data": "locationName" },
-                    { "title": "locationElectricMeter", "data": "locationElectricMeter" },
-                    { "title": "locationGassMeter", "data": "locationGassMeter" },
-                    { "title": "locationWapdaMeter", "data": "locationWapdaMeter" },
+                    { "title": "Computer No", "data": "locationElectricMeter" },
+                    { "title": "location Gas Meter", "data": "locationGassMeter" },
+                    { "title": "location Wapda Meter", "data": "locationWapdaMeter" },
 
 
 
@@ -323,7 +322,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <span class="input-group-addon bg-primary">location Name</span>
+                                    <span class="input-group-addon bg-primary">Location Name</span>
                                     <input type="hidden" id="location_id" value="" />
                                     <input type="text" value="" id="location_name" class="form-control" />
                                 </div>
@@ -338,26 +337,26 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <span class="input-group-addon bg-primary">SubArea</span>
+                                    <span class="input-group-addon bg-primary">Sub Area</span>
                                     <select class="form-control dropdownlist" id="location_subarea">
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <span class="input-group-addon bg-primary">locationElectricMeter</span>
+                                    <span class="input-group-addon bg-primary">Computer No</span>
                                     <input type="text" value="" id="location_electricMeter" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <span class="input-group-addon bg-primary">locationGassMeter</span>
+                                    <span class="input-group-addon bg-primary">location Gas Meter</span>
                                     <input type="text" value="" id="location_gassMeter" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <span class="input-group-addon bg-primary">locationWapdaMeter</span>
+                                    <span class="input-group-addon bg-primary">location Wapda Meter</span>
                                     <input type="text" value="" id="location_wapdaMeter" class="form-control" />
                                 </div>
                             </div>

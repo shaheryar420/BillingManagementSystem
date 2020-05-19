@@ -36,6 +36,7 @@
             $("#resident_rank").val('');
             $("#resident_name").val('');
             $("#resident_unit").val('');
+            $("#resident_area").val(1).trigger('change');
             $("#resident_remarks").val('');
         }
         function initResidentGrid() {
@@ -81,16 +82,14 @@
                             }
                         },
                         { "title": "Id", "data": "residentId", className: "hidden" },
-                        { "title": "Location", "data": "locationName" },
-                        { "title": "SubArea", "data": "subAreaName" },
-                        { "title": "Area", "data": "areaName" },
-                        { "title": "PaNumber", "data": "residentPaNumber" },
+                        { "title": "Pa Number", "data": "residentPaNumber" },
                         { "title": "Rank", "data": "residentRank" },
                         { "title": "Name", "data": "residentName" },
                         { "title": "Unit", "data": "residentUnit" },
                         { "title": "Remarks", "data": "residentRemarks" },
-                        { "title": "Payment Date", "data": "previousReading" },
-                        { "title": "Amount", "data": "previousReading" },
+                        { "title": "Area", "data": "areaName" },
+                        { "title": "Sub Area", "data": "subAreaName" },
+                        { "title": "Location", "data": "locationName" }                        
                     ]
                
             });
@@ -365,7 +364,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <span class="input-group-addon bg-primary">Resident PaNumber</span>
+                                    <span class="input-group-addon bg-primary">Resident Pa Number</span>
                                     <input type="hidden" id="resident_id" value="" />
                                     <input type="text" value="" id="resident_panumber" class="form-control" />
                                 </div>
@@ -405,7 +404,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <span class="input-group-addon bg-primary">SubArea</span>
+                                    <span class="input-group-addon bg-primary">Sub Area</span>
                                     <select class="form-control dropdownlist" id="resident_subarea">
                                     </select>
                                 </div>
