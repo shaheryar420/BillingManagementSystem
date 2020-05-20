@@ -23,7 +23,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 using (db_bmsEntities db = new db_bmsEntities())
                                 {
-                                    if(!String.IsNullOrEmpty(model.readingpicture_data))
+                                    if(!string.IsNullOrEmpty(model.readingpicture_data))
                                     {
                                         var newReadingPicture = new tbl_readingpicture()
                                         {
