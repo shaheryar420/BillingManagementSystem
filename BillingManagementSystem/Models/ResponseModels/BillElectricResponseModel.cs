@@ -35,8 +35,10 @@ namespace BillingManagementSystem.Models
         public string residentUnit { get; set; }
         public string locationName { get; set; }
         public string locationMeterNo { get; set; }
-        public string electricCharges { get; set; }
+        public string billElectricFpa { get; set; }
+        public string billElectricRebate { get; set; }
         public string payment { get; set; }
+        public string paymentDate { get; set; }
         public string paymentMonth { get; set; }
     }
 }

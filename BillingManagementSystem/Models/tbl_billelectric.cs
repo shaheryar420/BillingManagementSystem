@@ -29,5 +29,9 @@ namespace BillingManagementSystem.Models
         public Nullable<int> fk_billpicture { get; set; }
         public string billelectric_month { get; set; }
         public Nullable<double> billelectric_outstanding { get; set; }
+        public double billelectric_fpa { get; set; }
+        public double billelectric_rebate { get; set; }
+        public double billelectric_paymentamount { get; set; }
+        public Nullable<System.DateTime> billelectric_paymentdate { get; set; }
     }
 }

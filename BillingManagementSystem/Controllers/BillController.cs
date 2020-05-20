@@ -55,34 +55,58 @@ namespace BillingManagementSystem.Controllers
             string _currentReading = Request.Form["_currentReading"].ToString();
             string _currentUnit = Request.Form["_currentUnit"].ToString();
             string _month = Request.Form["_month"].ToString();
+            string _water = Request.Form["_water"].ToString();
+            string _tv = Request.Form["_tv"].ToString();
             string userId = Request.Cookies["bms_data"]["id"].ToString();
-            HttpPostedFileBase file = Request.Files[0]; //Uploaded file
-                                                        //Use the following properties to get file's name, size and MIMEType
-            int fileSize = file.ContentLength;
-            string fileName = file.FileName;
-            string mimeType = file.ContentType;
-            System.IO.Stream fileContent = file.InputStream;
-            string ext = Path.GetExtension(fileName);
-            byte[] thePictureAsBytes = new byte[fileSize];
-            using (BinaryReader theReader = new BinaryReader(fileContent))
+            ReadingElectricRequestModel model = new ReadingElectricRequestModel();
+            if (Request.Files.Count > 0)
             {
-                thePictureAsBytes = theReader.ReadBytes(fileSize);
-            }
-            String _base64 = Convert.ToBase64String(thePictureAsBytes);
+                HttpPostedFileBase file = Request.Files[0]; //Uploaded file
+                                                            //Use the following properties to get file's name, size and MIMEType
+                int fileSize = file.ContentLength;
+                string fileName = file.FileName;
+                string mimeType = file.ContentType;
+                System.IO.Stream fileContent = file.InputStream;
+                string ext = Path.GetExtension(fileName);
+                byte[] thePictureAsBytes = new byte[fileSize];
+                using (BinaryReader theReader = new BinaryReader(fileContent))
+                {
+                    thePictureAsBytes = theReader.ReadBytes(fileSize);
+                }
+                String _base64 = Convert.ToBase64String(thePictureAsBytes);
+                model = new ReadingElectricRequestModel()
+                {
+                    readingpicture_data = _base64,
+                    readingpicture_size = fileSize.ToString(),
+                    readingpicture_type = mimeType,
+                    readingElectricCurrentReading = _currentReading,
+                    readingElectricAddedby = userId,
+                    readingElectricPrevReading = _previousReading,
+                    readingElectricMonth = _month,
+                    readingElectircWater = _water,
+                    readingElectricFpa = "0",
+                    readingElectricTv = _tv,
+                    readingElectricUnits = _currentUnit,
+                    readingElectricMeterNo = _meterNo
 
-            ReadingElectricRequestModel model = new ReadingElectricRequestModel()
+                };
+            }
+            else
             {
-                readingpicture_data = _base64,
-                readingpicture_size = fileSize.ToString(),
-                readingpicture_type = mimeType,
-                readingElectricCurrentReading = _currentReading,
-                readingElectricAddedby = userId,
-                readingElectricPrevReading = _previousReading,
-                readingElectricMonth = _month,
-                readingElectricUnits = _currentUnit,
-                readingElectricMeterNo = _meterNo
-                
-            };
+                model = new ReadingElectricRequestModel()
+                {
+                    readingElectricCurrentReading = _currentReading,
+                    readingElectricAddedby = userId,
+                    readingElectricPrevReading = _previousReading,
+                    readingElectricMonth = _month,
+                    readingElectircWater = _water,
+                    readingElectricFpa = "0",
+                    readingElectricTv = _tv,
+                    readingElectricUnits = _currentUnit,
+                    readingElectricMeterNo = _meterNo
+
+                };
+            }
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
             var response = helper.AddReadingElectric(model);
             var json = Json(response);
@@ -97,35 +121,62 @@ namespace BillingManagementSystem.Controllers
             string _currentReading = Request.Form["_currentReading"].ToString();
             string _currentUnit = Request.Form["_currentUnit"].ToString();
             string _month = Request.Form["_month"].ToString();
+            string _water = Request.Form["_water"].ToString();
+            string _tv = Request.Form["_tv"].ToString();
             string userId = Request.Cookies["bms_data"]["id"].ToString();
-            HttpPostedFileBase file = Request.Files[0]; //Uploaded file
-                                                        //Use the following properties to get file's name, size and MIMEType
-            int fileSize = file.ContentLength;
-            string fileName = file.FileName;
-            string mimeType = file.ContentType;
-            System.IO.Stream fileContent = file.InputStream;
-            string ext = Path.GetExtension(fileName);
-            byte[] thePictureAsBytes = new byte[fileSize];
-            using (BinaryReader theReader = new BinaryReader(fileContent))
+            ReadingElectricRequestModel model = new ReadingElectricRequestModel();
+            if (Request.Files.Count > 0)
             {
-                thePictureAsBytes = theReader.ReadBytes(fileSize);
+                HttpPostedFileBase file = Request.Files[0]; //Uploaded file
+                                                            //Use the following properties to get file's name, size and MIMEType
+                int fileSize = file.ContentLength;
+                string fileName = file.FileName;
+                string mimeType = file.ContentType;
+                System.IO.Stream fileContent = file.InputStream;
+                string ext = Path.GetExtension(fileName);
+                byte[] thePictureAsBytes = new byte[fileSize];
+                using (BinaryReader theReader = new BinaryReader(fileContent))
+                {
+                    thePictureAsBytes = theReader.ReadBytes(fileSize);
+                }
+                String _base64 = Convert.ToBase64String(thePictureAsBytes);
+                model = new ReadingElectricRequestModel()
+                {
+                    readingElectricId = _id,
+                    readingpicture_data = _base64,
+                    readingpicture_size = fileSize.ToString(),
+                    readingpicture_type = mimeType,
+                    readingElectricCurrentReading = _currentReading,
+                    readingElectricAddedby = userId,
+                    readingElectricPrevReading = _previousReading,
+                    readingElectricMonth = _month,
+                    readingElectircWater = _water,
+                    readingElectricFpa = "0",
+                    readingElectricTv = _tv,
+                    readingElectricUnits = _currentUnit,
+                    readingElectricMeterNo = _meterNo
+
+                };
             }
-            String _base64 = Convert.ToBase64String(thePictureAsBytes);
-
-            ReadingElectricRequestModel model = new ReadingElectricRequestModel()
+            else
             {
-                readingElectricId = _id,
-                readingpicture_data = _base64,
-                readingpicture_size = fileSize.ToString(),
-                readingpicture_type = mimeType,
-                readingElectricCurrentReading = _currentReading,
-                readingElectricAddedby = userId,
-                readingElectricPrevReading = _previousReading,
-                readingElectricMonth = _month,
-                readingElectricUnits = _currentUnit,
-                readingElectricMeterNo = _meterNo
+                model = new ReadingElectricRequestModel()
+                {
+                    readingElectricId = _id,
+                    readingElectricCurrentReading = _currentReading,
+                    readingElectricAddedby = userId,
+                    readingElectricPrevReading = _previousReading,
+                    readingElectricMonth = _month,
+                    readingElectircWater = _water,
+                    readingElectricFpa = "0",
+                    readingElectricTv = _tv,
+                    readingElectricUnits = _currentUnit,
+                    readingElectricMeterNo = _meterNo
 
-            };
+                };
+            }
+
+            
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
             var response = helper.EditReadingElectric(model);
             var json = Json(response);
@@ -148,7 +199,7 @@ namespace BillingManagementSystem.Controllers
                 readingElectricAddedby = userId
             };
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
-            var response = helper.getAllReadings(model);
+            var response = helper.getReadingsByUser(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;

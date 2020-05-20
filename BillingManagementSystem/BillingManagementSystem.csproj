@@ -432,6 +432,7 @@
     <Content Include="fonts\font-awesome\font-awesome.css" />
     <Content Include="fonts\font-awesome\font-awesome.min.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\line-icons\premium-line-icons.css" />
     <Content Include="fonts\line-icons\premium-line-icons.min.css" />
     <Content Include="fonts\premium-line-icons.svg" />
@@ -465,8 +466,8 @@
     <Content Include="img\user.png" />
     <Content Include="Models\BMSMODEL.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>BMSMODEL.Context.cs</LastGenOutput>
       <DependentUpon>BMSMODEL.edmx</DependentUpon>
+      <LastGenOutput>BMSMODEL.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\BMSMODEL.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -805,6 +806,9 @@
       <DependentUpon>BMSMODEL.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ModelsValidatorHelper.cs" />
+    <Compile Include="Models\officerreport.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\RequestModels\AreaRequestModel.cs" />
     <Compile Include="Models\RequestModels\BillElectricRequestModel.cs" />
     <Compile Include="Models\RequestModels\BillGasRequestModel.cs" />
@@ -871,6 +875,9 @@
     <Compile Include="Models\tbl_location.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tbl_offr.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl_paymentgashistory.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
@@ -910,7 +917,13 @@
     <Compile Include="Models\tbl_residents.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tbl_slabs.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl_subarea.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_tarrif_category.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_userareas.cs">
@@ -966,6 +979,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="libman.json" />
     <EntityDeploy Include="Models\BMSMODEL.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>BMSMODEL.Designer.cs</LastGenOutput>
@@ -973,7 +987,9 @@
     <Content Include="Models\BMSMODEL.edmx.diagram">
       <DependentUpon>BMSMODEL.edmx</DependentUpon>
     </Content>
-    <Content Include="libman.json" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="packages.config" />
     <Content Include="scripts\plugins\jstree\LICENSE-MIT" />
     <Content Include="Views\Shared\_Footer.cshtml" />

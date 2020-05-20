@@ -72,10 +72,10 @@
                         }
                     },
                     { "title": "Id", "data": "billElectricId", className: "hidden" },
-                    { "title": "Computer No#", "data": "locationMeterNo" },
-                    { "title": "Location", "data": "locationName" },
-                    { "title": "Sub Area", "data": "locationName" },
+                    { "title": "Consumer #", "data": "locationMeterNo" },
                     { "title": "Area", "data": "locationName" },
+                    { "title": "Sub Area", "data": "locationName" },
+                    { "title": "Location", "data": "locationName" },
                     { "title": "Name", "data": "residentName" },
                     { "title": "PA No", "data": "residentPaNo" },
                     { "title": "Rank", "data": "residentRank" },
@@ -83,12 +83,11 @@
                     { "title": "Previous Reading", "data": "billElectricPrevReading" },
                     { "title": "Present Reading", "data": "billElectricCurrentReading" },
                     { "title": "Units", "data": "billElectricUnits" },
-                    { "title": "Payment Date", "data": "billElectricAmount" },
-                    { "title": "Amount", "data": "billElectricAmount" },
-                    { "title": "Payment Status", "data": "paymentStatusName" },
-                    { "title": "Outstanding", "data": "billElectricOutstanding" },
+                    { "title": "Electric Charges", "data": "billElectricRebate" },
+                    { "title": "FPA", "data": "billElectricFpa" },
                     { "title": "Water", "data": "billElectricWater" },
                     { "title": "TV", "data": "billElectricTv" },
+                    { "title": "Total Amount", "data": "billElectricAmount" },
                     {
                         "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
                             return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
@@ -247,10 +246,10 @@
                         }
                     },
                     { "title": "Id", "data": "billElectricId", className: "hidden" },
-                    { "title": "Computer No#", "data": "locationMeterNo" },
-                    { "title": "Location", "data": "locationName" },
-                    { "title": "Sub Area", "data": "locationName" },
+                    { "title": "Consumer #", "data": "locationMeterNo" },
                     { "title": "Area", "data": "locationName" },
+                    { "title": "Sub Area", "data": "locationName" },
+                    { "title": "Location", "data": "locationName" },
                     { "title": "Name", "data": "residentName" },
                     { "title": "PA No", "data": "residentPaNo" },
                     { "title": "Rank", "data": "residentRank" },
@@ -258,12 +257,11 @@
                     { "title": "Previous Reading", "data": "billElectricPrevReading" },
                     { "title": "Present Reading", "data": "billElectricCurrentReading" },
                     { "title": "Units", "data": "billElectricUnits" },
-                    { "title": "Payment Date", "data": "billElectricAmount" },
-                    { "title": "Amount", "data": "billElectricAmount" },
-                    { "title": "Payment Status", "data": "paymentStatusName" },
-                    { "title": "Outstanding", "data": "billElectricOutstanding" },
+                    { "title": "Electric Charges", "data": "billElectricRebate" },
+                    { "title": "FPA", "data": "billElectricFpa" },
                     { "title": "Water", "data": "billElectricWater" },
                     { "title": "TV", "data": "billElectricTv" },
+                    { "title": "Total Amount", "data": "billElectricAmount" },
                     {
                         "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
                             return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
@@ -363,7 +361,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Search By Computer No</label>
+                            <label class="control-label">Search By Consumer #</label>
                             <div class="input-group">
                                 <input type="text" value="" placeholder="Enter Meter#" class="form-control" id="meterNo" />
                                 <span id="btn_search_meterNo" class="input-group-addon btn btn-info"><i class="psi-magnifi-glass"></i></span>

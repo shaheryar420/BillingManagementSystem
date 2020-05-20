@@ -25,6 +25,7 @@ namespace BillingManagementSystem.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<officerreport> officerreports { get; set; }
         public DbSet<tbl_action> tbl_action { get; set; }
         public DbSet<tbl_area> tbl_area { get; set; }
         public DbSet<tbl_billelectric> tbl_billelectric { get; set; }
@@ -34,6 +35,7 @@ namespace BillingManagementSystem.Models
         public DbSet<tbl_fixedrates> tbl_fixedrates { get; set; }
         public DbSet<tbl_fixedratetype> tbl_fixedratetype { get; set; }
         public DbSet<tbl_location> tbl_location { get; set; }
+        public DbSet<tbl_offr> tbl_offr { get; set; }
         public DbSet<tbl_paymentgashistory> tbl_paymentgashistory { get; set; }
         public DbSet<tbl_paymenthistory> tbl_paymenthistory { get; set; }
         public DbSet<tbl_paymentstatus> tbl_paymentstatus { get; set; }
@@ -47,7 +49,9 @@ namespace BillingManagementSystem.Models
         public DbSet<tbl_residenthistory> tbl_residenthistory { get; set; }
         public DbSet<tbl_residentpayments> tbl_residentpayments { get; set; }
         public DbSet<tbl_residents> tbl_residents { get; set; }
+        public DbSet<tbl_slabs> tbl_slabs { get; set; }
         public DbSet<tbl_subarea> tbl_subarea { get; set; }
+        public DbSet<tbl_tarrif_category> tbl_tarrif_category { get; set; }
         public DbSet<tbl_userareas> tbl_userareas { get; set; }
         public DbSet<tbl_userpermissions> tbl_userpermissions { get; set; }
         public DbSet<tbl_users> tbl_users { get; set; }

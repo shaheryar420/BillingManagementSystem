@@ -7721,7 +7721,7 @@
 /**
  * ### State plugin
  *
- * Saves the state of the tree (selected nodes, opened nodes) on the user's computer using available options (localStorage, cookies, etc)
+ * Saves the state of the tree (selected nodes, opened nodes) on the user's Consumer using available options (localStorage, cookies, etc)
  */
 
 	var to = false;
@@ -7788,7 +7788,7 @@
 			$.vakata.storage.set(this.settings.state.key, JSON.stringify(st));
 		};
 		/**
-		 * restore the state from the user's computer
+		 * restore the state from the user's Consumer
 		 * @name restore_state()
 		 * @plugin state
 		 */
@@ -7806,7 +7806,7 @@
 			return false;
 		};
 		/**
-		 * clear the state on the user's computer
+		 * clear the state on the user's Consumer
 		 * @name clear_state()
 		 * @plugin state
 		 */

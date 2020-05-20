@@ -4,34 +4,38 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ce24d6f19b824d13a6a336f2f3fff5a6" Name="Diagram1">
-        <EntityTypeShape EntityType="db_bmsModel.tbl_action" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_area" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_billelectric" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_billgas" Width="1.5" PointX="2.75" PointY="3.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_billpicture" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_controller" Width="1.5" PointX="4.75" PointY="3.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_fixedrates" Width="1.5" PointX="6.75" PointY="0.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_fixedratetype" Width="1.5" PointX="6.75" PointY="3.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_location" Width="1.5" PointX="4.75" PointY="6.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_paymentgashistory" Width="1.5" PointX="6.75" PointY="6.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_paymenthistory" Width="1.5" PointX="8.75" PointY="0.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_paymentstatus" Width="1.5" PointX="0.75" PointY="8.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_paymenttype" Width="1.5" PointX="8.75" PointY="3.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_readingelectric" Width="1.5" PointX="8.75" PointY="6.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_readingelectriclog" Width="1.5" PointX="2.75" PointY="9.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_readinggas" Width="1.5" PointX="4.75" PointY="9.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_readinggaslog" Width="1.5" PointX="10.75" PointY="0.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_readingpicture" Width="1.5" PointX="10.75" PointY="4.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_residentbuilding" Width="1.5" PointX="6.75" PointY="10.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_residenthistory" Width="1.5" PointX="10.75" PointY="7.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_residentpayments" Width="1.5" PointX="8.75" PointY="10.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_residents" Width="1.5" PointX="10.75" PointY="10.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_subarea" Width="1.5" PointX="12.75" PointY="0.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_userareas" Width="1.5" PointX="12.75" PointY="3.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_userpermissions" Width="1.5" PointX="12.75" PointY="6.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_users" Width="1.5" PointX="12.75" PointY="9.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_usertype" Width="1.5" PointX="12.75" PointY="12.75" />
+      <Diagram DiagramId="dc74bf9f4c074b94a774f7a9e5265079" Name="Diagram1">
+        <EntityTypeShape EntityType="db_bmsModel.officerreport" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_action" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_area" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_billelectric" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_billgas" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_billpicture" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_controller" Width="1.5" PointX="2.75" PointY="6.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_fixedrates" Width="1.5" PointX="4.75" PointY="6.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_fixedratetype" Width="1.5" PointX="6.75" PointY="5.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_location" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_offr" Width="1.5" PointX="8.75" PointY="3.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_paymentgashistory" Width="1.5" PointX="6.75" PointY="8.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_paymenthistory" Width="1.5" PointX="8.75" PointY="7.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_paymentstatus" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_paymenttype" Width="1.5" PointX="2.75" PointY="9.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_readingelectric" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_readingelectriclog" Width="1.5" PointX="10.75" PointY="5.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_readinggas" Width="1.5" PointX="10.75" PointY="9.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_readinggaslog" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_readingpicture" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_residentbuilding" Width="1.5" PointX="2.75" PointY="12.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_residenthistory" Width="1.5" PointX="12.75" PointY="4.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_residentpayments" Width="1.5" PointX="4.75" PointY="12.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_residents" Width="1.5" PointX="6.75" PointY="12.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_slabs" Width="1.5" PointX="12.75" PointY="7.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_subarea" Width="1.5" PointX="12.75" PointY="12.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_tarrif_category" Width="1.5" PointX="14.75" PointY="0.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_userareas" Width="1.5" PointX="14.75" PointY="3.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_userpermissions" Width="1.5" PointX="14.75" PointY="6.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_users" Width="1.5" PointX="8.75" PointY="14.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_usertype" Width="1.5" PointX="14.75" PointY="9.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

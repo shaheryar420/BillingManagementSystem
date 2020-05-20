@@ -19,16 +19,16 @@
 
     <script>
         var Id = null;
-        var _id  = null;
+        var _id = null;
         var Dtable = null;
         var electricrate = null;
         var _prevResd = null;
+        var subareaId = null;
+        var locationId = null;
         $(document).on('nifty.ready', function () {
             $('.dropdownlist').select2();
             $('#btn_electric_update').hide();
             $('editTitle').hide();
-            $('#prev_read').hide();
-            $('#label_NPR').hide();
             $(".monthPicker").datepicker({
                 format: "mm-yyyy",
                 startView: "months",
@@ -45,7 +45,15 @@
             $("#meter_no").val('');
             $("#previous_reading").val('');
             $("#current_reading").val('');
-            $("#prev_read").val('');
+            $("#electric_area").val(1).trigger('change');
+            $("#current_unit").val('');
+            $("#month").val('');
+        }
+        function clear() {
+            $('#electric_id').val('');
+            $("#meter_no").val('');
+            $("#previous_reading").val('');
+            $("#current_reading").val('');
             $("#current_unit").val('');
             $("#month").val('');
         }
@@ -53,6 +61,7 @@
             Dtable = $(".electricGrid").DataTable({
                 autoWidth: true,
                 destroy: true,
+                scrollX: true,
                 "ajax": {
                     "url": '/Bill/GetAllReadingsElectric',
                     "type": 'POST',
@@ -68,7 +77,7 @@
                         }
                         else {
 
-                            
+
                         }
                     },
                     "error": function (a, b, c) {
@@ -80,10 +89,17 @@
                     }
                 },
                 "columns": [
+                    
                     {
                         title: 'Action',
                         render: function (data, type, row, meta) {
-                            return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_electric_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-success btn_electric_approvel'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_electric_delete'><i class='fa fa-trash'></i></a></div>";
+                            return "<a href='#' class='btn-sm btn-success btn_electric_approvel'>Approve</a>";
+                        }
+                    },
+                    {
+                        title: 'Action',
+                        render: function (data, type, row, meta) {
+                            return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_electric_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_electric_delete'><i class='fa fa-trash'></i></a></div>";
                         }
                     },
                     {
@@ -93,19 +109,26 @@
                         }
                     },
                     { "title": "Id", "data": "readingElectricId", className: "hidden" },
+                    { "title": "AreaId", "data": "area_id", className: "hidden" },
+                    { "title": "SubAreaId", "data": "subarea_id", className: "hidden" },
+                    { "title": "LocationId", "data": "location_id", className: "hidden" },
                     { "title": "Billing Month", "data": "readingElectricMonth" },
-                    { "title": "Meter #", "data": "readingElectricMeterNo" },
+                    { "title": "Consumer #", "data": "readingElectricMeterNo" },
+                    { "title": "Area", "data": "area_name" },
+                    { "title": "Sub Area", "data": "subarea_name" },
+                    { "title": "Location", "data": "location_name" },
                     { "title": "Previous Reading", "data": "readingElectricPrevReading" },
                     { "title": "Current Reading", "data": "readingElectricCurrentReading" },
                     { "title": "Current Units", "data": "readingElectricUnits" },
+                    { "title": "Water", "data": "readingElectricWater" },
+                    { "title": "TV", "data": "readingElectricTv" },
+                    { "title": "Date Added", "data": "readingElectricDatetime" },
+                    { "title": "Added By", "data": "readingElectricAddedby" },
                     {
                         "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
                             return "<img src='data:" + row.readingpicture_type + ";base64, " + row.readingpicture_data + "' class='img-sm img-thumbnail'/>";
                         }
                     },
-                    { "title": "Date Added", "data": "readingElectricDatetime" },
-                    { "title": "Added By", "data": "readingElectricAddedby" }
-
 
                 ]
             });
@@ -115,24 +138,31 @@
             $("div.html5Buttons").addClass("pull-right");
         }
         function initElectricGridActions() {
-         $(document).on('click', '.btn_electric_edit', function (e) {
+            $(document).on('click', '.btn_electric_approvel', function (e) {
+                e.preventDefault();
+                var rowData = Dtable.row($(this).parents('tr')).data();
+                _id = rowData.readingElectricId;
+                initApprovel(_id);
+            });
+            $(document).on('click', '.btn_electric_edit', function (e) {
                 e.preventDefault();
                 $('#btn_electric_update').show();
                 $('#btn_electric_add').hide();
                 $('#addTitle').hide();
                 $('#editTitle').show();
-                $('#previous_reading').show();
-                $('#prev_read').hide();
-                $('#label_NPR').hide();
-                $('#label_PR').show();
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 var _id = rowData.readingElectricId;
                 $('#electric_id').val(_id);
                 $("#meter_no").val(rowData.readingElectricMeterNo);
+                $("#electric_area").val(rowData.area_id).trigger('change');
+                subareaId = rowData.subarea_id;
+                locationId = rowData.location_id;
                 $("#previous_reading").val(rowData.readingElectricPrevReading);
                 $("#current_reading").val(rowData.readingElectricCurrentReading);
                 $("#current_unit").val(rowData.readingElectricUnits);
                 $("#month").val(rowData.readingElectricMonth);
+                $("#reading_water").val(rowData.readingElectricWater);
+                $("#reading_tv").val(rowData.readingElectricTv);
                 _prevResd = rowData.readingElectricPrevReading;
             });
             $(document).on('click', '.btn_electric_delete', function (e) {
@@ -184,16 +214,21 @@
                 var _url = "/Bill/AddReadingElectric";
                 var _meterNo = $("#meter_no").val();
                 var _currentReading = $("#current_reading").val();
+                var _previousReading = $("#previous_reading").val();
                 var _currentUnit = $("#current_unit").val();
                 var _month = $("#month").val();
+                var _water = $("#reading_water").val();
+                var _tv = $("#reading_tv").val();
                 var formdata = new FormData(); //FormData object
                 var fileInput = document.getElementById('online_file');
                 formdata.append(fileInput.files[0].name, fileInput.files[0]);
                 formdata.append("_meterNo", _meterNo);
-                formdata.append("_previousReading", _prevResd);
+                formdata.append("_previousReading", _previousReading);
                 formdata.append("_currentReading", _currentReading);
                 formdata.append("_currentUnit", _currentUnit);
                 formdata.append("_month", _month);
+                formdata.append("_water", _water);
+                formdata.append("_tv", _tv);
                 $.ajax({
                     url: _url,
                     type: "POST",
@@ -223,39 +258,6 @@
                 });
 
             });
-
-
-         $(document).on('click', '.btn_electric_approvel', function (e) {
-                e.preventDefault();
-                var rowData = Dtable.row($(this).parents('tr')).data();
-                _id = rowData.readingElectricId;
-                var _unit = rowData.readingElectricUnits;
-                $.ajax({
-                    url: '/Management/GetFixedRateByName',
-                    type: 'POST',
-                    data: { fixedRatesName: 'Electric Charges' },
-                    success: function (response) {
-                        if (response) {
-                            if (response.resultCode == '1100') {
-                                electricrate = response.fixedRatesAmount;
-                                console.log(electricrate);
-                                electricrate = _unit * electricrate;
-                                console.log(electricrate);
-                                initApprovel();
-                            }
-                            else {
-                                swal("Warning", response.remarks, "warning");
-                            }
-
-                        }
-                    },
-                    error: function (a, b, c) {
-                        swal('Error', a + b + c, 'error');
-                    }
-
-                });
-            });
-           
             $(document).on('click', '#btn_electric_update', function (e) {
                 e.preventDefault();
                 var _electricId = $('#electric_id').val();
@@ -264,48 +266,55 @@
                     var _electricId = $("#electric_id").val();
                     var _meterNo = $("#meter_no").val();
                     var _currentReading = $("#current_reading").val();
+                    var _previousReading = $("#previous_reading").val();
                     var _currentUnit = $("#current_unit").val();
                     var _month = $("#month").val();
+                    var _water = $("#reading_water").val();
+                    var _tv = $("#reading_tv").val();
                     var formdata = new FormData(); //FormData object
-                var fileInput = document.getElementById('online_file');
-                formdata.append(fileInput.files[0].name, fileInput.files[0]);
-                formdata.append("_id", _electricId);
-                formdata.append("_meterNo", _meterNo);
-                formdata.append("_previousReading", _prevResd);
-                formdata.append("_currentReading", _currentReading);
-                formdata.append("_currentUnit", _currentUnit);
-                formdata.append("_month", _month);
-                 $.ajax({
-                    url: _url,
-                    type: "POST",
-                    data: formdata,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function () {
-                        $('.loading').show();
-                    },
-                    complete: function () {
-                        $('.loading').hide();
-                    },
-                    success: function (data) {
-                        if (data.resultCode == "1100") {
-                            swal("Updated!", data.remarks, "success");
+                    var fileInput = document.getElementById('online_file');
+                    if (fileInput.files.length > 0) {
+                        formdata.append(fileInput.files[0].name, fileInput.files[0]);
+                    }
+                    formdata.append("_meterNo", _meterNo);
+                    formdata.append("_previousReading", _previousReading);
+                    formdata.append("_currentReading", _currentReading);
+                    formdata.append("_currentUnit", _currentUnit);
+                    formdata.append("_month", _month);
+                    formdata.append("_water", _water);
+                    formdata.append("_tv", _tv);
+                    formdata.append("_id", _electricId);
+                    $.ajax({
+                        url: _url,
+                        type: "POST",
+                        data: formdata,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function () {
+                            $('.loading').show();
+                        },
+                        complete: function () {
+                            $('.loading').hide();
+                        },
+                        success: function (data) {
+                            if (data.resultCode == "1100") {
+                                swal("Updated!", data.remarks, "success");
                                 initElectricGrid();
                                 $('#btn_electric_update').hide();
                                 $('#btn_electric_add').show();
                                 $('#addTitle').show();
                                 $('#editTitle').hide();
                                 clearFields();
+                            }
+                            else {
+                                $('.loading').hide();
+                                swal("Not Updated", data.remarks, "error");
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorMessage) {
+                            console.log(errorMessage);
                         }
-                        else {
-                            $('.loading').hide();
-                            swal("Not Updated", data.remarks, "error");
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorMessage) {
-                        console.log(errorMessage);
-                    }
-                });
+                    });
 
                 }
                 else {
@@ -357,7 +366,12 @@
 
                                 }
                                 $('#electric_subarea').select2().empty();
-                                $('#electric_subarea').select2({ data: list }).trigger('change');
+                                $('#electric_subarea').select2({ data: list });
+                                if (subareaId) {
+                                    $('#electric_subarea').val(subareaId);
+                                }
+                                $('#electric_subarea').trigger('change');
+
                             }
                             else {
                                 $('#electric_subarea').select2().empty();
@@ -372,6 +386,7 @@
                         swal('Error', a + b + c, 'error');
                     }
                 });
+
             });
 
             $("#electric_subarea").change(function () {
@@ -389,9 +404,15 @@
 
                                 }
                                 $('#electric_resident').select2().empty();
-                                $('#electric_resident').select2({ data: list }).trigger('change');
-                                Id = $('#electric_resident').val();
-                                initmeterNo(Id);
+                                $('#electric_resident').select2({ data: list });
+                                if (locationId) {
+                                    $('#electric_resident').val(locationId);
+                                }
+                                else {
+                                    clear();
+                                }
+                                $('#electric_resident').trigger('change');
+
                             }
                             else {
                                 $('#electric_resident').select2().empty();
@@ -407,6 +428,12 @@
                     }
                 });
             });
+            $("#electric_resident").change(function () {
+                if ($("#electric_resident").val()) {
+                    initmeterNo($('#electric_resident').val());
+                }
+
+            });
         }
         function initmeterNo(Id) {
             $.ajax({
@@ -414,16 +441,12 @@
                 type: 'POST',
                 data: { locationId: Id },
                 success: function (response) {
+                    console.log(response);
                     if (response) {
                         if (response.resultCode == '1100') {
                             $('#meter_no').val(response.locationElectricMeter);
-                            $('#previous_reading').val(response.previousReading);
-                            _prevResd = $("#previous_reading").val();
-                            if (_prevResd == '0') {
-                                $('#prev_read').show();
-                                $('#label_NPR').show();
-                                $('#label_PR').hide();
-                                $('#previous_reading').hide();
+                            if (!locationId) {
+                                $('#previous_reading').val(response.currentReading);
                             }
                         }
                         else {
@@ -440,26 +463,26 @@
 
         }
         $("#current_reading").change(function () {
-            if (_prevResd == "0") {
-                _prevResd = $('#prev_read').val();
-                currentReading = $('#current_reading').val();
-                var unit = currentReading - _prevResd;
-                $('#current_unit').val(unit);
-            }
-            else {
-
-                currentReading = $('#current_reading').val();
-                var unit = currentReading - _prevResd;
-                $('#current_unit').val(unit);
+            var currentReading = $('#current_reading').val();
+            var previousReading = $('#previous_reading').val();
+            if (currentReading) {
+                if (previousReading) {
+                    var unit = currentReading - previousReading;
+                    $('#current_unit').val(unit);
+                }
+                else {
+                    var unit = currentReading - 0;
+                    $('#current_unit').val(unit);
+                }
             }
 
         });
-
-        function initApprovel() {
+        ///
+        function initApprovel(_id) {
             $.ajax({
                 url: '/Bill/ApproveReadingElectric',
                 type: 'POST',
-                data: { readingElectricId: _id, amount: electricrate },
+                data: { readingElectricId: _id },
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
@@ -507,16 +530,12 @@
                         <select class="form-control dropdownlist" id="electric_resident"></select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Computer No.</label>
+                        <label class="control-label">Consumer #.</label>
                         <input type="number" value="" readonly class="form-control" id="meter_no" />
                     </div>
                     <div class="form-group">
                         <label class="control-label" id="label_PR">Previous Reading</label>
-                        <input type="number" value="" readonly class="form-control" id="previous_reading" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" id="label_NPR">Previous Reading</label>
-                        <input type="number" value="" class="form-control" id="prev_read" />
+                        <input type="number" value="" class="form-control" id="previous_reading" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Enter Current Reading</label>
@@ -526,6 +545,14 @@
                     <div class="form-group">
                         <label class="control-label">Current Units</label>
                         <input type="number" value="" class="form-control" id="current_unit" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Water</label>
+                        <input type="number" value="" class="form-control" id="reading_water" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Tv</label>
+                        <input type="number" value="" class="form-control" id="reading_tv" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Upload Picture</label>
@@ -546,7 +573,7 @@
 
             <div class="panel panel-bordered-info panel-colorful">
                 <div class="panel-heading">
-                    <h1 class="panel-title">Readings Added</h1>
+                    <h1 class="panel-title">Bills Generated</h1>
                 </div>
                 <div class="panel-body">
                     <table class="table table-bordered table-responsive table-hover electricGrid"></table>

@@ -50,12 +50,20 @@ namespace BillingManagementSystem.DataHelpers
                                             z.resident_unit,
                                             l.location_name,
                                             l.location_electricmeter,
-                                            p.paymentstatus_name
+                                            p.paymentstatus_name,
+                                            x.billelectric_rebate,
+                                            x.billelectric_fpa,
+                                            x.billelectric_paymentamount,
+                                            x.billelectric_paymentdate,
                                         }).ToList();
                     if (billsElectric.Count() > 0)
                     {
                         toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                         {
+                            payment = billElectric.billelectric_paymentamount.ToString(),
+                            paymentDate = billElectric.billelectric_paymentdate.ToString(),
+                            billElectricFpa = billElectric.billelectric_fpa.ToString(),
+                            billElectricRebate = billElectric.billelectric_rebate.ToString(),
                             paymentStatusName = billElectric.paymentstatus_name,
                             billElectricAmount = billElectric.billelectric_amount.ToString(),
                             billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
@@ -145,12 +153,20 @@ namespace BillingManagementSystem.DataHelpers
                                              z.resident_remarks,
                                              z.resident_unit,
                                              l.location_name,
-                                             l.location_electricmeter
+                                             l.location_electricmeter,
+                                             x.billelectric_rebate,
+                                             x.billelectric_fpa,
+                                             x.billelectric_paymentamount,
+                                             x.billelectric_paymentdate,
                                          }).ToList();
                     if (billsElectric.Count() > 0)
                     {
                         toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                         {
+                            payment = billElectric.billelectric_paymentamount.ToString(),
+                            paymentDate = billElectric.billelectric_paymentdate.ToString(),
+                            billElectricFpa = billElectric.billelectric_fpa.ToString(),
+                            billElectricRebate = billElectric.billelectric_rebate.ToString(),
                             paymentStatusName   = billElectric.paymentstatus_name,
                             billElectricAmount = billElectric.billelectric_amount.ToString(),
                             billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
@@ -243,12 +259,20 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_electricmeter,
+                                                 x.billelectric_rebate,
+                                                 x.billelectric_fpa,
+                                                 x.billelectric_paymentamount,
+                                                 x.billelectric_paymentdate,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                payment = billElectric.billelectric_paymentamount.ToString(),
+                                paymentDate = billElectric.billelectric_paymentdate.ToString(),
+                                billElectricFpa = billElectric.billelectric_fpa.ToString(),
+                                billElectricRebate = billElectric.billelectric_rebate.ToString(),
                                 paymentStatusName = billElectric.paymentstatus_name,
                                 billElectricAmount = billElectric.billelectric_amount.ToString(),
                                 billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
@@ -351,12 +375,20 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_electricmeter,
+                                                 x.billelectric_rebate,
+                                                 x.billelectric_fpa,
+                                                 x.billelectric_paymentamount,
+                                                 x.billelectric_paymentdate,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                payment = billElectric.billelectric_paymentamount.ToString(),
+                                paymentDate = billElectric.billelectric_paymentdate.ToString(),
+                                billElectricFpa = billElectric.billelectric_fpa.ToString(),
+                                billElectricRebate = billElectric.billelectric_rebate.ToString(),
                                 paymentStatusName = billElectric.paymentstatus_name,
                                 billElectricAmount = billElectric.billelectric_amount.ToString(),
                                 billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
@@ -458,12 +490,20 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_electricmeter,
+                                                 x.billelectric_rebate,
+                                                 x.billelectric_fpa,
+                                                 x.billelectric_paymentamount,
+                                                 x.billelectric_paymentdate,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                payment = billElectric.billelectric_paymentamount.ToString(),
+                                paymentDate = billElectric.billelectric_paymentdate.ToString(),
+                                billElectricFpa = billElectric.billelectric_fpa.ToString(),
+                                billElectricRebate = billElectric.billelectric_rebate.ToString(),
                                 paymentStatusName = billElectric.paymentstatus_name,
                                 billElectricAmount = billElectric.billelectric_amount.ToString(),
                                 billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
@@ -567,12 +607,20 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_electricmeter,
+                                                 x.billelectric_rebate,
+                                                 x.billelectric_fpa,
+                                                 x.billelectric_paymentamount,
+                                                 x.billelectric_paymentdate,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                payment = billElectric.billelectric_paymentamount.ToString(),
+                                paymentDate = billElectric.billelectric_paymentdate.ToString(),
+                                billElectricFpa = billElectric.billelectric_fpa.ToString(),
+                                billElectricRebate = billElectric.billelectric_rebate.ToString(),
                                 paymentStatusName = billElectric.paymentstatus_name,
                                 billElectricAmount = billElectric.billelectric_amount.ToString(),
                                 billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
@@ -674,12 +722,20 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_electricmeter,
+                                                 x.billelectric_rebate,
+                                                 x.billelectric_fpa,
+                                                 x.billelectric_paymentamount,
+                                                 x.billelectric_paymentdate,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                payment = billElectric.billelectric_paymentamount.ToString(),
+                                paymentDate = billElectric.billelectric_paymentdate.ToString(),
+                                billElectricFpa = billElectric.billelectric_fpa.ToString(),
+                                billElectricRebate = billElectric.billelectric_rebate.ToString(),
                                 paymentStatusName = billElectric.paymentstatus_name,
                                 billElectricAmount = billElectric.billelectric_amount.ToString(),
                                 billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
@@ -781,12 +837,20 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_electricmeter,
+                                                 x.billelectric_rebate,
+                                                 x.billelectric_fpa,
+                                                 x.billelectric_paymentamount,
+                                                 x.billelectric_paymentdate,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                payment = billElectric.billelectric_paymentamount.ToString(),
+                                paymentDate = billElectric.billelectric_paymentdate.ToString(),
+                                billElectricFpa = billElectric.billelectric_fpa.ToString(),
+                                billElectricRebate = billElectric.billelectric_rebate.ToString(),
                                 paymentStatusName = billElectric.paymentstatus_name,
                                 billElectricAmount = billElectric.billelectric_amount.ToString(),
                                 billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
@@ -888,12 +952,20 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_electricmeter,
+                                                 x.billelectric_rebate,
+                                                 x.billelectric_fpa,
+                                                 x.billelectric_paymentamount,
+                                                 x.billelectric_paymentdate,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                payment = billElectric.billelectric_paymentamount.ToString(),
+                                paymentDate = billElectric.billelectric_paymentdate.ToString(),
+                                billElectricFpa = billElectric.billelectric_fpa.ToString(),
+                                billElectricRebate = billElectric.billelectric_rebate.ToString(),
                                 paymentStatusName = billElectric.paymentstatus_name,
                                 billElectricAmount = billElectric.billelectric_amount.ToString(),
                                 billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
@@ -995,12 +1067,20 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_electricmeter,
+                                                 x.billelectric_rebate,
+                                                 x.billelectric_fpa,
+                                                 x.billelectric_paymentamount,
+                                                 x.billelectric_paymentdate,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                payment = billElectric.billelectric_paymentamount.ToString(),
+                                paymentDate = billElectric.billelectric_paymentdate.ToString(),
+                                billElectricFpa = billElectric.billelectric_fpa.ToString(),
+                                billElectricRebate = billElectric.billelectric_rebate.ToString(),
                                 paymentStatusName = billElectric.paymentstatus_name,
                                 billElectricAmount = billElectric.billelectric_amount.ToString(),
                                 billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
@@ -1103,12 +1183,20 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_electricmeter,
+                                                 x.billelectric_rebate,
+                                                 x.billelectric_fpa,
+                                                 x.billelectric_paymentamount,
+                                                 x.billelectric_paymentdate,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                payment = billElectric.billelectric_paymentamount.ToString(),
+                                paymentDate = billElectric.billelectric_paymentdate.ToString(),
+                                billElectricFpa = billElectric.billelectric_fpa.ToString(),
+                                billElectricRebate = billElectric.billelectric_rebate.ToString(),
                                 paymentStatusName = billElectric.paymentstatus_name,
                                 billElectricAmount = billElectric.billelectric_amount.ToString(),
                                 billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
@@ -1211,13 +1299,20 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_electricmeter
+                                                 l.location_electricmeter,
+                                                 x.billelectric_rebate,
+                                                 x.billelectric_fpa,
+                                                 x.billelectric_paymentamount,
+                                                 x.billelectric_paymentdate,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
-                            var fixedRatesElectric = (from x in db.tbl_fixedrates where x.fixedrates_name == "Electric Charges" select x.fixedrates_amount).FirstOrDefault();
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                payment = billElectric.billelectric_paymentamount.ToString(),
+                                paymentDate = billElectric.billelectric_paymentdate.ToString(),
+                                billElectricFpa = billElectric.billelectric_fpa.ToString(),
+                                billElectricRebate = billElectric.billelectric_rebate.ToString(),
                                 paymentStatusName = billElectric.paymentstatus_name,
                                 billElectricAmount = billElectric.billelectric_amount.ToString(),
                                 billElectricCurrentReading = billElectric.billelectric_currentreading.ToString(),
@@ -1241,7 +1336,6 @@ namespace BillingManagementSystem.DataHelpers
                                 locationName = !string.IsNullOrEmpty(billElectric.location_name) ? billElectric.location_name : "",
                                 locationMeterNo = !string.IsNullOrEmpty(billElectric.location_electricmeter) ? billElectric.location_electricmeter : "",
                                 fk_billPicture = billElectric.fk_billpicture.ToString(),
-                                electricCharges = fixedRatesElectric.ToString(),
                                 fk_location = billElectric.fk_location.ToString(),
                                 fk_paymentStatus = billElectric.fk_paymentstatus.ToString(),
                                 fk_resident = billElectric.fk_resident.ToString(),

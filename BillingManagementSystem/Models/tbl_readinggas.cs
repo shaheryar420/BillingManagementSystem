@@ -24,5 +24,8 @@ namespace BillingManagementSystem.Models
         public double reading_units { get; set; }
         public int reading_addedby { get; set; }
         public string reading_month { get; set; }
+        public double reading_water { get; set; }
+        public double reading_tv { get; set; }
+        public double reading_fpa { get; set; }
     }
 }

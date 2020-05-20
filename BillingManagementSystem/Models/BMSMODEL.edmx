@@ -5,6 +5,38 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="db_bmsModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'def.db_bms.billmar' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="billmar">
+          <Property Name="FK_CONSUMER_NO" Type="int" />
+          <Property Name="ISSUE_DATE" Type="text" />
+          <Property Name="E_PERVIOUS_UNIT" Type="text" />
+          <Property Name="E_PRESENT_UNIT" Type="text" />
+          <Property Name="E_AUTHRAIZE_UNITS" Type="text" />
+          <Property Name="WATER_CHARGES" Type="text" />
+          <Property Name="TV_FEE" Type="text" />
+          <Property Name="BILLING_MOUNTH" Type="text" />
+          <Property Name="E_CURRENT_BILL" Type="text" />
+          <Property Name="ELECTRIC_METERRENT" Type="text" />
+          <Property Name="CUST_NAME" Type="text" />
+          <Property Name="PERVIOUS_METER" Type="text" />
+          <Property Name="METER2_PERSENT" Type="text" />
+          <Property Name="FPA" Type="text" />
+          <Property Name="STATUS" Type="text" />
+        </EntityType>-->
+        <EntityType Name="officerreport">
+          <Key>
+            <PropertyRef Name="CUNSUMER_NO" />
+          </Key>
+          <Property Name="CUNSUMER_NO" Type="int" Nullable="false" />
+          <Property Name="RANK" Type="text" />
+          <Property Name="NAME" Type="text" />
+          <Property Name="UNIT" Type="text" />
+          <Property Name="ADDRESS" Type="text" />
+          <Property Name="PIN_CODE" Type="varchar" MaxLength="5" />
+          <Property Name="SERVICE_NUMBER" Type="text" />
+          <Property Name="METER_NO" Type="text" />
+        </EntityType>
         <EntityType Name="tbl_action">
           <Key>
             <PropertyRef Name="action_id" />
@@ -39,6 +71,10 @@
           <Property Name="fk_billpicture" Type="int" />
           <Property Name="billelectric_month" Type="varchar" MaxLength="45" />
           <Property Name="billelectric_outstanding" Type="double" />
+          <Property Name="billelectric_fpa" Type="double" Nullable="false" />
+          <Property Name="billelectric_rebate" Type="double" Nullable="false" />
+          <Property Name="billelectric_paymentamount" Type="double" Nullable="false" />
+          <Property Name="billelectric_paymentdate" Type="date" />
         </EntityType>
         <EntityType Name="tbl_billgas">
           <Key>
@@ -103,6 +139,19 @@
           <Property Name="location_gassmeter" Type="varchar" MaxLength="45" />
           <Property Name="location_wapdameter" Type="varchar" MaxLength="45" />
         </EntityType>
+        <EntityType Name="tbl_offr">
+          <Key>
+            <PropertyRef Name="CUNSUMER_NO" />
+          </Key>
+          <Property Name="CUNSUMER_NO" Type="int" Nullable="false" />
+          <Property Name="RANK" Type="varchar" MaxLength="500" />
+          <Property Name="NAME" Type="varchar" MaxLength="500" />
+          <Property Name="UNIT" Type="varchar" MaxLength="500" />
+          <Property Name="ADDRESS" Type="varchar" MaxLength="500" />
+          <Property Name="PIN_CODE" Type="varchar" MaxLength="5" />
+          <Property Name="SERVICE_NUMBER" Type="varchar" MaxLength="500" />
+          <Property Name="METER_NO" Type="varchar" MaxLength="500" />
+        </EntityType>
         <EntityType Name="tbl_paymentgashistory">
           <Key>
             <PropertyRef Name="paymenthistory_id" />
@@ -155,6 +204,9 @@
           <Property Name="readingelectric_units" Type="double" Nullable="false" />
           <Property Name="readingelectric_addedby" Type="int" Nullable="false" />
           <Property Name="readingelectric_month" Type="varchar" MaxLength="45" />
+          <Property Name="readingelectric_water" Type="double" Nullable="false" />
+          <Property Name="readingelectric_tv" Type="double" Nullable="false" />
+          <Property Name="readingelectric_fpa" Type="double" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_readingelectriclog">
           <Key>
@@ -186,6 +238,9 @@
           <Property Name="reading_units" Type="double" Nullable="false" />
           <Property Name="reading_addedby" Type="int" Nullable="false" />
           <Property Name="reading_month" Type="varchar" MaxLength="45" />
+          <Property Name="reading_water" Type="double" Nullable="false" />
+          <Property Name="reading_tv" Type="double" Nullable="false" />
+          <Property Name="reading_fpa" Type="double" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_readinggaslog">
           <Key>
@@ -254,6 +309,23 @@
           <Property Name="resident_unit" Type="varchar" MaxLength="400" />
           <Property Name="resident_remarks" Type="varchar" MaxLength="400" />
         </EntityType>
+        <EntityType Name="tbl_slabs">
+          <Key>
+            <PropertyRef Name="slab_id" />
+          </Key>
+          <Property Name="slab_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="slab_tariff" Type="varchar" MaxLength="355" />
+          <Property Name="slab_energy_charges" Type="double" />
+          <Property Name="slab_variables_charges" Type="double" />
+          <Property Name="slab_further_charges" Type="double" />
+          <Property Name="slab_excise_duty" Type="double" />
+          <Property Name="slab_gst" Type="double" />
+          <Property Name="slab_net_rate" Type="double" />
+          <Property Name="slab_amount" Type="double" />
+          <Property Name="slab_total_amount" Type="double" />
+          <Property Name="slab_remarks" Type="varchar" MaxLength="100" />
+          <Property Name="fk_tarrifcategory" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="tbl_subarea">
           <Key>
             <PropertyRef Name="subarea_id" />
@@ -261,6 +333,13 @@
           <Property Name="subarea_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="subarea_name" Type="varchar" MaxLength="45" />
           <Property Name="fk_area" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_tarrif_category">
+          <Key>
+            <PropertyRef Name="tarrif_id" />
+          </Key>
+          <Property Name="tarrif_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tarrif_name" Type="varchar" MaxLength="45" />
         </EntityType>
         <EntityType Name="tbl_userareas">
           <Key>
@@ -299,6 +378,7 @@
           <Property Name="usertype_name" Type="varchar" MaxLength="45" />
         </EntityType>
         <EntityContainer Name="db_bmsModelStoreContainer">
+          <EntitySet Name="officerreport" EntityType="Self.officerreport" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_action" EntityType="Self.tbl_action" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_area" EntityType="Self.tbl_area" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_billelectric" EntityType="Self.tbl_billelectric" Schema="db_bms" store:Type="Tables" />
@@ -308,6 +388,7 @@
           <EntitySet Name="tbl_fixedrates" EntityType="Self.tbl_fixedrates" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_fixedratetype" EntityType="Self.tbl_fixedratetype" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_location" EntityType="Self.tbl_location" Schema="db_bms" store:Type="Tables" />
+          <EntitySet Name="tbl_offr" EntityType="Self.tbl_offr" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_paymentgashistory" EntityType="Self.tbl_paymentgashistory" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_paymenthistory" EntityType="Self.tbl_paymenthistory" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_paymentstatus" EntityType="Self.tbl_paymentstatus" Schema="db_bms" store:Type="Tables" />
@@ -321,7 +402,9 @@
           <EntitySet Name="tbl_residenthistory" EntityType="Self.tbl_residenthistory" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_residentpayments" EntityType="Self.tbl_residentpayments" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_residents" EntityType="Self.tbl_residents" Schema="db_bms" store:Type="Tables" />
+          <EntitySet Name="tbl_slabs" EntityType="Self.tbl_slabs" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_subarea" EntityType="Self.tbl_subarea" Schema="db_bms" store:Type="Tables" />
+          <EntitySet Name="tbl_tarrif_category" EntityType="Self.tbl_tarrif_category" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_userareas" EntityType="Self.tbl_userareas" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_userpermissions" EntityType="Self.tbl_userpermissions" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_users" EntityType="Self.tbl_users" Schema="db_bms" store:Type="Tables" />
@@ -332,6 +415,7 @@
     <edmx:ConceptualModels>
       <Schema Namespace="db_bmsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="db_bmsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="officerreports" EntityType="db_bmsModel.officerreport" />
           <EntitySet Name="tbl_action" EntityType="db_bmsModel.tbl_action" />
           <EntitySet Name="tbl_area" EntityType="db_bmsModel.tbl_area" />
           <EntitySet Name="tbl_billelectric" EntityType="db_bmsModel.tbl_billelectric" />
@@ -341,6 +425,7 @@
           <EntitySet Name="tbl_fixedrates" EntityType="db_bmsModel.tbl_fixedrates" />
           <EntitySet Name="tbl_fixedratetype" EntityType="db_bmsModel.tbl_fixedratetype" />
           <EntitySet Name="tbl_location" EntityType="db_bmsModel.tbl_location" />
+          <EntitySet Name="tbl_offr" EntityType="db_bmsModel.tbl_offr" />
           <EntitySet Name="tbl_paymentgashistory" EntityType="db_bmsModel.tbl_paymentgashistory" />
           <EntitySet Name="tbl_paymenthistory" EntityType="db_bmsModel.tbl_paymenthistory" />
           <EntitySet Name="tbl_paymentstatus" EntityType="db_bmsModel.tbl_paymentstatus" />
@@ -354,12 +439,27 @@
           <EntitySet Name="tbl_residenthistory" EntityType="db_bmsModel.tbl_residenthistory" />
           <EntitySet Name="tbl_residentpayments" EntityType="db_bmsModel.tbl_residentpayments" />
           <EntitySet Name="tbl_residents" EntityType="db_bmsModel.tbl_residents" />
+          <EntitySet Name="tbl_slabs" EntityType="db_bmsModel.tbl_slabs" />
           <EntitySet Name="tbl_subarea" EntityType="db_bmsModel.tbl_subarea" />
+          <EntitySet Name="tbl_tarrif_category" EntityType="db_bmsModel.tbl_tarrif_category" />
           <EntitySet Name="tbl_userareas" EntityType="db_bmsModel.tbl_userareas" />
           <EntitySet Name="tbl_userpermissions" EntityType="db_bmsModel.tbl_userpermissions" />
           <EntitySet Name="tbl_users" EntityType="db_bmsModel.tbl_users" />
           <EntitySet Name="tbl_usertype" EntityType="db_bmsModel.tbl_usertype" />
         </EntityContainer>
+        <EntityType Name="officerreport">
+          <Key>
+            <PropertyRef Name="CUNSUMER_NO" />
+          </Key>
+          <Property Name="CUNSUMER_NO" Type="Int32" Nullable="false" />
+          <Property Name="RANK" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="NAME" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="UNIT" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ADDRESS" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="PIN_CODE" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="SERVICE_NUMBER" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="METER_NO" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="tbl_action">
           <Key>
             <PropertyRef Name="action_id" />
@@ -394,6 +494,10 @@
           <Property Name="fk_billpicture" Type="Int32" />
           <Property Name="billelectric_month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="billelectric_outstanding" Type="Double" />
+          <Property Name="billelectric_fpa" Type="Double" Nullable="false" />
+          <Property Name="billelectric_rebate" Type="Double" Nullable="false" />
+          <Property Name="billelectric_paymentamount" Type="Double" Nullable="false" />
+          <Property Name="billelectric_paymentdate" Type="DateTime" />
         </EntityType>
         <EntityType Name="tbl_billgas">
           <Key>
@@ -458,6 +562,19 @@
           <Property Name="location_gassmeter" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="location_wapdameter" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="tbl_offr">
+          <Key>
+            <PropertyRef Name="CUNSUMER_NO" />
+          </Key>
+          <Property Name="CUNSUMER_NO" Type="Int32" Nullable="false" />
+          <Property Name="RANK" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="NAME" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="UNIT" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ADDRESS" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="PIN_CODE" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="SERVICE_NUMBER" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="METER_NO" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="tbl_paymentgashistory">
           <Key>
             <PropertyRef Name="paymenthistory_id" />
@@ -510,6 +627,9 @@
           <Property Name="readingelectric_units" Type="Double" Nullable="false" />
           <Property Name="readingelectric_addedby" Type="Int32" Nullable="false" />
           <Property Name="readingelectric_month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="readingelectric_water" Type="Double" Nullable="false" />
+          <Property Name="readingelectric_tv" Type="Double" Nullable="false" />
+          <Property Name="readingelectric_fpa" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_readingelectriclog">
           <Key>
@@ -541,6 +661,9 @@
           <Property Name="reading_units" Type="Double" Nullable="false" />
           <Property Name="reading_addedby" Type="Int32" Nullable="false" />
           <Property Name="reading_month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="reading_water" Type="Double" Nullable="false" />
+          <Property Name="reading_tv" Type="Double" Nullable="false" />
+          <Property Name="reading_fpa" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_readinggaslog">
           <Key>
@@ -609,6 +732,23 @@
           <Property Name="resident_unit" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
           <Property Name="resident_remarks" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="tbl_slabs">
+          <Key>
+            <PropertyRef Name="slab_id" />
+          </Key>
+          <Property Name="slab_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="slab_tariff" Type="String" MaxLength="355" FixedLength="false" Unicode="false" />
+          <Property Name="slab_energy_charges" Type="Double" />
+          <Property Name="slab_variables_charges" Type="Double" />
+          <Property Name="slab_further_charges" Type="Double" />
+          <Property Name="slab_excise_duty" Type="Double" />
+          <Property Name="slab_gst" Type="Double" />
+          <Property Name="slab_net_rate" Type="Double" />
+          <Property Name="slab_amount" Type="Double" />
+          <Property Name="slab_total_amount" Type="Double" />
+          <Property Name="slab_remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="fk_tarrifcategory" Type="Int32" Nullable="false" />
+        </EntityType>
         <EntityType Name="tbl_subarea">
           <Key>
             <PropertyRef Name="subarea_id" />
@@ -616,6 +756,13 @@
           <Property Name="subarea_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="subarea_name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="fk_area" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_tarrif_category">
+          <Key>
+            <PropertyRef Name="tarrif_id" />
+          </Key>
+          <Property Name="tarrif_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tarrif_name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tbl_userareas">
           <Key>
@@ -653,12 +800,26 @@
           <Property Name="usertype_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="usertype_name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
-        </Schema>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="db_bmsModelStoreContainer" CdmEntityContainer="db_bmsEntities">
+          <EntitySetMapping Name="officerreports">
+            <EntityTypeMapping TypeName="db_bmsModel.officerreport">
+              <MappingFragment StoreEntitySet="officerreport">
+                <ScalarProperty Name="METER_NO" ColumnName="METER_NO" />
+                <ScalarProperty Name="SERVICE_NUMBER" ColumnName="SERVICE_NUMBER" />
+                <ScalarProperty Name="PIN_CODE" ColumnName="PIN_CODE" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="UNIT" ColumnName="UNIT" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="RANK" ColumnName="RANK" />
+                <ScalarProperty Name="CUNSUMER_NO" ColumnName="CUNSUMER_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tbl_action">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_action">
               <MappingFragment StoreEntitySet="tbl_action">
@@ -679,6 +840,10 @@
           <EntitySetMapping Name="tbl_billelectric">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_billelectric">
               <MappingFragment StoreEntitySet="tbl_billelectric">
+                <ScalarProperty Name="billelectric_paymentdate" ColumnName="billelectric_paymentdate" />
+                <ScalarProperty Name="billelectric_paymentamount" ColumnName="billelectric_paymentamount" />
+                <ScalarProperty Name="billelectric_rebate" ColumnName="billelectric_rebate" />
+                <ScalarProperty Name="billelectric_fpa" ColumnName="billelectric_fpa" />
                 <ScalarProperty Name="billelectric_outstanding" ColumnName="billelectric_outstanding" />
                 <ScalarProperty Name="billelectric_month" ColumnName="billelectric_month" />
                 <ScalarProperty Name="fk_billpicture" ColumnName="fk_billpicture" />
@@ -766,6 +931,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tbl_offr">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_offr">
+              <MappingFragment StoreEntitySet="tbl_offr">
+                <ScalarProperty Name="METER_NO" ColumnName="METER_NO" />
+                <ScalarProperty Name="SERVICE_NUMBER" ColumnName="SERVICE_NUMBER" />
+                <ScalarProperty Name="PIN_CODE" ColumnName="PIN_CODE" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="UNIT" ColumnName="UNIT" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="RANK" ColumnName="RANK" />
+                <ScalarProperty Name="CUNSUMER_NO" ColumnName="CUNSUMER_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tbl_paymentgashistory">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_paymentgashistory">
               <MappingFragment StoreEntitySet="tbl_paymentgashistory">
@@ -811,6 +990,9 @@
           <EntitySetMapping Name="tbl_readingelectric">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_readingelectric">
               <MappingFragment StoreEntitySet="tbl_readingelectric">
+                <ScalarProperty Name="readingelectric_fpa" ColumnName="readingelectric_fpa" />
+                <ScalarProperty Name="readingelectric_tv" ColumnName="readingelectric_tv" />
+                <ScalarProperty Name="readingelectric_water" ColumnName="readingelectric_water" />
                 <ScalarProperty Name="readingelectric_month" ColumnName="readingelectric_month" />
                 <ScalarProperty Name="readingelectric_addedby" ColumnName="readingelectric_addedby" />
                 <ScalarProperty Name="readingelectric_units" ColumnName="readingelectric_units" />
@@ -844,6 +1026,9 @@
           <EntitySetMapping Name="tbl_readinggas">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_readinggas">
               <MappingFragment StoreEntitySet="tbl_readinggas">
+                <ScalarProperty Name="reading_fpa" ColumnName="reading_fpa" />
+                <ScalarProperty Name="reading_tv" ColumnName="reading_tv" />
+                <ScalarProperty Name="reading_water" ColumnName="reading_water" />
                 <ScalarProperty Name="reading_month" ColumnName="reading_month" />
                 <ScalarProperty Name="reading_addedby" ColumnName="reading_addedby" />
                 <ScalarProperty Name="reading_units" ColumnName="reading_units" />
@@ -930,12 +1115,38 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tbl_slabs">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_slabs">
+              <MappingFragment StoreEntitySet="tbl_slabs">
+                <ScalarProperty Name="fk_tarrifcategory" ColumnName="fk_tarrifcategory" />
+                <ScalarProperty Name="slab_remarks" ColumnName="slab_remarks" />
+                <ScalarProperty Name="slab_total_amount" ColumnName="slab_total_amount" />
+                <ScalarProperty Name="slab_amount" ColumnName="slab_amount" />
+                <ScalarProperty Name="slab_net_rate" ColumnName="slab_net_rate" />
+                <ScalarProperty Name="slab_gst" ColumnName="slab_gst" />
+                <ScalarProperty Name="slab_excise_duty" ColumnName="slab_excise_duty" />
+                <ScalarProperty Name="slab_further_charges" ColumnName="slab_further_charges" />
+                <ScalarProperty Name="slab_variables_charges" ColumnName="slab_variables_charges" />
+                <ScalarProperty Name="slab_energy_charges" ColumnName="slab_energy_charges" />
+                <ScalarProperty Name="slab_tariff" ColumnName="slab_tariff" />
+                <ScalarProperty Name="slab_id" ColumnName="slab_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tbl_subarea">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_subarea">
               <MappingFragment StoreEntitySet="tbl_subarea">
                 <ScalarProperty Name="fk_area" ColumnName="fk_area" />
                 <ScalarProperty Name="subarea_name" ColumnName="subarea_name" />
                 <ScalarProperty Name="subarea_id" ColumnName="subarea_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_tarrif_category">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_tarrif_category">
+              <MappingFragment StoreEntitySet="tbl_tarrif_category">
+                <ScalarProperty Name="tarrif_name" ColumnName="tarrif_name" />
+                <ScalarProperty Name="tarrif_id" ColumnName="tarrif_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

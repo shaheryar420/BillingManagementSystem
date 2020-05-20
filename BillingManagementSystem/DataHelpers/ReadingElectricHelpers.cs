@@ -13,75 +13,69 @@ namespace BillingManagementSystem.DataHelpers
             ReadingElectricResponseModel toReturn = new ReadingElectricResponseModel();
             try
             {
-                if(!string.IsNullOrEmpty(model.readingpicture_data))
+                if(new ModelsValidatorHelper().validateint(model.readingElectricCurrentReading))
                 {
-                    if (!string.IsNullOrEmpty(model.readingpicture_type)) 
+                    if(new ModelsValidatorHelper().validateint(model.readingElectricAddedby))
                     {
-                        if(new ModelsValidatorHelper().validateint(model.readingpicture_size))
+                        if(!string.IsNullOrEmpty(model.readingElectricMonth))
                         {
-                            if(new ModelsValidatorHelper().validateint(model.readingElectricCurrentReading))
+                            if (new ModelsValidatorHelper().validateint(model.readingElectricPrevReading))
                             {
-                                if(new ModelsValidatorHelper().validateint(model.readingElectricAddedby))
+                                using (db_bmsEntities db = new db_bmsEntities())
                                 {
-                                    if(!string.IsNullOrEmpty(model.readingElectricMonth))
+                                    if(!String.IsNullOrEmpty(model.readingpicture_data))
                                     {
-                                        if (new ModelsValidatorHelper().validateint(model.readingElectricPrevReading))
+                                        var newReadingPicture = new tbl_readingpicture()
                                         {
-                                            using (db_bmsEntities db = new db_bmsEntities())
-                                            {
-                                                var newReadingPicture = new tbl_readingpicture()
-                                                {
-                                                    readingpicture_data = model.readingpicture_data,
-                                                    readingpicture_size = int.Parse(model.readingpicture_size),
-                                                    readingpicture_type = model.readingpicture_type
-                                                };
-                                                db.tbl_readingpicture.Add(newReadingPicture);
-                                                db.SaveChanges();
-                                                var newReadingElectric = new tbl_readingelectric()
-                                                {
-                                                    fk_readingpicture = newReadingPicture.readingpicture_id,
-                                                    readingelectric_addedby = int.Parse(model.readingElectricAddedby),
-                                                    readingelectric_units = int.Parse(model.readingElectricUnits),
-                                                    readingelectric_month = model.readingElectricMonth,
-                                                    readingelectric_currentreading = double.Parse(model.readingElectricCurrentReading),
-                                                    readingelectric_datetime = DateTime.UtcNow.AddHours(5),
-                                                    readingelectric_prevreading = double.Parse(model.readingElectricPrevReading),
-                                                    readingelectric_meterno = !string.IsNullOrEmpty(model.readingElectricMeterNo)?model.readingElectricMeterNo:"",
-                                                    readingelectric_remarks = !string.IsNullOrEmpty(model.readingElectricRemarks)?model.readingElectricRemarks:"",
-                                                };
-                                                db.tbl_readingelectric.Add(newReadingElectric);
-                                                db.SaveChanges();
-                                                toReturn = new ReadingElectricResponseModel()
-                                                {
-                                                    remarks = "Successfully Added",
-                                                    resultCode = "1100"
-                                                };
-                                            }
-                                        }
-                                        else
+                                            readingpicture_data = model.readingpicture_data,
+                                            readingpicture_size = int.Parse(model.readingpicture_size),
+                                            readingpicture_type = model.readingpicture_type
+                                        };
+                                        db.tbl_readingpicture.Add(newReadingPicture);
+                                        db.SaveChanges();
+                                        var newReadingElectric = new tbl_readingelectric()
                                         {
-                                            toReturn = new ReadingElectricResponseModel()
-                                            {
-                                                remarks = "Please Provide Previous Reading",
-                                                resultCode = "1300"
-                                            };
-                                        }
+                                            fk_readingpicture = newReadingPicture.readingpicture_id,
+                                            readingelectric_addedby = int.Parse(model.readingElectricAddedby),
+                                            readingelectric_units = int.Parse(model.readingElectricUnits),
+                                            readingelectric_month = model.readingElectricMonth,
+                                            readingelectric_currentreading = double.Parse(model.readingElectricCurrentReading),
+                                            readingelectric_datetime = DateTime.UtcNow.AddHours(5),
+                                            readingelectric_prevreading = double.Parse(model.readingElectricPrevReading),
+                                            readingelectric_meterno = !string.IsNullOrEmpty(model.readingElectricMeterNo) ? model.readingElectricMeterNo : "",
+                                            readingelectric_remarks = !string.IsNullOrEmpty(model.readingElectricRemarks) ? model.readingElectricRemarks : "",
+                                            readingelectric_tv = !string.IsNullOrEmpty(model.readingElectricTv) ? double.Parse(model.readingElectricTv) : 0,
+                                            readingelectric_fpa = !string.IsNullOrEmpty(model.readingElectricFpa) ? double.Parse(model.readingElectricFpa) : 0,
+                                            readingelectric_water = !string.IsNullOrEmpty(model.readingElectircWater) ? double.Parse(model.readingElectircWater) : 0,
+                                        };
+                                        db.tbl_readingelectric.Add(newReadingElectric);
+                                        db.SaveChanges();
                                     }
                                     else
                                     {
-                                        toReturn = new ReadingElectricResponseModel()
+                                        var newReadingElectric = new tbl_readingelectric()
                                         {
-                                            remarks = "Please Provide Reading Month",
-                                            resultCode ="1300"
+                                            fk_readingpicture = 0,
+                                            readingelectric_addedby = int.Parse(model.readingElectricAddedby),
+                                            readingelectric_units = int.Parse(model.readingElectricUnits),
+                                            readingelectric_month = model.readingElectricMonth,
+                                            readingelectric_currentreading = double.Parse(model.readingElectricCurrentReading),
+                                            readingelectric_datetime = DateTime.UtcNow.AddHours(5),
+                                            readingelectric_prevreading = double.Parse(model.readingElectricPrevReading),
+                                            readingelectric_meterno = !string.IsNullOrEmpty(model.readingElectricMeterNo) ? model.readingElectricMeterNo : "",
+                                            readingelectric_remarks = !string.IsNullOrEmpty(model.readingElectricRemarks) ? model.readingElectricRemarks : "",
+                                            readingelectric_tv = !string.IsNullOrEmpty(model.readingElectricTv) ? double.Parse(model.readingElectricTv) : 0,
+                                            readingelectric_fpa = !string.IsNullOrEmpty(model.readingElectricFpa) ? double.Parse(model.readingElectricFpa) : 0,
+                                            readingelectric_water = !string.IsNullOrEmpty(model.readingElectircWater) ? double.Parse(model.readingElectircWater) : 0,
                                         };
+                                        db.tbl_readingelectric.Add(newReadingElectric);
+                                        db.SaveChanges();
                                     }
-                                }
-                                else
-                                {
+                                    
                                     toReturn = new ReadingElectricResponseModel()
                                     {
-                                        remarks="Please Provide Added By",
-                                        resultCode="1300"
+                                        remarks = "Successfully Added",
+                                        resultCode = "1100"
                                     };
                                 }
                             }
@@ -89,8 +83,8 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 toReturn = new ReadingElectricResponseModel()
                                 {
-                                    remarks = "Please Provide Current Reading",
-                                    resultCode="1300"
+                                    remarks = "Please Provide Previous Reading",
+                                    resultCode = "1300"
                                 };
                             }
                         }
@@ -98,8 +92,8 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn = new ReadingElectricResponseModel()
                             {
-                                remarks="Please Provide Picture Size",
-                                resultCode="1300"
+                                remarks = "Please Provide Reading Month",
+                                resultCode ="1300"
                             };
                         }
                     }
@@ -107,7 +101,7 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         toReturn = new ReadingElectricResponseModel()
                         {
-                            remarks="Please Provide Picture Type",
+                            remarks="Please Provide Added By",
                             resultCode="1300"
                         };
                     }
@@ -116,7 +110,7 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     toReturn = new ReadingElectricResponseModel()
                     {
-                        remarks="Please Provide Picture Data",
+                        remarks = "Please Provide Current Reading",
                         resultCode="1300"
                     };
                 }
@@ -205,6 +199,9 @@ namespace BillingManagementSystem.DataHelpers
                             readingElectric.readingelectric_prevreading = !string.IsNullOrEmpty(model.readingElectricPrevReading)?double.Parse(model.readingElectricPrevReading):readingElectric.readingelectric_prevreading;
                             readingElectric.readingelectric_meterno = !string.IsNullOrEmpty(model.readingElectricMeterNo) ? model.readingElectricMeterNo : readingElectric.readingelectric_meterno;
                             readingElectric.readingelectric_remarks = !string.IsNullOrEmpty(model.readingElectricRemarks) ? model.readingElectricRemarks : readingElectric.readingelectric_remarks;
+                            readingElectric.readingelectric_tv = !string.IsNullOrEmpty(model.readingElectricTv) ? double.Parse(model.readingElectricTv) : 0;
+                            readingElectric.readingelectric_fpa = !string.IsNullOrEmpty(model.readingElectricFpa) ? double.Parse(model.readingElectricFpa) : 0;
+                            readingElectric.readingelectric_water = !string.IsNullOrEmpty(model.readingElectircWater) ? double.Parse(model.readingElectircWater) : 0;
                             db.SaveChanges();
                             toReturn = new ReadingElectricResponseModel()
                             {
@@ -311,18 +308,19 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             int readingElectricId = int.Parse(model.readingElectricId);
                             var readingElectric = (from x in db.tbl_readingelectric where x.readingelectric_id == readingElectricId select x).FirstOrDefault();
+                            double _units = readingElectric.readingelectric_units;
                             var location = (from x in db.tbl_location where x.location_electricmeter == readingElectric.readingelectric_meterno select x).FirstOrDefault();
                             if (location != null)
                             {
                                 var residentBuilding = (from x in db.tbl_residentbuilding where x.fk_building == location.location_id select x).FirstOrDefault();
                                 if (residentBuilding != null)
                                 {
-                                    var previousPendingBill = (from x in db.tbl_billelectric where x.fk_paymentstatus == 2 && x.fk_resident == residentBuilding.fk_resident select x).FirstOrDefault();
+                                    /*var previousPendingBill = (from x in db.tbl_billelectric where x.fk_paymentstatus == 3 && x.fk_location == residentBuilding.fk_building select x).FirstOrDefault();
                                     var outstanding = "";
                                     if (previousPendingBill != null)
                                     {
                                         outstanding = previousPendingBill.billelectric_outstanding.ToString();
-                                        previousPendingBill.fk_paymentstatus = 3;
+                                        previousPendingBill.fk_paymentstatus = 2;
                                         db.SaveChanges();
                                         var newPaymentHistory = new tbl_paymenthistory();
                                         newPaymentHistory.paymentmonth = new MonthFinderHelpers().GetPreviousMonth(readingElectric.readingelectric_month);
@@ -335,7 +333,7 @@ namespace BillingManagementSystem.DataHelpers
                                     else
                                     {
                                         outstanding = "0";
-                                    }
+                                    }*/
 
                                     var readingPicture = (from x in db.tbl_readingpicture where x.readingpicture_id == readingElectric.fk_readingpicture select x).FirstOrDefault();
                                     if (readingPicture != null)
@@ -348,28 +346,97 @@ namespace BillingManagementSystem.DataHelpers
                                         };
                                         db.tbl_billpicture.Add(newBillPicture);
                                         db.SaveChanges();
-                                        var fixedRatesWater = (from x in db.tbl_fixedrates where x.fixedrates_name == "Water Charges" select x).FirstOrDefault();
-                                        var fixedRatesTv = (from x in db.tbl_fixedrates where x.fixedrates_name == "Tv Charges" select x).FirstOrDefault();
+
+                                        //Calculating Bill Amount & Adding Bill
+                                        var fpa = (from x in db.tbl_fixedrates where x.fixedrates_id == 1 select x.fixedrates_amount).FirstOrDefault();
+                                        var meterRent = (from x in db.tbl_fixedrates where x.fixedrates_id == 2 select x.fixedrates_amount).FirstOrDefault();
+                                        var slabs = (from x in db.tbl_slabs select x).ToList();
+                                        //Calculations
+                                        double totalAmount = 0.0;
+                                        double totalEnergyCharges = 0.0;
+                                        double totalFPA = 0.0;
+                                        for(int i=0;i<slabs.Count;i++)
+                                        {
+                                            if(totalEnergyCharges == 0)
+                                            {
+
+                                                if (slabs[i].slab_tariff.Contains(">"))
+                                                {
+                                                    var limit = double.Parse(slabs[i].slab_tariff.Replace(">", " ").Trim());
+                                                    if (_units <= limit)
+                                                    {
+                                                        totalAmount = slabs[i].slab_net_rate.Value * _units;
+                                                        totalEnergyCharges = slabs[i].slab_energy_charges.Value * _units;
+                                                        totalFPA = fpa * _units;
+                                                    }
+
+                                                }
+                                                else if (slabs[i].slab_tariff.Contains("-"))
+                                                {
+                                                    var limitLow = double.Parse(slabs[i].slab_tariff.Split('-')[0].Trim());
+                                                    var limitHigh = double.Parse(slabs[i].slab_tariff.Split('-')[1].Trim());
+                                                    if (_units >= limitLow && _units <= limitHigh)
+                                                    {
+                                                        double extraUnits = limitHigh - _units;
+                                                        _units = _units - extraUnits;
+                                                        double extraTotalAmount = slabs[i].slab_net_rate.Value * extraUnits;
+                                                        double extraEnergy = slabs[i].slab_energy_charges.Value * extraUnits;
+                                                        double extraFPA = fpa * extraUnits;
+                                                        totalAmount = (slabs[i - 1].slab_net_rate.Value * _units) + extraTotalAmount;
+                                                        totalEnergyCharges = (slabs[i - 1].slab_energy_charges.Value * _units) + extraEnergy;
+                                                        totalFPA = (fpa * _units) + extraFPA;
+                                                    }
+                                                }
+                                                else if (slabs[i].slab_tariff.Contains("<"))
+                                                {
+                                                    var limit = double.Parse(slabs[i].slab_tariff.Replace("<", " ").Trim());
+                                                    if (_units > limit)
+                                                    {
+                                                        double extraUnits = _units - limit;
+                                                        _units = _units - extraUnits;
+                                                        double extraTotalAmount = slabs[i].slab_net_rate.Value * extraUnits;
+                                                        double extraEnergy = slabs[i].slab_energy_charges.Value * extraUnits;
+                                                        double extraFPA = fpa * extraUnits;
+                                                        totalAmount = (slabs[i-1].slab_net_rate.Value * _units) + extraTotalAmount;
+                                                        totalEnergyCharges = (slabs[i-1].slab_energy_charges.Value * _units) + extraEnergy;
+                                                        totalFPA = (fpa * _units) + extraFPA;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    totalAmount = slabs[i].slab_net_rate.Value * _units;
+                                                    totalEnergyCharges = slabs[i].slab_energy_charges.Value * _units;
+                                                    totalFPA = fpa * _units;
+                                                }
+                                            }
+                                        }
+                                        totalEnergyCharges = totalEnergyCharges / 2;
+                                        totalAmount = totalAmount + (totalFPA + readingElectric.readingelectric_tv + meterRent);
+                                        totalAmount = (totalAmount - totalEnergyCharges) ;
+                                        totalAmount = totalAmount + readingElectric.readingelectric_water;
+                                        /// Entry
                                         var newBill = new tbl_billelectric()
                                         {
                                             fk_billpicture = newBillPicture.billpicture_id,
                                             fk_location = residentBuilding.fk_building,
                                             fk_resident = residentBuilding.fk_resident,
-                                            fk_paymentstatus = 2,
-                                            billelectric_amount = double.Parse(model.amount),
+                                            fk_paymentstatus = 3,
+                                            billelectric_amount = totalAmount,
                                             billelectric_currentreading = readingElectric.readingelectric_currentreading,
                                             billelectric_month = readingElectric.readingelectric_month,
                                             billelectric_outstanding = 0,
                                             billelectric_prevreading = readingElectric.readingelectric_prevreading,
                                             billelectric_units = readingElectric.readingelectric_units,
-                                            billelectric_tv = fixedRatesTv.fixedrates_amount,
-                                            billelectric_water = fixedRatesWater.fixedrates_amount,
+                                            billelectric_tv = readingElectric.readingelectric_tv,
+                                            billelectric_water = readingElectric.readingelectric_water,
+                                            billelectric_fpa = totalFPA,
+                                            billelectric_rebate = totalEnergyCharges,
                                             billelectric_datetime = readingElectric.readingelectric_datetime,
                                             billelectric_remarks = readingElectric.readingelectric_remarks
                                         };
                                         db.tbl_billelectric.Add(newBill);
                                         db.SaveChanges();
-                                        newBill.billelectric_outstanding = newBill.billelectric_amount + double.Parse(outstanding);
+                                        newBill.billelectric_outstanding = 0; //newBill.billelectric_amount + double.Parse(outstanding);
                                         var newReadingElectricLog = new tbl_readingelectriclog()
                                         {
                                             readingelectriclog_addedby = readingElectric.readingelectric_addedby,
@@ -450,7 +517,7 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-        public List<ReadingElectricResponseModel> getAllReadings(ReadingElectricRequestModel model)
+        public List<ReadingElectricResponseModel> getReadingsByUser(ReadingElectricRequestModel model)
         {
             List<ReadingElectricResponseModel> toRetrun = new List<ReadingElectricResponseModel>();
             try
@@ -463,8 +530,12 @@ namespace BillingManagementSystem.DataHelpers
                                   where x.fk_user == user
                                   select y.location_electricmeter).ToList();
                     var readings = (from x in db.tbl_readingelectric
-                                    join y in db.tbl_readingpicture on x.fk_readingpicture equals y.readingpicture_id
                                     join z in db.tbl_users on x.readingelectric_addedby equals z.users_id
+                                    join a in db.tbl_location on x.readingelectric_meterno equals a.location_electricmeter
+                                    join b in db.tbl_subarea on a.fk_subarea equals b.subarea_id
+                                    join c in db.tbl_area on b.fk_area equals c.area_id
+                                    join y in db.tbl_readingpicture on x.fk_readingpicture equals y.readingpicture_id into pList
+                                    from y in pList.DefaultIfEmpty()
                                     select new
                                     {
                                        x.fk_readingpicture,
@@ -477,30 +548,49 @@ namespace BillingManagementSystem.DataHelpers
                                        x.readingelectric_prevreading,
                                        x.readingelectric_remarks,
                                        x.readingelectric_units,
+                                       x.readingelectric_fpa,
+                                       x.readingelectric_tv,
+                                       x.readingelectric_water,
                                        y.readingpicture_data,
                                        y.readingpicture_size,
                                        y.readingpicture_type,
+                                       a.location_id,
+                                       b.subarea_id,
+                                       c.area_id,
+                                       a.location_name,
+                                       b.subarea_name,
+                                       c.area_name,
+                                       a.fk_subarea,
                                        z.users_fullname
                                     }).Where(x=> meters.Contains(x.readingelectric_meterno)).ToList();
                     if (readings.Count() > 0)
                     {
                         toRetrun = readings.Select(x => new ReadingElectricResponseModel()
                         {
-                            fk_readingPicture= x.fk_readingpicture.ToString(),
-                            readingElectricAddedby= x.users_fullname.ToString(),
-                            readingElectricCurrentReading= x.readingelectric_currentreading.ToString(),
-                            readingElectricDatetime=x.readingelectric_datetime.ToString(),
-                            readingElectricId= x.readingelectric_id.ToString(),
-                            readingElectricMeterNo=!string.IsNullOrEmpty(x.readingelectric_meterno)? x.readingelectric_meterno:"",
-                            readingElectricMonth=!string.IsNullOrEmpty(x.readingelectric_month)?x.readingelectric_month:"",
-                            readingElectricPrevReading=x.readingelectric_prevreading.ToString(),
-                            readingElectricRemarks=!string.IsNullOrEmpty(x.readingelectric_remarks)?x.readingelectric_remarks:"",
-                            readingElectricUnits= x.readingelectric_units.ToString(),
-                            readingpicture_data= x.readingpicture_data,
-                            readingpicture_size= x.readingpicture_size.ToString(),
-                            readingpicture_type= x.readingpicture_type,
-                            remarks="Successfully Found",
-                            resultCode="1100"
+                            area_id = x.area_id.ToString(),
+                            area_name = x.area_name.ToString(),
+                            location_id = x.location_id.ToString(),
+                            location_name = x.location_name.ToString(),
+                            subarea_id = x.subarea_id.ToString(),
+                            subarea_name = x.subarea_name.ToString(),
+                            fk_readingPicture = x.fk_readingpicture.ToString(),
+                            readingElectricFpa = x.readingelectric_fpa.ToString(),
+                            readingElectricTv = x.readingelectric_tv.ToString(),
+                            readingElectricWater = x.readingelectric_water.ToString(),
+                            readingElectricAddedby = x.users_fullname.ToString(),
+                            readingElectricCurrentReading = x.readingelectric_currentreading.ToString(),
+                            readingElectricDatetime = x.readingelectric_datetime.ToString(),
+                            readingElectricId = x.readingelectric_id.ToString(),
+                            readingElectricMeterNo = !string.IsNullOrEmpty(x.readingelectric_meterno) ? x.readingelectric_meterno : "",
+                            readingElectricMonth = !string.IsNullOrEmpty(x.readingelectric_month) ? x.readingelectric_month : "",
+                            readingElectricPrevReading = x.readingelectric_prevreading.ToString(),
+                            readingElectricRemarks = !string.IsNullOrEmpty(x.readingelectric_remarks) ? x.readingelectric_remarks : "",
+                            readingElectricUnits = x.readingelectric_units.ToString(),
+                            readingpicture_data = x.readingpicture_data,
+                            readingpicture_size = x.readingpicture_size.ToString(),
+                            readingpicture_type = x.readingpicture_type,
+                            remarks = "Successfully Found",
+                            resultCode = "1100"
                         }).ToList();
                     }
                     else
@@ -523,6 +613,5 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toRetrun;
         }
-
     }
 }
