@@ -320,6 +320,7 @@ namespace BillingManagementSystem.DataHelpers
                         int areaId = int.Parse(model.fk_subArea);
                         var locations = (from x in db.tbl_location
                                         join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
+                                        join z in db.tbl_area on y.fk_area equals z.area_id
                                         where x.fk_subarea == areaId
                                         select new
                                         {
@@ -329,22 +330,53 @@ namespace BillingManagementSystem.DataHelpers
                                             x.location_id,
                                             x.location_name,
                                             x.location_wapdameter,
-                                            y.subarea_name
+                                            y.subarea_name,
+                                            z.area_name,
+                                            z.area_id
                                         }).ToList();
                         if (locations.Count()>0)
                         {
-                            toReturn= locations.Select(location => new LocationResponseModel()
+                            foreach (var location in locations)
                             {
-                                subAreaName = location.subarea_name,
-                                fk_subArea = location.fk_subarea.ToString(),
-                                locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
-                                locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
-                                locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
-                                locationWapdaMeter = !string.IsNullOrEmpty(location.location_wapdameter) ? location.location_wapdameter : "",
-                                locationId = location.location_id.ToString(),
-                                remarks = "Successfully Location Found",
-                                resultCode = "1100"
-                            }).ToList();
+                                var Consumers = (from z in db.tbl_location 
+                                                 join r in db.tbl_residentbuilding on z.location_id equals r.fk_building
+                                                 join re in db.tbl_residents on r.fk_resident equals re.resident_id
+                                                 where z.fk_subarea == location.fk_subarea
+                                                 select new
+                                                 {
+                                                     re.resident_id
+                                                 }
+                                              ).ToList();
+                                var noOfConsumers = Consumers.Count();
+                                double totalUnits = 0;
+                                double totalAmount = 0;
+                                foreach (var Consumer in Consumers)
+                                {
+                                    var Units = (from x in db.tbl_billelectric
+                                                 where x.fk_resident == Consumer.resident_id
+                                                 select x).FirstOrDefault();
+                                    totalAmount = totalAmount + Units.billelectric_amount;
+                                    totalUnits = totalUnits + Units.billelectric_units;
+                                }
+                                var _locoation = new LocationResponseModel()
+                                {
+                                    totalAmount = totalAmount.ToString(),
+                                    totalUnits = totalUnits.ToString(),
+                                    noOfConsumers = noOfConsumers.ToString(),
+                                    fk_subArea = location.fk_subarea.ToString(),
+                                    areaName = !string.IsNullOrEmpty(location.area_name) ? location.area_name : "",
+                                    subAreaName = location.subarea_name,
+                                    fk_area = location.area_id.ToString(),
+                                    locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
+                                    locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
+                                    locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
+                                    locationWapdaMeter = !string.IsNullOrEmpty(location.location_wapdameter) ? location.location_wapdameter : "",
+                                    locationId = location.location_id.ToString(),
+                                    remarks = "Locations Found SuccessFully",
+                                    resultCode = "1100"
+                                };
+                                toReturn.Add(_locoation) ;
+                            }
                         }
                         else
                         {
@@ -360,7 +392,7 @@ namespace BillingManagementSystem.DataHelpers
                         toReturn.Add( new LocationResponseModel()
                         {
                             resultCode = "1300",
-                            remarks = "Please Provide Area"
+                            remarks = "Please Provide Sub Area"
                         });
                     }
                 }

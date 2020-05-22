@@ -14,6 +14,9 @@ namespace BillingManagementSystem.Models
         public string fk_subArea { get; set; }
         public string subAreaName { get; set; }
         public string areaName { get; set; }
+        public string noOfConsumers { get; set; }
+        public string totalUnits { get; set; }
+        public string totalAmount { get; set; }
         public string locationElectricMeter { get; set; }
         public string locationGassMeter { get; set; }
         public string locationWapdaMeter { get; set; }

@@ -18,6 +18,18 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
+        public ActionResult SubArea()
+        {
+            return View();
+        }
+        public ActionResult Locations()
+        {
+            return View();
+        }
+        public ActionResult ROR()
+        {
+            return View();
+        }
         public ActionResult DashBoardStats()
         {
             DashBoardHelpers helper = new DashBoardHelpers();

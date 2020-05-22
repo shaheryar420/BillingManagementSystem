@@ -18,8 +18,22 @@
 
     <script>
         $(document).on('nifty.ready', function () {
+            var queryString = new Array();
+            $(function () {
+                if (queryString.length == 0) {
+                    if (window.location.search.split('?').length > 1) {
+                        var params = window.location.search.split('?')[1].split('&');
+                        for (var i = 0; i < params.length; i++) {
+                            var key = params[i].split('=')[0];
+                            var value = decodeURIComponent(params[i].split('=')[1]);
+                            queryString[key] = value;
+                        }
+                    }
+                }
+                initSubAreaGrid(queryString["areaId"]);
+                
+            });
             fetchStatusStats();
-            initAreaGrid();
         });
     </script>
     <script>
@@ -54,14 +68,15 @@
             });
 
         }
-        function initAreaGrid() {
+        function initSubAreaGrid(areaId) {
             var id;
-            Dtable = $(".areaGrid").DataTable({
+            Dtable = $(".subAreaGrid").DataTable({
                 autoWidth: true,
                 destroy: true,
                 "ajax": {
-                    "url": '/Management/GetAllAreas',
+                    "url": '/Management/GetAllSubAreasByAreaId',
                     "type": 'POST',
+                    "data": { areaId: areaId },
                     "dataSrc": function (data) {
 
                        if (data.length > 0) {
@@ -93,14 +108,14 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { "title": "Id", "data": "areaId", className: "hidden" ,
+                    { "title": "Id", "data": "subAreaId", className: "hidden" ,
                         "render": function (data, type, full, meta) {
                             return id = data;
                         }
                     },
-                    { "title": "Area Name", "data": "areaName" ,
+                    { "title": "Sub Area Name", "data": "subAreaName" ,
                       "render": function(data, type, full, meta) {
-                       return '<a href="Home/SubArea?areaId=' + id + '">"' + data + '"</a>'; }},         
+                       return '<a href="Locations?subAreaId=' + id + '">"' + data + '"</a>'; }},         
                     { "title": "No. Of Consumers", "data": "noOfConsumers" },
                     { "title": "Units", "data": "totalUnits" },
                     { "title": "Amount", "data": "totalAmount" },       
@@ -189,10 +204,10 @@
         <div class="col-md-12">
             <div class="panel panel-bordered-warning">
                 <div class="panel-heading">
-                    <h1 class="panel-title">Area List</h1>
+                    <h1 class="panel-title">Sub Area List</h1>
                 </div>
                 <div class="panel-body">
-                    <table class="table table-bordered table-striped table-hover areaGrid"></table>
+                    <table class="table table-bordered table-striped table-hover subAreaGrid"></table>
                 </div>
             </div>
         </div>

@@ -268,6 +268,18 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult GetAllLocationsBySubAreaId(string subAreaId)
+        {
+            LocationRequestModel model = new LocationRequestModel()
+            {
+                fk_subArea = subAreaId,
+            };
+            LocationHelpers helper = new LocationHelpers();
+            var response = helper.GetAllLocationsBySubArea(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
         #region Sub Area
         public ActionResult AddSubArea([FromBody] SubAreaRequestModel model)
@@ -321,6 +333,17 @@ namespace BillingManagementSystem.Controllers
         }
         public ActionResult GetAllSubAreasByArea([FromBody] SubAreaRequestModel model)
         {
+            model.userId = Request.Cookies["bms_data"]["id"].ToString();
+            SubAreaHelpers helper = new SubAreaHelpers();
+            var response = helper.GetAllSubAreasByArea(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAllSubAreasByAreaId(string areaId)
+        {
+            SubAreaRequestModel model = new SubAreaRequestModel();
+            model.fk_area = areaId;
             model.userId = Request.Cookies["bms_data"]["id"].ToString();
             SubAreaHelpers helper = new SubAreaHelpers();
             var response = helper.GetAllSubAreasByArea(model);

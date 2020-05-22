@@ -244,13 +244,42 @@ namespace BillingManagementSystem.DataHelpers
                     var areas = (from x in db.tbl_area select x).ToList();
                     if (areas.Count() > 0)
                     {
-                        toReturn = areas.Select(area => new AreaResponseModel()
+                        foreach(var area in areas)
                         {
-                            areaId = area.area_id.ToString(),
-                            areaName = !string.IsNullOrEmpty(area.area_name) ? area.area_name : "",
-                            remarks = "Area Found SuccessFully",
-                            resultCode = "1100"
-                        }).ToList();
+                            var Consumers = (from x in db.tbl_area
+                                             join y in db.tbl_subarea on x.area_id equals y.fk_area
+                                             join z in db.tbl_location on y.subarea_id equals z.fk_subarea
+                                             join r in db.tbl_residentbuilding on z.location_id equals r.fk_building
+                                             join re in db.tbl_residents on r.fk_resident equals re.resident_id
+                                             where x.area_id == area.area_id
+                                             select new
+                                             {
+                                                 re.resident_id
+                                             }
+                                          ).ToList();
+                            var noOfConsumers = Consumers.Count();
+                            double totalUnits = 0;
+                            double totalAmount = 0;
+                            foreach (var Consumer in Consumers)
+                            {
+                                var Units = (from x in db.tbl_billelectric
+                                             where x.fk_resident == Consumer.resident_id
+                                             select x).FirstOrDefault();
+                                totalAmount = totalAmount + Units.billelectric_amount;
+                                totalUnits = totalUnits +Units.billelectric_units;
+                            }
+                            var _area = new AreaResponseModel()
+                            {
+                                totalAmount = totalAmount.ToString(),
+                                areaId = area.area_id.ToString(),
+                                totalUnits= totalUnits.ToString(),
+                                areaName = !string.IsNullOrEmpty(area.area_name) ? area.area_name : "",
+                                noOfConsumers = noOfConsumers.ToString(),
+                                remarks = "Area Found SuccessFully",
+                                resultCode = "1100"
+                            };
+                            toReturn.Add(_area);
+                        }
                     }
                     else
                     {

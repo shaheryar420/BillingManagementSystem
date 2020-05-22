@@ -18,8 +18,22 @@
 
     <script>
         $(document).on('nifty.ready', function () {
+            var queryString = new Array();
+            $(function () {
+                if (queryString.length == 0) {
+                    if (window.location.search.split('?').length > 1) {
+                        var params = window.location.search.split('?')[1].split('&');
+                        for (var i = 0; i < params.length; i++) {
+                            var key = params[i].split('=')[0];
+                            var value = decodeURIComponent(params[i].split('=')[1]);
+                            queryString[key] = value;
+                        }
+                    }
+                }
+                initRORGrid(queryString["consumerNo"]);
+                
+            });
             fetchStatusStats();
-            initAreaGrid();
         });
     </script>
     <script>
@@ -54,14 +68,18 @@
             });
 
         }
-        function initAreaGrid() {
+        function initRORGrid(consumerNo) {
             var id;
-            Dtable = $(".areaGrid").DataTable({
+            Dtable = $(".RORGrid").DataTable({
+                scrollX: true, 
                 autoWidth: true,
                 destroy: true,
                 "ajax": {
-                    "url": '/Management/GetAllAreas',
+                    "url": '/ROR/GetAllRORElectricByMeterNo',
                     "type": 'POST',
+                    "data": {
+                        billElectricId: consumerNo
+                    },
                     "dataSrc": function (data) {
 
                        if (data.length > 0) {
@@ -86,24 +104,35 @@
                     }
                 },
                 "columns": [
-                   
                     {
                         title: 'Sr. #',
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { "title": "Id", "data": "areaId", className: "hidden" ,
-                        "render": function (data, type, full, meta) {
-                            return id = data;
+                    { "title": "Id", "data": "billElectricId", className: "hidden" },
+                    { "title": "Consumer #", "data": "locationMeterNo" },
+                    { "title": "Area", "data": "locationName" },
+                    { "title": "Sub Area", "data": "locationName" },
+                    { "title": "Location", "data": "locationName" },
+                    { "title": "Name", "data": "residentName" },
+                    { "title": "PA No", "data": "residentPaNo" },
+                    { "title": "Rank", "data": "residentRank" },
+                    { "title": "Unit/FMN", "data": "residentUnit" },
+                    { "title": "Previous Reading", "data": "billElectricPrevReading" },
+                    { "title": "Present Reading", "data": "billElectricCurrentReading" },
+                    { "title": "Units", "data": "billElectricUnits" },
+                    { "title": "Electric Charges", "data": "billElectricRebate" },
+                    { "title": "FPA", "data": "billElectricFpa" },
+                    { "title": "Water", "data": "billElectricWater" },
+                    { "title": "TV", "data": "billElectricTv" },
+                    { "title": "Total Amount", "data": "billElectricAmount" },
+                    {
+                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
                         }
                     },
-                    { "title": "Area Name", "data": "areaName" ,
-                      "render": function(data, type, full, meta) {
-                       return '<a href="Home/SubArea?areaId=' + id + '">"' + data + '"</a>'; }},         
-                    { "title": "No. Of Consumers", "data": "noOfConsumers" },
-                    { "title": "Units", "data": "totalUnits" },
-                    { "title": "Amount", "data": "totalAmount" },       
+                    { "title": "Remarks", "data": "billElectricRemarks" }
                    
                 ]
             });
@@ -189,10 +218,10 @@
         <div class="col-md-12">
             <div class="panel panel-bordered-warning">
                 <div class="panel-heading">
-                    <h1 class="panel-title">Area List</h1>
+                    <h1 class="panel-title">ROR List</h1>
                 </div>
                 <div class="panel-body">
-                    <table class="table table-bordered table-striped table-hover areaGrid"></table>
+                    <table class="table table-bordered table-striped table-hover RORGrid"></table>
                 </div>
             </div>
         </div>

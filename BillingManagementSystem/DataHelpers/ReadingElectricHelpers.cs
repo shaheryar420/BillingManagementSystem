@@ -613,5 +613,114 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toRetrun;
         }
+        public LocationResponseModel getAllDetailBySunsumerNo (LocationRequestModel model)
+        {
+            LocationResponseModel toReturn = new LocationResponseModel();
+            try
+            {
+                if (string.IsNullOrEmpty(model.locationElectricMeter))
+                {
+                    using(db_bmsEntities db = new db_bmsEntities())
+                    {
+                        var location = (from x in db.tbl_location
+                                        join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
+                                        join a in db.tbl_area on y.fk_area equals a.area_id
+                                        join rb in db.tbl_residentbuilding on x.location_id equals rb.fk_building
+                                        where x.location_electricmeter == model.locationElectricMeter
+                                        select new
+                                        {
+                                            x.fk_subarea,
+                                            x.location_electricmeter,
+                                            x.location_gassmeter,
+                                            x.location_id,
+                                            x.location_name,
+                                            x.location_wapdameter,
+                                            a.area_id,
+                                            a.area_name,
+                                            rb.fk_resident,
+                                            y.subarea_name
+                                        }).FirstOrDefault();
+                        if (location != null)
+                        {
+                            toReturn = new LocationResponseModel()
+                            {
+                                areaName = location.area_name,
+                                fk_area = location.area_id.ToString(),
+                                subAreaName = location.subarea_name,
+                                fk_subArea = location.fk_subarea.ToString(),
+                                locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
+                                locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
+                                locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
+                                locationWapdaMeter = !string.IsNullOrEmpty(location.location_wapdameter) ? location.location_wapdameter : "",
+                                locationId = location.location_id.ToString(),
+                                residentId = location.fk_resident.ToString(),
+                                remarks = "Successfully Location Found",
+                                resultCode = "1100"
+                            };
+                            var bill = (from x in db.tbl_billelectric where x.fk_location == location.location_id select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
+                            var billGas = (from x in db.tbl_billgas where x.fk_location == location.location_id select x).OrderByDescending(x => x.datetime).FirstOrDefault();
+                            if (bill != null)
+                            {
+                                toReturn.previousReading = !String.IsNullOrEmpty(bill.billelectric_prevreading.ToString()) ? bill.billelectric_prevreading.ToString() : "";
+                                toReturn.outstanding = !String.IsNullOrEmpty(bill.billelectric_outstanding.ToString()) ? bill.billelectric_outstanding.ToString() : "";
+                                toReturn.billMonth = !string.IsNullOrEmpty(bill.billelectric_month) ? bill.billelectric_month : "";
+                                toReturn.currentReading = bill.billelectric_currentreading.ToString();
+                                toReturn.currentUnit = bill.billelectric_units.ToString();
+                            }
+                            else
+                            {
+                                toReturn.previousReading = "0";
+                                toReturn.outstanding = "0";
+                                toReturn.billMonth = "0";
+                                toReturn.currentReading = "0";
+                                toReturn.currentUnit = "0";
+
+                            }
+                            if (billGas != null)
+                            {
+                                toReturn.previousGasReading = billGas.prevreading.ToString();
+                                toReturn.gasOutstanding = billGas.outstanding.ToString();
+                                toReturn.billGasMonth = billGas.month.ToString();
+                                toReturn.currentGasReading = billGas.currentreading.ToString();
+                                toReturn.currentGasUnit = billGas.units.ToString();
+                            }
+                            else
+                            {
+                                toReturn.previousGasReading = "0";
+                                toReturn.gasOutstanding = "0";
+                                toReturn.billGasMonth = "0";
+                                toReturn.currentGasReading = "0";
+                                toReturn.currentGasUnit = "0";
+                            }
+                        }
+                        else
+                        {
+                            toReturn = new LocationResponseModel()
+                            {
+                                resultCode = "1200",
+                                remarks = "No Record Found"
+                            };
+                        }
+                    }
+                }
+                else
+                {
+                    toReturn = new LocationResponseModel()
+                    {
+                        remarks = "Please Provide Consumer No",
+                        resultCode ="1300"
+                    };
+                }
+            }
+            catch(Exception Ex)
+            {
+                toReturn = new LocationResponseModel()
+                {
+                    remarks = "There Was A Fatal Error "+Ex.ToString(),
+                    resultCode = "1000"
+                };
+            }
+            return toReturn;
+        }
     }
 }

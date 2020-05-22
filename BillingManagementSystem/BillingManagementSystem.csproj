@@ -1023,6 +1023,9 @@
     <Content Include="Views\Bill\AdminGas.cshtml" />
     <Content Include="Views\Recovery\RecoveryApprovalGas.cshtml" />
     <Content Include="Views\Management\SubArea.cshtml" />
+    <Content Include="Views\Home\SubArea.cshtml" />
+    <Content Include="Views\Home\Locations.cshtml" />
+    <Content Include="Views\Home\ROR.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
