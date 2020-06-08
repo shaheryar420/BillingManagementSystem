@@ -213,6 +213,15 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult getAllDetailBySunsumerNo([FromBody] LocationRequestModel model)
+        {
+            model.userId = Request.Cookies["bms_data"]["id"].ToString();
+            ReadingElectricHelpers helper = new ReadingElectricHelpers();
+            var response = helper.getAllDetailBySunsumerNo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
         #region Gas Reading
         public ActionResult AddReadingGas()

@@ -480,6 +480,42 @@
             
         });
 
+        $("#consumer_no").change(function () {
+            var _consumerNo = $('#consumer_no').val();
+            console.log(_consumerNo);
+            if (_consumerNo) {
+                $.ajax({
+                    url: '/Bill/getAllDetailBySunsumerNo',
+                    type: 'POST',
+                    data: { locationElectricMeter: _consumerNo },
+                    success: function (response) {
+                        if (response.resultCode == '1100') {
+                            $("#electric_area").val(response.areaName);
+                            $("#electric_subarea").val(response.subAreaName);
+                            $("#electric_resident").val(response.locationElectricMeter);
+                            $("#previous_reading").val(response.previousReading);
+                           
+                        }
+                        else {
+                            $('#electric_area').val('');
+                            $('#electric_subarea').val('');
+                            $('#electric_resident').val('');
+                            $('#previous_reading').val('');
+
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            }
+            else {
+
+            }
+
+        });
+
+
     </script>
 }
 <div id="page-head">
@@ -497,7 +533,7 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="control-label">Consumer #.</label>
-                        <input tabindex="1" type="number" value="" readonly class="form-control" id="meter_no" />
+                        <input tabindex="1" type="number" value="" readonly class="form-control" id="consumer_no" />
                     </div>
                     <div class="form-group">
                         <label class="control-label"> Area</label>
