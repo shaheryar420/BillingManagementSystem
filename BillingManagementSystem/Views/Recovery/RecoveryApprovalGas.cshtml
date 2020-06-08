@@ -387,7 +387,7 @@
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
-                            $('#meter_no').val(response.locationGassMeter);
+                            $('#consumer_no').val(response.locationGassMeter);
                             $('#previous_reading').val(response.previousGasReading);
                             $('#current_reading').val(response.currentGasReading);
                             $('#current_unit').val(response.currentGasUnit);
@@ -437,7 +437,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Consumer No.</label>
-                        <input type="number" value="" readonly class="form-control" id="meter_no" />
+                        <input type="number" value="" readonly class="form-control" id="consumer_no" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Outstandings</label>

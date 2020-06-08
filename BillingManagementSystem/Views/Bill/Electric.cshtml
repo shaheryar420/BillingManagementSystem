@@ -24,7 +24,6 @@
         var subareaId = null;
         var locationId = null;
         $(document).on('nifty.ready', function () {
-            $('.dropdownlist').select2();
             $('#btn_electric_update').hide();
             $('editTitle').hide();
             $(".monthPicker").datepicker({
@@ -37,7 +36,7 @@
                 addFile($("#online_file")[0].files[0]);
             });
             initElectricGrid();
-            initDropDowns();
+           
             initElectricGridActions();
 
         });
@@ -45,7 +44,7 @@
     <script>
         function clearFields() {
             $('#electric_id').val('');
-            $("#meter_no").val('');
+            $("#consumer_no").val('');
             $("#previous_reading").val('');
             $("#current_reading").val('');
             $("#electric_area").val(1).trigger('change');
@@ -59,7 +58,7 @@
         }
         function clear() {
             $('#electric_id').val('');
-            $("#meter_no").val('');
+            $("#consumer_no").val('');
             $("#previous_reading").val('');
             $("#current_reading").val('');
             $("#reading_water").val('');
@@ -152,7 +151,7 @@
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 var _id = rowData.readingElectricId;
                 $('#electric_id').val(_id);
-                $("#meter_no").val(rowData.readingElectricMeterNo);
+                $("#consumer_no").val(rowData.readingElectricMeterNo);
                 $("#electric_area").val(rowData.area_id).trigger('change');
                 subareaId = rowData.subarea_id;
                 locationId = rowData.location_id;
@@ -211,7 +210,7 @@
             });
             $('#btn_electric_add').click(function () {
                 var _url = "/Bill/AddReadingElectric";
-                var _meterNo = $("#meter_no").val();
+                var _meterNo = $("#consumer_no").val();
                 var _currentReading = $("#current_reading").val();
                 var _previousReading = $("#previous_reading").val();
                 var _currentUnit = $("#current_unit").val();
@@ -266,7 +265,7 @@
                 if (_electricId) {
                     var _url = "/Bill/EditReadingElectric";
                     var _electricId = $("#electric_id").val();
-                    var _meterNo = $("#meter_no").val();
+                    var _meterNo = $("#consumer_no").val();
                     var _currentReading = $("#current_reading").val();
                     var _previousReading = $("#previous_reading").val();
                     var _currentUnit = $("#current_unit").val();
@@ -446,7 +445,7 @@
                     console.log(response);
                     if (response) {
                         if (response.resultCode == '1100') {
-                            $('#meter_no').val(response.locationElectricMeter);
+                            $('#consumer_no').val(response.locationElectricMeter);
                             if (!locationId) {
                                 $('#previous_reading').val(response.currentReading);
                             }
@@ -485,14 +484,14 @@
             console.log(_consumerNo);
             if (_consumerNo) {
                 $.ajax({
-                    url: '/Bill/getAllDetailBySunsumerNo',
+                    url: '/Bill/getAllDetailByConsumerNo',
                     type: 'POST',
                     data: { locationElectricMeter: _consumerNo },
                     success: function (response) {
                         if (response.resultCode == '1100') {
                             $("#electric_area").val(response.areaName);
                             $("#electric_subarea").val(response.subAreaName);
-                            $("#electric_resident").val(response.locationElectricMeter);
+                            $("#electric_resident").val(response.locationName);
                             $("#previous_reading").val(response.previousReading);
                            
                         }
@@ -533,7 +532,7 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="control-label">Consumer #.</label>
-                        <input tabindex="1" type="number" value="" readonly class="form-control" id="consumer_no" />
+                        <input tabindex="1" type="number" value=""  class="form-control" id="consumer_no" />
                     </div>
                     <div class="form-group">
                         <label class="control-label"> Area</label>

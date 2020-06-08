@@ -613,12 +613,12 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toRetrun;
         }
-        public LocationResponseModel getAllDetailBySunsumerNo (LocationRequestModel model)
+        public LocationResponseModel getAllDetailByConsumerNo (LocationRequestModel model)
         {
             LocationResponseModel toReturn = new LocationResponseModel();
             try
             {
-                if (string.IsNullOrEmpty(model.locationElectricMeter))
+                if (!string.IsNullOrEmpty(model.locationElectricMeter))
                 {
                     using(db_bmsEntities db = new db_bmsEntities())
                     {

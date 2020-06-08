@@ -213,11 +213,11 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-        public ActionResult getAllDetailBySunsumerNo([FromBody] LocationRequestModel model)
+        public ActionResult getAllDetailByConsumerNo([FromBody] LocationRequestModel model)
         {
             model.userId = Request.Cookies["bms_data"]["id"].ToString();
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
-            var response = helper.getAllDetailBySunsumerNo(model);
+            var response = helper.getAllDetailByConsumerNo(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;

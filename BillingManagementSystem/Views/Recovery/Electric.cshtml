@@ -25,14 +25,24 @@
                 startView: "months", 
                 minViewMode: "months"
             });
-            initDropDowns();
+           
             initElectricGrid();
             initElectricGridActions();
         });
     </script>
     <script>
         function clearFields() {
-          
+            $('#electric_id').val('');
+            $("#consumer_no").val('');
+            $("#previous_reading").val('');
+            $("#current_reading").val('');
+            $("#electric_area").val(1).trigger('change');
+            $("#reading_water").val('');
+            $("#reading_tv").val('');
+            $("#current_unit").val('');
+            $("#month").val('');
+            $("#previous_reading").focus();
+            tabindex = 0;
         }
         function initElectricGrid() {
             Dtable = $(".electricGrid").DataTable({
@@ -256,100 +266,6 @@
                 });
 
             });
-        function initDropDowns() {
-            $.ajax({
-                url: '/Management/GetAllAreas',
-                type: 'POST',
-                success: function (response) {
-                    if (response) {
-                        if (response[0].resultCode == '1100') {
-                            var list = [];
-                            for (var i = 0; i < response.length; i++) {
-                                list.push({ text: response[i].areaName, id: response[i].areaId });
-                            }
-                            $('#electric_area').select2({ data: list }).trigger('change');
-
-
-                        }
-                        else {
-                            $('#electric_area').select2({
-                                placeholder: "area not found ",
-                                allowClear: true
-                            }).trigger('change');
-                        }
-                    }
-                },
-                error: function (a, b, c) {
-                    swal('Error', a + b + c, 'error');
-                }
-
-            });
-             $("#electric_area").change(function () {
-                var _areaId = $("#electric_area").val();
-                $.ajax({
-                    url: '/Management/GetAllSubAreasByArea',
-                    type: 'POST',
-                    data: { fk_area: _areaId },
-                    success: function (response) {
-                        if (response) {
-                            if (response[0].resultCode == '1100') {
-                                var list = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    list.push({ text: response[i].subAreaName, id: response[i].subAreaId });
-
-                                }
-                                $('#electric_subarea').select2().empty();
-                                $('#electric_subarea').select2({ data: list }).trigger('change');
-                            }
-                            else {
-                                $('#electric_subarea').select2().empty();
-                                $('#electric_subarea').select2({
-                                    placeholder: "SubArea not found ",
-                                    allowClear: true
-                                }).trigger('change');
-                            }
-                        }
-                    },
-                    error: function (a, b, c) {
-                        swal('Error', a + b + c, 'error');
-                    }
-                });
-            });
-
-            $("#electric_subarea").change(function () {
-                var _subareaId = $("#electric_subarea").val();
-                $.ajax({
-                    url: '/Management/GetAllLocationsBySubArea',
-                    type: 'POST',
-                    data: { fk_subArea: _subareaId },
-                    success: function (response) {
-                        if (response) {
-                            if (response[0].resultCode == '1100') {
-                                var list = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    list.push({ text: response[i].locationName, id: response[i].locationId });
-
-                                }
-                                $('#electric_resident').select2().empty();
-                                $('#electric_resident').select2({ data: list }).trigger('change');
-                                Id = $('#electric_resident').val();
-                                initmeterNo(Id);
-                            }
-                            else {
-                                $('#electric_resident').select2().empty();
-                                $('#electric_resident').select2({
-                                    placeholder: "resident not found ",
-                                    allowClear: true
-                                }).trigger('change');
-                            }
-                        }
-                    },
-                    error: function (a, b, c) {
-                        swal('Error', a + b + c, 'error');
-                    }
-                });
-            });
-        }
         function initmeterNo(Id) {
             $.ajax({
                 url: '/Management/GetLocationById',
@@ -358,7 +274,7 @@
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
-                            $('#meter_no').val(response.locationElectricMeter);
+                            $('#consumer_no').val(response.locationElectricMeter);
                             $('#previous_reading').val(response.previousReading);
                             $('#current_reading').val(response.currentReading);
                             $('#current_unit').val(response.currentUnit);
@@ -379,6 +295,44 @@
 
             });
         }
+          $("#consumer_no").change(function () {
+            var _consumerNo = $('#consumer_no').val();
+            console.log(_consumerNo);
+            if (_consumerNo) {
+                $.ajax({
+                    url: '/Bill/getAllDetailByConsumerNo',
+                    type: 'POST',
+                    data: { locationElectricMeter: _consumerNo },
+                    success: function (response) {
+                        if (response.resultCode == '1100') {
+                            $("#electric_area").val(response.areaName);
+                            $("#electric_subarea").val(response.subAreaName);
+                            $("#electric_resident").val(response.locationName);
+                            $("#previous_reading").val(response.previousReading);
+                            $("#total_outstanding").val(response.outstanding);
+                            $("#current_reading").val(response.currentReading);
+                            $("#current_unit").val(response.currentUnit);
+                            $("#month").val(response.billMonth);
+                           
+                        }
+                        else {
+                            $('#electric_area').val('');
+                            $('#electric_subarea').val('');
+                            $('#electric_resident').val('');
+                            $('#previous_reading').val('');
+
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            }
+            else {
+
+            }
+
+        });
     </script>
 }
 <div id="page-head">
@@ -395,20 +349,20 @@
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
-                        <label class="control-label">Select Area</label>
-                        <select class="form-control dropdownlist" id="electric_area"></select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Select SubArea</label>
-                        <select class="form-control dropdownlist" id="electric_subarea"></select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Select Location</label>
-                        <select class="form-control dropdownlist" id="electric_resident"></select>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label">Consumer No.</label>
-                        <input type="number" value="" readonly class="form-control" id="meter_no" />
+                        <input type="number" value="" class="form-control" id="consumer_no" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Area</label>
+                        <input readonly class="form-control dropdownlist" id="electric_area"></input>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">SubArea</label>
+                        <input readonly class="form-control dropdownlist" id="electric_subarea"></input>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Location</label>
+                        <input readonly class="form-control dropdownlist" id="electric_resident"></input>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Outstandings</label>
@@ -428,7 +382,7 @@
                         <input type="number" value="" readonly class="form-control" id="current_unit" />
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Select Month</label>
+                        <label class="control-label">Month</label>
                         <input type="text" value="" readonly class="form-control monthPicker" id="month" />
                     </div>
                     <div class="form-group">

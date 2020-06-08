@@ -367,7 +367,7 @@
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
-                            $('#meter_no').val(response.locationElectricMeter);
+                            $('#consumer_no').val(response.locationElectricMeter);
                             $('#previous_reading').val(response.previousReading);
                             $('#current_reading').val(response.currentReading);
                             $('#current_unit').val(response.currentUnit);
@@ -417,7 +417,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Consumer No.</label>
-                        <input type="number" value="" readonly class="form-control" id="meter_no" />
+                        <input type="number" value="" readonly class="form-control" id="consumer_no" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Outstandings</label>

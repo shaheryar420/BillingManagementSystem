@@ -47,7 +47,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 toReturn = new PaymentResponseModel()
                                 {
-                                    remarks = "Please Provide ResidentId",
+                                    remarks = "Please Provide Resident",
                                     resultCode = "1300"
                                 };
                             }
