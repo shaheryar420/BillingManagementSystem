@@ -318,11 +318,11 @@ namespace BillingManagementSystem.DataHelpers
                                 var residentBuilding = (from x in db.tbl_residentbuilding where x.fk_building == location.location_id select x).FirstOrDefault();
                                 if (residentBuilding != null)
                                 {
-                                    var previousPendingBill = (from x in db.tbl_billelectric where x.fk_paymentstatus == 3 && x.fk_location == residentBuilding.fk_building select x).FirstOrDefault();
+                                    var previousPendingBill = (from x in db.tbl_billgas where x.fk_paymentstatus == 3 && x.fk_location == residentBuilding.fk_building select x).FirstOrDefault();
                                     var outstanding = "";
                                     if (previousPendingBill != null)
                                     {
-                                        outstanding = previousPendingBill.billelectric_outstanding.ToString();
+                                        outstanding = previousPendingBill.outstanding.ToString();
                                         previousPendingBill.fk_paymentstatus = 2;
                                         db.SaveChanges();
                                         var newPaymentHistory = new tbl_paymenthistory();
@@ -418,28 +418,26 @@ namespace BillingManagementSystem.DataHelpers
                                         totalAmount = (totalAmount - totalEnergyCharges);
                                         
                                         /// Entry
-                                        var newBill = new tbl_billelectric()
+                                        var newBill = new tbl_billgas()
                                         {
                                             fk_billpicture = newBillPicture.billpicture_id,
                                             fk_location = residentBuilding.fk_building,
                                             fk_resident = residentBuilding.fk_resident,
                                             fk_paymentstatus = 3,
-                                            billelectric_amount = totalAmount,
-                                            billelectric_currentreading = readingGas.reading_currentreading,
-                                            billelectric_month = readingGas.reading_month,
-                                            billelectric_outstanding = 0,
-                                            billelectric_prevreading = readingGas.reading_prevreading,
-                                            billelectric_units = readingGas.reading_units,
-                                            billelectric_tv = readingGas.reading_tv,
-                                            billelectric_water = readingGas.reading_water,
-                                            billelectric_fpa = totalFPA,
-                                            billelectric_rebate = totalEnergyCharges,
-                                            billelectric_datetime = readingGas.reading_datetime,
-                                            billelectric_remarks = readingGas.reading_remarks
+                                            amount = totalAmount,
+                                            currentreading = readingGas.reading_currentreading,
+                                            month = readingGas.reading_month,
+                                            outstanding = 0,
+                                            prevreading = readingGas.reading_prevreading,
+                                            units = readingGas.reading_units,
+                                            fpa = totalFPA,
+                                            rebate = totalEnergyCharges,
+                                            datetime = readingGas.reading_datetime,
+                                            remarks = readingGas.reading_remarks
                                         };
-                                        db.tbl_billelectric.Add(newBill);
+                                        db.tbl_billgas.Add(newBill);
                                         db.SaveChanges();
-                                        newBill.billelectric_outstanding = newBill.billelectric_amount + double.Parse(outstanding);
+                                        newBill.outstanding = newBill.amount + double.Parse(outstanding);
                                         var newreadingGasLog = new tbl_readinggaslog()
                                         {
                                             readinglog_addedby = readingGas.reading_addedby,

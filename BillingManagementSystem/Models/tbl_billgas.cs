@@ -27,5 +27,9 @@ namespace BillingManagementSystem.Models
         public Nullable<int> fk_billpicture { get; set; }
         public string month { get; set; }
         public Nullable<double> outstanding { get; set; }
+        public double fpa { get; set; }
+        public double rebate { get; set; }
+        public double paymentAmount { get; set; }
+        public Nullable<System.DateTime> paymentDate { get; set; }
     }
 }
