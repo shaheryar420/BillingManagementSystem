@@ -598,7 +598,7 @@ namespace BillingManagementSystem.DataHelpers
             LocationResponseModel toReturn = new LocationResponseModel();
             try
             {
-                if (!string.IsNullOrEmpty(model.locationElectricMeter))
+                if (!string.IsNullOrEmpty(model.locationGassMeter))
                 {
                     using (db_bmsEntities db = new db_bmsEntities())
                     {

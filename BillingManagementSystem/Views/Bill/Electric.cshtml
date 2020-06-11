@@ -36,6 +36,7 @@
         var _prevResd = null;
         var subareaId = null;
         var locationId = null;
+        var Dtable = null;
         $(document).on('nifty.ready', function () {
             $('#btn_electric_update').hide();
             $('editTitle').hide();
@@ -85,9 +86,8 @@
         }
         function initElectricGrid() {
             Dtable = $(".electricGrid").DataTable({
-                autoWidth: true,
-                destroy: true,
                 scrollX: true,
+                destroy: true,
                 "ajax": {
                     "url": '/Bill/GetAllReadingsElectric',
                     "type": 'POST',
