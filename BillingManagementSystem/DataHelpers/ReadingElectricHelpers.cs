@@ -449,6 +449,7 @@ namespace BillingManagementSystem.DataHelpers
                                         db.tbl_billelectric.Add(newBill);
                                         db.SaveChanges();
                                         newBill.billelectric_outstanding = newBill.billelectric_amount + double.Parse(outstanding);
+                                        newBill.billelectric_amount = newBill.billelectric_amount + double.Parse(outstanding);
                                         var newReadingElectricLog = new tbl_readingelectriclog()
                                         {
                                             readingelectriclog_addedby = readingElectric.readingelectric_addedby,
@@ -851,6 +852,7 @@ namespace BillingManagementSystem.DataHelpers
                             var billGas = (from x in db.tbl_billgas where x.fk_location == location.location_id select x).OrderByDescending(x => x.datetime).FirstOrDefault();
                             if (bill != null)
                             {
+                                toReturn.totalElectricAmount = bill.billelectric_amount.ToString();
                                 toReturn.previousReading = !String.IsNullOrEmpty(bill.billelectric_prevreading.ToString()) ? bill.billelectric_prevreading.ToString() : "";
                                 toReturn.outstanding = !String.IsNullOrEmpty(bill.billelectric_outstanding.ToString()) ? bill.billelectric_outstanding.ToString() : "";
                                 toReturn.billMonth = !string.IsNullOrEmpty(bill.billelectric_month) ? bill.billelectric_month : "";

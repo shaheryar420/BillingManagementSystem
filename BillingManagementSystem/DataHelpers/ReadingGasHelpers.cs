@@ -450,6 +450,8 @@ namespace BillingManagementSystem.DataHelpers
                                         db.tbl_billgas.Add(newBill);
                                         db.SaveChanges();
                                         newBill.outstanding = newBill.amount + double.Parse(outstanding);
+
+                                        newBill.amount = newBill.amount + double.Parse(outstanding);
                                         var newreadingGasLog = new tbl_readinggaslog()
                                         {
                                             readinglog_addedby = readingGas.reading_addedby,
@@ -832,6 +834,7 @@ namespace BillingManagementSystem.DataHelpers
                                 toReturn.outstanding = !String.IsNullOrEmpty(billGas.outstanding.ToString()) ? billGas.outstanding.ToString() : "";
                                 toReturn.billMonth = !string.IsNullOrEmpty(billGas.month) ? billGas.month : "";
                                 toReturn.currentReading = billGas.currentreading.ToString();
+                                toReturn.totalGasAmount = billGas.amount.ToString();
                                 toReturn.currentUnit = billGas.units.ToString();
                             }
                             else
