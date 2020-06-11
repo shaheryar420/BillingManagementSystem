@@ -246,7 +246,8 @@
                     var _currentUnit = $("#current_unit").val();
                     var _month = $("#month").val();
                     var formdata = new FormData(); //FormData object
-                var fileInput = document.getElementById('online_file');
+                    var fileInput = document.getElementById('online_file');
+                    if (fileInput.files.length > 0) {
                 formdata.append(fileInput.files[0].name, fileInput.files[0]);
                 formdata.append("_id", _gasId);
                 formdata.append("_meterNo", _meterNo);
@@ -285,7 +286,10 @@
                         console.log(errorMessage);
                     }
                 });
-
+                    }
+                    else {
+                        swal('Warning', 'Please attach the meter image', 'warning');
+                    }
                 }
                 else {
                     swal("Warning", "Please select a GasReading", "warning");

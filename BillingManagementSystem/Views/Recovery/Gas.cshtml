@@ -208,7 +208,9 @@
             var _amount = $("#Amount").val();
             var _month = $("#month").val();
             var formdata = new FormData(); //FormData object
-
+            var fileInput = document.getElementById('online_file');
+            if (fileInput.files.length > 0) {
+            formdata.append(fileInput.files[0].name, fileInput.files[0]);
             formdata.append("_amount", _amount);
             formdata.append("_residentId", residentId);
             formdata.append("_month", _month);
@@ -239,7 +241,10 @@
                     console.log(errorMessage);
                 }
             });
-
+            }
+            else {
+                swal('Warning', 'Please attach the meter image', 'warning');
+            }
         });
 
         function initDropDowns() {
@@ -380,23 +385,24 @@
                 <div class="panel-head">
                     <h1 class="panel-title">Add Bill Recovery</h1>
                 </div>
+                <div class="form-group">
+                    <label class="control-label">Consumer No.</label>
+                    <input type="number" value="" readonly class="form-control" id="consumer_no" />
+                </div>
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="control-label">Select Area</label>
-                        <select class="form-control dropdownlist" id="gas_area"></select>
+                        <input readonly class="form-control " id="gas_area">
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select SubArea</label>
-                        <select class="form-control dropdownlist" id="gas_subarea"></select>
+                        <input readonly class="form-control dropdownlist" id="gas_subarea">
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select Location</label>
-                        <select class="form-control dropdownlist" id="gas_location"></select>
+                        <input readonly class="form-control" id="gas_location">
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">Consumer No.</label>
-                        <input type="number" value="" readonly class="form-control" id="consumer_no" />
-                    </div>
+
                     <div class="form-group">
                         <label class="control-label">Outstandings</label>
                         <input type="number" value="" readonly class="form-control" id="total_outstanding" />

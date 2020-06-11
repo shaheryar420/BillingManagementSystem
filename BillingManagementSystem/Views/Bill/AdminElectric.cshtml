@@ -271,6 +271,7 @@
                 var _tv = $("#reading_tv").val();
                 var formdata = new FormData(); //FormData object
                 var fileInput = document.getElementById('online_file');
+                if (fileInput.files.length > 0) {
                 formdata.append(fileInput.files[0].name, fileInput.files[0]);
                 formdata.append("_meterNo", _meterNo);
                 formdata.append("_previousReading", _previousReading);
@@ -306,7 +307,10 @@
                         console.log(errorMessage);
                     }
                 });
-
+                }
+                else {
+                    swal('Warning', 'Please attach the meter image', 'warning');
+                }
             });
 
             $(document).on('click', '#btn_electric_update', function (e) {
@@ -325,8 +329,8 @@
                     var formdata = new FormData(); //FormData object
                     var fileInput = document.getElementById('online_file');
                     if (fileInput.files.length > 0) {
-                        formdata.append(fileInput.files[0].name, fileInput.files[0]);
-                    }
+                    formdata.append(fileInput.files[0].name, fileInput.files[0]);
+                    
                     formdata.append("_meterNo", _meterNo);
                     formdata.append("_previousReading", _previousReading);
                     formdata.append("_currentReading", _currentReading);
@@ -366,7 +370,10 @@
                             console.log(errorMessage);
                         }
                     });
-
+                }
+                else {
+                    swal('Warning', 'Please attach the meter image', 'warning');
+                }
                 }
                 else {
                     swal("Warning", "Please select a location", "warning");

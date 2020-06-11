@@ -3,6 +3,7 @@ using BillingManagementSystem.DataHelpers;
 using BillingManagementSystem.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -41,7 +42,20 @@ namespace BillingManagementSystem.Controllers
             string _amount = Request.Form["_amount"].ToString();
             string _residentId = Request.Form["_residentId"].ToString();
             string _month = Request.Form["_month"].ToString();
+            HttpPostedFileBase file = Request.Files[0]; //Uploaded file
+                                                        //Use the following properties to get file's name, size and MIMEType
+            int fileSize = file.ContentLength;
+            string fileName = file.FileName;
+            string mimeType = file.ContentType;
+            System.IO.Stream fileContent = file.InputStream;
+            string ext = Path.GetExtension(fileName);
+            byte[] thePictureAsBytes = new byte[fileSize];
+            using (BinaryReader theReader = new BinaryReader(fileContent))
+            {
+                thePictureAsBytes = theReader.ReadBytes(fileSize);
+            }
 
+            String _base64 = Convert.ToBase64String(thePictureAsBytes);
             PaymentRequestModel model = new PaymentRequestModel()
             {
                 
@@ -89,7 +103,20 @@ namespace BillingManagementSystem.Controllers
             string _amount = Request.Form["_amount"].ToString();
             string _residentId = Request.Form["_residentId"].ToString();
             string _month = Request.Form["_month"].ToString();
+            HttpPostedFileBase file = Request.Files[0]; //Uploaded file
+                                                        //Use the following properties to get file's name, size and MIMEType
+            int fileSize = file.ContentLength;
+            string fileName = file.FileName;
+            string mimeType = file.ContentType;
+            System.IO.Stream fileContent = file.InputStream;
+            string ext = Path.GetExtension(fileName);
+            byte[] thePictureAsBytes = new byte[fileSize];
+            using (BinaryReader theReader = new BinaryReader(fileContent))
+            {
+                thePictureAsBytes = theReader.ReadBytes(fileSize);
+            }
 
+            String _base64 = Convert.ToBase64String(thePictureAsBytes);
             PaymentRequestModel model = new PaymentRequestModel()
             {
 

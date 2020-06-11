@@ -73,18 +73,7 @@
             tabindex = 0;
 
         }
-        function clear() {
-            $('#electric_id').val('');
-            $("#consumer_no").val('');
-            $("#previous_reading").val('');
-            $("#current_reading").val('');
-            $("#reading_water").val('');
-            $("#reading_tv").val('');
-            $("#current_unit").val('');
-            $("#month").val('');
-            $("#previous_reading").focus();
-            tabindex = 0;
-        }
+        
         function initElectricGrid() {
             Dtable = $(".electricGrid").DataTable({
                 scrollX: true,
@@ -237,9 +226,9 @@
                 var _tv = $("#reading_tv").val();
                 var formdata = new FormData(); //FormData object
                 var fileInput = document.getElementById('online_file');
-                if (fileInput.files[0] != null) {
+                if (fileInput.files.length > 0) {
                     formdata.append(fileInput.files[0].name, fileInput.files[0]);
-                }
+                
 
                 formdata.append("_meterNo", _meterNo);
                 formdata.append("_previousReading", _previousReading);
@@ -275,7 +264,10 @@
                         console.log(errorMessage);
                     }
                 });
-
+                }
+                else {
+                    swal('Warning', 'Please attach the meter image', 'warning');
+                }
             });
             $(document).on('click', '#btn_electric_update', function (e) {
                 e.preventDefault();
@@ -294,7 +286,7 @@
                     var fileInput = document.getElementById('online_file');
                     if (fileInput.files.length > 0) {
                         formdata.append(fileInput.files[0].name, fileInput.files[0]);
-                    }
+                    
                     formdata.append("_meterNo", _meterNo);
                     formdata.append("_previousReading", _previousReading);
                     formdata.append("_currentReading", _currentReading);
@@ -334,7 +326,10 @@
                             console.log(errorMessage);
                         }
                     });
-
+                }
+                else {
+                    swal('Warning', 'Please attach the meter image', 'warning');
+                }
                 }
                 else {
                     swal("Warning", "Please select a location", "warning");
