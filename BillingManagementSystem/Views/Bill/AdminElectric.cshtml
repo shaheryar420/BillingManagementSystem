@@ -141,9 +141,13 @@
             $(document).on('click', '.btn_electric_approvel', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
-                _id = rowData.readingElectricId;
-                initApprovel(_id);
+                Id = rowData.readingElectricId;
+                $('#approve-modal').modal('show').on("shown.bs.modal", function () {
+                });
             });
+
+          
+
             $(document).on('click', '.btn_electric_edit', function (e) {
                 e.preventDefault();
                 $('#btn_electric_update').show();
@@ -165,6 +169,7 @@
                 $("#reading_tv").val(rowData.readingElectricTv);
                 _prevResd = rowData.readingElectricPrevReading;
             });
+
             $(document).on('click', '.btn_electric_delete', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
@@ -210,6 +215,7 @@
                     swal("Warning", "Please select a Reading", "warning");
                 }
             });
+
             $('#btn_electric_add').click(function () {
                 var _url = "/Bill/AddReadingElectric";
                 var _meterNo = $("#consumer_no").val();
@@ -258,6 +264,7 @@
                 });
 
             });
+
             $(document).on('click', '#btn_electric_update', function (e) {
                 e.preventDefault();
                 var _electricId = $('#electric_id').val();
@@ -324,33 +331,6 @@
         }
 
        
-        function initmeterNo(Id) {
-            $.ajax({
-                url: '/Management/GetLocationById',
-                type: 'POST',
-                data: { locationId: Id },
-                success: function (response) {
-                    console.log(response);
-                    if (response) {
-                        if (response.resultCode == '1100') {
-                            $('#consumer_no').val(response.locationElectricMeter);
-                            if (!locationId) {
-                                $('#previous_reading').val(response.currentReading);
-                            }
-                        }
-                        else {
-                            swal("Warning", response.remarks, "warning");
-                        }
-
-                    }
-                },
-                error: function (a, b, c) {
-                    swal('Error', a + b + c, 'error');
-                }
-
-            });
-
-        }
         $("#current_reading").change(function () {
             var currentReading = $('#current_reading').val();
             var previousReading = $('#previous_reading').val();
@@ -366,6 +346,7 @@
             }
 
         });
+
          $("#consumer_no").change(function () {
             var _consumerNo = $('#consumer_no').val();
             console.log(_consumerNo);
@@ -380,10 +361,7 @@
                             $("#electric_subarea").val(response.subAreaName);
                             $("#electric_resident").val(response.locationName);
                             $("#previous_reading").val(response.previousReading);
-                            $("#total_outstanding").val(response.outstanding);
-                            $("#current_reading").val(response.currentReading);
-                            $("#current_unit").val(response.currentUnit);
-                            $("#month").val(response.billMonth);
+                            
                            
                         }
                         else {
@@ -405,11 +383,18 @@
 
         });
         ///
-        function initApprovel(_id) {
+        $(document).on('click', '.btn_Approve', function (e) {
+            e.preventDefault();
+            
+
+            initApprovel(Id);
+        });
+
+        function initApprovel(Id) {
             $.ajax({
                 url: '/Bill/ApproveReadingElectric',
                 type: 'POST',
-                data: { readingElectricId: _id },
+                data: { readingElectricId: Id },
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
@@ -446,19 +431,19 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="control-label">Consumer #.</label>
-                        <input type="number" value=""  class="form-control" id="consumer_no" />
+                        <input type="number" value="" class="form-control" id="consumer_no" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select Area</label>
-                        <input readonly class="form-control dropdownlist" id="electric_area"></input>
+                        <input readonly class="form-control " id="electric_area">
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select SubArea</label>
-                        <input readonly class="form-control dropdownlist" id="electric_subarea"></Input>
+                        <input readonly class="form-control " id="electric_subarea">
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select Location</label>
-                        <input readonly class="form-control dropdownlist" id="electric_resident"></input>
+                        <input readonly class="form-control " id="electric_resident">
                     </div>
                     <div class="form-group">
                         <label class="control-label" id="label_PR">Previous Reading</label>
@@ -504,6 +489,96 @@
                 </div>
                 <div class="panel-body">
                     <table class="table table-bordered table-responsive table-hover electricGrid"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="approve-modal" role="dialog" aria-labelledby="inbox-modal" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+
+                <!--Modal header-->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                    <h2 class="modal-title">Reading Details</h2>
+                </div>
+
+                <!--Modal body-->
+                <div class="modal-body" id="modal-overlay">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Location Meter #.</label>
+                                <input readonly class="form-control" id="meter_no_detail" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Area Name</label>
+                                <input readonly class="form-control " id="electric_area_detail">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">SubArea Name</label>
+                                <input readonly class="form-control " id="electric_subarea_detail">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Location Name</label>
+                                <input readonly class="form-control " id="electric_resident_detail">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" id="label_PR">Previous Reading</label>
+                                <input readonly class="form-control" id="previous_reading_detail" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Current Reading</label>
+                                <input readonly class="form-control" id="current_reading_detail" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Units</label>
+                                <input readonly class="form-control" id="current_units_detail" />
+                            </div>
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Outstanding</label>
+                                <input readonly class="form-control " id="electric_outstanding_detail">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Amount</label>
+                                <input readonly class="form-control " id="electric_amount_detail">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Mounth</label>
+                                <input readonly class="form-control " id="electric_mounth_detail">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Energy Charges</label>
+                                <input readonly class="form-control " id="electric_charges_detail">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Tv</label>
+                                <input readonly class="form-control " id="electric_tv_detail">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Remarks</label>
+                                <input readonly class="form-control " id="electric_remarks_detail">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Water</label>
+                                <input class="form-control " id="electric_water_detail">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Modal footer-->
+                <div class="modal-footer">
+                    <div class="btn-group pull-right">
+                        <a href="#" data-dismiss="modal" class="btn btn-primary close">Close</a>
+                        <a href="#" id="btn_Approve" class="btn btn-success">Approve</a>
+                    </div>
                 </div>
             </div>
         </div>
