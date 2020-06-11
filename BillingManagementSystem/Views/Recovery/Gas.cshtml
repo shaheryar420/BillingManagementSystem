@@ -25,14 +25,22 @@
                 startView: "months",
                 minViewMode: "months"
             });
-            initDropDowns();
             initGasGrid();
             initGasGridActions();
         });
     </script>
     <script>
         function clearFields() {
-
+            $("#gas_area").val('');
+            $("#gas_subarea").val('');
+            $("#gas_location").val('');
+            $("#previous_reading").val('');
+            $("#total_outstanding").val('');
+            $("#current_reading").val('');
+            $("#current_unit").val('');
+            $("#month").val('');
+            $("#amount_gas").val('');
+            $("#Amount").val('');
         }
         function initGasGrid() {
             Dtable = $(".gasGrid").DataTable({
@@ -86,6 +94,11 @@
                     { "title": "SubArea", "data": "subAreaName" },
                     { "title": "Location", "data": "locationName" },
                     { "title": "Resident Name", "data": "residentName" },
+                    {
+                        "title": "Picture", "data": "pictureId", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.pictureType + ";base64, " + row.picturedata + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
 
                 ]
             });
@@ -247,130 +260,42 @@
             }
         });
 
-        function initDropDowns() {
-            $.ajax({
-                url: '/Management/GetAllAreas',
-                type: 'POST',
-                success: function (response) {
-                    if (response) {
-                        if (response[0].resultCode == '1100') {
-                            var list = [];
-                            for (var i = 0; i < response.length; i++) {
-                                list.push({ text: response[i].areaName, id: response[i].areaId });
-                            }
-                            $('#gas_area').select2({ data: list }).trigger('change');
-
-
-                        }
-                        else {
-                            $('#gas_area').select2({
-                                placeholder: "area not found ",
-                                allowClear: true
-                            }).trigger('change');
-                        }
-                    }
-                },
-                error: function (a, b, c) {
-                    swal('Error', a + b + c, 'error');
-                }
-
-            });
-                 $("#gas_area").change(function () {
-                var _areaId = $("#gas_area").val();
+        $("#consumer_no").change(function () {
+            var _consumerNo = $('#consumer_no').val();
+            console.log(_consumerNo);
+            if (_consumerNo) {
                 $.ajax({
-                    url: '/Management/GetAllSubAreasByArea',
+                    url: '/Bill/getAllGasDetailsByConsumerNo',
                     type: 'POST',
-                    data: { fk_area: _areaId },
+                    data: { locationGassMeter: _consumerNo },
                     success: function (response) {
-                        if (response) {
-                            if (response[0].resultCode == '1100') {
-                                var list = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    list.push({ text: response[i].subAreaName, id: response[i].subAreaId });
-
-                                }
-                                $('#gas_subarea').select2().empty();
-                                $('#gas_subarea').select2({ data: list }).trigger('change');
-                            }
-                            else {
-                                $('#gas_subarea').select2().empty();
-                                $('#gas_subarea').select2({
-                                    placeholder: "SubArea not found ",
-                                    allowClear: true
-                                }).trigger('change');
-                            }
-                        }
-                    },
-                    error: function (a, b, c) {
-                        swal('Error', a + b + c, 'error');
-                    }
-                });
-            });
-
-            $("#gas_subarea").change(function () {
-                var _subareaId = $("#gas_subarea").val();
-                $.ajax({
-                    url: '/Management/GetAllLocationsBySubArea',
-                    type: 'POST',
-                    data: { fk_subArea: _subareaId },
-                    success: function (response) {
-                        if (response) {
-                            if (response[0].resultCode == '1100') {
-                                var list = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    list.push({ text: response[i].locationName, id: response[i].locationId });
-
-                                }
-                                $('#gas_location').select2().empty();
-                                $('#gas_location').select2({ data: list }).trigger('change');
-                                Id = $('#gas_location').val();
-                                initmeterNo(Id);
-                            }
-                            else {
-                                $('#gas_location').select2().empty();
-                                $('#gas_location').select2({
-                                    placeholder: "resident not found ",
-                                    allowClear: true
-                                }).trigger('change');
-                            }
-                        }
-                    },
-                    error: function (a, b, c) {
-                        swal('Error', a + b + c, 'error');
-                    }
-                });
-            });
-        }
-
-        function initmeterNo(Id) {
-            $.ajax({
-                url: '/Management/GetLocationById',
-                type: 'POST',
-                data: { locationId: Id },
-                success: function (response) {
-                    if (response) {
                         if (response.resultCode == '1100') {
-                            $('#consumer_no').val(response.locationGassMeter);
-                            $('#previous_reading').val(response.previousGasReading);
-                            $('#current_reading').val(response.currentGasReading);
-                            $('#current_unit').val(response.currentGasUnit);
-                            $('#total_outstanding').val(response.gasOutstanding);
-                            $('#month').val(response.billGasMonth);
+                            $("#gas_area").val(response.areaName);
+                            $("#gas_subarea").val(response.subAreaName);
+                            $("#gas_location").val(response.locationName);
+                            $("#previous_reading").val(response.previousReading);
+                            $("#total_outstanding").val(response.outstanding);
+                            $("#current_reading").val(response.currentReading);
+                            $("#current_unit").val(response.currentUnit);
+                            $("#month").val(response.billMonth);
+                            $("#amount_gas").val(response.totalGasAmount);
                             residentId = response.residentId;
-                            console.log(residentId);
+
                         }
                         else {
-                            swal("Warning", response.remarks, "warning");
+                            clearFields()
                         }
-
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
                     }
-                },
-                error: function (a, b, c) {
-                    swal('Error', a + b + c, 'error');
-                }
+                });
+            }
+            else {
+                clearFields();
+            }
 
-            });
-        }
+        });
     </script>
 }
 <div id="page-head">
@@ -385,11 +310,12 @@
                 <div class="panel-head">
                     <h1 class="panel-title">Add Bill Recovery</h1>
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Consumer No.</label>
-                    <input type="number" value="" readonly class="form-control" id="consumer_no" />
-                </div>
+               
                 <div class="panel-body">
+                    <div class="form-group">
+                        <label class="control-label">Consumer No.</label>
+                        <input type="number" value=""  class="form-control" id="consumer_no" />
+                    </div>
                     <div class="form-group">
                         <label class="control-label">Select Area</label>
                         <input readonly class="form-control " id="gas_area">
@@ -430,9 +356,12 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Amount</label>
+                        <input readonly value="" class="form-control" id="amount_gas" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Amount Recived</label>
                         <input type="number" value="" class="form-control" id="Amount" />
                     </div>
-
                     <div class="form-group">
                         <a href="#" id="btn_gas_add" class="btn btn-success pull-right">Submit</a>
                         <a href="#" id="btn_gas_update" class="btn btn-success pull-right">Update</a>

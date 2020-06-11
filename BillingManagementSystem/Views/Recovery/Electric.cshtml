@@ -37,10 +37,12 @@
             $('#electric_subarea').val('');
             $('#electric_resident').val('');
             $('#previous_reading').val('');
-            $("#total_outstanding").val();
-            $("#current_reading").val();
-            $("#current_unit").val();
-            $("#month").val();
+            $("#total_outstanding").val('');
+            $("#current_reading").val('');
+            $("#current_unit").val('');
+            $("#month").val('');
+            $("#electric_amount").val('');
+            $("#Amount").val('');
         }
         function initElectricGrid() {
             Dtable = $(".electricGrid").DataTable({
@@ -94,7 +96,11 @@
                     { "title": "SubArea", "data": "subAreaName" },
                     { "title": "Location", "data": "locationName" },
                     { "title": "Resident Name", "data": "residentName" },
-                    
+                    {
+                        "title": "Picture", "data": "pictureId", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.pictureType + ";base64, " + row.picturedata + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
                 ]
             });
             Dtable.columns.adjust();
@@ -288,7 +294,8 @@
                             $("#current_reading").val(response.currentReading);
                             $("#current_unit").val(response.currentUnit);
                             $("#month").val(response.billMonth);
-                           
+                            $("#electric_amount").val(response.totalElectricAmount);
+                            residentId = response.residentId;
                         }
                         else {
                             clearFields()
@@ -362,6 +369,10 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Amount</label>
+                        <input readonly value="" class="form-control" id="electric_amount" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Amount Recived</label>
                         <input type="number" value="" class="form-control" id="Amount" />
                     </div>
 

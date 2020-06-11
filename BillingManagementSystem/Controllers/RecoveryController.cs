@@ -58,7 +58,9 @@ namespace BillingManagementSystem.Controllers
             String _base64 = Convert.ToBase64String(thePictureAsBytes);
             PaymentRequestModel model = new PaymentRequestModel()
             {
-                
+                readingpicture_data = _base64,
+                readingpicture_size = fileSize.ToString(),
+                readingpicture_type = mimeType,
                 paymentAmount = _amount,
                 residentId = _residentId,
                 paymentMonth = _month
@@ -119,7 +121,9 @@ namespace BillingManagementSystem.Controllers
             String _base64 = Convert.ToBase64String(thePictureAsBytes);
             PaymentRequestModel model = new PaymentRequestModel()
             {
-
+                readingpicture_data = _base64,
+                readingpicture_size = fileSize.ToString(),
+                readingpicture_type = mimeType,
                 paymentAmount = _amount,
                 residentId = _residentId,
                 paymentMonth = _month
