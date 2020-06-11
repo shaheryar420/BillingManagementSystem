@@ -350,22 +350,33 @@ namespace BillingManagementSystem.DataHelpers
                                 var noOfConsumers = Consumers.Count();
                                 double totalUnits = 0;
                                 double totalAmount = 0;
+                                double gasUnits = 0;
+                                double gasAmount = 0;
                                 foreach (var Consumer in Consumers)
                                 {
                                     var Units = (from x in db.tbl_billelectric
                                                  where x.fk_resident == Consumer.resident_id
                                                  select x).FirstOrDefault();
+                                    var GasBill = (from x in db.tbl_billgas where x.fk_resident == Consumer.resident_id select x).FirstOrDefault();
+
                                     if (Units != null)
                                     {
                                         totalAmount = totalAmount + Units.billelectric_amount;
                                         totalUnits = totalUnits + Units.billelectric_units;
                                     }
-                                    
+                                    else if (GasBill != null)
+                                    {
+                                        gasUnits = gasUnits + GasBill.units;
+                                        gasAmount = gasAmount + GasBill.amount;
+                                    }
+
                                 }
                                 var _locoation = new LocationResponseModel()
                                 {
-                                    totalAmount = totalAmount.ToString(),
-                                    totalUnits = totalUnits.ToString(),
+                                    totalGasAmount = gasAmount.ToString(),
+                                    totalGasUnits = gasUnits.ToString(),
+                                    totalElectricAmount = totalAmount.ToString(),
+                                    totalElectricUnits = totalUnits.ToString(),
                                     noOfConsumers = noOfConsumers.ToString(),
                                     fk_subArea = location.fk_subarea.ToString(),
                                     areaName = !string.IsNullOrEmpty(location.area_name) ? location.area_name : "",
