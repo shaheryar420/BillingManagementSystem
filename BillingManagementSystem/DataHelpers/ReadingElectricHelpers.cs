@@ -315,7 +315,7 @@ namespace BillingManagementSystem.DataHelpers
                                 var residentBuilding = (from x in db.tbl_residentbuilding where x.fk_building == location.location_id select x).FirstOrDefault();
                                 if (residentBuilding != null)
                                 {
-                                    /*var previousPendingBill = (from x in db.tbl_billelectric where x.fk_paymentstatus == 3 && x.fk_location == residentBuilding.fk_building select x).FirstOrDefault();
+                                    var previousPendingBill = (from x in db.tbl_billelectric where x.fk_paymentstatus == 3 && x.fk_location == residentBuilding.fk_building select x).FirstOrDefault();
                                     var outstanding = "";
                                     if (previousPendingBill != null)
                                     {
@@ -333,7 +333,7 @@ namespace BillingManagementSystem.DataHelpers
                                     else
                                     {
                                         outstanding = "0";
-                                    }*/
+                                    }
 
                                     var readingPicture = (from x in db.tbl_readingpicture where x.readingpicture_id == readingElectric.fk_readingpicture select x).FirstOrDefault();
                                     if (readingPicture != null)
@@ -436,7 +436,7 @@ namespace BillingManagementSystem.DataHelpers
                                         };
                                         db.tbl_billelectric.Add(newBill);
                                         db.SaveChanges();
-                                        newBill.billelectric_outstanding = 0; //newBill.billelectric_amount + double.Parse(outstanding);
+                                        newBill.billelectric_outstanding = newBill.billelectric_amount + double.Parse(outstanding);
                                         var newReadingElectricLog = new tbl_readingelectriclog()
                                         {
                                             readingelectriclog_addedby = readingElectric.readingelectric_addedby,

@@ -4,23 +4,10 @@
 }
 @section Styles
 {
-    <style>
-        .control-label {
-            font-size: medium;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        }
-        .panel-title {
-            font-size: large;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-        }
-
     @Styles.Render("~/plugins/select2")
     @Styles.Render("~/plugins/datepicker")
     @Styles.Render("~/plugins/datatable")
     @Styles.Render("~/plugins/sweetAlert")
-
-
-    </style>
 }
 @section Scripts
 {
@@ -49,7 +36,7 @@
                 addFile($("#online_file")[0].files[0]);
             });
             initElectricGrid();
-
+           
             initElectricGridActions();
 
         });
@@ -60,9 +47,7 @@
             $("#consumer_no").val('');
             $("#previous_reading").val('');
             $("#current_reading").val('');
-            $("#electric_area").val('');
-            $("#electric_resident").val('');
-            $("#electric_subarea").val('');
+            $("#electric_area").val(1).trigger('change');
             $("#reading_water").val('');
             $("#reading_tv").val('');
             $("#current_unit").val('');
@@ -87,7 +72,7 @@
             Dtable = $(".electricGrid").DataTable({
                 autoWidth: true,
                 destroy: true,
-                scrollX: true,
+                scrollX:true,
                 "ajax": {
                     "url": '/Bill/GetAllReadingsElectric',
                     "type": 'POST',
@@ -237,7 +222,7 @@
                 if (fileInput.files[0] != null) {
                     formdata.append(fileInput.files[0].name, fileInput.files[0]);
                 }
-
+                
                 formdata.append("_meterNo", _meterNo);
                 formdata.append("_previousReading", _previousReading);
                 formdata.append("_currentReading", _currentReading);
@@ -339,118 +324,118 @@
             });
         }
 
-        //function initDropDowns() {
-        //    $.ajax({
-        //        url: '/Management/GetAllAreas',
-        //        type: 'POST',
-        //        success: function (response) {
-        //            if (response) {
-        //                if (response[0].resultCode == '1100') {
-        //                    var list = [];
-        //                    for (var i = 0; i < response.length; i++) {
-        //                        list.push({ text: response[i].areaName, id: response[i].areaId });
-        //                    }
-        //                    $('#electric_area').select2({ data: list }).trigger('change');
+        function initDropDowns() {
+            $.ajax({
+                url: '/Management/GetAllAreas',
+                type: 'POST',
+                success: function (response) {
+                    if (response) {
+                        if (response[0].resultCode == '1100') {
+                            var list = [];
+                            for (var i = 0; i < response.length; i++) {
+                                list.push({ text: response[i].areaName, id: response[i].areaId });
+                            }
+                            $('#electric_area').select2({ data: list }).trigger('change');
 
 
-        //                }
-        //                else {
-        //                    $('#electric_area').select2({
-        //                        placeholder: "area not found ",
-        //                        allowClear: true
-        //                    }).trigger('change');
-        //                }
-        //            }
-        //        },
-        //        error: function (a, b, c) {
-        //            swal('Error', a + b + c, 'error');
-        //        }
+                        }
+                        else {
+                            $('#electric_area').select2({
+                                placeholder: "area not found ",
+                                allowClear: true
+                            }).trigger('change');
+                        }
+                    }
+                },
+                error: function (a, b, c) {
+                    swal('Error', a + b + c, 'error');
+                }
 
-        //    });
-        //    $("#electric_area").change(function () {
-        //        var _areaId = $("#electric_area").val();
-        //        $.ajax({
-        //            url: '/Management/GetAllSubAreasByArea',
-        //            type: 'POST',
-        //            data: { fk_area: _areaId },
-        //            success: function (response) {
-        //                if (response) {
-        //                    if (response[0].resultCode == '1100') {
-        //                        var list = [];
-        //                        for (var i = 0; i < response.length; i++) {
-        //                            list.push({ text: response[i].subAreaName, id: response[i].subAreaId });
+            });
+            $("#electric_area").change(function () {
+                var _areaId = $("#electric_area").val();
+                $.ajax({
+                    url: '/Management/GetAllSubAreasByArea',
+                    type: 'POST',
+                    data: { fk_area: _areaId },
+                    success: function (response) {
+                        if (response) {
+                            if (response[0].resultCode == '1100') {
+                                var list = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    list.push({ text: response[i].subAreaName, id: response[i].subAreaId });
 
-        //                        }
-        //                        $('#electric_subarea').select2().empty();
-        //                        $('#electric_subarea').select2({ data: list });
-        //                        if (subareaId) {
-        //                            $('#electric_subarea').val(subareaId);
-        //                        }
-        //                        $('#electric_subarea').trigger('change');
+                                }
+                                $('#electric_subarea').select2().empty();
+                                $('#electric_subarea').select2({ data: list });
+                                if (subareaId) {
+                                    $('#electric_subarea').val(subareaId);
+                                }
+                                $('#electric_subarea').trigger('change');
+                                
+                            }
+                            else {
+                                $('#electric_subarea').select2().empty();
+                                $('#electric_subarea').select2({
+                                    placeholder: "SubArea not found ",
+                                    allowClear: true
+                                }).trigger('change');
+                            }
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+                
+            });
 
-        //                    }
-        //                    else {
-        //                        $('#electric_subarea').select2().empty();
-        //                        $('#electric_subarea').select2({
-        //                            placeholder: "SubArea not found ",
-        //                            allowClear: true
-        //                        }).trigger('change');
-        //                    }
-        //                }
-        //            },
-        //            error: function (a, b, c) {
-        //                swal('Error', a + b + c, 'error');
-        //            }
-        //        });
+            $("#electric_subarea").change(function () {
+                var _subareaId = $("#electric_subarea").val();
+                $.ajax({
+                    url: '/Management/GetAllLocationsBySubArea',
+                    type: 'POST',
+                    data: { fk_subArea: _subareaId },
+                    success: function (response) {
+                        if (response) {
+                            if (response[0].resultCode == '1100') {
+                                var list = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    list.push({ text: response[i].locationName, id: response[i].locationId });
 
-        //    });
-
-        //    $("#electric_subarea").change(function () {
-        //        var _subareaId = $("#electric_subarea").val();
-        //        $.ajax({
-        //            url: '/Management/GetAllLocationsBySubArea',
-        //            type: 'POST',
-        //            data: { fk_subArea: _subareaId },
-        //            success: function (response) {
-        //                if (response) {
-        //                    if (response[0].resultCode == '1100') {
-        //                        var list = [];
-        //                        for (var i = 0; i < response.length; i++) {
-        //                            list.push({ text: response[i].locationName, id: response[i].locationId });
-
-        //                        }
-        //                        $('#electric_resident').select2().empty();
-        //                        $('#electric_resident').select2({ data: list });
-        //                        if (locationId) {
-        //                            $('#electric_resident').val(locationId);
-        //                        }
-        //                        else {
-        //                            clear();
-        //                        }
-        //                        $('#electric_resident').trigger('change');
-
-        //                    }
-        //                    else {
-        //                        $('#electric_resident').select2().empty();
-        //                        $('#electric_resident').select2({
-        //                            placeholder: "resident not found ",
-        //                            allowClear: true
-        //                        }).trigger('change');
-        //                    }
-        //                }
-        //            },
-        //            error: function (a, b, c) {
-        //                swal('Error', a + b + c, 'error');
-        //            }
-        //        });
-        //    });
-        //    $("#electric_resident").change(function () {
-        //        if ($("#electric_resident").val()) {
-        //            initmeterNo($('#electric_resident').val());
-        //        }
-
-        //    });
-        //}
+                                }
+                                $('#electric_resident').select2().empty();
+                                $('#electric_resident').select2({ data: list });
+                                if (locationId) {
+                                    $('#electric_resident').val(locationId);
+                                }
+                                else {
+                                    clear();
+                                }
+                                $('#electric_resident').trigger('change');
+                                
+                            }
+                            else {
+                                $('#electric_resident').select2().empty();
+                                $('#electric_resident').select2({
+                                    placeholder: "resident not found ",
+                                    allowClear: true
+                                }).trigger('change');
+                            }
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            });
+            $("#electric_resident").change(function () {
+                if ($("#electric_resident").val()) {
+                    initmeterNo($('#electric_resident').val());                    
+                }
+                
+            });
+        }
         function initmeterNo(Id) {
             $.ajax({
                 url: '/Management/GetLocationById',
@@ -488,12 +473,10 @@
                 }
                 else {
                     var unit = currentReading - 0;
-
-                    console.log(unit);
                     $('#current_unit').val(unit);
                 }
             }
-
+            
         });
 
         $("#consumer_no").change(function () {
@@ -510,10 +493,11 @@
                             $("#electric_subarea").val(response.subAreaName);
                             $("#electric_resident").val(response.locationName);
                             $("#previous_reading").val(response.previousReading);
-
+                           
                         }
                         else {
                             clearFields();
+
                         }
                     },
                     error: function (a, b, c) {
@@ -545,19 +529,19 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="control-label">Consumer #.</label>
-                        <input tabindex="1" type="number" value="" class="form-control" id="consumer_no" />
+                        <input tabindex="1" type="number" value=""  class="form-control" id="consumer_no" />
                     </div>
                     <div class="form-group">
                         <label class="control-label"> Area</label>
-                        <input readonly class="form-control " id="electric_area" />
+                        <input readonly class="form-control dropdownlist" id="electric_area"/>
                     </div>
                     <div class="form-group">
                         <label class="control-label"> SubArea</label>
-                        <input readonly class="form-control " id="electric_subarea" />
+                        <input  readonly class="form-control dropdownlist" id="electric_subarea"/>
                     </div>
                     <div class="form-group">
                         <label class="control-label"> Location</label>
-                        <input readonly class="form-control " id="electric_resident" />
+                        <input  readonly class="form-control dropdownlist" id="electric_resident"/>
                     </div>
                     <div class="form-group">
                         <label class="control-label" id="label_PR">Previous Reading</label>
