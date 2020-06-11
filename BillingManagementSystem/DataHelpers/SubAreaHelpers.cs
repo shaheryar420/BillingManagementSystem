@@ -413,8 +413,12 @@ namespace BillingManagementSystem.DataHelpers
                                         var Units = (from x in db.tbl_billelectric
                                                      where x.fk_resident == Consumer.resident_id
                                                      select x).FirstOrDefault();
-                                        totalAmount = totalAmount + Units.billelectric_amount;
-                                        totalUnits = totalUnits + Units.billelectric_units;
+                                        if (Units != null)
+                                        {
+                                            totalAmount = totalAmount + Units.billelectric_amount;
+                                            totalUnits = totalUnits + Units.billelectric_units;
+                                        }
+                                       
                                     }
                                     var _SubArea = new SubAreaResponseModel()
                                     {
