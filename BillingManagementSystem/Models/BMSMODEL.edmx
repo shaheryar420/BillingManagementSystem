@@ -5,25 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="db_bmsModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'def.db_bms.billmar' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="billmar">
-          <Property Name="FK_CONSUMER_NO" Type="int" />
-          <Property Name="ISSUE_DATE" Type="text" />
-          <Property Name="E_PERVIOUS_UNIT" Type="text" />
-          <Property Name="E_PRESENT_UNIT" Type="text" />
-          <Property Name="E_AUTHRAIZE_UNITS" Type="text" />
-          <Property Name="WATER_CHARGES" Type="text" />
-          <Property Name="TV_FEE" Type="text" />
-          <Property Name="BILLING_MOUNTH" Type="text" />
-          <Property Name="E_CURRENT_BILL" Type="text" />
-          <Property Name="ELECTRIC_METERRENT" Type="text" />
-          <Property Name="CUST_NAME" Type="text" />
-          <Property Name="PERVIOUS_METER" Type="text" />
-          <Property Name="METER2_PERSENT" Type="text" />
-          <Property Name="FPA" Type="text" />
-          <Property Name="STATUS" Type="text" />
-        </EntityType>-->
         <EntityType Name="officerreport">
           <Key>
             <PropertyRef Name="CUNSUMER_NO" />
@@ -93,6 +74,10 @@ warning 6013: The table/view 'def.db_bms.billmar' does not have a primary key de
           <Property Name="fk_billpicture" Type="int" />
           <Property Name="month" Type="varchar" MaxLength="45" />
           <Property Name="outstanding" Type="double" />
+          <Property Name="fpa" Type="double" Nullable="false" />
+          <Property Name="rebate" Type="double" Nullable="false" />
+          <Property Name="paymentAmount" Type="double" Nullable="false" />
+          <Property Name="paymentDate" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="tbl_billpicture">
           <Key>
@@ -516,6 +501,10 @@ warning 6013: The table/view 'def.db_bms.billmar' does not have a primary key de
           <Property Name="fk_billpicture" Type="Int32" />
           <Property Name="month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="outstanding" Type="Double" />
+          <Property Name="fpa" Type="Double" Nullable="false" />
+          <Property Name="rebate" Type="Double" Nullable="false" />
+          <Property Name="paymentAmount" Type="Double" Nullable="false" />
+          <Property Name="paymentDate" Type="DateTime" />
         </EntityType>
         <EntityType Name="tbl_billpicture">
           <Key>
@@ -865,6 +854,10 @@ warning 6013: The table/view 'def.db_bms.billmar' does not have a primary key de
           <EntitySetMapping Name="tbl_billgas">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_billgas">
               <MappingFragment StoreEntitySet="tbl_billgas">
+                <ScalarProperty Name="paymentDate" ColumnName="paymentDate" />
+                <ScalarProperty Name="paymentAmount" ColumnName="paymentAmount" />
+                <ScalarProperty Name="rebate" ColumnName="rebate" />
+                <ScalarProperty Name="fpa" ColumnName="fpa" />
                 <ScalarProperty Name="outstanding" ColumnName="outstanding" />
                 <ScalarProperty Name="month" ColumnName="month" />
                 <ScalarProperty Name="fk_billpicture" ColumnName="fk_billpicture" />
