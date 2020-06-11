@@ -45,6 +45,9 @@
         function clearFields() {
             $('#gas_id').val('');
             $("#consumer_no").val('');
+            $("#gas_area").val('');
+            $("#gas_subarea").val('');
+            $("#gas_location").val('');
             $("#previous_reading").val('');
             $("#current_reading").val('');
             $("#prev_read").val('');
@@ -181,6 +184,7 @@
                     swal("Warning", "Please select a Reading", "warning");
                 }
             });
+
             $('#btn_gas_add').click(function () {
                 var _url = "/Bill/AddReadingGas";
                 var _meterNo = $("#gas_meterNo").val();
@@ -224,6 +228,7 @@
                 });
 
             });
+
             $(document).on('click', '#btn_gas_update', function (e) {
                 e.preventDefault();
                 var _gasId = $('#gas_id').val();
@@ -313,6 +318,7 @@
             });
              
         }
+
         $("#current_reading").change(function () {
             if (_prevResd == "0") {
                 _prevResd = $('#prev_read').val();
@@ -325,6 +331,37 @@
                 currentReading = $('#current_reading').val();
                 var unit = currentReading - _prevResd;
                 $('#current_unit').val(unit);
+            }
+
+        });
+
+        $("#consumer_no").change(function () {
+            var _consumerNo = $('#consumer_no').val();
+            console.log(_consumerNo);
+            if (_consumerNo) {
+                $.ajax({
+                    url: '/Bill/getAllDetailByConsumerNo',
+                    type: 'POST',
+                    data: { locationElectricMeter: _consumerNo },
+                    success: function (response) {
+                        if (response.resultCode == '1100') {
+                            $("#gas_area").val(response.areaName);
+                            $("#gas_subarea").val(response.subAreaName);
+                            $("#gas_location").val(response.locationName);
+                            $("#previous_reading").val(response.previousReading);
+
+                        }
+                        else {
+                            clearFields();
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            }
+            else {
+
             }
 
         });
@@ -351,15 +388,15 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select Area</label>
-                        <input readonly class="form-control dropdownlist" id="gas_area"></input>
+                        <input readonly class="form-control " id="gas_area">
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select SubArea</label>
-                        <input readonly class="form-control dropdownlist" id="gas_subarea"></input>
+                        <input readonly class="form-control " id="gas_subarea">
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select Location</label>
-                        <input readonly class="form-control dropdownlist" id="gas_location">
+                        <input readonly class="form-control " id="gas_location">
                     </div>
 
                     <div class="form-group">
