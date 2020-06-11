@@ -37,6 +37,14 @@
             initElectricGrid();
             
             initElectricGridActions();
+            
+
+            $(document).on('click', '#btn_approve', function (e) {
+                e.preventDefault();
+
+                var water =  $('#electric_water_detail').val();
+                initApprovel(water);
+            });
         });
     </script>
     <script>
@@ -45,7 +53,7 @@
             $("#consumer_no").val('');
             $("#previous_reading").val('');
             $("#current_reading").val('');
-            $("#electric_area").val(1).trigger('change');
+            $("#electric_area").val('');
             $("#current_unit").val('');
             $("#month").val('');
         }
@@ -142,6 +150,42 @@
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 Id = rowData.readingElectricId;
+                $.ajax({
+                    url: '/Bill/CalculateReadingElectric',
+                    type: 'POST',
+                    data: { readingElectricId: Id },
+                    success: function (response) {
+                        if (response) {
+                            if (response.resultCode == '1100') {
+                                
+                                $('#previous_reading_detail').val(response.billElectricPrevReading);
+                                $('#current_reading_detail').val(response.billElectricCurrentReading);
+                                $('#current_units_detail').val(response.billElectricUnits);
+                                $('#electric_water_detail').val(response.billElectricWater);
+                                $('#electric_tv_detail').val(response.billElectricTv);
+                                $('#electric_remarks_detail').val(response.billElectricRemarks);
+                                $('#electric_mounth_detail').val(response.billElectricMonth);
+                                $('#electric_outstanding_detail').val(response.billElectricOutstanding);
+                                $('#meter_no_detail').val(response.locationMeterNo);
+                                $('#electric_area_detail').val(response.areaName);
+                                $('#electric_subarea_detail').val(response.subAreaName);
+                                $('#electric_resident_detail').val(response.locationName);
+                                $('#electric_charges_detail').val(response.energyCharges);
+                                $('#electric_amount_detail').val(response.billElectricAmount);
+                               
+                                
+                            }
+                            else {
+                                swal("Warning", response.remarks, "warning");
+                            }
+
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+
+                });
                 $('#approve-modal').modal('show').on("shown.bs.modal", function () {
                 });
             });
@@ -383,18 +427,13 @@
 
         });
         ///
-        $(document).on('click', '.btn_Approve', function (e) {
-            e.preventDefault();
-            
+        
 
-            initApprovel(Id);
-        });
-
-        function initApprovel(Id) {
+        function initApprovel(water) {
             $.ajax({
                 url: '/Bill/ApproveReadingElectric',
                 type: 'POST',
-                data: { readingElectricId: Id },
+                data: { readingElectricId: Id, readingElectircWater: water },
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
@@ -577,7 +616,7 @@
                 <div class="modal-footer">
                     <div class="btn-group pull-right">
                         <a href="#" data-dismiss="modal" class="btn btn-primary close">Close</a>
-                        <a href="#" id="btn_Approve" class="btn btn-success">Approve</a>
+                        <a href="#" id="btn_approve" class="btn btn-success">Approve</a>
                     </div>
                 </div>
             </div>
