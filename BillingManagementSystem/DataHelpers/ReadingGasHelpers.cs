@@ -639,13 +639,13 @@ namespace BillingManagementSystem.DataHelpers
                             };
                             var bill = (from x in db.tbl_billelectric where x.fk_location == location.location_id select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
                             var billGas = (from x in db.tbl_billgas where x.fk_location == location.location_id select x).OrderByDescending(x => x.datetime).FirstOrDefault();
-                            if (bill != null)
+                            if (billGas != null)
                             {
-                                toReturn.previousReading = !String.IsNullOrEmpty(bill.billelectric_prevreading.ToString()) ? bill.billelectric_prevreading.ToString() : "";
-                                toReturn.outstanding = !String.IsNullOrEmpty(bill.billelectric_outstanding.ToString()) ? bill.billelectric_outstanding.ToString() : "";
-                                toReturn.billMonth = !string.IsNullOrEmpty(bill.billelectric_month) ? bill.billelectric_month : "";
-                                toReturn.currentReading = bill.billelectric_currentreading.ToString();
-                                toReturn.currentUnit = bill.billelectric_units.ToString();
+                                toReturn.previousReading = !String.IsNullOrEmpty(billGas.prevreading.ToString()) ? billGas.prevreading.ToString() : "";
+                                toReturn.outstanding = !String.IsNullOrEmpty(billGas.outstanding.ToString()) ? billGas.outstanding.ToString() : "";
+                                toReturn.billMonth = !string.IsNullOrEmpty(billGas.month) ? billGas.month : "";
+                                toReturn.currentReading = billGas.currentreading.ToString();
+                                toReturn.currentUnit = billGas.units.ToString();
                             }
                             else
                             {
