@@ -32,6 +32,7 @@
     <script>
         var Id = null;
         var fileCounter = 0;
+        
         var dataSet = [];
         var _prevResd = null;
         var subareaId = null;
@@ -156,6 +157,8 @@
             $("div.tableBottom").addClass("pull-left");
             $("div.html5Buttons").addClass("pull-right");
         }
+
+        
         function initElectricGridActions() {
             $(document).on('click', '.btn_electric_edit', function (e) {
                 e.preventDefault();
@@ -451,33 +454,33 @@
 
         //    });
         //}
-        function initmeterNo(Id) {
-            $.ajax({
-                url: '/Management/GetLocationById',
-                type: 'POST',
-                data: { locationId: Id },
-                success: function (response) {
-                    console.log(response);
-                    if (response) {
-                        if (response.resultCode == '1100') {
-                            $('#consumer_no').val(response.locationElectricMeter);
-                            if (!locationId) {
-                                $('#previous_reading').val(response.currentReading);
-                            }
-                        }
-                        else {
-                            swal("Warning", response.remarks, "warning");
-                        }
+        //function initmeterNo(Id) {
+        //    $.ajax({
+        //        url: '/Management/GetLocationById',
+        //        type: 'POST',
+        //        data: { locationId: Id },
+        //        success: function (response) {
+        //            console.log(response);
+        //            if (response) {
+        //                if (response.resultCode == '1100') {
+        //                    $('#consumer_no').val(response.locationElectricMeter);
+        //                    if (!locationId) {
+        //                        $('#previous_reading').val(response.currentReading);
+        //                    }
+        //                }
+        //                else {
+        //                    swal("Warning", response.remarks, "warning");
+        //                }
 
-                    }
-                },
-                error: function (a, b, c) {
-                    swal('Error', a + b + c, 'error');
-                }
+        //            }
+        //        },
+        //        error: function (a, b, c) {
+        //            swal('Error', a + b + c, 'error');
+        //        }
 
-            });
+        //    });
 
-        }
+        //}
         $("#current_reading").change(function () {
             var currentReading = $('#current_reading').val();
             var previousReading = $('#previous_reading').val();

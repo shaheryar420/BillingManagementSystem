@@ -24,8 +24,7 @@
            
             $('#btn_gas_update').hide();
             $('editTitle').hide();
-            $('#prev_read').hide();
-            $('#label_NPR').hide();
+            
             $(".monthPicker").datepicker({
                 format: "mm-yyyy",
                 startView: "months",
@@ -56,7 +55,7 @@
         }
         function initGasGrid() {
             Dtable = $(".gasGrid").DataTable({
-                autoWidth: true,
+                scrollX: true,
                 destroy: true,
                 "ajax": {
                     "url": '/Bill/GetAllReadingsGas',
@@ -132,7 +131,7 @@
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 var _id = rowData.readingGasId;
                 $('#gas_id').val(_id);
-                $("#gas_meterNo").val(rowData.readingGasMeterNo);
+                $("#consumer_no").val(rowData.readingGasMeterNo);
                 $("#previous_reading").val(rowData.readingGasPrevReading);
                 $("#current_reading").val(rowData.readingGasCurrentReading);
                 $("#current_unit").val(rowData.readingGasUnits);
@@ -187,15 +186,16 @@
 
             $('#btn_gas_add').click(function () {
                 var _url = "/Bill/AddReadingGas";
-                var _meterNo = $("#gas_meterNo").val();
+                var _meterNo = $("#consumer_no").val();
                 var _currentReading = $("#current_reading").val();
+                var _previousReading = $("#previous_reading").val();
                 var _currentUnit = $("#current_unit").val();
                 var _month = $("#month").val();
                 var formdata = new FormData(); //FormData object
                 var fileInput = document.getElementById('online_file');
                 formdata.append(fileInput.files[0].name, fileInput.files[0]);
                 formdata.append("_meterNo", _meterNo);
-                formdata.append("_previousReading", _prevResd);
+                formdata.append("_previousReading", _previousReading);
                 formdata.append("_currentReading", _currentReading);
                 formdata.append("_currentUnit", _currentUnit);
                 formdata.append("_month", _month);
@@ -235,7 +235,7 @@
                 if (_gasId) {
                     var _url = "/Bill/EditReadingGas";
                     var _gasId = $("#gas_id").val();
-                    var _meterNo = $("#gas_meterNo").val();
+                    var _meterNo = $("#consumer_no").val();
                     var _previousReading = $("#previous_reading").val();
                     var _currentReading = $("#current_reading").val();
                     var _currentUnit = $("#current_unit").val();
@@ -287,53 +287,26 @@
                 }
             });
         }
-        function initmeterNo(Id) {
-            $.ajax({
-                url: '/Management/GetLocationById',
-                type: 'POST',
-                data: { locationId: Id },
-                success: function (response) {
-                    if (response) {
-                        if (response.resultCode == '1100') {
-                            $('#gas_meterNo').val(response.locationGassMeter);
-                            $('#previous_reading').val(response.previousGasReading);
-                            _prevResd = $("#previous_reading").val();
-                            if (_prevResd == '0') {
-                                $('#prev_read').show();
-                                $('#label_NPR').show();
-                                $('#label_PR').hide();
-                                $('#previous_reading').hide();
-                            }
-                        }
-                        else {
-                            swal("Warning", response.remarks, "warning");
-                        }
-
-                    }
-                },
-                error: function (a, b, c) {
-                    swal('Error', a + b + c, 'error');
-                }
-
-            });
-             
-        }
+       
 
         $("#current_reading").change(function () {
-            if (_prevResd == "0") {
-                _prevResd = $('#prev_read').val();
-                currentReading = $('#current_reading').val();
-                var unit = currentReading - _prevResd;
-                $('#current_unit').val(unit);
-            }
-            else {
+            var currentReading = $('#current_reading').val();
+            var previousReading = $('#previous_reading').val();
+            if (currentReading) {
+                if (previousReading) {
+                    var unit = currentReading - previousReading;
+                    $('#current_unit').val(unit);
+                }
+                else {
+                    var unit = currentReading - 0;
 
-                currentReading = $('#current_reading').val();
-                var unit = currentReading - _prevResd;
-                $('#current_unit').val(unit);
+                    console.log(unit);
+                    $('#current_unit').val(unit);
+                }
             }
 
         });
+        
 
         $("#consumer_no").change(function () {
             var _consumerNo = $('#consumer_no').val();
@@ -399,13 +372,10 @@
                         <input readonly class="form-control " id="gas_location">
                     </div>
 
+
                     <div class="form-group">
                         <label class="control-label" id="label_PR">Previous Reading</label>
-                        <input type="number" value="" readonly class="form-control" id="previous_reading" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" id="label_NPR">Previous Reading</label>
-                        <input type="number" value="" class="form-control" id="prev_read" />
+                        <input tabindex="4" type="number" value="" class="form-control" id="previous_reading" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Enter Current Reading</label>

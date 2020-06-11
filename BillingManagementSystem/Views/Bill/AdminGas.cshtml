@@ -26,8 +26,7 @@
             $('.dropdownlist').select2();
             $('#btn_gas_update').hide();
             $('editTitle').hide();
-            $('#prev_read').hide();
-            $('#label_NPR').hide();
+            
             $(".monthPicker").datepicker({
                 format: "mm-yyyy",
                 startView: "months",
@@ -38,7 +37,6 @@
                 addFile($("#online_file")[0].files[0]);
             });
             initGasGrid();
-            initDropDowns();
             initGasGridActions();
         });
     </script>
@@ -52,13 +50,12 @@
             $("#gas_location").val('');
             $("#previous_reading").val('');
             $("#current_reading").val('');
-            $("#prev_read").val('');
             $("#current_unit").val('');
             $("#month").val('');
         }
         function initGasGrid() {
             Dtable = $(".gasGrid").DataTable({
-                autoWidth: true,
+                scrollX: true,
                 destroy: true,
                 "ajax": {
                     "url": '/Bill/GetAllReadingsGas',
@@ -127,14 +124,11 @@
                 $('#btn_gas_add').hide();
                 $('#addTitle').hide();
                 $('#editTitle').show();
-                $('#previous_reading').show();
-                $('#prev_read').hide();
-                $('#label_NPR').hide();
-                $('#label_PR').show();
+                
                 var rowData = Dtable.row($(this).parents('tr')).data();
                 var _id = rowData.readingGasId;
                 $('#gas_id').val(_id);
-                $("#gas_meterNo").val(rowData.readingGasMeterNo);
+                $("#consumer_no").val(rowData.readingGasMeterNo);
                 $("#previous_reading").val(rowData.readingGasPrevReading);
                 $("#current_reading").val(rowData.readingGasCurrentReading);
                 $("#current_unit").val(rowData.readingGasUnits);
@@ -188,15 +182,16 @@
             });
             $('#btn_gas_add').click(function () {
                 var _url = "/Bill/AddReadingGas";
-                var _meterNo = $("#gas_meterNo").val();
+                var _meterNo = $("#consumer_no").val();
                 var _currentReading = $("#current_reading").val();
+                var _previousReading = $("#previous_reading").val();
                 var _currentUnit = $("#current_unit").val();
                 var _month = $("#month").val();
                 var formdata = new FormData(); //FormData object
                 var fileInput = document.getElementById('online_file');
                 formdata.append(fileInput.files[0].name, fileInput.files[0]);
                 formdata.append("_meterNo", _meterNo);
-                formdata.append("_previousReading", _prevResd);
+                formdata.append("_previousReading", _previousReading);
                 formdata.append("_currentReading", _currentReading);
                 formdata.append("_currentUnit", _currentUnit);
                 formdata.append("_month", _month);
@@ -215,7 +210,7 @@
                     success: function (data) {
                         if (data.resultCode == "1100") {
                             initGasGrid();
-                             clearFields();
+                            clearFields();
                             swal("Added!", data.remarks, "success");
                         }
                         else {
@@ -233,20 +228,16 @@
             $(document).on('click', '.btn_gas_approvel', function (e) {
                 e.preventDefault();
                 var rowData = Dtable.row($(this).parents('tr')).data();
-                _id = rowData.readingGasId;
-                var _unit = rowData.readingGasUnits;
+                var _id = rowData.readingGasId;
                 $.ajax({
-                    url: '/Management/GetFixedRateByName',
+                    url: '/Bill/ApproveReadingGas',
                     type: 'POST',
-                    data: { fixedRatesName: 'Gas Charges' },
+                    data: { readingGasId: _id},
                     success: function (response) {
                         if (response) {
                             if (response.resultCode == '1100') {
-                                gasrate = response.fixedRatesAmount;
-                                console.log(gasrate);
-                                gasrate = _unit * gasrate;
-                                console.log(gasrate);
-                                initApprovel();
+                                initGasGrid();
+                                swal("Success", "Approved Successfully.", "success");
                             }
                             else {
                                 swal("Warning", response.remarks, "warning");
@@ -267,51 +258,51 @@
                 if (_gasId) {
                     var _url = "/Bill/EditReadingGas";
                     var _gasId = $("#gas_id").val();
-                    var _meterNo = $("#gas_meterNo").val();
+                    var _meterNo = $("#consumer_no").val();
                     var _previousReading = $("#previous_reading").val();
                     var _currentReading = $("#current_reading").val();
                     var _currentUnit = $("#current_unit").val();
                     var _month = $("#month").val();
                     var formdata = new FormData(); //FormData object
-                var fileInput = document.getElementById('online_file');
-                formdata.append(fileInput.files[0].name, fileInput.files[0]);
-                formdata.append("_id", _gasId);
-                formdata.append("_meterNo", _meterNo);
-                formdata.append("_previousReading", _previousReading);
-                formdata.append("_currentReading", _currentReading);
-                formdata.append("_currentUnit", _currentUnit);
-                formdata.append("_month", _month);
-                 $.ajax({
-                    url: _url,
-                    type: "POST",
-                    data: formdata,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function () {
-                        $('.loading').show();
-                    },
-                    complete: function () {
-                        $('.loading').hide();
-                    },
-                    success: function (data) {
-                        if (data.resultCode == "1100") {
-                            swal("Updated!", data.remarks, "success");
+                    var fileInput = document.getElementById('online_file');
+                    formdata.append(fileInput.files[0].name, fileInput.files[0]);
+                    formdata.append("_id", _gasId);
+                    formdata.append("_meterNo", _meterNo);
+                    formdata.append("_previousReading", _previousReading);
+                    formdata.append("_currentReading", _currentReading);
+                    formdata.append("_currentUnit", _currentUnit);
+                    formdata.append("_month", _month);
+                    $.ajax({
+                        url: _url,
+                        type: "POST",
+                        data: formdata,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function () {
+                            $('.loading').show();
+                        },
+                        complete: function () {
+                            $('.loading').hide();
+                        },
+                        success: function (data) {
+                            if (data.resultCode == "1100") {
+                                swal("Updated!", data.remarks, "success");
                                 initGasGrid();
                                 $('#btn_gas_update').hide();
                                 $('#btn_gas_add').show();
                                 $('#addTitle').show();
-                            $('#editTitle').hide();
-                            clearFields();
+                                $('#editTitle').hide();
+                                clearFields();
+                            }
+                            else {
+                                $('.loading').hide();
+                                swal("Not Updated", data.remarks, "error");
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorMessage) {
+                            console.log(errorMessage);
                         }
-                        else {
-                            $('.loading').hide();
-                            swal("Not Updated", data.remarks, "error");
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorMessage) {
-                        console.log(errorMessage);
-                    }
-                });
+                    });
 
                 }
                 else {
@@ -350,46 +341,58 @@
             }
 
         });
-        
-        $("#current_reading").change(function () {
-            if (_prevResd == "0") {
-                _prevResd = $('#prev_read').val();
-                currentReading = $('#current_reading').val();
-                var unit = currentReading - _prevResd;
-                $('#current_unit').val(unit);
-            }
-            else {
 
-                currentReading = $('#current_reading').val();
-                var unit = currentReading - _prevResd;
-                $('#current_unit').val(unit);
+        $("#current_reading").change(function () {
+            var currentReading = $('#current_reading').val();
+            var previousReading = $('#previous_reading').val();
+            if (currentReading) {
+                if (previousReading) {
+                    var unit = currentReading - previousReading;
+                    $('#current_unit').val(unit);
+                }
+                else {
+                    var unit = currentReading - 0;
+
+                    console.log(unit);
+                    $('#current_unit').val(unit);
+                }
             }
 
         });
 
-        function initApprovel() {
-            $.ajax({
-                url: '/Bill/ApproveReadingGas',
-                type: 'POST',
-                data: { readingGasId: _id, amount: gasrate },
-                success: function (response) {
-                    if (response) {
+        $("#consumer_no").change(function () {
+            var _consumerNo = $('#consumer_no').val();
+            console.log(_consumerNo);
+            if (_consumerNo) {
+                $.ajax({
+                    url: '/Bill/getAllGasDetailsByConsumerNo',
+                    type: 'POST',
+                    data: { locationGassMeter: _consumerNo },
+                    success: function (response) {
                         if (response.resultCode == '1100') {
-                            initGasGrid();
-                            swal("Success", "Approved Successfully.", "success");
+                            $("#gas_area").val(response.areaName);
+                            $("#gas_subarea").val(response.subAreaName);
+                            $("#gas_location").val(response.locationName);
+                            $("#previous_reading").val(response.previousGasReading);
+
                         }
                         else {
-                            swal("Warning", response.remarks, "warning");
+                            clearFields();
                         }
-
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
                     }
-                },
-                error: function (a, b, c) {
-                    swal('Error', a + b + c, 'error');
-                }
+                });
+            }
+            else {
 
-            });
-        }
+            }
+
+        });
+
+
+        
     </script>
 
 }
@@ -407,29 +410,27 @@
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
+                        <label class="control-label">Consumer No.</label>
+                        <input type="hidden" id="gas_id" value="" />
+                        <input type="number" value="" class="form-control" id="consumer_no" />
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">Select Area</label>
-                        <select class="form-control" id="gas_area"></select>
+                        <input readonly class="form-control " id="gas_area">
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select SubArea</label>
-                        <select class="form-control" id="gas_subarea"></select>
+                        <input readonly class="form-control " id="gas_subarea">
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select Location</label>
-                        <select class="form-control" id="gas_location"></select>
+                        <input readonly class="form-control " id="gas_location">
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">Consumer No.</label>
-                        <input type="hidden" id="gas_id" value="" />
-                        <input type="number" value="" readonly class="form-control" id="gas_meterNo" />
-                    </div>
+
+
                     <div class="form-group">
                         <label class="control-label" id="label_PR">Previous Reading</label>
-                        <input type="number" value="" readonly class="form-control" id="previous_reading" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" id="label_NPR">Previous Reading</label>
-                        <input type="number" value="" class="form-control" id="prev_read" />
+                        <input tabindex="4" type="number" value="" class="form-control" id="previous_reading" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Enter Current Reading</label>
