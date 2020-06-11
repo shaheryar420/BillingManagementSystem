@@ -213,6 +213,15 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult CalculateReadingElectric([FromBody] ReadingElectricRequestModel model)
+        {
+            model.userId = Request.Cookies["bms_data"]["id"].ToString();
+            ReadingElectricHelpers helper = new ReadingElectricHelpers();
+            var response = helper.calculateReadingElectric(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         public ActionResult getAllDetailByConsumerNo([FromBody] LocationRequestModel model)
         {
             model.userId = Request.Cookies["bms_data"]["id"].ToString();
@@ -336,6 +345,17 @@ namespace BillingManagementSystem.Controllers
 
             ReadingGasHelpers helper = new ReadingGasHelpers();
             var response = helper.ApproveReadingGas(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult CalculateReadingGas([FromBody] ReadingGasRequestModel model)
+        {
+            string userId = Request.Cookies["bms_data"]["id"].ToString();
+            model.userId = userId;
+
+            ReadingGasHelpers helper = new ReadingGasHelpers();
+            var response = helper.calculateReadingGas(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;

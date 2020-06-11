@@ -40,5 +40,6 @@ namespace BillingManagementSystem.Models
         public string payment { get; set; }
         public string paymentDate { get; set; }
         public string paymentMonth { get; set; }
+        public string energyCharges { get; set; }
     }
 }

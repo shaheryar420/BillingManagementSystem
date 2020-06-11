@@ -827,7 +827,9 @@
     <Compile Include="Models\RequestModels\UserSubAreasRequestModel.cs" />
     <Compile Include="Models\RequestModels\UserTypeRequestModel.cs" />
     <Compile Include="Models\ResponseModels\ActionResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\ApproveElectricResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ApprovePaymentResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\ApproveGasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\AreaResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillElectricResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillGasResponseModel.cs" />

@@ -29,33 +29,45 @@ namespace BillingManagementSystem.DataHelpers
                                         {
                                             using (db_bmsEntities db = new db_bmsEntities())
                                             {
-                                                var newReadingPicture = new tbl_readingpicture()
+                                                var existingReading = (from x in db.tbl_readinggas where x.reading_month == model.readingGasMonth select x).FirstOrDefault();
+                                                if (existingReading == null)
                                                 {
-                                                    readingpicture_data = model.readingpicture_data,
-                                                    readingpicture_size = int.Parse(model.readingpicture_size),
-                                                    readingpicture_type = model.readingpicture_type
-                                                };
-                                                db.tbl_readingpicture.Add(newReadingPicture);
-                                                db.SaveChanges();
-                                                var newReadingGas = new tbl_readinggas()
+                                                    var newReadingPicture = new tbl_readingpicture()
+                                                    {
+                                                        readingpicture_data = model.readingpicture_data,
+                                                        readingpicture_size = int.Parse(model.readingpicture_size),
+                                                        readingpicture_type = model.readingpicture_type
+                                                    };
+                                                    db.tbl_readingpicture.Add(newReadingPicture);
+                                                    db.SaveChanges();
+                                                    var newReadingGas = new tbl_readinggas()
+                                                    {
+                                                        fk_readingpicture = newReadingPicture.readingpicture_id,
+                                                        reading_addedby = int.Parse(model.readingGasAddedby),
+                                                        reading_units = double.Parse(model.readingGasCurrentReading) - double.Parse(model.readingGasPrevReading),
+                                                        reading_month = model.readingGasMonth,
+                                                        reading_currentreading = double.Parse(model.readingGasCurrentReading),
+                                                        reading_datetime = DateTime.UtcNow.AddHours(5),
+                                                        reading_prevreading = double.Parse(model.readingGasPrevReading),
+                                                        reading_meterno = !string.IsNullOrEmpty(model.readingGasMeterNo) ? model.readingGasMeterNo : "",
+                                                        reading_remarks = !string.IsNullOrEmpty(model.readingGasRemarks) ? model.readingGasRemarks : "",
+                                                    };
+                                                    db.tbl_readinggas.Add(newReadingGas);
+                                                    db.SaveChanges();
+                                                    toReturn = new ReadingGasResponseModel()
+                                                    {
+                                                        remarks = "Successfully Added",
+                                                        resultCode = "1100"
+                                                    };
+                                                }
+                                                else
                                                 {
-                                                    fk_readingpicture = newReadingPicture.readingpicture_id,
-                                                    reading_addedby = int.Parse(model.readingGasAddedby),
-                                                    reading_units = double.Parse(model.readingGasCurrentReading) - double.Parse(model.readingGasPrevReading),
-                                                    reading_month = model.readingGasMonth,
-                                                    reading_currentreading = double.Parse(model.readingGasCurrentReading),
-                                                    reading_datetime = DateTime.UtcNow.AddHours(5),
-                                                    reading_prevreading = double.Parse(model.readingGasPrevReading),
-                                                    reading_meterno = !string.IsNullOrEmpty(model.readingGasMeterNo) ? model.readingGasMeterNo : "",
-                                                    reading_remarks = !string.IsNullOrEmpty(model.readingGasRemarks) ? model.readingGasRemarks : "",
-                                                };
-                                                db.tbl_readinggas.Add(newReadingGas);
-                                                db.SaveChanges();
-                                                toReturn = new ReadingGasResponseModel()
-                                                {
-                                                    remarks = "Successfully Added",
-                                                    resultCode = "1100"
-                                                };
+                                                    toReturn = new ReadingGasResponseModel()
+                                                    {
+                                                        remarks = "Reading Already Exists for This Month",
+                                                        resultCode = "1200"
+                                                    };
+                                                }
                                             }
                                         }
                                         else
@@ -518,6 +530,183 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
+        public ApproveGasResponseModel calculateReadingGas(ReadingGasRequestModel model)
+        {
+            ApproveGasResponseModel toReturn = new ApproveGasResponseModel();
+            try
+            {
+                if (new ModelsValidatorHelper().validateint(model.userId))
+                {
+                    int userId = int.Parse(model.userId);
+                    using (db_bmsEntities db = new db_bmsEntities())
+                    {
+                        if (new ModelsValidatorHelper().validateint(model.readingGasId))
+                        {
+                            int readingGasId = int.Parse(model.readingGasId);
+                            var readingGas = (from x in db.tbl_readinggas where x.reading_id == readingGasId select x).FirstOrDefault();
+                            double _units = readingGas.reading_units;
+                            var location = (from x in db.tbl_location
+                                            join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
+                                            join z in db.tbl_area on y.fk_area equals z.area_id
+                                            where x.location_gassmeter == readingGas.reading_meterno select new 
+                                            {
+                                                x.location_id,
+                                                x.location_gassmeter,
+                                                x.location_name,
+                                                y.subarea_name,
+                                                z.area_name
+                                            }).FirstOrDefault();
+                            if (location != null)
+                            {
+                                var residentBuilding = (from x in db.tbl_residentbuilding where x.fk_building == location.location_id select x).FirstOrDefault();
+                                if (residentBuilding != null)
+                                {
+                                    var previousPendingBill = (from x in db.tbl_billgas where x.fk_paymentstatus == 3 && x.fk_location == residentBuilding.fk_building select x).FirstOrDefault();
+                                    double outstanding = 0.0;
+                                    if (previousPendingBill != null)
+                                    {
+                                        outstanding = previousPendingBill.outstanding.Value;
+                                    }
+                                    else
+                                    {
+                                        outstanding = 0.0;
+                                    }
+                                    //Calculating Bill Amount & Adding Bill
+                                    var fpa = (from x in db.tbl_fixedrates where x.fixedrates_id == 1 select x.fixedrates_amount).FirstOrDefault();
+                                    var meterRent = (from x in db.tbl_fixedrates where x.fixedrates_id == 2 select x.fixedrates_amount).FirstOrDefault();
+                                    var slabs = (from x in db.tbl_slabs select x).ToList();
+                                    //Calculations
+                                    double totalAmount = 0.0;
+                                    double totalEnergyCharges = 0.0;
+                                    double totalFPA = 0.0;
+                                    for (int i = 0; i < slabs.Count; i++)
+                                    {
+                                        if (totalEnergyCharges == 0)
+                                        {
+
+                                            if (slabs[i].slab_tariff.Contains(">"))
+                                            {
+                                                var limit = double.Parse(slabs[i].slab_tariff.Replace(">", " ").Trim());
+                                                if (_units <= limit)
+                                                {
+                                                    totalAmount = slabs[i].slab_net_rate.Value * _units;
+                                                    totalEnergyCharges = slabs[i].slab_energy_charges.Value * _units;
+                                                    totalFPA = fpa * _units;
+                                                }
+
+                                            }
+                                            else if (slabs[i].slab_tariff.Contains("-"))
+                                            {
+                                                var limitLow = double.Parse(slabs[i].slab_tariff.Split('-')[0].Trim());
+                                                var limitHigh = double.Parse(slabs[i].slab_tariff.Split('-')[1].Trim());
+                                                if (_units >= limitLow && _units <= limitHigh)
+                                                {
+                                                    double extraUnits = limitHigh - _units;
+                                                    _units = _units - extraUnits;
+                                                    double extraTotalAmount = slabs[i].slab_net_rate.Value * extraUnits;
+                                                    double extraEnergy = slabs[i].slab_energy_charges.Value * extraUnits;
+                                                    double extraFPA = fpa * extraUnits;
+                                                    totalAmount = (slabs[i - 1].slab_net_rate.Value * _units) + extraTotalAmount;
+                                                    totalEnergyCharges = (slabs[i - 1].slab_energy_charges.Value * _units) + extraEnergy;
+                                                    totalFPA = (fpa * _units) + extraFPA;
+                                                }
+                                            }
+                                            else if (slabs[i].slab_tariff.Contains("<"))
+                                            {
+                                                var limit = double.Parse(slabs[i].slab_tariff.Replace("<", " ").Trim());
+                                                if (_units > limit)
+                                                {
+                                                    double extraUnits = _units - limit;
+                                                    _units = _units - extraUnits;
+                                                    double extraTotalAmount = slabs[i].slab_net_rate.Value * extraUnits;
+                                                    double extraEnergy = slabs[i].slab_energy_charges.Value * extraUnits;
+                                                    double extraFPA = fpa * extraUnits;
+                                                    totalAmount = (slabs[i - 1].slab_net_rate.Value * _units) + extraTotalAmount;
+                                                    totalEnergyCharges = (slabs[i - 1].slab_energy_charges.Value * _units) + extraEnergy;
+                                                    totalFPA = (fpa * _units) + extraFPA;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                totalAmount = slabs[i].slab_net_rate.Value * _units;
+                                                totalEnergyCharges = slabs[i].slab_energy_charges.Value * _units;
+                                                totalFPA = fpa * _units;
+                                            }
+                                        }
+                                    }
+                                    totalEnergyCharges = totalEnergyCharges / 2;
+                                    totalAmount = totalAmount + (totalFPA + meterRent);
+                                    totalAmount = (totalAmount - totalEnergyCharges);
+                                    outstanding = outstanding + totalAmount;
+
+                                    /// Entry
+                                    toReturn = new ApproveGasResponseModel()
+                                    {
+                                         billGasAmount = totalAmount.ToString(),
+                                         billGasCurrentReading = readingGas.reading_currentreading.ToString(),
+                                         billGasMonth = !String.IsNullOrEmpty(readingGas.reading_month) ? readingGas.reading_month : "",
+                                         billGasOutstanding = outstanding.ToString(),
+                                         billGasPrevReading = readingGas.reading_prevreading.ToString(),
+                                         billGasRemarks = !string.IsNullOrEmpty(readingGas.reading_remarks) ? readingGas.reading_remarks : "",
+                                         billGasUnits = readingGas.reading_units.ToString(),
+                                         billGasWater = readingGas.reading_water.ToString(),
+                                         billGasTv = readingGas.reading_tv.ToString(),
+                                         gasCharges = totalEnergyCharges.ToString(),
+                                         areaName = !string.IsNullOrEmpty(location.subarea_name)?location.subarea_name:"",
+                                         subAreaName = !string.IsNullOrEmpty(location.area_name)?location.area_name:"",                                         
+                                         locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
+                                         locationMeterNo = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
+                                         remarks = "Successfully Found",
+                                         resultCode = "1100",
+                                     };
+                                }
+                                else
+                                {
+                                    toReturn = new ApproveGasResponseModel()
+                                    {
+                                        remarks = "No Resident Found",
+                                        resultCode = "1200"
+                                    };
+                                }
+                            }
+                            else
+                            {
+                                toReturn = new ApproveGasResponseModel()
+                                {
+                                    remarks = " No Meter Found With Meter No " + model.readingGasMeterNo,
+                                    resultCode = "1200"
+                                };
+                            }
+                        }
+                        else
+                        {
+                            toReturn = new ApproveGasResponseModel()
+                            {
+                                remarks = "Please Provide Reading",
+                                resultCode = "1300"
+                            };
+                        }
+                    }
+                }
+                else
+                {
+                    toReturn = new ApproveGasResponseModel()
+                    {
+                        remarks = "Please provide Logged In User",
+                        resultCode = "1300"
+                    };
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn = new ApproveGasResponseModel()
+                {
+                    remarks = "There was A Fatal Error " + Ex.ToString(),
+                    resultCode = "1000"
+                };
+            }
+            return toReturn;
+        }
         public List<ReadingGasResponseModel> getAllReadings(ReadingGasRequestModel model)
         {
             List<ReadingGasResponseModel> toRetrun = new List<ReadingGasResponseModel>();
@@ -700,5 +889,6 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
+      
     }
 }

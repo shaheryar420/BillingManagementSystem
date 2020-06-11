@@ -23,60 +23,72 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 using (db_bmsEntities db = new db_bmsEntities())
                                 {
-                                    if(!string.IsNullOrEmpty(model.readingpicture_data))
+                                    var existingReading = (from x in db.tbl_readingelectric where x.readingelectric_month == model.readingElectricMonth select x).FirstOrDefault();
+                                    if (existingReading == null)
                                     {
-                                        var newReadingPicture = new tbl_readingpicture()
+                                        if (!string.IsNullOrEmpty(model.readingpicture_data))
                                         {
-                                            readingpicture_data = model.readingpicture_data,
-                                            readingpicture_size = int.Parse(model.readingpicture_size),
-                                            readingpicture_type = model.readingpicture_type
-                                        };
-                                        db.tbl_readingpicture.Add(newReadingPicture);
-                                        db.SaveChanges();
-                                        var newReadingElectric = new tbl_readingelectric()
+                                            var newReadingPicture = new tbl_readingpicture()
+                                            {
+                                                readingpicture_data = model.readingpicture_data,
+                                                readingpicture_size = int.Parse(model.readingpicture_size),
+                                                readingpicture_type = model.readingpicture_type
+                                            };
+                                            db.tbl_readingpicture.Add(newReadingPicture);
+                                            db.SaveChanges();
+                                            var newReadingElectric = new tbl_readingelectric()
+                                            {
+                                                fk_readingpicture = newReadingPicture.readingpicture_id,
+                                                readingelectric_addedby = int.Parse(model.readingElectricAddedby),
+                                                readingelectric_units = int.Parse(model.readingElectricUnits),
+                                                readingelectric_month = model.readingElectricMonth,
+                                                readingelectric_currentreading = double.Parse(model.readingElectricCurrentReading),
+                                                readingelectric_datetime = DateTime.UtcNow.AddHours(5),
+                                                readingelectric_prevreading = double.Parse(model.readingElectricPrevReading),
+                                                readingelectric_meterno = !string.IsNullOrEmpty(model.readingElectricMeterNo) ? model.readingElectricMeterNo : "",
+                                                readingelectric_remarks = !string.IsNullOrEmpty(model.readingElectricRemarks) ? model.readingElectricRemarks : "",
+                                                readingelectric_tv = !string.IsNullOrEmpty(model.readingElectricTv) ? double.Parse(model.readingElectricTv) : 0,
+                                                readingelectric_fpa = !string.IsNullOrEmpty(model.readingElectricFpa) ? double.Parse(model.readingElectricFpa) : 0,
+                                                readingelectric_water = !string.IsNullOrEmpty(model.readingElectircWater) ? double.Parse(model.readingElectircWater) : 0,
+                                            };
+                                            db.tbl_readingelectric.Add(newReadingElectric);
+                                            db.SaveChanges();
+                                        }
+                                        else
                                         {
-                                            fk_readingpicture = newReadingPicture.readingpicture_id,
-                                            readingelectric_addedby = int.Parse(model.readingElectricAddedby),
-                                            readingelectric_units = int.Parse(model.readingElectricUnits),
-                                            readingelectric_month = model.readingElectricMonth,
-                                            readingelectric_currentreading = double.Parse(model.readingElectricCurrentReading),
-                                            readingelectric_datetime = DateTime.UtcNow.AddHours(5),
-                                            readingelectric_prevreading = double.Parse(model.readingElectricPrevReading),
-                                            readingelectric_meterno = !string.IsNullOrEmpty(model.readingElectricMeterNo) ? model.readingElectricMeterNo : "",
-                                            readingelectric_remarks = !string.IsNullOrEmpty(model.readingElectricRemarks) ? model.readingElectricRemarks : "",
-                                            readingelectric_tv = !string.IsNullOrEmpty(model.readingElectricTv) ? double.Parse(model.readingElectricTv) : 0,
-                                            readingelectric_fpa = !string.IsNullOrEmpty(model.readingElectricFpa) ? double.Parse(model.readingElectricFpa) : 0,
-                                            readingelectric_water = !string.IsNullOrEmpty(model.readingElectircWater) ? double.Parse(model.readingElectircWater) : 0,
+                                            var newReadingElectric = new tbl_readingelectric()
+                                            {
+                                                fk_readingpicture = 0,
+                                                readingelectric_addedby = int.Parse(model.readingElectricAddedby),
+                                                readingelectric_units = int.Parse(model.readingElectricUnits),
+                                                readingelectric_month = model.readingElectricMonth,
+                                                readingelectric_currentreading = double.Parse(model.readingElectricCurrentReading),
+                                                readingelectric_datetime = DateTime.UtcNow.AddHours(5),
+                                                readingelectric_prevreading = double.Parse(model.readingElectricPrevReading),
+                                                readingelectric_meterno = !string.IsNullOrEmpty(model.readingElectricMeterNo) ? model.readingElectricMeterNo : "",
+                                                readingelectric_remarks = !string.IsNullOrEmpty(model.readingElectricRemarks) ? model.readingElectricRemarks : "",
+                                                readingelectric_tv = !string.IsNullOrEmpty(model.readingElectricTv) ? double.Parse(model.readingElectricTv) : 0,
+                                                readingelectric_fpa = !string.IsNullOrEmpty(model.readingElectricFpa) ? double.Parse(model.readingElectricFpa) : 0,
+                                                readingelectric_water = !string.IsNullOrEmpty(model.readingElectircWater) ? double.Parse(model.readingElectircWater) : 0,
+                                            };
+                                            db.tbl_readingelectric.Add(newReadingElectric);
+                                            db.SaveChanges();
+                                        }
+
+                                        toReturn = new ReadingElectricResponseModel()
+                                        {
+                                            remarks = "Successfully Added",
+                                            resultCode = "1100"
                                         };
-                                        db.tbl_readingelectric.Add(newReadingElectric);
-                                        db.SaveChanges();
                                     }
                                     else
                                     {
-                                        var newReadingElectric = new tbl_readingelectric()
+                                        toReturn = new ReadingElectricResponseModel()
                                         {
-                                            fk_readingpicture = 0,
-                                            readingelectric_addedby = int.Parse(model.readingElectricAddedby),
-                                            readingelectric_units = int.Parse(model.readingElectricUnits),
-                                            readingelectric_month = model.readingElectricMonth,
-                                            readingelectric_currentreading = double.Parse(model.readingElectricCurrentReading),
-                                            readingelectric_datetime = DateTime.UtcNow.AddHours(5),
-                                            readingelectric_prevreading = double.Parse(model.readingElectricPrevReading),
-                                            readingelectric_meterno = !string.IsNullOrEmpty(model.readingElectricMeterNo) ? model.readingElectricMeterNo : "",
-                                            readingelectric_remarks = !string.IsNullOrEmpty(model.readingElectricRemarks) ? model.readingElectricRemarks : "",
-                                            readingelectric_tv = !string.IsNullOrEmpty(model.readingElectricTv) ? double.Parse(model.readingElectricTv) : 0,
-                                            readingelectric_fpa = !string.IsNullOrEmpty(model.readingElectricFpa) ? double.Parse(model.readingElectricFpa) : 0,
-                                            readingelectric_water = !string.IsNullOrEmpty(model.readingElectircWater) ? double.Parse(model.readingElectircWater) : 0,
+                                            remarks = "Reading Already Exists for This Month",
+                                            resultCode = "1200"
                                         };
-                                        db.tbl_readingelectric.Add(newReadingElectric);
-                                        db.SaveChanges();
                                     }
-                                    
-                                    toReturn = new ReadingElectricResponseModel()
-                                    {
-                                        remarks = "Successfully Added",
-                                        resultCode = "1100"
-                                    };
                                 }
                             }
                             else
@@ -510,6 +522,184 @@ namespace BillingManagementSystem.DataHelpers
             catch(Exception Ex)
             {
                 toReturn = new ReadingElectricResponseModel()
+                {
+                    remarks = "There was A Fatal Error " + Ex.ToString(),
+                    resultCode = "1000"
+                };
+            }
+            return toReturn;
+        }
+        public ApproveElectricResponseModel calculateReadingElectric(ReadingElectricRequestModel model)
+        {
+            ApproveElectricResponseModel toReturn = new ApproveElectricResponseModel();
+            try
+            {
+                if (new ModelsValidatorHelper().validateint(model.userId))
+                {
+                    int userId = int.Parse(model.userId);
+                    using (db_bmsEntities db = new db_bmsEntities())
+                    {
+                        if (new ModelsValidatorHelper().validateint(model.readingElectricId))
+                        {
+                            int readingElectricId = int.Parse(model.readingElectricId);
+                            var readingElectric = (from x in db.tbl_readingelectric where x.readingelectric_id == readingElectricId select x).FirstOrDefault();
+                            double _units = readingElectric.readingelectric_units;
+                            var location = (from x in db.tbl_location
+                                            join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
+                                            join z in db.tbl_area on y.fk_area equals z.area_id
+                                            where x.location_electricmeter == readingElectric.readingelectric_meterno
+                                            select new
+                                            {
+                                                x.location_id,
+                                                x.location_gassmeter,
+                                                x.location_name,
+                                                y.subarea_name,
+                                                z.area_name
+                                            }).FirstOrDefault();
+                            if (location != null)
+                            {
+                                var residentBuilding = (from x in db.tbl_residentbuilding where x.fk_building == location.location_id select x).FirstOrDefault();
+                                if (residentBuilding != null)
+                                {
+                                    var previousPendingBill = (from x in db.tbl_billelectric where x.fk_paymentstatus == 3 && x.fk_location == residentBuilding.fk_building select x).FirstOrDefault();
+                                    double outstanding = 0.0;
+                                    if (previousPendingBill != null)
+                                    {
+                                        outstanding = previousPendingBill.billelectric_outstanding.Value;
+                                    }
+                                    else
+                                    {
+                                        outstanding = 0.0;
+                                    }
+                                    //Calculating Bill Amount & Adding Bill
+                                    var fpa = (from x in db.tbl_fixedrates where x.fixedrates_id == 1 select x.fixedrates_amount).FirstOrDefault();
+                                    var meterRent = (from x in db.tbl_fixedrates where x.fixedrates_id == 2 select x.fixedrates_amount).FirstOrDefault();
+                                    var slabs = (from x in db.tbl_slabs select x).ToList();
+                                    //Calculations
+                                    double totalAmount = 0.0;
+                                    double totalEnergyCharges = 0.0;
+                                    double totalFPA = 0.0;
+                                    for (int i = 0; i < slabs.Count; i++)
+                                    {
+                                        if (totalEnergyCharges == 0)
+                                        {
+
+                                            if (slabs[i].slab_tariff.Contains(">"))
+                                            {
+                                                var limit = double.Parse(slabs[i].slab_tariff.Replace(">", " ").Trim());
+                                                if (_units <= limit)
+                                                {
+                                                    totalAmount = slabs[i].slab_net_rate.Value * _units;
+                                                    totalEnergyCharges = slabs[i].slab_energy_charges.Value * _units;
+                                                    totalFPA = fpa * _units;
+                                                }
+
+                                            }
+                                            else if (slabs[i].slab_tariff.Contains("-"))
+                                            {
+                                                var limitLow = double.Parse(slabs[i].slab_tariff.Split('-')[0].Trim());
+                                                var limitHigh = double.Parse(slabs[i].slab_tariff.Split('-')[1].Trim());
+                                                if (_units >= limitLow && _units <= limitHigh)
+                                                {
+                                                    double extraUnits = limitHigh - _units;
+                                                    _units = _units - extraUnits;
+                                                    double extraTotalAmount = slabs[i].slab_net_rate.Value * extraUnits;
+                                                    double extraEnergy = slabs[i].slab_energy_charges.Value * extraUnits;
+                                                    double extraFPA = fpa * extraUnits;
+                                                    totalAmount = (slabs[i - 1].slab_net_rate.Value * _units) + extraTotalAmount;
+                                                    totalEnergyCharges = (slabs[i - 1].slab_energy_charges.Value * _units) + extraEnergy;
+                                                    totalFPA = (fpa * _units) + extraFPA;
+                                                }
+                                            }
+                                            else if (slabs[i].slab_tariff.Contains("<"))
+                                            {
+                                                var limit = double.Parse(slabs[i].slab_tariff.Replace("<", " ").Trim());
+                                                if (_units > limit)
+                                                {
+                                                    double extraUnits = _units - limit;
+                                                    _units = _units - extraUnits;
+                                                    double extraTotalAmount = slabs[i].slab_net_rate.Value * extraUnits;
+                                                    double extraEnergy = slabs[i].slab_energy_charges.Value * extraUnits;
+                                                    double extraFPA = fpa * extraUnits;
+                                                    totalAmount = (slabs[i - 1].slab_net_rate.Value * _units) + extraTotalAmount;
+                                                    totalEnergyCharges = (slabs[i - 1].slab_energy_charges.Value * _units) + extraEnergy;
+                                                    totalFPA = (fpa * _units) + extraFPA;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                totalAmount = slabs[i].slab_net_rate.Value * _units;
+                                                totalEnergyCharges = slabs[i].slab_energy_charges.Value * _units;
+                                                totalFPA = fpa * _units;
+                                            }
+                                        }
+                                    }
+                                    totalEnergyCharges = totalEnergyCharges / 2;
+                                    totalAmount = totalAmount + (totalFPA + meterRent);
+                                    totalAmount = (totalAmount - totalEnergyCharges);
+                                    outstanding = outstanding + totalAmount;
+
+                                    /// Entry
+                                    toReturn = new ApproveElectricResponseModel()
+                                    {
+                                        billElectricAmount = totalAmount.ToString(),
+                                        billElectricCurrentReading = readingElectric.readingelectric_currentreading.ToString(),
+                                        billElectricMonth = !String.IsNullOrEmpty(readingElectric.readingelectric_month) ? readingElectric.readingelectric_month : "",
+                                        billElectricOutstanding = outstanding.ToString(),
+                                        billElectricPrevReading = readingElectric.readingelectric_prevreading.ToString(),
+                                        billElectricRemarks = !string.IsNullOrEmpty(readingElectric.readingelectric_remarks) ? readingElectric.readingelectric_remarks : "",
+                                        billElectricUnits = readingElectric.readingelectric_units.ToString(),
+                                        billElectricWater = readingElectric.readingelectric_water.ToString(),
+                                        billElectricTv = readingElectric.readingelectric_tv.ToString(),
+                                        energyCharges = totalEnergyCharges.ToString(),
+                                        locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
+                                        locationMeterNo = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
+                                        subAreaName=!string.IsNullOrEmpty(location.subarea_name)?location.subarea_name:"",
+                                        areaName = !string.IsNullOrEmpty(location.area_name)?location.area_name:"",
+                                        remarks = "Successfully Found",
+                                        resultCode = "1100",
+                                    };
+                                }
+                                else
+                                {
+                                    toReturn = new ApproveElectricResponseModel()
+                                    {
+                                        remarks = "No Resident Found",
+                                        resultCode = "1200"
+                                    };
+                                }
+                            }
+                            else
+                            {
+                                toReturn = new ApproveElectricResponseModel()
+                                {
+                                    remarks = " No Meter Found With Meter No " + model.readingElectricMeterNo,
+                                    resultCode = "1200"
+                                };
+                            }
+                        }
+                        else
+                        {
+                            toReturn = new ApproveElectricResponseModel()
+                            {
+                                remarks = "Please Provide Reading",
+                                resultCode = "1300"
+                            };
+                        }
+                    }
+                }
+                else
+                {
+                    toReturn = new ApproveElectricResponseModel()
+                    {
+                        remarks = "Please provide Logged In User",
+                        resultCode = "1300"
+                    };
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn = new ApproveElectricResponseModel()
                 {
                     remarks = "There was A Fatal Error " + Ex.ToString(),
                     resultCode = "1000"
