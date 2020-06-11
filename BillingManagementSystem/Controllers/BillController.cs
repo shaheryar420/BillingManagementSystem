@@ -340,6 +340,15 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult getAllGasDetailsByConsumerNo([FromBody] LocationRequestModel model)
+        {
+            model.userId = Request.Cookies["bms_data"]["id"].ToString();
+            ReadingGasHelpers helper = new ReadingGasHelpers();
+            var response = helper.getAllDetailByConsumerNo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
     }
 }
