@@ -340,15 +340,15 @@
             console.log(_consumerNo);
             if (_consumerNo) {
                 $.ajax({
-                    url: '/Bill/getAllDetailByConsumerNo',
+                    url: '/Bill/getAllGasDetailsByConsumerNo',
                     type: 'POST',
-                    data: { locationElectricMeter: _consumerNo },
+                    data: { locationGassMeter: _consumerNo },
                     success: function (response) {
                         if (response.resultCode == '1100') {
                             $("#gas_area").val(response.areaName);
                             $("#gas_subarea").val(response.subAreaName);
                             $("#gas_location").val(response.locationName);
-                            $("#previous_reading").val(response.previousReading);
+                            $("#previous_reading").val(response.previousGasReading);
 
                         }
                         else {
@@ -384,7 +384,7 @@
                     <div class="form-group">
                         <label class="control-label">Consumer No.</label>
                         <input type="hidden" id="gas_id" value="" />
-                        <input type="number" value="" class="form-control" id="gas_meterNo" />
+                        <input type="number" value="" class="form-control" id="consumer_no" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Select Area</label>
