@@ -232,7 +232,7 @@
                 $.ajax({
                     url: '/Bill/ApproveReadingGas',
                     type: 'POST',
-                    data: { readingGasId: _id},
+                    data: { readingGasId: _id },
                     success: function (response) {
                         if (response) {
                             if (response.resultCode == '1100') {
@@ -311,36 +311,7 @@
             });
         }
 
-        $("#consumer_no").change(function () {
-            var _consumerNo = $('#consumer_no').val();
-            console.log(_consumerNo);
-            if (_consumerNo) {
-                $.ajax({
-                    url: '/Bill/getAllDetailByConsumerNo',
-                    type: 'POST',
-                    data: { locationElectricMeter: _consumerNo },
-                    success: function (response) {
-                        if (response.resultCode == '1100') {
-                            $("#gas_area").val(response.areaName);
-                            $("#gas_subarea").val(response.subAreaName);
-                            $("#gas_location").val(response.locationName);
-                            $("#previous_reading").val(response.previousReading);
-
-                        }
-                        else {
-                            clearFields();
-                        }
-                    },
-                    error: function (a, b, c) {
-                        swal('Error', a + b + c, 'error');
-                    }
-                });
-            }
-            else {
-
-            }
-
-        });
+        
 
         $("#current_reading").change(function () {
             var currentReading = $('#current_reading').val();
@@ -374,6 +345,9 @@
                             $("#gas_subarea").val(response.subAreaName);
                             $("#gas_location").val(response.locationName);
                             $("#previous_reading").val(response.previousGasReading);
+                            $("#current_reading").val(response.currentGasReading);
+                            $("#current_unit").val(response.currentGasUnit);
+                            $("#month").val(response.billMonth);
 
                         }
                         else {
@@ -392,13 +366,12 @@
         });
 
 
-        
     </script>
 
 }
 <div id="page-head">
     <div class="pad-all text-center">
-        <h2>Gas Bill Entry</h2>
+        <h2>Gas Bill Approval</h2>
     </div>
 </div>
 <div id="page-content">
