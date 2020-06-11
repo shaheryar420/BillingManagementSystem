@@ -37,6 +37,37 @@ namespace BillingManagementSystem.DataHelpers
                                 };
                                 db.tbl_paymenthistory.Add(newPayment);
                                 db.SaveChanges();
+                                var newApprovedPayment = new tbl_residentpayments()
+                                {
+                                    fk_resident = newPayment.fk_resident,
+                                    fk_paymenttype = 0,
+                                    paymentmonth = newPayment.paymentmonth,
+                                    payment_amount = newPayment.payment_amount,
+                                    payment_datetime = newPayment.paymenthistory_datetime,
+                                    meter_no = newPayment.meter_no
+                                };
+                                db.tbl_residentpayments.Add(newApprovedPayment);
+                                db.SaveChanges();
+                                toReturn = new PaymentResponseModel()
+                                {
+                                    remarks = "Payment Successfully Approved",
+                                    resultCode = "1100"
+                                };
+                                var billPending = (from x in db.tbl_billelectric where x.fk_resident == newPayment.fk_resident && x.fk_paymentstatus == 2 select x).FirstOrDefault();
+                                if (billPending != null)
+                                {
+                                    if (billPending.billelectric_outstanding == newPayment.payment_amount)
+                                    {
+                                        billPending.fk_paymentstatus = 1;
+                                        billPending.billelectric_outstanding = 0;
+                                    }
+                                    else
+                                    {
+                                        billPending.billelectric_outstanding = billPending.billelectric_outstanding - newPayment.payment_amount;
+                                    }
+
+                                    db.SaveChanges();
+                                }
                                 toReturn = new PaymentResponseModel()
                                 {
                                     resultCode = "1100",
@@ -218,6 +249,37 @@ namespace BillingManagementSystem.DataHelpers
                                 };
                                 db.tbl_paymentgashistory.Add(newPayment);
                                 db.SaveChanges();
+                                var newApprovedPayment = new tbl_residentpayments()
+                                {
+                                    fk_resident = newPayment.fk_resident,
+                                    fk_paymenttype = 0,
+                                    paymentmonth = newPayment.paymentmonth,
+                                    payment_amount = newPayment.payment_amount,
+                                    payment_datetime = newPayment.paymenthistory_datetime,
+                                    meter_no = newPayment.meter_no
+                                };
+                                db.tbl_residentpayments.Add(newApprovedPayment);
+                                db.SaveChanges();
+                                toReturn = new PaymentResponseModel()
+                                {
+                                    remarks = "Payment Successfully Approved",
+                                    resultCode = "1100"
+                                };
+                                var billPending = (from x in db.tbl_billgas where x.fk_resident == newPayment.fk_resident && x.fk_paymentstatus == 2 select x).FirstOrDefault();
+                                if (billPending != null)
+                                {
+                                    if (billPending.outstanding == newPayment.payment_amount)
+                                    {
+                                        billPending.fk_paymentstatus = 1;
+                                        billPending.outstanding = 0;
+                                    }
+                                    else
+                                    {
+                                        billPending.outstanding = billPending.outstanding - newPayment.payment_amount;
+                                    }
+
+                                    db.SaveChanges();
+                                }
                                 toReturn = new PaymentResponseModel()
                                 {
                                     resultCode = "1100",
