@@ -31,6 +31,7 @@
                     }
                 }
                 initRORGrid(queryString["consumerNo"]);
+                initRORGasGrid(queryString["consumerNo"]);
                 
             });
             fetchStatusStats();
@@ -69,8 +70,8 @@
 
         }
         function initRORGrid(consumerNo) {
-            var id;
-            Dtable = $(".RORGrid").DataTable({
+           
+            Dtable = $(".rorElectricGrid").DataTable({
                 scrollX: true, 
                 autoWidth: true,
                 destroy: true,
@@ -134,6 +135,77 @@
                     },
                     { "title": "Remarks", "data": "billElectricRemarks" }
                    
+                ]
+            });
+            Dtable.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+        }
+
+        function initRORGasRGrid(consumerNo) {
+
+            Dtable = $(".rorGasGrid").DataTable({
+                scrollX: true,
+                autoWidth: true,
+                destroy: true,
+                "ajax": {
+                    "url": '/ROR/GetAllRORGasByMeterNo',
+                    "type": 'POST',
+                    "data": {
+                        billGasId: consumerNo
+                    },
+                    "dataSrc": function (data) {
+
+                        if (data.length > 0) {
+                            if (data[0].resultCode == '1100') {
+                                return data;
+                            }
+                            {
+                                return [];
+                            }
+                        }
+                        else {
+
+
+                        }
+                    },
+                    "error": function (a, b, c) {
+                        swal({
+                            title: "Error",
+                            text: a.status + ": " + c,
+                            type: "error"
+                        });
+                    }
+                },
+                "columns": [
+                    {
+                        title: 'Sr. #',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "title": "Id", "data": "billGasId", className: "hidden" },
+                    { "title": "Consumer #", "data": "locationMeterNo" },
+                    { "title": "Area", "data": "locationName" },
+                    
+                    { "title": "Name", "data": "residentName" },
+                    { "title": "PA No", "data": "residentPaNo" },
+                    { "title": "Rank", "data": "residentRank" },
+                    { "title": "Unit/FMN", "data": "residentUnit" },
+                    { "title": "Previous Reading", "data": "billGasPrevReading" },
+                    { "title": "Present Reading", "data": "billGasCurrentReading" },
+                    { "title": "Units", "data": "billGasUnits" },
+                    { "title": "Electric Charges", "data": "gasCharges" },
+                    
+                    { "title": "Total Amount", "data": "billGasAmount" },
+                    {
+                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
+                    { "title": "Remarks", "data": "billGasRemarks" }
+
                 ]
             });
             Dtable.columns.adjust();
@@ -214,17 +286,50 @@
             </div>
         </div>
     </div>
+    
     <div class="row">
+
         <div class="col-md-12">
-            <div class="panel panel-bordered-warning">
-                <div class="panel-heading">
-                    <h1 class="panel-title">ROR List</h1>
+
+            <div class="tab-base">
+
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab0" id="t0" data-toggle="tab" aria-expanded="true">Electric</a>
+                    </li>
+                    <li>
+                        <a href="#tab1" id="t1" data-toggle="tab" aria-expanded="true">Gas</a>
+                    </li>
+                    
+                </ul>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">ROR List</h1>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-content">
+                            <div id="tab0" class="tab-pane fade active in">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-bordered table-striped table-hover rorElectricGrid"></table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab1" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-bordered table-striped table-hover rorGasGrid"></table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                        </div>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <table class="table table-bordered table-striped table-hover RORGrid"></table>
-                </div>
+
             </div>
         </div>
     </div>
-
 </div>

@@ -201,39 +201,44 @@
                 var _month = $("#month").val();
                 var formdata = new FormData(); //FormData object
                 var fileInput = document.getElementById('online_file');
-                formdata.append(fileInput.files[0].name, fileInput.files[0]);
-                formdata.append("_meterNo", _meterNo);
-                formdata.append("_previousReading", _previousReading);
-                formdata.append("_currentReading", _currentReading);
-                formdata.append("_currentUnit", _currentUnit);
-                formdata.append("_month", _month);
-                $.ajax({
-                    url: _url,
-                    type: "POST",
-                    data: formdata,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function () {
-                        $('.loading').show();
-                    },
-                    complete: function () {
-                        $('.loading').hide();
-                    },
-                    success: function (data) {
-                        if (data.resultCode == "1100") {
-                            initGasGrid();
-                            clearFields();
-                            swal("Added!", data.remarks, "success");
-                        }
-                        else {
+                if (fileInput.files.length > 0) {
+                    formdata.append(fileInput.files[0].name, fileInput.files[0]);
+                    formdata.append("_meterNo", _meterNo);
+                    formdata.append("_previousReading", _previousReading);
+                    formdata.append("_currentReading", _currentReading);
+                    formdata.append("_currentUnit", _currentUnit);
+                    formdata.append("_month", _month);
+                    $.ajax({
+                        url: _url,
+                        type: "POST",
+                        data: formdata,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function () {
+                            $('.loading').show();
+                        },
+                        complete: function () {
                             $('.loading').hide();
-                            swal("Not Added", data.remarks, "error");
+                        },
+                        success: function (data) {
+                            if (data.resultCode == "1100") {
+                                initGasGrid();
+                                clearFields();
+                                swal("Added!", data.remarks, "success");
+                            }
+                            else {
+                                $('.loading').hide();
+                                swal("Not Added", data.remarks, "error");
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorMessage) {
+                            console.log(errorMessage);
                         }
-                    },
-                    error: function (jqXHR, textStatus, errorMessage) {
-                        console.log(errorMessage);
-                    }
-                });
+                    });
+                }
+                else {
+                    swal('Warning', 'Please attach the meter image', 'warning');
+                }
 
             });
 
@@ -265,6 +270,7 @@
 
                             }
                             else {
+                                console.log(response.remarks);
                                 swal("Warning", response.remarks, "warning");
                             }
 
@@ -371,7 +377,7 @@
                             $("#gas_area").val(response.areaName);
                             $("#gas_subarea").val(response.subAreaName);
                             $("#gas_location").val(response.locationName);
-                            $("#previous_reading").val(response.previousGasReading);
+                            $("#previous_reading").val(response.currentReading);
                             
 
                         }
@@ -397,6 +403,7 @@
                 data: { readingGasId: Id},
                 success: function (response) {
                     if (response) {
+                        console.log(response);
                         if (response.resultCode == '1100') {
                             initGasGrid();
                             swal("Success", "Approved Successfully.", "success");

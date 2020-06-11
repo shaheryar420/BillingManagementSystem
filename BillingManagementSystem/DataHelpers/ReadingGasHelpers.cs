@@ -338,7 +338,7 @@ namespace BillingManagementSystem.DataHelpers
                                         previousPendingBill.fk_paymentstatus = 2;
                                         db.SaveChanges();
                                         var newPaymentHistory = new tbl_paymenthistory();
-                                        newPaymentHistory.paymentmonth = new MonthFinderHelpers().GetPreviousMonth(readingGas.reading_month);
+                                        newPaymentHistory.paymentmonth = new MonthFinderHelpers().GetPreviousMonth(readingGas.reading_month.ToString());
                                         newPaymentHistory.payment_amount = 0;
                                         newPaymentHistory.fk_paymenttype = 0;
                                         newPaymentHistory.paymenthistory_datetime = DateTime.UtcNow.AddHours(5);

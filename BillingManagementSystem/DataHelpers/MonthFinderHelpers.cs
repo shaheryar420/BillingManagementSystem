@@ -9,7 +9,7 @@ namespace BillingManagementSystem.DataHelpers
     {
         public string GetPreviousMonth(string x)
         {
-            string[] monthYear = x.Split('_');
+            string[] monthYear = x.Split('-');
             int month = int.Parse(monthYear[0]);
             int year = int.Parse(monthYear[1]);
             if(month == 1)
@@ -25,7 +25,7 @@ namespace BillingManagementSystem.DataHelpers
         }
         public string GetNextMonth(string x)
         {
-            string[] monthYear = x.Split('_');
+            string[] monthYear = x.Split('-');
             int month = int.Parse(monthYear[0]);
             int year = int.Parse(monthYear[1]);
             if (month == 12)
