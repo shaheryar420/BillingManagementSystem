@@ -144,20 +144,20 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-        public ActionResult RemovePaymentElectric(string Id)
+        public ActionResult RemovePaymentElectric(string readingElectricId)
         {
             PaymentRequestModel model = new PaymentRequestModel();
-            model.paymenthistoryId = Id;
+            model.paymenthistoryId = readingElectricId;
             RecoveryHelpers helper = new RecoveryHelpers();
             var response = helper.removePaymentElectric(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-        public ActionResult RemovePaymentGas(string Id)
+        public ActionResult RemovePaymentGas(string readingElectricId)
         {
             PaymentRequestModel model = new PaymentRequestModel();
-            model.paymenthistoryId = Id;
+            model.paymenthistoryId = readingElectricId;
             RecoveryHelpers helper = new RecoveryHelpers();
             var response = helper.removePaymentGas(model);
             var json = Json(response);

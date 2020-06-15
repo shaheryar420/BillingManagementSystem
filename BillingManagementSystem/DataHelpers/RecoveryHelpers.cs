@@ -45,6 +45,7 @@ namespace BillingManagementSystem.DataHelpers
                                                 meter_no = meterNo,
                                                 fk_resident = residentId,
                                                 fk_picture = newReadingPicture.readingpicture_id,
+                                                fk_billelectric = 0,
                                                 paymenthistory_datetime = DateTime.UtcNow.AddHours(5),
                                                 paymentmonth = model.paymentMonth,
                                                 payment_amount = int.Parse(model.paymentAmount),
@@ -72,6 +73,7 @@ namespace BillingManagementSystem.DataHelpers
                                             var billPending = (from x in db.tbl_billelectric where x.fk_resident == newPayment.fk_resident && x.fk_paymentstatus == 3 select x).OrderByDescending(x=>x.billelectric_month).FirstOrDefault();
                                             if (billPending != null)
                                             {
+                                                newPayment.fk_billelectric = billPending.billelectric_id;
                                                 if (billPending.billelectric_outstanding == newPayment.payment_amount)
                                                 {
                                                     billPending.fk_paymentstatus = 1;
@@ -307,6 +309,7 @@ namespace BillingManagementSystem.DataHelpers
                                                 fk_resident = residentId,
                                                 paymenthistory_datetime = DateTime.UtcNow.AddHours(5),
                                                 paymentmonth = model.paymentMonth,
+                                                fk_billgas = 0,
                                                 fk_picture = newReadingPicture.readingpicture_id,
                                                 payment_amount = int.Parse(model.paymentAmount),
                                                 fk_paymenttype = 0
@@ -333,6 +336,7 @@ namespace BillingManagementSystem.DataHelpers
                                             var billPending = (from x in db.tbl_billgas where x.fk_resident == newPayment.fk_resident && x.fk_paymentstatus == 3 select x).OrderByDescending(x=>x.datetime).FirstOrDefault();
                                             if (billPending != null)
                                             {
+                                                newPayment.fk_billgas = billPending.id;
                                                 if (billPending.outstanding == newPayment.payment_amount)
                                                 {
                                                     billPending.fk_paymentstatus = 1;
@@ -435,6 +439,14 @@ namespace BillingManagementSystem.DataHelpers
                         var payment = (from x in db.tbl_paymenthistory where x.paymenthistory_id == paymentId select x).FirstOrDefault();
                         if (payment != null)
                         {
+                            var bill = (from x in db.tbl_billelectric where x.billelectric_id == payment.fk_billelectric select x).FirstOrDefault();
+                            if (bill != null)
+                            {
+                                bill.billelectric_paymentamount = 0;
+                                bill.billelectric_paymentdate = null;
+                                bill.billelectric_paymentmonth = "";
+                                bill.fk_paymentstatus = 3;
+                            }
                             db.tbl_paymenthistory.Remove(payment);
                             db.SaveChanges();
                             toReturn = new PaymentResponseModel()
@@ -485,6 +497,14 @@ namespace BillingManagementSystem.DataHelpers
                         var payment = (from x in db.tbl_paymentgashistory where x.paymenthistory_id == paymentId select x).FirstOrDefault();
                         if(payment!= null)
                         {
+                            var bill = (from x in db.tbl_billgas where x.id == payment.fk_billgas select x).FirstOrDefault();
+                            if (bill != null)
+                            {
+                                bill.paymentAmount = 0;
+                                bill.paymentDate = null;
+                                bill.paymentMonth = "";
+                                bill.fk_paymentstatus = 3;
+                            }
                             db.tbl_paymentgashistory.Remove(payment);
                             db.SaveChanges();
                             toReturn = new PaymentResponseModel()

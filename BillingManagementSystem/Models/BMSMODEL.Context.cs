@@ -35,8 +35,6 @@ namespace BillingManagementSystem.Models
         public DbSet<tbl_fixedratetype> tbl_fixedratetype { get; set; }
         public DbSet<tbl_location> tbl_location { get; set; }
         public DbSet<tbl_offr> tbl_offr { get; set; }
-        public DbSet<tbl_paymentgashistory> tbl_paymentgashistory { get; set; }
-        public DbSet<tbl_paymenthistory> tbl_paymenthistory { get; set; }
         public DbSet<tbl_paymentstatus> tbl_paymentstatus { get; set; }
         public DbSet<tbl_paymenttype> tbl_paymenttype { get; set; }
         public DbSet<tbl_readingelectric> tbl_readingelectric { get; set; }
@@ -56,5 +54,7 @@ namespace BillingManagementSystem.Models
         public DbSet<tbl_users> tbl_users { get; set; }
         public DbSet<tbl_usertype> tbl_usertype { get; set; }
         public DbSet<tbl_billelectric> tbl_billelectric { get; set; }
+        public DbSet<tbl_paymentgashistory> tbl_paymentgashistory { get; set; }
+        public DbSet<tbl_paymenthistory> tbl_paymenthistory { get; set; }
     }
 }

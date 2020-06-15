@@ -22,5 +22,6 @@ namespace BillingManagementSystem.Models
         public int fk_resident { get; set; }
         public string meter_no { get; set; }
         public int fk_picture { get; set; }
+        public int fk_billelectric { get; set; }
     }
 }
