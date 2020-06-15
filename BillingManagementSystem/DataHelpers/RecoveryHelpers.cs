@@ -48,7 +48,7 @@ namespace BillingManagementSystem.DataHelpers
                                                 fk_billelectric = 0,
                                                 paymenthistory_datetime = DateTime.UtcNow.AddHours(5),
                                                 paymentmonth = model.paymentMonth,
-                                                payment_amount = int.Parse(model.paymentAmount),
+                                                payment_amount = double.Parse(model.paymentAmount),
                                                 fk_paymenttype = 0,
                                             };
                                             db.tbl_paymenthistory.Add(newPayment);
@@ -311,7 +311,7 @@ namespace BillingManagementSystem.DataHelpers
                                                 paymentmonth = model.paymentMonth,
                                                 fk_billgas = 0,
                                                 fk_picture = newReadingPicture.readingpicture_id,
-                                                payment_amount = int.Parse(model.paymentAmount),
+                                                payment_amount = double.Parse(model.paymentAmount),
                                                 fk_paymenttype = 0
                                             };
                                             db.tbl_paymentgashistory.Add(newPayment);
@@ -445,6 +445,7 @@ namespace BillingManagementSystem.DataHelpers
                                 bill.billelectric_paymentamount = 0;
                                 bill.billelectric_paymentdate = null;
                                 bill.billelectric_paymentmonth = "";
+                                bill.billelectric_outstanding = bill.billelectric_amount;
                                 bill.fk_paymentstatus = 3;
                             }
                             db.tbl_paymenthistory.Remove(payment);
@@ -504,6 +505,7 @@ namespace BillingManagementSystem.DataHelpers
                                 bill.paymentDate = null;
                                 bill.paymentMonth = "";
                                 bill.fk_paymentstatus = 3;
+                                bill.outstanding = bill.amount;
                             }
                             db.tbl_paymentgashistory.Remove(payment);
                             db.SaveChanges();
