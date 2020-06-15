@@ -55,11 +55,13 @@ namespace BillingManagementSystem.DataHelpers
                                             x.billelectric_fpa,
                                             x.billelectric_paymentamount,
                                             x.billelectric_paymentdate,
+                                            x.billelectric_paymentmonth,
                                         }).ToList();
                     if (billsElectric.Count() > 0)
                     {
                         toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                         {
+                            paymentMonth = !string.IsNullOrEmpty(billElectric.billelectric_paymentmonth)?billElectric.billelectric_paymentmonth:"",
                             payment = billElectric.billelectric_paymentamount.ToString(),
                             paymentDate = billElectric.billelectric_paymentdate.ToString(),
                             billElectricFpa = billElectric.billelectric_fpa.ToString(),
@@ -158,11 +160,13 @@ namespace BillingManagementSystem.DataHelpers
                                              x.billelectric_fpa,
                                              x.billelectric_paymentamount,
                                              x.billelectric_paymentdate,
+                                             x.billelectric_paymentmonth,
                                          }).ToList();
                     if (billsElectric.Count() > 0)
                     {
                         toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                         {
+                            paymentMonth = !string.IsNullOrEmpty(billElectric.billelectric_paymentmonth) ? billElectric.billelectric_paymentmonth : "",
                             payment = billElectric.billelectric_paymentamount.ToString(),
                             paymentDate = billElectric.billelectric_paymentdate.ToString(),
                             billElectricFpa = billElectric.billelectric_fpa.ToString(),
@@ -264,11 +268,13 @@ namespace BillingManagementSystem.DataHelpers
                                                  x.billelectric_fpa,
                                                  x.billelectric_paymentamount,
                                                  x.billelectric_paymentdate,
+                                                 x.billelectric_paymentmonth,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                paymentMonth = !string.IsNullOrEmpty(billElectric.billelectric_paymentmonth) ? billElectric.billelectric_paymentmonth : "",
                                 payment = billElectric.billelectric_paymentamount.ToString(),
                                 paymentDate = billElectric.billelectric_paymentdate.ToString(),
                                 billElectricFpa = billElectric.billelectric_fpa.ToString(),
@@ -380,11 +386,13 @@ namespace BillingManagementSystem.DataHelpers
                                                  x.billelectric_fpa,
                                                  x.billelectric_paymentamount,
                                                  x.billelectric_paymentdate,
+                                                 x.billelectric_paymentmonth,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                paymentMonth = !string.IsNullOrEmpty(billElectric.billelectric_paymentmonth) ? billElectric.billelectric_paymentmonth : "",
                                 payment = billElectric.billelectric_paymentamount.ToString(),
                                 paymentDate = billElectric.billelectric_paymentdate.ToString(),
                                 billElectricFpa = billElectric.billelectric_fpa.ToString(),
@@ -495,11 +503,13 @@ namespace BillingManagementSystem.DataHelpers
                                                  x.billelectric_fpa,
                                                  x.billelectric_paymentamount,
                                                  x.billelectric_paymentdate,
+                                                 x.billelectric_paymentmonth,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                paymentMonth = !string.IsNullOrEmpty(billElectric.billelectric_paymentmonth) ? billElectric.billelectric_paymentmonth : "",
                                 payment = billElectric.billelectric_paymentamount.ToString(),
                                 paymentDate = billElectric.billelectric_paymentdate.ToString(),
                                 billElectricFpa = billElectric.billelectric_fpa.ToString(),
@@ -612,11 +622,13 @@ namespace BillingManagementSystem.DataHelpers
                                                  x.billelectric_fpa,
                                                  x.billelectric_paymentamount,
                                                  x.billelectric_paymentdate,
+                                                 x.billelectric_paymentmonth,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                paymentMonth = !string.IsNullOrEmpty(billElectric.billelectric_paymentmonth) ? billElectric.billelectric_paymentmonth : "",
                                 payment = billElectric.billelectric_paymentamount.ToString(),
                                 paymentDate = billElectric.billelectric_paymentdate.ToString(),
                                 billElectricFpa = billElectric.billelectric_fpa.ToString(),
@@ -727,11 +739,13 @@ namespace BillingManagementSystem.DataHelpers
                                                  x.billelectric_fpa,
                                                  x.billelectric_paymentamount,
                                                  x.billelectric_paymentdate,
+                                                 x.billelectric_paymentmonth,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                paymentMonth = !string.IsNullOrEmpty(billElectric.billelectric_paymentmonth) ? billElectric.billelectric_paymentmonth : "",
                                 payment = billElectric.billelectric_paymentamount.ToString(),
                                 paymentDate = billElectric.billelectric_paymentdate.ToString(),
                                 billElectricFpa = billElectric.billelectric_fpa.ToString(),
@@ -842,11 +856,13 @@ namespace BillingManagementSystem.DataHelpers
                                                  x.billelectric_fpa,
                                                  x.billelectric_paymentamount,
                                                  x.billelectric_paymentdate,
+                                                 x.billelectric_paymentmonth,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                paymentMonth = !string.IsNullOrEmpty(billElectric.billelectric_paymentmonth) ? billElectric.billelectric_paymentmonth : "",
                                 payment = billElectric.billelectric_paymentamount.ToString(),
                                 paymentDate = billElectric.billelectric_paymentdate.ToString(),
                                 billElectricFpa = billElectric.billelectric_fpa.ToString(),
@@ -957,11 +973,13 @@ namespace BillingManagementSystem.DataHelpers
                                                  x.billelectric_fpa,
                                                  x.billelectric_paymentamount,
                                                  x.billelectric_paymentdate,
+                                                 x.billelectric_paymentmonth,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                paymentMonth = !string.IsNullOrEmpty(billElectric.billelectric_paymentmonth) ? billElectric.billelectric_paymentmonth : "",
                                 payment = billElectric.billelectric_paymentamount.ToString(),
                                 paymentDate = billElectric.billelectric_paymentdate.ToString(),
                                 billElectricFpa = billElectric.billelectric_fpa.ToString(),
@@ -1072,11 +1090,13 @@ namespace BillingManagementSystem.DataHelpers
                                                  x.billelectric_fpa,
                                                  x.billelectric_paymentamount,
                                                  x.billelectric_paymentdate,
+                                                 x.billelectric_paymentmonth,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                paymentMonth = !string.IsNullOrEmpty(billElectric.billelectric_paymentmonth) ? billElectric.billelectric_paymentmonth : "",
                                 payment = billElectric.billelectric_paymentamount.ToString(),
                                 paymentDate = billElectric.billelectric_paymentdate.ToString(),
                                 billElectricFpa = billElectric.billelectric_fpa.ToString(),
@@ -1188,11 +1208,13 @@ namespace BillingManagementSystem.DataHelpers
                                                  x.billelectric_fpa,
                                                  x.billelectric_paymentamount,
                                                  x.billelectric_paymentdate,
+                                                 x.billelectric_paymentmonth,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                paymentMonth = !string.IsNullOrEmpty(billElectric.billelectric_paymentmonth) ? billElectric.billelectric_paymentmonth : "",
                                 payment = billElectric.billelectric_paymentamount.ToString(),
                                 paymentDate = billElectric.billelectric_paymentdate.ToString(),
                                 billElectricFpa = billElectric.billelectric_fpa.ToString(),
@@ -1304,11 +1326,13 @@ namespace BillingManagementSystem.DataHelpers
                                                  x.billelectric_fpa,
                                                  x.billelectric_paymentamount,
                                                  x.billelectric_paymentdate,
+                                                 x.billelectric_paymentmonth,
                                              }).ToList();
                         if (billsElectric.Count() > 0)
                         {
                             toReturn = billsElectric.Select(billElectric => new BillElectricResponseModel()
                             {
+                                paymentMonth = !string.IsNullOrEmpty(billElectric.billelectric_paymentmonth) ? billElectric.billelectric_paymentmonth : "",
                                 payment = billElectric.billelectric_paymentamount.ToString(),
                                 paymentDate = billElectric.billelectric_paymentdate.ToString(),
                                 billElectricFpa = billElectric.billelectric_fpa.ToString(),
@@ -1398,6 +1422,7 @@ namespace BillingManagementSystem.DataHelpers
                                          where x.fk_paymentstatus == 2
                                          select new
                                          {
+                                             x.rebate,
                                              x.amount,
                                              x.currentreading,
                                              x.datetime,
@@ -1421,12 +1446,19 @@ namespace BillingManagementSystem.DataHelpers
                                              z.resident_unit,
                                              l.location_name,
                                              l.location_gassmeter,
-                                             p.paymentstatus_name
+                                             p.paymentstatus_name,
+                                             x.paymentAmount,
+                                             x.paymentDate,
+                                             x.paymentMonth,
                                          }).ToList();
                     if (billsGas.Count() > 0)
                     {
                         toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                         {
+                            paymentDate = billGas.paymentDate.ToString(),
+                            payment = billGas.paymentAmount.ToString(),
+                            paymentMonth = !string.IsNullOrEmpty(billGas.paymentMonth)?billGas.paymentMonth:"",
+                            gasCharges = billGas.rebate.ToString(),
                             paymentStatusName = billGas.paymentstatus_name,
                             billGasAmount = billGas.amount.ToString(),
                             billGasCurrentReading = billGas.currentreading.ToString(),
@@ -1489,6 +1521,7 @@ namespace BillingManagementSystem.DataHelpers
                                          join l in db.tbl_location on x.fk_location equals l.location_id
                                          select new
                                          {
+                                             x.rebate,
                                              x.amount,
                                              x.currentreading,
                                              x.datetime,
@@ -1511,12 +1544,19 @@ namespace BillingManagementSystem.DataHelpers
                                              z.resident_remarks,
                                              z.resident_unit,
                                              l.location_name,
-                                             l.location_gassmeter
+                                             l.location_gassmeter,
+                                             x.paymentAmount,
+                                             x.paymentDate,
+                                             x.paymentMonth,
                                          }).ToList();
                     if (billsGas.Count() > 0)
                     {
                         toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                         {
+                            paymentDate = billGas.paymentDate.ToString(),
+                            payment = billGas.paymentAmount.ToString(),
+                            paymentMonth = !string.IsNullOrEmpty(billGas.paymentMonth) ? billGas.paymentMonth : "",
+                            gasCharges = billGas.rebate.ToString(),
                             billGasAmount = billGas.amount.ToString(),
                             billGasCurrentReading = billGas.currentreading.ToString(),
                             billGasDateTime = billGas.datetime.ToString(),
@@ -1581,6 +1621,7 @@ namespace BillingManagementSystem.DataHelpers
                                              where x.month == model.billGasMonth
                                              select new
                                              {
+                                                 x.rebate,
                                                  x.amount,
                                                  x.currentreading,
                                                  x.datetime,
@@ -1603,12 +1644,19 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_gassmeter
+                                                 l.location_gassmeter,
+                                                 x.paymentAmount,
+                                                 x.paymentDate,
+                                                 x.paymentMonth,
                                              }).ToList();
                         if (billsGas.Count() > 0)
                         {
                             toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
+                                paymentDate = billGas.paymentDate.ToString(),
+                                payment = billGas.paymentAmount.ToString(),
+                                paymentMonth = !string.IsNullOrEmpty(billGas.paymentMonth) ? billGas.paymentMonth : "",
+                                gasCharges = billGas.rebate.ToString(),
                                 billGasAmount = billGas.amount.ToString(),
                                 billGasCurrentReading = billGas.currentreading.ToString(),
                                 billGasDateTime = billGas.datetime.ToString(),
@@ -1683,6 +1731,7 @@ namespace BillingManagementSystem.DataHelpers
                                              where x.amount == amount
                                              select new
                                              {
+                                                 x.rebate,
                                                  x.amount,
                                                  x.currentreading,
                                                  x.datetime,
@@ -1705,12 +1754,19 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_gassmeter
+                                                 l.location_gassmeter,
+                                                 x.paymentAmount,
+                                                 x.paymentDate,
+                                                 x.paymentMonth,
                                              }).ToList();
                         if (billsGas.Count() > 0)
                         {
                             toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
+                                paymentDate = billGas.paymentDate.ToString(),
+                                payment = billGas.paymentAmount.ToString(),
+                                paymentMonth = !string.IsNullOrEmpty(billGas.paymentMonth) ? billGas.paymentMonth : "",
+                                gasCharges = billGas.rebate.ToString(),
                                 billGasAmount = billGas.amount.ToString(),
                                 billGasCurrentReading = billGas.currentreading.ToString(),
                                 billGasDateTime = billGas.datetime.ToString(),
@@ -1788,6 +1844,7 @@ namespace BillingManagementSystem.DataHelpers
                                                  x.currentreading,
                                                  x.datetime,
                                                  x.id,
+                                                 x.rebate,
                                                  x.month,
                                                  x.outstanding,
                                                  x.prevreading,
@@ -1806,13 +1863,20 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_gassmeter
+                                                 l.location_gassmeter,
+                                                 x.paymentAmount,
+                                                 x.paymentDate,
+                                                 x.paymentMonth,
                                              }).ToList();
                         if (billsGas.Count() > 0)
                         {
                             toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
+                                paymentDate = billGas.paymentDate.ToString(),
+                                payment = billGas.paymentAmount.ToString(),
+                                paymentMonth = !string.IsNullOrEmpty(billGas.paymentMonth) ? billGas.paymentMonth : "",
                                 billGasAmount = billGas.amount.ToString(),
+                                gasCharges = billGas.rebate.ToString(),
                                 billGasCurrentReading = billGas.currentreading.ToString(),
                                 billGasDateTime = billGas.datetime.ToString(),
                                 billGasId = billGas.id.ToString(),
@@ -1887,6 +1951,7 @@ namespace BillingManagementSystem.DataHelpers
                                              where a.subarea_id == areaId
                                              select new
                                              {
+                                                 x.rebate,
                                                  x.amount,
                                                  x.currentreading,
                                                  x.datetime,
@@ -1909,12 +1974,19 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_gassmeter
+                                                 l.location_gassmeter,
+                                                 x.paymentAmount,
+                                                 x.paymentDate,
+                                                 x.paymentMonth,
                                              }).ToList();
                         if (billsGas.Count() > 0)
                         {
                             toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
+                                paymentDate = billGas.paymentDate.ToString(),
+                                payment = billGas.paymentAmount.ToString(),
+                                paymentMonth = !string.IsNullOrEmpty(billGas.paymentMonth) ? billGas.paymentMonth : "",
+                                gasCharges = billGas.rebate.ToString(),
                                 billGasAmount = billGas.amount.ToString(),
                                 billGasCurrentReading = billGas.currentreading.ToString(),
                                 billGasDateTime = billGas.datetime.ToString(),
@@ -1988,6 +2060,7 @@ namespace BillingManagementSystem.DataHelpers
                                              where z.resident_name == model.residentName
                                              select new
                                              {
+                                                 x.rebate,
                                                  x.amount,
                                                  x.currentreading,
                                                  x.datetime,
@@ -2010,12 +2083,19 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_gassmeter
+                                                 l.location_gassmeter,
+                                                 x.paymentAmount,
+                                                 x.paymentDate,
+                                                 x.paymentMonth,
                                              }).ToList();
                         if (billsGas.Count() > 0)
                         {
                             toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
+                                paymentDate = billGas.paymentDate.ToString(),
+                                payment = billGas.paymentAmount.ToString(),
+                                paymentMonth = !string.IsNullOrEmpty(billGas.paymentMonth) ? billGas.paymentMonth : "",
+                                gasCharges = billGas.rebate.ToString(),
                                 billGasAmount = billGas.amount.ToString(),
                                 billGasCurrentReading = billGas.currentreading.ToString(),
                                 billGasDateTime = billGas.datetime.ToString(),
@@ -2090,6 +2170,7 @@ namespace BillingManagementSystem.DataHelpers
                                         where z.resident_id == residentId
                                         select new
                                         {
+                                            x.rebate,
                                             x.amount,
                                             x.currentreading,
                                             x.datetime,
@@ -2112,13 +2193,18 @@ namespace BillingManagementSystem.DataHelpers
                                             z.resident_remarks,
                                             z.resident_unit,
                                             l.location_name,
-                                            l.location_gassmeter
+                                            l.location_gassmeter,
+                                            x.paymentAmount,
+                                            x.paymentDate,
+                                            x.paymentMonth,
                                         }).ToList();
                         if (billsGas.Count() > 0)
                         {
-                            var fixedRatesGas = (from x in db.tbl_fixedrates where x.fixedrates_name == "Gas Charges" select x.fixedrates_amount).FirstOrDefault();
                             toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
+                                paymentDate = billGas.paymentDate.ToString(),
+                                payment = billGas.paymentAmount.ToString(),
+                                paymentMonth = !string.IsNullOrEmpty(billGas.paymentMonth) ? billGas.paymentMonth : "",
                                 billGasAmount = billGas.amount.ToString(),
                                 billGasCurrentReading = billGas.currentreading.ToString(),
                                 billGasDateTime = billGas.datetime.ToString(),
@@ -2141,18 +2227,18 @@ namespace BillingManagementSystem.DataHelpers
                                 fk_billPicture = billGas.fk_billpicture.ToString(),
                                 fk_location = billGas.fk_location.ToString(),
                                 fk_paymentStatus = billGas.fk_paymentstatus.ToString(),
-                                gasCharges = fixedRatesGas.ToString(),
+                                gasCharges = billGas.rebate.ToString(),
                                 fk_resident = billGas.fk_resident.ToString(),
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             }).ToList();
-                            foreach(var bill in toReturn)
-                            {
-                                var month = new MonthFinderHelpers().GetNextMonth(bill.billGasMonth);
-                                var payment = (from x in db.tbl_residentpayments where x.paymentmonth == month && x.fk_resident == residentId select x).FirstOrDefault();
-                                bill.payment = payment.payment_amount.ToString();
-                                bill.paymentMonth = payment.paymentmonth;
-                            }
+                            //foreach(var bill in toReturn)
+                            //{
+                            //    var month = new MonthFinderHelpers().GetNextMonth(bill.billGasMonth);
+                            //    var payment = (from x in db.tbl_residentpayments where x.paymentmonth == month && x.fk_resident == residentId select x).FirstOrDefault();
+                            //    bill.payment = payment.payment_amount.ToString();
+                            //    bill.paymentMonth = payment.paymentmonth;
+                            //}
                         }
                         else
                         {
@@ -2200,6 +2286,7 @@ namespace BillingManagementSystem.DataHelpers
                                              where z.resident_panumber == model.paNo
                                              select new
                                              {
+                                                 x.rebate,
                                                  x.amount,
                                                  x.currentreading,
                                                  x.datetime,
@@ -2222,12 +2309,19 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_gassmeter
+                                                 l.location_gassmeter,
+                                                 x.paymentAmount,
+                                                 x.paymentDate,
+                                                 x.paymentMonth,
                                              }).ToList();
                         if (billsGas.Count() > 0)
                         {
                             toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
+                                paymentDate = billGas.paymentDate.ToString(),
+                                payment = billGas.paymentAmount.ToString(),
+                                paymentMonth = !string.IsNullOrEmpty(billGas.paymentMonth) ? billGas.paymentMonth : "",
+                                gasCharges = billGas.rebate.ToString(),
                                 billGasAmount = billGas.amount.ToString(),
                                 billGasCurrentReading = billGas.currentreading.ToString(),
                                 billGasDateTime = billGas.datetime.ToString(),
@@ -2301,6 +2395,7 @@ namespace BillingManagementSystem.DataHelpers
                                              where z.resident_unit == model.unit
                                              select new
                                              {
+                                                 x.rebate,
                                                  x.amount,
                                                  x.currentreading,
                                                  x.datetime,
@@ -2323,12 +2418,19 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_gassmeter
+                                                 l.location_gassmeter,
+                                                 x.paymentAmount,
+                                                 x.paymentDate,
+                                                 x.paymentMonth,
                                              }).ToList();
                         if (billsGas.Count() > 0)
                         {
                             toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
+                                paymentDate = billGas.paymentDate.ToString(),
+                                payment = billGas.paymentAmount.ToString(),
+                                paymentMonth = !string.IsNullOrEmpty(billGas.paymentMonth) ? billGas.paymentMonth : "",
+                                gasCharges = billGas.rebate.ToString(),
                                 billGasAmount = billGas.amount.ToString(),
                                 billGasCurrentReading = billGas.currentreading.ToString(),
                                 billGasDateTime = billGas.datetime.ToString(),
@@ -2402,6 +2504,7 @@ namespace BillingManagementSystem.DataHelpers
                                              where z.resident_rank == model.rank
                                              select new
                                              {
+                                                 x.rebate,
                                                  x.amount,
                                                  x.currentreading,
                                                  x.datetime,
@@ -2424,12 +2527,19 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_gassmeter
+                                                 l.location_gassmeter,
+                                                 x.paymentAmount,
+                                                 x.paymentDate,
+                                                 x.paymentMonth,
                                              }).ToList();
                         if (billsGas.Count() > 0)
                         {
                             toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
+                                paymentDate = billGas.paymentDate.ToString(),
+                                payment = billGas.paymentAmount.ToString(),
+                                paymentMonth = !string.IsNullOrEmpty(billGas.paymentMonth) ? billGas.paymentMonth : "",
+                                gasCharges = billGas.rebate.ToString(),
                                 billGasAmount = billGas.amount.ToString(),
                                 billGasCurrentReading = billGas.currentreading.ToString(),
                                 billGasDateTime = billGas.datetime.ToString(),
@@ -2504,6 +2614,7 @@ namespace BillingManagementSystem.DataHelpers
                                              where x.datetime == dateEntered
                                              select new
                                              {
+                                                 x.rebate,
                                                  x.amount,
                                                  x.currentreading,
                                                  x.datetime,
@@ -2526,12 +2637,19 @@ namespace BillingManagementSystem.DataHelpers
                                                  z.resident_remarks,
                                                  z.resident_unit,
                                                  l.location_name,
-                                                 l.location_gassmeter
+                                                 l.location_gassmeter,
+                                                 x.paymentAmount,
+                                                 x.paymentDate,
+                                                 x.paymentMonth,
                                              }).ToList();
                         if (billsGas.Count() > 0)
                         {
                             toReturn = billsGas.Select(billGas => new BillGasResponseModel()
                             {
+                                paymentDate = billGas.paymentDate.ToString(),
+                                payment = billGas.paymentAmount.ToString(),
+                                paymentMonth = !string.IsNullOrEmpty(billGas.paymentMonth) ? billGas.paymentMonth : "",
+                                gasCharges = billGas.rebate.ToString(),
                                 billGasAmount = billGas.amount.ToString(),
                                 billGasCurrentReading = billGas.currentreading.ToString(),
                                 billGasDateTime = billGas.datetime.ToString(),

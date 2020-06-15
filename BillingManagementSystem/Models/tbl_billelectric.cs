@@ -33,5 +33,6 @@ namespace BillingManagementSystem.Models
         public double billelectric_rebate { get; set; }
         public double billelectric_paymentamount { get; set; }
         public Nullable<System.DateTime> billelectric_paymentdate { get; set; }
+        public string billelectric_paymentmonth { get; set; }
     }
 }

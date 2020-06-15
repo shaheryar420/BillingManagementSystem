@@ -422,7 +422,7 @@ namespace BillingManagementSystem.DataHelpers
                                             totalAmount = totalAmount + Units.billelectric_amount;
                                             totalUnits = totalUnits + Units.billelectric_units;
                                         }
-                                        else if(GasBill != null)
+                                        if(GasBill != null)
                                         {
                                             gasUnits = gasUnits + GasBill.units;
                                             gasAmount = gasAmount + GasBill.amount;

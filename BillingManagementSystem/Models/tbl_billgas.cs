@@ -31,5 +31,6 @@ namespace BillingManagementSystem.Models
         public double rebate { get; set; }
         public double paymentAmount { get; set; }
         public Nullable<System.DateTime> paymentDate { get; set; }
+        public string paymentMonth { get; set; }
     }
 }

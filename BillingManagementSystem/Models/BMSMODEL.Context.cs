@@ -28,7 +28,6 @@ namespace BillingManagementSystem.Models
         public DbSet<officerreport> officerreports { get; set; }
         public DbSet<tbl_action> tbl_action { get; set; }
         public DbSet<tbl_area> tbl_area { get; set; }
-        public DbSet<tbl_billelectric> tbl_billelectric { get; set; }
         public DbSet<tbl_billgas> tbl_billgas { get; set; }
         public DbSet<tbl_billpicture> tbl_billpicture { get; set; }
         public DbSet<tbl_controller> tbl_controller { get; set; }
@@ -56,5 +55,6 @@ namespace BillingManagementSystem.Models
         public DbSet<tbl_userpermissions> tbl_userpermissions { get; set; }
         public DbSet<tbl_users> tbl_users { get; set; }
         public DbSet<tbl_usertype> tbl_usertype { get; set; }
+        public DbSet<tbl_billelectric> tbl_billelectric { get; set; }
     }
 }

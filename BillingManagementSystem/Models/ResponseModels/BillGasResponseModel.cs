@@ -38,6 +38,7 @@ namespace BillingManagementSystem.Models
         public string residentUnit { get; set; }
         public string locationName { get; set; }
         public string locationMeterNo { get; set; }
-        
+        public string paymentDate { get; set; }
+
     }
 }

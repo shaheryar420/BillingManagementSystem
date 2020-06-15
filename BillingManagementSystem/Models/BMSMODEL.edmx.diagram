@@ -8,7 +8,6 @@
         <EntityTypeShape EntityType="db_bmsModel.officerreport" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_action" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_area" Width="1.5" PointX="2.75" PointY="3.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_billelectric" Width="1.5" PointX="4.75" PointY="0.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_billgas" Width="1.5" PointX="6.75" PointY="0.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_billpicture" Width="1.5" PointX="0.75" PointY="6.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_controller" Width="1.5" PointX="2.75" PointY="6.75" />
@@ -36,6 +35,7 @@
         <EntityTypeShape EntityType="db_bmsModel.tbl_userpermissions" Width="1.5" PointX="14.75" PointY="6.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_users" Width="1.5" PointX="8.75" PointY="14.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_usertype" Width="1.5" PointX="14.75" PointY="9.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_billelectric" Width="1.5" PointX="0.75" PointY="15.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
