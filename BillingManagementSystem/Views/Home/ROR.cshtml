@@ -31,8 +31,11 @@
                     }
                 }
                 initRORGrid(queryString["consumerNo"]);
+            });
+            
+            $(document).on('click', '#t1', function (e) {
+                e.preventDefault();
                 initRORGasGrid(queryString["consumerNo"]);
-                
             });
             fetchStatusStats();
         });
