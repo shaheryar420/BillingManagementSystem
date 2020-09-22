@@ -86,7 +86,7 @@ namespace BillingManagementSystem.DataHelpers
                                     fixedRatesAmount = fixedRate.fixedrates_amount.ToString(),
                                     fixedRatesId = fixedRate.fixedrates_id.ToString(),
                                     fixedRatesName = fixedRate.fixedrates_name,
-                                    fixedRatesUnit = fixedRate.fixedrates_unit,
+                                    fixedRatesUnit = fixedRate.fixedrates_unit!=null?fixedRate.fixedrates_unit.Value.ToString():"",
                                     remarks = " Successfully Updated",
                                     resultCode = "1100",
                                 };

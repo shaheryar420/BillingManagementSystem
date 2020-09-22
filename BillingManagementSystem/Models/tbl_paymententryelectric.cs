@@ -12,17 +12,18 @@ namespace BillingManagementSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tbl_paymentgashistory
+    public partial class tbl_paymententryelectric
     {
-        public int paymenthistory_id { get; set; }
-        public System.DateTime paymenthistory_datetime { get; set; }
+        public int payment_id { get; set; }
+        public System.DateTime payment_datetime { get; set; }
         public double payment_amount { get; set; }
         public int fk_paymenttype { get; set; }
         public string paymentmonth { get; set; }
         public int fk_resident { get; set; }
         public string meter_no { get; set; }
         public int fk_picture { get; set; }
-        public int fk_billgas { get; set; }
+        public int fk_billelectric { get; set; }
         public int fk_location { get; set; }
+        public string billingmonth { get; set; }
     }
 }

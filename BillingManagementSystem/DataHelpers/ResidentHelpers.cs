@@ -32,7 +32,8 @@ namespace BillingManagementSystem.DataHelpers
                                         resident_panumber = model.residentPaNumber,
                                         resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : "",
                                         resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : "",
-                                        resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : ""
+                                        resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : "",
+                                        resident_pin_code = int.Parse(model.residentPinCode),
                                     };
                                     var residentExistingBuilding = (from x in db.tbl_residentbuilding where x.fk_building == locationId select x).FirstOrDefault();
                                     if(residentExistingBuilding == null)
@@ -107,6 +108,104 @@ namespace BillingManagementSystem.DataHelpers
                 {
                     remarks= "There Was A fatal Error"+ Ex.ToString(),
                     resultCode="1000"
+                };
+            }
+            return toReturn;
+        }
+        public ResidentResponseModel AddResidentOnVacation(ResidentRequestModel model)
+        {
+            ResidentResponseModel toReturn = new ResidentResponseModel();
+            try
+            {
+                using (db_bmsEntities db = new db_bmsEntities())
+                {
+                    if (new ModelsValidatorHelper().validateint(model.locationId))
+                    {
+                        int locationId = int.Parse(model.locationId);
+                        if (!string.IsNullOrEmpty(model.residentName))
+                        {
+                            if (!string.IsNullOrEmpty(model.residentPaNumber))
+                            {
+                                var existingResident = (from x in db.tbl_residents where x.resident_panumber == model.residentPaNumber select x).FirstOrDefault();
+                                if (existingResident == null)
+                                {
+                                    tbl_residents resident = new tbl_residents()
+                                    {
+                                        resident_name = model.residentName,
+                                        resident_panumber = model.residentPaNumber,
+                                        resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : "",
+                                        resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : "",
+                                        resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : "",
+                                        resident_pin_code = int.Parse(model.residentPinCode),
+                                    };
+                                    var residentExistingBuilding = (from x in db.tbl_residentbuilding where x.fk_building == locationId select x).FirstOrDefault();
+                                    if (residentExistingBuilding != null)
+                                    {
+                                        db.tbl_residents.Add(resident);
+                                        db.SaveChanges();
+                                        toReturn = new ResidentResponseModel()
+                                        {
+                                            residentId = resident.resident_id.ToString(),
+                                            remarks = "Successfully Added",
+                                            resultCode = "1100"
+                                        };
+                                        residentExistingBuilding.fk_resident = resident.resident_id;
+                                        db.SaveChanges();
+
+                                    }
+                                    else
+                                    {
+                                        toReturn = new ResidentResponseModel()
+                                        {
+                                            remarks = "Building Not Found",
+                                            resultCode = "1200"
+                                        };
+                                    }
+
+                                }
+                                else
+                                {
+                                    toReturn = new ResidentResponseModel()
+                                    {
+                                        remarks = "Resident Already Exists",
+                                        resultCode = "1400"
+                                    };
+                                }
+                            }
+                            else
+                            {
+                                toReturn = new ResidentResponseModel()
+                                {
+                                    remarks = "Please Provide Pa Number",
+                                    resultCode = "1300"
+                                };
+                            }
+                        }
+                        else
+                        {
+                            toReturn = new ResidentResponseModel()
+                            {
+                                remarks = "Please Provide Name",
+                                resultCode = "1300"
+                            };
+                        }
+                    }
+                    else
+                    {
+                        toReturn = new ResidentResponseModel()
+                        {
+                            remarks = "Please Provide Building",
+                            resultCode = "1300"
+                        };
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn = new ResidentResponseModel()
+                {
+                    remarks = "There Was A fatal Error" + Ex.ToString(),
+                    resultCode = "1000"
                 };
             }
             return toReturn;

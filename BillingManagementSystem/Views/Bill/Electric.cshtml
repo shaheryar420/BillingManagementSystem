@@ -51,11 +51,21 @@
             $("#electric_area").val('');
             $("#electric_resident").val('');
             $("#electric_subarea").val('');
-            $("#reading_water").val('');
-            $("#reading_tv").val('');
             $("#current_unit").val('');
             $("#month").val('');
             $("#previous_reading").focus();
+
+        }
+        function clearModalFields() {
+            $('#model_consumer_no').val('');
+            $("#resident_pa_no").val('');
+            $("#resident_name").val('');
+            $("#resident_unit").val('');
+            $("#resident_remarks").val('');
+            $("#resident_status").val('');
+            $("#resident_area").val('');
+            $("#resident_subarea").val('');
+            $("#resident_location").val('');
 
         }
 
@@ -115,9 +125,32 @@
                     { "title": "Previous Reading", "data": "readingElectricPrevReading" },
                     { "title": "Current Reading", "data": "readingElectricCurrentReading" },
                     { "title": "Current Units", "data": "readingElectricUnits" },
-                    { "title": "Water", "data": "readingElectricWater" },
-                    { "title": "TV", "data": "readingElectricTv" },
                     { "title": "Date Added", "data": "readingElectricDatetime" },
+                    { "title": "Resident PA No", "data": "residentPANo" },
+                    { "title": "Resident Name", "data": "residentName" },
+                    { "title": "Resident Unit", "data": "residentUnit" },
+                    { "title": "Resident Rank", "data": "residentRank" },
+                    {
+                        "title": "Resident Status",
+                        "data": "residentPinCode",
+                        render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "Officer";
+                            }
+                            if (data == 2) {
+                                return "OR"
+                            }
+                            if (data == 3) {
+                                return "JCO"
+                            }
+                            if (data == 4) {
+                                return "Civilian"
+                            }
+                            if (data == 5) {
+                                return "Commercial"
+                            }
+                        }
+                    },
                     { "title": "Added By", "data": "readingElectricAddedby" },
                     {
                         "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
@@ -152,8 +185,6 @@
                 $("#current_reading").val(rowData.readingElectricCurrentReading);
                 $("#current_unit").val(rowData.readingElectricUnits);
                 $("#month").val(rowData.readingElectricMonth);
-                $("#reading_water").val(rowData.readingElectricWater);
-                $("#reading_tv").val(rowData.readingElectricTv);
                 _prevResd = rowData.readingElectricPrevReading;
             });
             $(document).on('click', '.btn_electric_delete', function (e) {
@@ -208,21 +239,15 @@
                 var _previousReading = $("#previous_reading").val();
                 var _currentUnit = $("#current_unit").val();
                 var _month = $("#month").val();
-                var _water = $("#reading_water").val();
-                var _tv = $("#reading_tv").val();
                 var formdata = new FormData(); //FormData object
                 var fileInput = document.getElementById('online_file');
                 if (fileInput.files.length > 0) {
                     formdata.append(fileInput.files[0].name, fileInput.files[0]);
-
-
                     formdata.append("_meterNo", _meterNo);
                     formdata.append("_previousReading", _previousReading);
                     formdata.append("_currentReading", _currentReading);
                     formdata.append("_currentUnit", _currentUnit);
                     formdata.append("_month", _month);
-                    formdata.append("_water", _water);
-                    formdata.append("_tv", _tv);
                     $.ajax({
                         url: _url,
                         type: "POST",
@@ -266,8 +291,6 @@
                     var _previousReading = $("#previous_reading").val();
                     var _currentUnit = $("#current_unit").val();
                     var _month = $("#month").val();
-                    var _water = $("#reading_water").val();
-                    var _tv = $("#reading_tv").val();
                     var formdata = new FormData(); //FormData object
                     var fileInput = document.getElementById('online_file');
                     if (fileInput.files.length > 0) {
@@ -279,8 +302,6 @@
                         formdata.append("_currentUnit", _currentUnit);
                         formdata.append("_month", _month);
                         formdata.append("_water", _water);
-                        formdata.append("_tv", _tv);
-                        formdata.append("_id", _electricId);
                         $.ajax({
                             url: _url,
                             type: "POST",
@@ -321,6 +342,63 @@
                     swal("Warning", "Please select a location", "warning");
                 }
             });
+            $(document).on('click', '.btn_add_resident', function (e) {
+                e.preventDefault();
+                $('#resident-modal').modal('show').on("shown.bs.modal", function () {
+                });
+            });
+            $(document).on('click', '#btn_resident_update', function (e) {
+                e.preventDefault();
+                var _locationId = $('#resident_location_id').val();
+                if (_locationId) {
+                    var _url = "/Management/AddResidentOnVacatingTheLocation";
+                    var _PANO = $("#resident_pa_no").val();
+                    var _name = $("#resident_name").val();
+                    var _rank = $("#resident_rank").val();
+                    var _unit = $("#resident_unit").val();
+                    var _remarks = $("#resident_remarks").val();
+                    var _status = $("#resident_status").val();
+                    var formdata = new FormData(); //FormData object                                       
+                    formdata.append("locationId", _locationId);
+                    formdata.append("residentName", _name);
+                    formdata.append("residentPaNumber", _PANO);
+                    formdata.append("residentRank", _rank);
+                    formdata.append("residentUnit", _unit);
+                    formdata.append("residentRemarks", _remarks);
+                    formdata.append("residentPinCode", _status);
+                    $.ajax({
+                        url: _url,
+                        type: "POST",
+                        data: formdata,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function () {
+                            $('.loading').show();
+                        },
+                        complete: function () {
+                            $('.loading').hide();
+                        },
+                        success: function (data) {
+                            if (data.resultCode == "1100") {
+                                swal("Updated!", data.remarks, "success");
+                                clearModalFields();
+                                initElectricGrid();
+                            }
+                            else {
+                                $('.loading').hide();
+                                swal("Not Updated", data.remarks, "error");
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorMessage) {
+                            console.log(errorMessage);
+                        }
+                    });
+               
+                }
+                else {
+                    swal("Warning", "Please select a location", "warning");
+                }
+            });
         }
 
         $("#current_reading").change(function () {
@@ -346,14 +424,14 @@
             console.log(_consumerNo);
             if (_consumerNo) {
                 $.ajax({
-                    url: '/Bill/getAllDetailByConsumerNo',
+                    url: '/Bill/getAllDetailByConsumerNoForReadingElectric',
                     type: 'POST',
-                    data: { locationElectricMeter: _consumerNo },
+                    data: { consummerNo: _consumerNo },
                     success: function (response) {
                         if (response.resultCode == '1100') {
                             $("#electric_area").val(response.areaName);
                             $("#electric_subarea").val(response.subAreaName);
-                            $("#electric_resident").val(response.locationName);
+                            $("#electric_resident").val(response.locationName);                            
                             $("#previous_reading").val(response.previousReading);
 
                         }
@@ -372,6 +450,41 @@
             }
 
         });
+        $("#model_consumer_no").change(function () {
+            var _consumerNo = $('#model_consumer_no').val();
+            console.log(_consumerNo);
+            if (_consumerNo) {
+                $.ajax({
+                    url: '/Bill/getAllDetailByConsumerNoForReadingElectric',
+                    type: 'POST',
+                    data: { consummerNo: _consumerNo },
+                    success: function (response) {
+                        if (response.resultCode == '1100') {;
+                            $("#resident_area").val(response.areaName);
+                            $("#resident_subarea").val(response.subAreaName);
+                            $("#resident_location").val(response.locationName);
+                            $("#resident_location_id").val(response.locationId);
+
+                        }
+                        else {
+                            clearFields();
+
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            }
+            else {
+
+            }
+
+        });
+        $(".close").click(function () {
+            clearModalFields();
+
+        });
 
 
     </script>
@@ -385,8 +498,13 @@
     <div class="row">
         <div class="col-md-4">
             <div class="panel panel-bordered-warning panel-colorful">
-                <div class="panel-head">
+
+                <div class="panel-heading">
+                    <div class="panel-control">
+                        <button href='#' class='btn-success btn btn_add_resident'>Add Resident</button>
+                    </div>
                     <h1 class="panel-title">Generate Bill</h1>
+
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
@@ -419,20 +537,12 @@
                         <input tabindex="6" type="number" value="" class="form-control" id="current_unit" />
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Water</label>
-                        <input tabindex="7" type="number" value="" class="form-control" id="reading_water" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Tv</label>
-                        <input tabindex="8" type="number" value="" class="form-control" id="reading_tv" />
+                        <label class="control-label">Select Month</label>
+                        <input tabindex="10" type="text" value="" class="form-control monthPicker" id="month" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Upload Picture</label>
                         <input tabindex="9" type="file" id="online_file" value="" class="form-control" accept=".jpg,.png,.jpeg,.pdf" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Select Month</label>
-                        <input tabindex="10" type="text" value="" class="form-control monthPicker" id="month" />
                     </div>
                     <div class="form-group">
                         <a href="#" tabindex="11" id="btn_electric_add" class="btn btn-success pull-right">Submit</a>
@@ -448,6 +558,89 @@
                 </div>
                 <div class="panel-body">
                     <table class="table table-bordered table-responsive table-hover electricGrid"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="resident-modal" role="dialog" aria-labelledby="inbox-modal" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!--Modal header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h2 class="text-center" >Update Resident</h2>
+            </div>
+
+            <!--Modal body-->
+            <div class="modal-body" id="modal-overlay">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Resident Details:</h4>
+                        <div class="form-group">
+                            <label class="control-label">Resident PA #.</label>
+                            <input class="form-control" id="resident_pa_no" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Resident Name</label>
+                            <input class="form-control " id="resident_name">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Resident Rank</label>
+                            <input class="form-control " id="resident_rank">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Resident Unit</label>
+                            <input class="form-control " id="resident_unit">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Resident Remarks</label>
+                            <input class="form-control " id="resident_remarks">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Status</label>
+                            <select class="form-control dropdownlist" id="resident_status">
+                                <option value="1">Officer</option>
+                                <option value="2">OR</option>
+                                <option value="3">JCO</option>
+                                <option value="4">Civilian</option>
+                                <option value="5">Commercial</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Assign Location:</h4>
+                        <div class="form-group">
+                            <label class="control-label">Consumer #.</label>
+                            <input tabindex="1" type="number" value="" class="form-control" id="model_consumer_no" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Area</label>
+                            <input readonly class="form-control dropdownlist" id="resident_area">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Sub Area</label>
+                            <input readonly class="form-control dropdownlist" id="resident_subarea">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Location</label>
+                            <input readonly class="form-control dropdownlist" id="resident_location">
+                        </div>
+                        <div class="form-group">                            
+                            <input class="form-control dropdownlist hidden" id="resident_location_id">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal footer-->
+            <div class="modal-footer">
+                <div class="btn-group pull-right">
+                    <a href="#" data-dismiss="modal" class="btn btn-primary close">Close</a>
+                    <a href="#" id="btn_resident_update" class="btn btn-success">Update</a>
                 </div>
             </div>
         </div>

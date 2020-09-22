@@ -1,4 +1,5 @@
 ﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -50,8 +51,11 @@
     <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.3.1\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
@@ -66,8 +70,11 @@
       <HintPath>..\packages\K4os.Hash.xxHash.1.0.6\lib\net45\K4os.Hash.xxHash.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MySql.Data, Version=8.0.20.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.8.0.20\lib\net452\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=6.10.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.10.9\lib\net452\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.10.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.Entity.6.10.9\lib\net452\MySql.Data.Entity.EF6.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -118,14 +125,8 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="Ubiety.Dns.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.8.0.20\lib\net452\Ubiety.Dns.Core.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
-    </Reference>
-    <Reference Include="Zstandard.Net, Version=1.1.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.8.0.20\lib\net452\Zstandard.Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -464,15 +465,15 @@
     <Content Include="img\logo3.jpg" />
     <Content Include="img\logo4.jpeg" />
     <Content Include="img\user.png" />
-    <Content Include="Models\BMSMODEL.Context.tt">
+    <Content Include="Models\BMSModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>BMSMODEL.edmx</DependentUpon>
-      <LastGenOutput>BMSMODEL.Context.cs</LastGenOutput>
+      <DependentUpon>BMSModel.edmx</DependentUpon>
+      <LastGenOutput>BMSModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\BMSMODEL.tt">
+    <Content Include="Models\BMSModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>BMSMODEL.edmx</DependentUpon>
-      <LastGenOutput>BMSMODEL.cs</LastGenOutput>
+      <DependentUpon>BMSModel.edmx</DependentUpon>
+      <LastGenOutput>BMSModel.cs</LastGenOutput>
     </Content>
     <Content Include="scripts\ai.0.22.9-build00167.js" />
     <Content Include="scripts\ai.0.22.9-build00167.min.js" />
@@ -790,30 +791,32 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\HMTLHelperExtensions.cs" />
-    <Compile Include="Models\BMSMODEL.Context.cs">
+    <Compile Include="Models\BMSModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BMSMODEL.Context.tt</DependentUpon>
+      <DependentUpon>BMSModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\BMSMODEL.cs">
+    <Compile Include="Models\BMSModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\BMSMODEL.Designer.cs">
+    <Compile Include="Models\BMSModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BMSMODEL.edmx</DependentUpon>
+      <DependentUpon>BMSModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ModelsValidatorHelper.cs" />
     <Compile Include="Models\officerreport.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\RequestModels\AreaRequestModel.cs" />
+    <Compile Include="Models\RequestModels\BillDetailsByConsummerNoAndMonthRequestModel.cs" />
     <Compile Include="Models\RequestModels\BillElectricRequestModel.cs" />
     <Compile Include="Models\RequestModels\BillGasRequestModel.cs" />
     <Compile Include="Models\RequestModels\FixedRatesTypeRequestModel.cs" />
     <Compile Include="Models\RequestModels\FixedRatesRequestModel.cs" />
+    <Compile Include="Models\RequestModels\LocationHistoryRequestModel.cs" />
     <Compile Include="Models\RequestModels\LocationRequestModel.cs" />
     <Compile Include="Models\RequestModels\PaymentRequestModel.cs" />
     <Compile Include="Models\RequestModels\PictureRequestModel.cs" />
@@ -831,16 +834,21 @@
     <Compile Include="Models\ResponseModels\ApprovePaymentResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ApproveGasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\AreaResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\BillCalculationResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\BillDetailsByConsummerNoAndMonthResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillElectricResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillGasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ControllerResponseModel.cs" />
     <Compile Include="Models\ResponseModels\DashBoardResponseModel.cs" />
     <Compile Include="Models\ResponseModels\FixedRatesResponseModel.cs" />
     <Compile Include="Models\ResponseModels\FixedRatesTypeResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\LocationHistoryResponseModel.cs" />
     <Compile Include="Models\ResponseModels\LocationResponseModel.cs" />
     <Compile Include="Models\ResponseModels\LoginResponseModel.cs" />
     <Compile Include="Models\ResponseModels\PaymentResponseModel.cs" />
     <Compile Include="Models\ResponseModels\PictureResponseModel.cs" />
+    <Compile Include="Models\RequestModels\ReadingElectricDetailByConsumerNoRequestModel.cs" />
+    <Compile Include="Models\ResponseModels\ReadingElectricDetailByConsumerNoResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ReadingElectricResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ReadingGasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ResidentBuildingResponseModel.cs" />
@@ -851,98 +859,108 @@
     <Compile Include="Models\ResponseModels\UserSubAreasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserTypeResponseModel.cs" />
     <Compile Include="Models\tbl_action.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_area.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_billelectric.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_billgas.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_billpicture.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_controller.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_fixedrates.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_fixedratetype.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_location.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_offr.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_outstanding.cs">
+      <DependentUpon>BMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_paymententryelectric.cs">
+      <DependentUpon>BMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_paymententrygas.cs">
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_paymentgashistory.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_paymenthistory.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_paymentstatus.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_paymenttype.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_readingelectric.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_readingelectriclog.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_readinggas.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_readinggaslog.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_readingpicture.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_residentbuilding.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_residenthistory.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_residentpayments.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_residents.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_slabs.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_subarea.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_tarrif_category.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_userareas.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_userpermissions.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_users.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_usertype.cs">
-      <DependentUpon>BMSMODEL.tt</DependentUpon>
+      <DependentUpon>BMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\ResidentViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App_Start\SetPermissionsAttribute.cs" />
+    <Compile Include="SubDataHelpers\ReadingElectricSubHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -982,16 +1000,16 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="libman.json" />
-    <EntityDeploy Include="Models\BMSMODEL.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>BMSMODEL.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\BMSMODEL.edmx.diagram">
-      <DependentUpon>BMSMODEL.edmx</DependentUpon>
-    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <EntityDeploy Include="Models\BMSModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>BMSModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\BMSModel.edmx.diagram">
+      <DependentUpon>BMSModel.edmx</DependentUpon>
+    </Content>
     <None Include="packages.config" />
     <Content Include="scripts\plugins\jstree\LICENSE-MIT" />
     <Content Include="Views\Shared\_Footer.cshtml" />
@@ -1075,7 +1093,10 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
   </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

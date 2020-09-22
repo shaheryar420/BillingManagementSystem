@@ -405,6 +405,15 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult AddResidentOnVacatingTheLocation([FromBody] ResidentRequestModel model)
+        {
+            ResidentHelpers helper = new ResidentHelpers();
+            var response = helper.AddResidentOnVacation(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
         public ActionResult EditResident([FromBody] ResidentRequestModel model)
         {
             ResidentHelpers helper = new ResidentHelpers();

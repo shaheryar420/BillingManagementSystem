@@ -116,7 +116,7 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { "title": "Id", "data": "readingElectricId", className: "hidden" },
+                  { "title": "Id", "data": "readingElectricId", className: "hidden" },
                     { "title": "AreaId", "data": "area_id", className: "hidden" },
                     { "title": "SubAreaId", "data": "subarea_id", className: "hidden" },
                     { "title": "LocationId", "data": "location_id", className: "hidden" },
@@ -128,10 +128,32 @@
                     { "title": "Previous Reading", "data": "readingElectricPrevReading" },
                     { "title": "Current Reading", "data": "readingElectricCurrentReading" },
                     { "title": "Current Units", "data": "readingElectricUnits" },
-                    { "title": "Water", "data": "readingElectricWater" },
-                    { "title": "TV", "data": "readingElectricTv" },
                     { "title": "Date Added", "data": "readingElectricDatetime" },
-                    { "title": "Added By", "data": "readingElectricAddedby" },
+                    { "title": "Resident PA No", "data": "residentPANo" },
+                    { "title": "Resident Name", "data": "residentName" },
+                    { "title": "Resident Unit", "data": "residentUnit" },
+                    { "title": "Resident Rank", "data": "residentRank" },
+                    {
+                        "title": "Resident Status",
+                        "data": "residentPinCode",
+                        render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "Officer";
+                            }
+                            if (data == 2) {
+                                return "OR"
+                            }
+                            if (data == 3) {
+                                return "JCO"
+                            }
+                            if (data == 4) {
+                                return "Civilian"
+                            }
+                            if (data == 5) {
+                                return "Commercial"
+                            }
+                        }
+                    },
                     {
                         "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
                             return "<img src='data:" + row.readingpicture_type + ";base64, " + row.readingpicture_data + "' class='img-sm img-thumbnail'/>";
@@ -209,8 +231,6 @@
                 $("#current_reading").val(rowData.readingElectricCurrentReading);
                 $("#current_unit").val(rowData.readingElectricUnits);
                 $("#month").val(rowData.readingElectricMonth);
-                $("#reading_water").val(rowData.readingElectricWater);
-                $("#reading_tv").val(rowData.readingElectricTv);
                 _prevResd = rowData.readingElectricPrevReading;
             });
 
@@ -267,8 +287,6 @@
                 var _previousReading = $("#previous_reading").val();
                 var _currentUnit = $("#current_unit").val();
                 var _month = $("#month").val();
-                var _water = $("#reading_water").val();
-                var _tv = $("#reading_tv").val();
                 var formdata = new FormData(); //FormData object
                 var fileInput = document.getElementById('online_file');
                 if (fileInput.files.length > 0) {
@@ -278,8 +296,6 @@
                 formdata.append("_currentReading", _currentReading);
                 formdata.append("_currentUnit", _currentUnit);
                 formdata.append("_month", _month);
-                formdata.append("_water", _water);
-                formdata.append("_tv", _tv);
                 $.ajax({
                     url: _url,
                     type: "POST",
@@ -324,8 +340,6 @@
                     var _previousReading = $("#previous_reading").val();
                     var _currentUnit = $("#current_unit").val();
                     var _month = $("#month").val();
-                    var _water = $("#reading_water").val();
-                    var _tv = $("#reading_tv").val();
                     var formdata = new FormData(); //FormData object
                     var fileInput = document.getElementById('online_file');
                     if (fileInput.files.length > 0) {
@@ -336,8 +350,6 @@
                     formdata.append("_currentReading", _currentReading);
                     formdata.append("_currentUnit", _currentUnit);
                     formdata.append("_month", _month);
-                    formdata.append("_water", _water);
-                    formdata.append("_tv", _tv);
                     formdata.append("_id", _electricId);
                     $.ajax({
                         url: _url,
@@ -403,9 +415,9 @@
             console.log(_consumerNo);
             if (_consumerNo) {
                 $.ajax({
-                    url: '/Bill/getAllDetailByConsumerNo',
+                    url: '/Bill/getAllDetailByConsumerNoForReadingElectric',
                     type: 'POST',
-                    data: { locationElectricMeter: _consumerNo },
+                    data: { consummerNo: _consumerNo },
                     success: function (response) {
                         if (response.resultCode == '1100') {
                             $("#electric_area").val(response.areaName);
@@ -505,21 +517,14 @@
                         <input type="number" value="" class="form-control" id="current_unit" />
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Water</label>
-                        <input type="number" value="" class="form-control" id="reading_water" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Tv</label>
-                        <input type="number" value="" class="form-control" id="reading_tv" />
+                        <label class="control-label">Select Month</label>
+                        <input type="text" value="" class="form-control monthPicker" id="month" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Upload Picture</label>
                         <input type="file" id="online_file" value="" class="form-control" accept=".jpg,.png,.jpeg,.pdf" />
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">Select Month</label>
-                        <input type="text" value="" class="form-control monthPicker" id="month" />
-                    </div>
+                    
                     <div class="form-group">
                         <a href="#" id="btn_electric_add" class="btn btn-success pull-right">Submit</a>
                         <a href="#" id="btn_electric_update" class="btn btn-success pull-right">Update</a>
@@ -613,7 +618,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Water</label>
-                                <input class="form-control " id="electric_water_detail">
+                                <input readonly class="form-control " id="electric_water_detail">
                             </div>
                         </div>
                     </div>

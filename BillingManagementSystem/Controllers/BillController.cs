@@ -55,8 +55,6 @@ namespace BillingManagementSystem.Controllers
             string _currentReading = Request.Form["_currentReading"].ToString();
             string _currentUnit = Request.Form["_currentUnit"].ToString();
             string _month = Request.Form["_month"].ToString();
-            string _water = Request.Form["_water"].ToString();
-            string _tv = Request.Form["_tv"].ToString();
             string userId = Request.Cookies["bms_data"]["id"].ToString();
             ReadingElectricRequestModel model = new ReadingElectricRequestModel();
             if (Request.Files.Count > 0)
@@ -83,9 +81,6 @@ namespace BillingManagementSystem.Controllers
                     readingElectricAddedby = userId,
                     readingElectricPrevReading = _previousReading,
                     readingElectricMonth = _month,
-                    readingElectircWater = _water,
-                    readingElectricFpa = "0",
-                    readingElectricTv = _tv,
                     readingElectricUnits = _currentUnit,
                     readingElectricMeterNo = _meterNo
 
@@ -99,9 +94,6 @@ namespace BillingManagementSystem.Controllers
                     readingElectricAddedby = userId,
                     readingElectricPrevReading = _previousReading,
                     readingElectricMonth = _month,
-                    readingElectircWater = _water,
-                    readingElectricFpa = "0",
-                    readingElectricTv = _tv,
                     readingElectricUnits = _currentUnit,
                     readingElectricMeterNo = _meterNo
 
@@ -150,9 +142,6 @@ namespace BillingManagementSystem.Controllers
                     readingElectricAddedby = userId,
                     readingElectricPrevReading = _previousReading,
                     readingElectricMonth = _month,
-                    readingElectircWater = _water,
-                    readingElectricFpa = "0",
-                    readingElectricTv = _tv,
                     readingElectricUnits = _currentUnit,
                     readingElectricMeterNo = _meterNo
 
@@ -167,9 +156,6 @@ namespace BillingManagementSystem.Controllers
                     readingElectricAddedby = userId,
                     readingElectricPrevReading = _previousReading,
                     readingElectricMonth = _month,
-                    readingElectircWater = _water,
-                    readingElectricFpa = "0",
-                    readingElectricTv = _tv,
                     readingElectricUnits = _currentUnit,
                     readingElectricMeterNo = _meterNo
 
@@ -208,7 +194,7 @@ namespace BillingManagementSystem.Controllers
         {
             model.userId = Request.Cookies["bms_data"]["id"].ToString();
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
-            var response = helper.ApproveReadingElectric(model);
+            var response = helper.ApproveElectricReading(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;
@@ -227,6 +213,24 @@ namespace BillingManagementSystem.Controllers
             model.userId = Request.Cookies["bms_data"]["id"].ToString();
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
             var response = helper.getAllDetailByConsumerNo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult getAllDetailByConsumerNoForReadingElectric([FromBody] ReadingElectricDetailByConsumerNoRequestModel model)
+        {
+            model.userId = Request.Cookies["bms_data"]["id"].ToString();
+            ReadingElectricHelpers helper = new ReadingElectricHelpers();
+            var response = helper.getAllDetailByConsumerNoForReadingElectric(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult getAllDetailByConsumerNoForRecoveryElectric([FromBody] BillDetailsByConsummerNoAndMonthRequestModel model)
+        {
+            var userId = Request.Cookies["bms_data"]["id"].ToString();
+            ReadingElectricHelpers helper = new ReadingElectricHelpers();
+            var response = helper.getBillDetailsByConsummerNoAndMonthForBillRecovery(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;

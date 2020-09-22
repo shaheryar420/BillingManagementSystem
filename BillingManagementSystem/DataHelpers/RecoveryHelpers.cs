@@ -15,94 +15,87 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using(db_bmsEntities db = new db_bmsEntities())
                 {
-                    if(!string.IsNullOrEmpty(model.paymentMonth))
+                    if (!string.IsNullOrEmpty(model.fk_paymentType))
                     {
-                        if(!string.IsNullOrEmpty(model.paymentAmount))
+                        if (!string.IsNullOrEmpty(model.billingMonth))
                         {
-                            if (new ModelsValidatorHelper().validateint(model.residentId))
+                            if (!string.IsNullOrEmpty(model.paymentMonth))
                             {
-                                if (!string.IsNullOrEmpty(model.readingpicture_type))
-                                { 
-                                    if (!string.IsNullOrEmpty(model.readingpicture_data))
+                                if (!string.IsNullOrEmpty(model.paymentAmount))
+                                {
+                                    if (new ModelsValidatorHelper().validateint(model.residentId))
                                     {
-                                        if (new ModelsValidatorHelper().validateint(model.readingpicture_size))
+                                        if (!string.IsNullOrEmpty(model.readingpicture_type))
                                         {
-                                            var newReadingPicture = new tbl_readingpicture()
+                                            if (!string.IsNullOrEmpty(model.readingpicture_data))
                                             {
-                                                readingpicture_data = model.readingpicture_data,
-                                                readingpicture_size = int.Parse(model.readingpicture_size),
-                                                readingpicture_type = model.readingpicture_type
-                                            };
-                                            db.tbl_readingpicture.Add(newReadingPicture);
-                                            db.SaveChanges();
-                                            int residentId = int.Parse(model.residentId);
-                                            var meterNo = (from x in db.tbl_location
-                                                           join rb in db.tbl_residentbuilding on x.location_id equals rb.fk_building
-                                                           where rb.fk_resident == residentId
-                                                           select x.location_electricmeter).FirstOrDefault();
-                                            var newPayment = new tbl_paymenthistory()
-                                            {
-                                                meter_no = meterNo,
-                                                fk_resident = residentId,
-                                                fk_picture = newReadingPicture.readingpicture_id,
-                                                fk_billelectric = 0,
-                                                paymenthistory_datetime = DateTime.UtcNow.AddHours(5),
-                                                paymentmonth = model.paymentMonth,
-                                                payment_amount = double.Parse(model.paymentAmount),
-                                                fk_paymenttype = 0,
-                                            };
-                                            db.tbl_paymenthistory.Add(newPayment);
-                                            db.SaveChanges();
-                                            //var newApprovedPayment = new tbl_residentpayments()
-                                            //{
-                                            //    fk_resident = newPayment.fk_resident,
-                                            //    fk_paymenttype = 0,
-                                            //    fk_picture = newReadingPicture.readingpicture_id,
-                                            //    paymentmonth = newPayment.paymentmonth,
-                                            //    payment_amount = newPayment.payment_amount,
-                                            //    payment_datetime = newPayment.paymenthistory_datetime,
-                                            //    meter_no = newPayment.meter_no
-                                            //};
-                                            //db.tbl_residentpayments.Add(newApprovedPayment);
-                                            //db.SaveChanges();
-                                            toReturn = new PaymentResponseModel()
-                                            {
-                                                remarks = "Payment Successfully Approved",
-                                                resultCode = "1100"
-                                            };
-                                            var billPending = (from x in db.tbl_billelectric where x.fk_resident == newPayment.fk_resident && x.fk_paymentstatus == 3 select x).OrderByDescending(x=>x.billelectric_month).FirstOrDefault();
-                                            if (billPending != null)
-                                            {
-                                                newPayment.fk_billelectric = billPending.billelectric_id;
-                                                if (billPending.billelectric_outstanding == newPayment.payment_amount)
+                                                if (new ModelsValidatorHelper().validateint(model.readingpicture_size))
                                                 {
-                                                    billPending.fk_paymentstatus = 1;
-                                                    billPending.billelectric_outstanding = 0;
-                                                    billPending.billelectric_paymentamount = newPayment.payment_amount;
-                                                    billPending.billelectric_paymentdate = newPayment.paymenthistory_datetime;
-                                                    billPending.billelectric_paymentmonth = newPayment.paymentmonth;
+                                                    var newReadingPicture = new tbl_readingpicture()
+                                                    {
+                                                        readingpicture_data = model.readingpicture_data,
+                                                        readingpicture_size = int.Parse(model.readingpicture_size),
+                                                        readingpicture_type = model.readingpicture_type
+                                                    };
+                                                    db.tbl_readingpicture.Add(newReadingPicture);
+                                                    db.SaveChanges();
+                                                    int residentId = int.Parse(model.residentId);
+                                                    var bill = (from x in db.tbl_billelectric
+                                                                join y in db.tbl_location on x.fk_location equals y.location_id
+                                                                where x.fk_resident == residentId && x.billelectric_month == model.billingMonth
+                                                                select new
+                                                                {
+                                                                    x.billelectric_id,
+                                                                    x.fk_location,
+                                                                    y.location_electricmeter
+                                                                }).FirstOrDefault();
+                                                    var newPayment = new tbl_paymententryelectric()
+                                                    {
+                                                        meter_no = bill.location_electricmeter,
+                                                        fk_resident = residentId,
+                                                        fk_location = bill.fk_location,
+                                                        billingmonth = model.billingMonth,
+                                                        fk_picture = newReadingPicture.readingpicture_id,
+                                                        fk_billelectric = bill.billelectric_id,
+                                                        payment_datetime = DateTime.UtcNow.AddHours(5),
+                                                        paymentmonth = model.paymentMonth,
+                                                        payment_amount = double.Parse(model.paymentAmount),
+                                                        fk_paymenttype = int.Parse(model.fk_paymentType),
+                                                    };
+                                                    db.tbl_paymententryelectric.Add(newPayment);
+                                                    db.SaveChanges();
+
+
+
+                                                    toReturn = new PaymentResponseModel()
+                                                    {
+                                                        resultCode = "1100",
+                                                        remarks = "Succesfully Added"
+                                                    };
                                                 }
                                                 else
                                                 {
-                                                    billPending.billelectric_outstanding = billPending.billelectric_outstanding - newPayment.payment_amount;
-                                                    billPending.billelectric_paymentamount = newPayment.payment_amount;
-                                                    billPending.billelectric_paymentdate = newPayment.paymenthistory_datetime;
-                                                    billPending.billelectric_paymentmonth = newPayment.paymentmonth;
+                                                    toReturn = new PaymentResponseModel()
+                                                    {
+                                                        remarks = "Please Provide Picture Size",
+                                                        resultCode = "1300"
+                                                    };
                                                 }
-
-                                                db.SaveChanges();
                                             }
-                                            toReturn = new PaymentResponseModel()
+                                            else
                                             {
-                                                resultCode = "1100",
-                                                remarks = "Succesfully Added"
-                                            };
+                                                toReturn = new PaymentResponseModel()
+                                                {
+                                                    remarks = "Please Provide Picture Data",
+                                                    resultCode = "1300"
+                                                };
+                                            }
                                         }
                                         else
                                         {
                                             toReturn = new PaymentResponseModel()
                                             {
-                                                remarks = "Please Provide Picture Size",
+                                                remarks = "Please Provide Picture Type",
                                                 resultCode = "1300"
                                             };
                                         }
@@ -111,7 +104,7 @@ namespace BillingManagementSystem.DataHelpers
                                     {
                                         toReturn = new PaymentResponseModel()
                                         {
-                                            remarks = "Please Provide Picture Data",
+                                            remarks = "Please Provide Resident",
                                             resultCode = "1300"
                                         };
                                     }
@@ -120,7 +113,7 @@ namespace BillingManagementSystem.DataHelpers
                                 {
                                     toReturn = new PaymentResponseModel()
                                     {
-                                        remarks = "Please Provide Picture Type",
+                                        remarks = "Please provide Amount Received",
                                         resultCode = "1300"
                                     };
                                 }
@@ -129,7 +122,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 toReturn = new PaymentResponseModel()
                                 {
-                                    remarks = "Please Provide Resident",
+                                    remarks = "Please Provide Payment Month",
                                     resultCode = "1300"
                                 };
                             }
@@ -138,7 +131,7 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn = new PaymentResponseModel()
                             {
-                                remarks ="Please provide Amount Received",
+                                remarks = "Please Provide Billing Month",
                                 resultCode = "1300"
                             };
                         }
@@ -147,7 +140,7 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         toReturn = new PaymentResponseModel()
                         {
-                            remarks = "Please Provide Payment Month",
+                            remarks = "Please Provide Payment Source",
                             resultCode = "1300"
                         };
                     }

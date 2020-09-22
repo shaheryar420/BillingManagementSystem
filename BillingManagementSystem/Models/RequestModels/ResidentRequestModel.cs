@@ -18,5 +18,9 @@ namespace BillingManagementSystem.Models
         public string paymentMonth { get; set; }
         public string paymentAmount { get; set; }
         public string meterNo { get; set; }
+        /// <summary>
+        /// identifies Whether resident is officer or civilian or OR NCO or Commercial
+        /// </summary>
+        public string residentPinCode { get; set; }
     }
 }

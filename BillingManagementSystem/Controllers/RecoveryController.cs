@@ -42,6 +42,7 @@ namespace BillingManagementSystem.Controllers
             string _amount = Request.Form["_amount"].ToString();
             string _residentId = Request.Form["_residentId"].ToString();
             string _month = Request.Form["_month"].ToString();
+            string _billingMonth = Request.Form["_billMonth"].ToString();
             HttpPostedFileBase file = Request.Files[0]; //Uploaded file
                                                         //Use the following properties to get file's name, size and MIMEType
             int fileSize = file.ContentLength;
@@ -63,7 +64,8 @@ namespace BillingManagementSystem.Controllers
                 readingpicture_type = mimeType,
                 paymentAmount = _amount,
                 residentId = _residentId,
-                paymentMonth = _month
+                paymentMonth = _month,
+                billingMonth= _billingMonth,
 
             };
             RecoveryHelpers helper = new RecoveryHelpers();

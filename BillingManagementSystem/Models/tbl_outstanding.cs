@@ -12,17 +12,14 @@ namespace BillingManagementSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tbl_paymentgashistory
+    public partial class tbl_outstanding
     {
-        public int paymenthistory_id { get; set; }
-        public System.DateTime paymenthistory_datetime { get; set; }
-        public double payment_amount { get; set; }
-        public int fk_paymenttype { get; set; }
-        public string paymentmonth { get; set; }
+        public int outstanding_id { get; set; }
+        public double outstanding_amount { get; set; }
+        public System.DateTime outstanding_date { get; set; }
+        public int fk_consummer_no { get; set; }
+        public string outstanding_month { get; set; }
         public int fk_resident { get; set; }
-        public string meter_no { get; set; }
-        public int fk_picture { get; set; }
-        public int fk_billgas { get; set; }
         public int fk_location { get; set; }
     }
 }

@@ -29,6 +29,12 @@ namespace BillingManagementSystem.Models
         public string subarea_name { get; set; }
         public string location_id { get; set; }
         public string location_name { get; set; }
+        public string residentId { get; set; }
+        public string residentName { get; set; }
+        public string residentRank { get; set; }
+        public string residentPANo { get; set; }
+        public string residentUnit { get; set; }
+        public string residentPinCode { get; set; }
         public string remarks { get; set; }
         public string resultCode { get; set; }
     }

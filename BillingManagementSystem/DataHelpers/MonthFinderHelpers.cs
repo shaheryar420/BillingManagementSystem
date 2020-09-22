@@ -46,6 +46,13 @@ namespace BillingManagementSystem.DataHelpers
             int year = currentDate.Year;
             return month > 9 ? month + "-" + year : "0" + month + "-" + year;
         }
+        public string GetCurrentMonthWithOutYear()
+        {
+            DateTime currentDate = DateTime.UtcNow.AddHours(5);
+            int month = currentDate.Month;
+            int year = currentDate.Year;
+            return month > 9 ? month.ToString(): "0" + month ;
+        }
         public string GetMonth(DateTime dateTime)
         {
             DateTime currentDate = dateTime;

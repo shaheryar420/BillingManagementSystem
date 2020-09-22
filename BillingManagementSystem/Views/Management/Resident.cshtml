@@ -169,10 +169,11 @@
                 var _name = $("#resident_name").val();
                 var _unit = $("#resident_unit").val();
                 var _remarks = $("#resident_remarks").val();
+                var _status = $("#status").val();
                 console.log(_remarks);
                 var _areaId = $("#resident_area").val();
                 var _locationId = $("#resident_location").val();
-                $.post(url, { locationId: _locationId, areaId: _areaId, residentPaNumber: _panumber, residentRank: _rank, residentName: _name, residentUnit: _unit, residentRemarks: _remarks }, function (data) {
+                $.post(url, { locationId: _locationId, areaId: _areaId, residentPaNumber: _panumber, residentRank: _rank, residentName: _name, residentUnit: _unit, residentRemarks: _remarks, residentPinCode:_status }, function (data) {
                     if (data.resultCode == "1100") {
                         swal("Added!", data.remarks, "success");
                         initResidentGrid();
@@ -413,6 +414,18 @@
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">Location</span>
                                     <select class="form-control dropdownlist" id="resident_location">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Status</span>
+                                    <select class="form-control dropdownlist" id="status">
+                                        <option value="1">Officer</option>
+                                        <option value="2">OR</option>
+                                        <option value="3">JCO</option>
+                                        <option value="4">Civilian</option>
+                                        <option value="5">Commercial</option>
                                     </select>
                                 </div>
                             </div>
