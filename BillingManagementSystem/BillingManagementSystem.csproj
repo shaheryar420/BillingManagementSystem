@@ -465,15 +465,15 @@
     <Content Include="img\logo3.jpg" />
     <Content Include="img\logo4.jpeg" />
     <Content Include="img\user.png" />
-    <Content Include="Models\BMSModel.Context.tt">
+    <Content Include="Models\BMSMODEL.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>BMSModel.edmx</DependentUpon>
-      <LastGenOutput>BMSModel.Context.cs</LastGenOutput>
+      <DependentUpon>BMSMODEL.edmx</DependentUpon>
+      <LastGenOutput>BMSMODEL.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\BMSModel.tt">
+    <Content Include="Models\BMSMODEL.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>BMSModel.edmx</DependentUpon>
-      <LastGenOutput>BMSModel.cs</LastGenOutput>
+      <DependentUpon>BMSMODEL.edmx</DependentUpon>
+      <LastGenOutput>BMSMODEL.cs</LastGenOutput>
     </Content>
     <Content Include="scripts\ai.0.22.9-build00167.js" />
     <Content Include="scripts\ai.0.22.9-build00167.min.js" />
@@ -791,24 +791,24 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\HMTLHelperExtensions.cs" />
-    <Compile Include="Models\BMSModel.Context.cs">
+    <Compile Include="Models\BMSMODEL.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BMSModel.Context.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\BMSModel.cs">
+    <Compile Include="Models\BMSMODEL.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\BMSModel.Designer.cs">
+    <Compile Include="Models\BMSMODEL.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BMSModel.edmx</DependentUpon>
+      <DependentUpon>BMSMODEL.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ModelsValidatorHelper.cs" />
     <Compile Include="Models\officerreport.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\RequestModels\AreaRequestModel.cs" />
     <Compile Include="Models\RequestModels\BillDetailsByConsummerNoAndMonthRequestModel.cs" />
@@ -859,103 +859,103 @@
     <Compile Include="Models\ResponseModels\UserSubAreasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserTypeResponseModel.cs" />
     <Compile Include="Models\tbl_action.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_area.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_billelectric.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_billgas.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_billpicture.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_controller.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_fixedrates.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_fixedratetype.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_location.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_offr.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_outstanding.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_paymententryelectric.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_paymententrygas.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_paymentgashistory.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_paymenthistory.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_paymentstatus.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_paymenttype.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_readingelectric.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_readingelectriclog.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_readinggas.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_readinggaslog.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_readingpicture.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_residentbuilding.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_residenthistory.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_residentpayments.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_residents.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_slabs.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_subarea.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_tarrif_category.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_userareas.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_userpermissions.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_users.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_usertype.cs">
-      <DependentUpon>BMSModel.tt</DependentUpon>
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\ResidentViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1003,12 +1003,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <EntityDeploy Include="Models\BMSModel.edmx">
+    <EntityDeploy Include="Models\BMSMODEL.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>BMSModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>BMSMODEL.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\BMSModel.edmx.diagram">
-      <DependentUpon>BMSModel.edmx</DependentUpon>
+    <Content Include="Models\BMSMODEL.edmx.diagram">
+      <DependentUpon>BMSMODEL.edmx</DependentUpon>
     </Content>
     <None Include="packages.config" />
     <Content Include="scripts\plugins\jstree\LICENSE-MIT" />
