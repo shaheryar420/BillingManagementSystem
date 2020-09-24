@@ -92,10 +92,34 @@
                     { "title": "Outstanding", "data": "outstanding" },
                     { "title": "Amount Received", "data": "paymentAmount" },
                     { "title": "Date Added", "data": "paymenthistoryDatetime" },
-                    { "title": "Arae", "data": "areaName" },
-                    { "title": "SubArea", "data": "subAreaName" },
+                    { "title": "Area", "data": "areaName" },
+                    { "title": "Sub Area", "data": "subAreaName" },
                     { "title": "Location", "data": "locationName" },
                     { "title": "Resident Name", "data": "residentName" },
+                    {
+                        "title": "Resident Status",
+                        "data": "residentStatus",
+                        render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "Officer";
+                            }
+                            if (data == 2) {
+                                return "OR"
+                            }
+                            if (data == 3) {
+                                return "JCO"
+                            }
+                            if (data == 4) {
+                                return "Civilian"
+                            }
+                            if (data == 5) {
+                                return "Commercial"
+                            }
+                        }
+                    },
+                    { "title": "Resident PA No", "data": "residentPaNo" },
+                    { "title": "Resident Rank", "data": "residentRank" },
+                    { "title": "Resident Unit", "data": "residentUnit" },
                     {
                         "title": "Picture", "data": "pictureId", render: function (data, type, row, meta) {
                             return "<img src='data:" + row.pictureType + ";base64, " + row.picturedata + "' class='img-sm img-thumbnail'/>";
@@ -230,8 +254,103 @@
                 else {
                     swal("Warning", "Please select a location", "warning");
                 }
-            });        }
-         $('#btn_electric_add').click(function () {
+            });
+        }
+        function initHistoryGrid(_consumerNo) {
+            Dtable = $(".historyGrid").DataTable({
+                autoWidth: true,
+                destroy: true,
+                "ajax": {
+                    "url": '/Bill/getLocationHistoryByConsumerNo',
+                    "type": 'POST',
+                    "data": { consumerNo: _consumerNo },
+                    "dataSrc": function (data) {
+
+                        if (data.length > 0) {
+                            if (data[0].resultCode == '1100') {
+
+                                return data;
+                            }
+                            else {
+
+                                return [];
+                            }
+                        }
+                        else {
+
+                            return [];
+                        }
+                    },
+                    "error": function (a, b, c) {
+                        swal({
+                            title: "Info",
+                            text: "Not connected to the internet",
+                            type: "info"
+                        });
+                    }
+                },
+                "columns": [
+                    {
+                        title: 'Sr. #',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "title": "Bill Id", "data": "billId", className: "hidden" },
+                    { "title": "PA No", "data": "paNo" },
+                    { "title": "Resident Name", "data": "residentName" },
+                    { "title": "Resident Rank", "data": "residentRank" },
+                    { "title": "Resident Unit", "data": "residentUnit" },
+                    {
+                        "title": "Resident Status",
+                        "data": "residentStatus",
+                        render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "Officer";
+                            }
+                            if (data == 2) {
+                                return "OR"
+                            }
+                            if (data == 3) {
+                                return "JCO"
+                            }
+                            if (data == 4) {
+                                return "Civilian"
+                            }
+                            if (data == 5) {
+                                return "Commercial"
+                            }
+                        }
+                    },
+                    { "title": "Billing Month", "data": "billingMonth" },
+                    { "title": "Bill Amount", "data": "billAmount" },
+                    { "title": "Bill Outstanding", "data": "OutstandingAmountOfMonth" },
+                    {
+                        "title": "Bill Status",
+                        "data": "billStatus",
+                        render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "Paid";
+                            }
+                            if (data == 2) {
+                                return "Partial Paid"
+                            }
+                            if (data == 3) {
+                                return "Pending"
+                            }                            
+                        }
+                    },
+                    { "title": "Bill Payment Month", "data": "paymentMonth" },
+                    { "title": "Bill Payment Amount", "data": "paymentAmount" },
+
+                ]
+            });
+            Dtable.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+        }
+        $('#btn_electric_add').click(function () {
                 console.log('ok');
                 var _url = "/Recovery/AddPayment";
                 var _amount = $("#Amount").val();
@@ -241,8 +360,8 @@
                 var formdata = new FormData(); //FormData object
              var fileInput = document.getElementById('online_file');
              if (fileInput.files.length > 0) {
-                 console.log(fileInput.files[0]);
-                formdata.append(fileInput.files[0].Name, fileInput.files[0]);
+                 formdata.append(fileInput.files[0].Name, fileInput.files[0]);
+                 console.log(formdata);
                 formdata.append("_amount", _amount);
                 formdata.append("_residentId", residentId);
                  formdata.append("_month", _paymentMonth);
@@ -280,7 +399,6 @@
                  swal('Warning', 'Please attach the meter image', 'warning');
              }
             });
-
         $("#billing_month").change(function () {
             var _billingMonth = $('#billing_month').val();
             var _consumerNo = $('#consumer_no').val();
@@ -319,6 +437,14 @@
             }
 
         });
+        $('#consumer_no').change(function (e) {
+
+            var _consumerNo = $(this).val();
+            if (_consumerNo) {
+                initHistoryGrid(_consumerNo);
+
+            }
+        });
     </script>
 }
 <div id="page-head">
@@ -348,7 +474,7 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="control-label">Consumer No.</label>
-                        <input type="number" value="" class="form-control" id="consumer_no" />
+                        <input  value="" class="form-control" id="consumer_no" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Billing Month</label>

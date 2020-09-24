@@ -514,6 +514,8 @@ namespace BillingManagementSystem.Controllers
         #region Fixed Rate
         public ActionResult EditFixedRate([FromBody] FixedRatesRequestModel model)
         {
+            string userId = Request.Cookies["bms_data"]["id"].ToString();
+            model.userId = userId;
             FixedRatesHelpers helper = new FixedRatesHelpers();
             var response = helper.UpdateFixedRates(model);
             var json = Json(response);
@@ -526,6 +528,14 @@ namespace BillingManagementSystem.Controllers
             model.userId = userId;
             FixedRatesHelpers helper = new FixedRatesHelpers();
             var response = helper.GetFixedRatesByName(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetFixedRateList()
+        {
+            FixedRatesHelpers helper = new FixedRatesHelpers();
+            var response = helper.GetListOfFixedRates();
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;

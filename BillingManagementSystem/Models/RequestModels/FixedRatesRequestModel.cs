@@ -13,5 +13,6 @@ namespace BillingManagementSystem.Models
         public string fixedRatesAmount { get; set; }
         public string fk_type { get; set; }
         public string fixedRatesUnit { get; set; }
+        public string fixedRateStatus { get; set; }
     }
 }

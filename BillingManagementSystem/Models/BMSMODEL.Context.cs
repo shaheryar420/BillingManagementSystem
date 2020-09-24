@@ -34,7 +34,6 @@ namespace BillingManagementSystem.Models
         public virtual DbSet<tbl_controller> tbl_controller { get; set; }
         public virtual DbSet<tbl_fixedrates> tbl_fixedrates { get; set; }
         public virtual DbSet<tbl_fixedratetype> tbl_fixedratetype { get; set; }
-        public virtual DbSet<tbl_location> tbl_location { get; set; }
         public virtual DbSet<tbl_offr> tbl_offr { get; set; }
         public virtual DbSet<tbl_paymentgashistory> tbl_paymentgashistory { get; set; }
         public virtual DbSet<tbl_paymenthistory> tbl_paymenthistory { get; set; }
@@ -54,10 +53,11 @@ namespace BillingManagementSystem.Models
         public virtual DbSet<tbl_users> tbl_users { get; set; }
         public virtual DbSet<tbl_usertype> tbl_usertype { get; set; }
         public virtual DbSet<tbl_readinggas> tbl_readinggas { get; set; }
-        public virtual DbSet<tbl_outstanding> tbl_outstanding { get; set; }
         public virtual DbSet<tbl_readingelectriclog> tbl_readingelectriclog { get; set; }
         public virtual DbSet<tbl_readingelectric> tbl_readingelectric { get; set; }
         public virtual DbSet<tbl_paymententryelectric> tbl_paymententryelectric { get; set; }
         public virtual DbSet<tbl_paymententrygas> tbl_paymententrygas { get; set; }
+        public virtual DbSet<tbl_location> tbl_location { get; set; }
+        public virtual DbSet<tbl_outstanding> tbl_outstanding { get; set; }
     }
 }

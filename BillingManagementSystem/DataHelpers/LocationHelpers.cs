@@ -29,7 +29,10 @@ namespace BillingManagementSystem.DataHelpers
                                     location_gassmeter = !string.IsNullOrEmpty(model.locationGassMeter) ? model.locationGassMeter : "",
                                     location_name = model.locationName,
                                     location_wapdameter = !string.IsNullOrEmpty(model.locationWapdaMeter) ? model.locationWapdaMeter : "",
-                                };
+                                    location_tv_charges= !string.IsNullOrEmpty(model.locationTvStatus)?int.Parse(model.locationTvStatus):0,
+                                    location_water_charges= !string.IsNullOrEmpty(model.locationWaterStatus)?int.Parse(model.locationWaterStatus):0,
+                                    location_second_meter = !string.IsNullOrEmpty(model.locationSecondMeter) ? model.locationSecondMeter : "",
+                            };
                                 db.tbl_location.Add(newLocation);
                                 db.SaveChanges();
                                 toReturn = new LocationResponseModel()
@@ -106,6 +109,9 @@ namespace BillingManagementSystem.DataHelpers
                                 location.location_gassmeter = !string.IsNullOrEmpty(model.locationGassMeter) ? model.locationGassMeter : location.location_gassmeter;
                                 location.location_name = !string.IsNullOrEmpty(model.locationName) ? model.locationName : location.location_name;
                                 location.location_wapdameter = !string.IsNullOrEmpty(model.locationWapdaMeter) ? model.locationWapdaMeter : location.location_wapdameter;
+                                location.location_tv_charges = !string.IsNullOrEmpty(model.locationTvStatus) ? int.Parse(model.locationTvStatus) : location.location_tv_charges;
+                                location.location_water_charges = !string.IsNullOrEmpty(model.locationWaterStatus) ? int.Parse(model.locationWaterStatus) : location.location_water_charges;
+                                location.location_second_meter = !string.IsNullOrEmpty(model.locationSecondMeter) ? model.locationSecondMeter : "";
                                 db.SaveChanges();
                                 toReturn = new LocationResponseModel()
                                 {
@@ -330,6 +336,7 @@ namespace BillingManagementSystem.DataHelpers
                                             x.location_id,
                                             x.location_name,
                                             x.location_wapdameter,
+                                            x.location_second_meter,
                                             y.subarea_name,
                                             z.area_name,
                                             z.area_id
@@ -341,7 +348,7 @@ namespace BillingManagementSystem.DataHelpers
                                 var Consumers = (from z in db.tbl_location 
                                                  join r in db.tbl_residentbuilding on z.location_id equals r.fk_building
                                                  join re in db.tbl_residents on r.fk_resident equals re.resident_id
-                                                 where z.fk_subarea == location.fk_subarea
+                                                 where z.location_id == location.location_id
                                                  select new
                                                  {
                                                      re.resident_id
@@ -352,24 +359,27 @@ namespace BillingManagementSystem.DataHelpers
                                 double totalAmount = 0;
                                 double gasUnits = 0;
                                 double gasAmount = 0;
-                                foreach (var Consumer in Consumers)
+                                var ElectricBills = (from x in db.tbl_billelectric
+                                                     where x.fk_location == location.location_id
+                                                     select x).ToList();
+                                var Gasbills = (from x in db.tbl_billgas
+                                                where x.fk_location == location.location_id
+                                                select x).ToList();
+                                if (ElectricBills.Count() > 0)
                                 {
-                                    var Units = (from x in db.tbl_billelectric
-                                                 where x.fk_resident == Consumer.resident_id
-                                                 select x).FirstOrDefault();
-                                    var GasBill = (from x in db.tbl_billgas where x.fk_resident == Consumer.resident_id select x).FirstOrDefault();
-
-                                    if (Units != null)
+                                    foreach (var bill in ElectricBills)
                                     {
-                                        totalAmount = totalAmount + Units.billelectric_amount;
-                                        totalUnits = totalUnits + Units.billelectric_units;
+                                        totalAmount = totalAmount + bill.billelectric_amount;
+                                        totalUnits = totalUnits + bill.billelectric_units;
                                     }
-                                    if (GasBill != null)
+                                }
+                                if (Gasbills.Count() > 0)
+                                {
+                                    foreach (var bill in Gasbills)
                                     {
-                                        gasUnits = gasUnits + GasBill.units;
-                                        gasAmount = gasAmount + GasBill.amount;
+                                        gasAmount = gasAmount + bill.amount;
+                                        gasUnits = gasUnits + bill.units;
                                     }
-
                                 }
                                 var _locoation = new LocationResponseModel()
                                 {
@@ -382,6 +392,7 @@ namespace BillingManagementSystem.DataHelpers
                                     areaName = !string.IsNullOrEmpty(location.area_name) ? location.area_name : "",
                                     subAreaName = location.subarea_name,
                                     fk_area = location.area_id.ToString(),
+                                    locationSecondMeter = !string.IsNullOrEmpty(location.location_second_meter)?location.location_second_meter:"",
                                     locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                                     locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
                                     locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
@@ -440,6 +451,9 @@ namespace BillingManagementSystem.DataHelpers
                                             x.location_id,
                                             x.location_name,
                                             x.location_wapdameter,
+                                            x.location_tv_charges,
+                                            x.location_water_charges,
+                                            x.location_second_meter,
                                             y.subarea_name,
                                             z.area_id,
                                             z.area_name
@@ -450,12 +464,15 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             subAreaName = location.subarea_name,
                             fk_area = location.area_id.ToString(),
+                            tvChargesStatus= location.location_tv_charges.ToString(),
+                            waterChargesStatus= location.location_water_charges.ToString(),
                             areaName = !string.IsNullOrEmpty(location.area_name)?location.area_name:"",
                             fk_subArea = location.fk_subarea.ToString(),
                             locationElectricMeter = !string.IsNullOrEmpty(location.location_electricmeter) ? location.location_electricmeter : "",
                             locationGassMeter = !string.IsNullOrEmpty(location.location_gassmeter) ? location.location_gassmeter : "",
                             locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
                             locationWapdaMeter = !string.IsNullOrEmpty(location.location_wapdameter) ? location.location_wapdameter : "",
+                            locationSecondMeter = !string.IsNullOrEmpty(location.location_second_meter)?location.location_second_meter:"",
                             locationId = location.location_id.ToString(),
                             remarks = "Successfully Location Found",
                             resultCode = "1100"

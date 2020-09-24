@@ -557,6 +557,10 @@ namespace BillingManagementSystem.DataHelpers
                                         p.readingpicture_size,
                                         p.readingpicture_type,
                                         r.resident_name,
+                                        r.resident_panumber,
+                                        r.resident_unit,
+                                        r.resident_rank,
+                                        r.resident_pin_code,
                                         y.location_id,
                                         y.location_name,
                                         s.subarea_name,
@@ -572,6 +576,10 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         toReturn = payments.Select(payment => new PaymentResponseModel()
                         {
+                            residentPaNo= payment.resident_panumber,
+                            residentRank= payment.resident_rank,
+                            residentStatus= payment.resident_pin_code.ToString(),
+                            residentUnit=payment.resident_unit,
                             picturedata = payment.readingpicture_data,
                             pictureSize = payment.readingpicture_size.ToString(),
                             pictureId = payment.readingpicture_id.ToString(),
@@ -585,6 +593,7 @@ namespace BillingManagementSystem.DataHelpers
                             locationName = payment.location_name,
                             subAreaName = payment.subarea_name,
                             areaName = payment.area_name,
+                            
                             remarks = "Successfully Found",
                             resultCode = "1100"
                         }).ToList();

@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BillingManagementSystem.Models;
+using System;
 using System.Linq;
-using System.Web;
-using BillingManagementSystem.Models;
 
 namespace BillingManagementSystem.SubDataHelpers
 {
     public class ReadingElectricSubHelpers
     {
-        public BillCalculationResponseModel CalculateBill(double _units, int resident_pin_code)
+        public BillCalculationResponseModel CalculateBill(double _units, int resident_pin_code, int locationId)
         {
             BillCalculationResponseModel toReturn = new BillCalculationResponseModel();
             try
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    
+                    var location = db.tbl_location.Where(x => x.location_id == locationId).FirstOrDefault();
                     //Calculating Bill Amount & Adding Bill
                     var fparate = (from x in db.tbl_fixedrates where x.fixedrates_id == 1 select x).FirstOrDefault();
                     var meterRent = (from x in db.tbl_fixedrates where x.fixedrates_id == 2 select x.fixedrates_amount).FirstOrDefault();
@@ -108,26 +106,32 @@ namespace BillingManagementSystem.SubDataHelpers
                     {
                         totalAmount = totalAmount + ( meterRent);
                     }
-                    if (_units >= tvRate.fixedrates_unit)
+                    if (location.location_tv_charges == 0)
                     {
-                        if (tvRate.fixedrates_status == 0)
+                        if (_units >= tvRate.fixedrates_unit)
                         {
-                            totalAmount = totalAmount + tvCharges;
-                        }
-                        else
-                        {
-                            totalAmount = totalAmount + tvCharges;
+                            if (tvRate.fixedrates_status == 0)
+                            {
+                                totalAmount = totalAmount + tvCharges;
+                            }
+                            else
+                            {
+                                totalAmount = totalAmount + tvCharges;
+                            }
                         }
                     }
-                    if (_units >= waterRate.fixedrates_unit)
+                    if (location.location_water_charges == 0)
                     {
-                        if (waterRate.fixedrates_status == 0)
+                        if (_units >= waterRate.fixedrates_unit)
                         {
-                            totalAmount = totalAmount + waterCharges;
-                        }
-                        else
-                        {
-                            totalAmount = totalAmount + waterCharges;
+                            if (waterRate.fixedrates_status == 0)
+                            {
+                                totalAmount = totalAmount + waterCharges;
+                            }
+                            else
+                            {
+                                totalAmount = totalAmount + waterCharges;
+                            }
                         }
                     }
                     if (resident_pin_code == 1)

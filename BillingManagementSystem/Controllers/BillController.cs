@@ -235,6 +235,15 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult getLocationHistoryByConsumerNo([FromBody] LocationHistoryRequestModel model)
+        {
+            var userId = Request.Cookies["bms_data"]["id"].ToString();
+            ReadingElectricHelpers helper = new ReadingElectricHelpers();
+            var response = helper.getLocationHistoryByConsummerNo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
         #region Gas Reading
         public ActionResult AddReadingGas()

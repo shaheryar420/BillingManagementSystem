@@ -10,6 +10,10 @@ namespace BillingManagementSystem.Models
         public string paymenthistoryId { get; set; }
         public string paymenthistoryDatetime { get; set; }
         public string residentName { get; set; }
+        public string residentPaNo { get; set; }
+        public string residentRank { get; set; }
+        public string residentUnit { get; set; }
+        public string residentStatus { get; set; }
         public string locationId { get; set; }
         public string locationName { get; set; }
         public string subAreaId { get; set; }

@@ -7,6 +7,7 @@ namespace BillingManagementSystem.Models
 {
     public class LocationHistoryResponseModel
     {
+        public string billId { get; set; }
         public string residentName { get; set; }
         public string paNo { get; set; }
         public string residentRank { get; set; }
@@ -14,6 +15,7 @@ namespace BillingManagementSystem.Models
         public string residentStatus { get; set; }
         public string billingMonth { get; set; }
         public string billAmount { get; set; }
+        public string billStatus { get; set; }
         public string OutstandingAmountOfMonth { get; set; }
         public string paymentMonth { get; set; }
         public string paymentAmount { get; set; }

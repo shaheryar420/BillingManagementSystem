@@ -257,26 +257,43 @@ namespace BillingManagementSystem.DataHelpers
                                                  re.resident_id
                                              }
                                           ).ToList();
+                            var Locations = (from x in db.tbl_area
+                                             join y in db.tbl_subarea on x.area_id equals y.fk_area
+                                             join z in db.tbl_location on y.subarea_id equals z.fk_subarea                                             
+                                             where x.area_id == area.area_id
+                                             select new
+                                             {
+                                                 z.location_id
+                                             }
+                                          ).ToList();
                             var noOfConsumers = Consumers.Count();
                             double totalUnits = 0;
                             double gasUnits = 0;
                             double gasAmount = 0;
                             double totalAmount = 0;
-                            foreach (var Consumer in Consumers)
+                            foreach (var Location in Locations)
                             {
-                                var Units = (from x in db.tbl_billelectric
-                                             where x.fk_resident == Consumer.resident_id
-                                             select x).FirstOrDefault();
-                                var Gasbill = (from x in db.tbl_billgas where x.fk_resident == Consumer.resident_id select x).FirstOrDefault();
-                                if (Units != null)
+                                var ElectricBills = (from x in db.tbl_billelectric
+                                             where x.fk_location == Location.location_id
+                                             select x).ToList();
+                                var Gasbills = (from x in db.tbl_billgas
+                                               where x.fk_location == Location.location_id
+                                               select x).ToList(); 
+                                if (ElectricBills.Count()>0)
                                 {
-                                    totalAmount = totalAmount + Units.billelectric_amount;
-                                    totalUnits = totalUnits + Units.billelectric_units;
+                                    foreach (var bill in ElectricBills)
+                                    {
+                                        totalAmount = totalAmount+bill.billelectric_amount;
+                                        totalUnits = totalUnits + bill.billelectric_units;
+                                    }
                                 }
-                                if(Gasbill != null)
+                                if(Gasbills.Count()>0)
                                 {
-                                    gasAmount = gasAmount +Gasbill.amount;
-                                    gasUnits = gasUnits + Gasbill.units;
+                                    foreach (var bill in Gasbills)
+                                    {
+                                        gasAmount = gasAmount + bill.amount;
+                                        gasUnits = gasUnits + bill.units;
+                                    }
                                 }
                             }
                             var _area = new AreaResponseModel()

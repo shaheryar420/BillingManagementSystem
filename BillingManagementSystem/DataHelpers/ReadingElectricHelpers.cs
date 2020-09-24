@@ -26,9 +26,9 @@ namespace BillingManagementSystem.DataHelpers
                                 {
                                     var residentId = (from x in db.tbl_location
                                                       join y in db.tbl_residentbuilding on x.location_id equals y.fk_building
-                                                      where x.location_electricmeter== model.readingElectricMeterNo
+                                                      where x.location_electricmeter== model.readingElectricMeterNo || x.location_second_meter==model.readingElectricMeterNo
                                                       select y.fk_resident).FirstOrDefault();
-                                    var existingReading = (from x in db.tbl_readingelectric where x.readingelectric_month == model.readingElectricMonth && x.fk_resident== residentId select x).FirstOrDefault();
+                                    var existingReading = (from x in db.tbl_readingelectric where x.readingelectric_month == model.readingElectricMonth && x.fk_resident== residentId && x.readingelectric_meterno== model.readingElectricMeterNo select x).FirstOrDefault();
                                     if (existingReading == null)
                                     {
                                         if (!string.IsNullOrEmpty(model.readingpicture_data))
@@ -544,7 +544,7 @@ namespace BillingManagementSystem.DataHelpers
                             int readingElectricId = int.Parse(model.readingElectricId);
                             var readingElectric = (from x in db.tbl_readingelectric where x.readingelectric_id == readingElectricId select x).FirstOrDefault();
                             double _units = readingElectric.readingelectric_units;
-                            var location = (from x in db.tbl_location where x.location_electricmeter == readingElectric.readingelectric_meterno select x).FirstOrDefault();
+                            var location = (from x in db.tbl_location where x.location_electricmeter == readingElectric.readingelectric_meterno || x.location_second_meter== readingElectric.readingelectric_meterno select x).FirstOrDefault();
                             if (location != null)
                             {
                                 var resident = db.tbl_residents.Where(x => x.resident_id == readingElectric.fk_resident).FirstOrDefault();
@@ -573,7 +573,7 @@ namespace BillingManagementSystem.DataHelpers
                                         db.tbl_billpicture.Add(newBillPicture);
                                         db.SaveChanges();
 
-                                        var response = new SubDataHelpers.ReadingElectricSubHelpers().CalculateBill(_units, resident.resident_pin_code);
+                                        var response = new SubDataHelpers.ReadingElectricSubHelpers().CalculateBill(_units, resident.resident_pin_code, location.location_id);
                                         double totalAmount = Math.Round(response.totalAmount);
                                         double totalEnergyCharges = Math.Round(response.totalEnergyCharges);
                                         double totalFPA = Math.Round(response.totalFPA);
@@ -623,7 +623,7 @@ namespace BillingManagementSystem.DataHelpers
                                         };
                                         var newOutstanding = new tbl_outstanding()
                                         {
-                                            fk_consummer_no = int.Parse(readingElectric.readingelectric_meterno),
+                                            fk_consummer_no = readingElectric.readingelectric_meterno,
                                             outstanding_amount = newBill.billelectric_amount,
                                             outstanding_date = DateTime.UtcNow.AddHours(5),
                                             outstanding_month = newBill.billelectric_month,
@@ -655,7 +655,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 toReturn = new ReadingElectricResponseModel()
                                 {
-                                    remarks = " No Meter Found With Meter No " + model.readingElectricMeterNo,
+                                    remarks = " No Location Found With Meter No " + model.readingElectricMeterNo,
                                     resultCode = "1200"
                                 };
                             }
@@ -707,7 +707,7 @@ namespace BillingManagementSystem.DataHelpers
                             var location = (from x in db.tbl_location
                                             join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
                                             join z in db.tbl_area on y.fk_area equals z.area_id
-                                            where x.location_electricmeter == readingElectric.readingelectric_meterno
+                                            where x.location_electricmeter == readingElectric.readingelectric_meterno || x.location_second_meter == readingElectric.readingelectric_meterno
                                             select new
                                             {
                                                 x.location_id,
@@ -731,7 +731,7 @@ namespace BillingManagementSystem.DataHelpers
                                     {
                                         totalOutstandings = 0.0;
                                     }
-                                    var response = new SubDataHelpers.ReadingElectricSubHelpers().CalculateBill(_units, resident.resident_pin_code);
+                                    var response = new SubDataHelpers.ReadingElectricSubHelpers().CalculateBill(_units, resident.resident_pin_code, location.location_id);
                                     double totalAmount = Math.Round(response.totalAmount);
                                     double totalEnergyCharges = Math.Round(response.totalEnergyCharges);
                                     double totalFPA = Math.Round(response.totalFPA);
@@ -810,7 +810,7 @@ namespace BillingManagementSystem.DataHelpers
             List<ReadingElectricResponseModel> toRetrun = new List<ReadingElectricResponseModel>();
             try
             {
-                using(db_bmsEntities db = new db_bmsEntities())
+                using (db_bmsEntities db = new db_bmsEntities())
                 {
                     int user = int.Parse(model.readingElectricAddedby);
                     var meters = (from x in db.tbl_userareas
@@ -819,7 +819,7 @@ namespace BillingManagementSystem.DataHelpers
                                   select y.location_electricmeter).ToList();
                     var readings = (from x in db.tbl_readingelectric
                                     join z in db.tbl_users on x.readingelectric_addedby equals z.users_id
-                                    join a in db.tbl_location on x.readingelectric_meterno equals a.location_electricmeter
+                                    join a in db.tbl_location on x.fk_location equals a.location_id
                                     join b in db.tbl_subarea on a.fk_subarea equals b.subarea_id
                                     join c in db.tbl_area on b.fk_area equals c.area_id
                                     join r in db.tbl_residents on x.fk_resident equals r.resident_id
@@ -854,7 +854,7 @@ namespace BillingManagementSystem.DataHelpers
                                        r.resident_pin_code,
                                        r.resident_rank,
                                        r.resident_unit
-                                    }).Where(x=> meters.Contains(x.readingelectric_meterno)).ToList();
+                                    }).ToList();
                     if (readings.Count() > 0)
                     {
                         toRetrun = readings.Select(x => new ReadingElectricResponseModel()
@@ -899,6 +899,109 @@ namespace BillingManagementSystem.DataHelpers
                 }
             }
             catch(Exception Ex)
+            {
+                toRetrun.Add(new ReadingElectricResponseModel()
+                {
+                    resultCode = "1000",
+                    remarks = "There Was A Fatal Error " + Ex.ToString(),
+                });
+            }
+            return toRetrun;
+        }
+        public List<ReadingElectricResponseModel> getAllReadings(ReadingElectricRequestModel model)
+        {
+            List<ReadingElectricResponseModel> toRetrun = new List<ReadingElectricResponseModel>();
+            try
+            {
+                using (db_bmsEntities db = new db_bmsEntities())
+                {
+                    int user = int.Parse(model.readingElectricAddedby);
+                    var meters = (from x in db.tbl_userareas
+                                  join y in db.tbl_location on x.fk_subarea equals y.fk_subarea
+                                  where x.fk_user == user
+                                  select y.location_electricmeter).ToList();
+                    var readings = (from x in db.tbl_readingelectric
+                                    join z in db.tbl_users on x.readingelectric_addedby equals z.users_id
+                                    join a in db.tbl_location on x.readingelectric_meterno equals a.location_electricmeter
+                                    join b in db.tbl_subarea on a.fk_subarea equals b.subarea_id
+                                    join c in db.tbl_area on b.fk_area equals c.area_id
+                                    join r in db.tbl_residents on x.fk_resident equals r.resident_id
+                                    join y in db.tbl_readingpicture on x.fk_readingpicture equals y.readingpicture_id into pList
+                                    from y in pList.DefaultIfEmpty()
+                                    select new
+                                    {
+                                        x.fk_readingpicture,
+                                        x.readingelectric_addedby,
+                                        x.readingelectric_currentreading,
+                                        x.readingelectric_datetime,
+                                        x.readingelectric_id,
+                                        x.readingelectric_meterno,
+                                        x.readingelectric_month,
+                                        x.readingelectric_prevreading,
+                                        x.readingelectric_remarks,
+                                        x.readingelectric_units,
+                                        y.readingpicture_data,
+                                        y.readingpicture_size,
+                                        y.readingpicture_type,
+                                        a.location_id,
+                                        b.subarea_id,
+                                        c.area_id,
+                                        a.location_name,
+                                        b.subarea_name,
+                                        c.area_name,
+                                        a.fk_subarea,
+                                        z.users_fullname,
+                                        r.resident_panumber,
+                                        r.resident_id,
+                                        r.resident_name,
+                                        r.resident_pin_code,
+                                        r.resident_rank,
+                                        r.resident_unit
+                                    }).Where(x => meters.Contains(x.readingelectric_meterno)).ToList();
+                    if (readings.Count() > 0)
+                    {
+                        toRetrun = readings.Select(x => new ReadingElectricResponseModel()
+                        {
+                            area_id = x.area_id.ToString(),
+                            area_name = x.area_name.ToString(),
+                            location_id = x.location_id.ToString(),
+                            location_name = x.location_name.ToString(),
+                            subarea_id = x.subarea_id.ToString(),
+                            subarea_name = x.subarea_name.ToString(),
+                            fk_readingPicture = x.fk_readingpicture.ToString(),
+                            readingElectricAddedby = x.users_fullname.ToString(),
+                            readingElectricCurrentReading = x.readingelectric_currentreading.ToString(),
+                            readingElectricDatetime = x.readingelectric_datetime.ToString(),
+                            readingElectricId = x.readingelectric_id.ToString(),
+                            readingElectricMeterNo = !string.IsNullOrEmpty(x.readingelectric_meterno) ? x.readingelectric_meterno : "",
+                            readingElectricMonth = !string.IsNullOrEmpty(x.readingelectric_month) ? x.readingelectric_month : "",
+                            readingElectricPrevReading = x.readingelectric_prevreading.ToString(),
+                            readingElectricRemarks = !string.IsNullOrEmpty(x.readingelectric_remarks) ? x.readingelectric_remarks : "",
+                            readingElectricUnits = x.readingelectric_units.ToString(),
+                            readingpicture_data = x.readingpicture_data,
+                            readingpicture_size = x.readingpicture_size.ToString(),
+                            readingpicture_type = x.readingpicture_type,
+                            residentId = x.resident_id.ToString(),
+                            residentName = x.resident_name,
+                            residentPANo = x.resident_panumber,
+                            residentRank = x.resident_rank,
+                            residentUnit = x.resident_unit,
+                            residentPinCode = x.resident_pin_code.ToString(),
+                            remarks = "Successfully Found",
+                            resultCode = "1100"
+                        }).ToList();
+                    }
+                    else
+                    {
+                        toRetrun.Add(new ReadingElectricResponseModel()
+                        {
+                            remarks = "No Record Found",
+                            resultCode = "1200"
+                        });
+                    }
+                }
+            }
+            catch (Exception Ex)
             {
                 toRetrun.Add(new ReadingElectricResponseModel()
                 {
@@ -1031,7 +1134,7 @@ namespace BillingManagementSystem.DataHelpers
                                         join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
                                         join a in db.tbl_area on y.fk_area equals a.area_id
                                         join rb in db.tbl_residentbuilding on x.location_id equals rb.fk_building
-                                        where x.location_electricmeter == model.consummerNo
+                                        where x.location_electricmeter == model.consummerNo || x.location_second_meter == model.consummerNo
                                         select new
                                         {
                                             x.fk_subarea,
@@ -1045,13 +1148,13 @@ namespace BillingManagementSystem.DataHelpers
                                             rb.fk_resident,
                                             y.subarea_name
                                         }).FirstOrDefault();
-                        var reading = db.tbl_readingelectric.Where(x => x.readingelectric_meterno == model.consummerNo).OrderByDescending(x => x.readingelectric_datetime).FirstOrDefault();
+                        var reading = db.tbl_readingelectric.Where(x => x.readingelectric_meterno == model.consummerNo ).OrderByDescending(x => x.readingelectric_datetime).FirstOrDefault();
                         if (location != null)
                         {
                             toReturn = new ReadingElectricDetailByConsumerNoResponseModel()
                             {
                                 locationId= location.location_id.ToString(),
-                                previousReading = reading.readingelectric_currentreading.ToString(),
+                                previousReading = reading!=null?reading.readingelectric_currentreading.ToString():"0",
                                 areaName = location.area_name,
                                 subAreaName = location.subarea_name,
                                 locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
@@ -1104,7 +1207,7 @@ namespace BillingManagementSystem.DataHelpers
                                             join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
                                             join a in db.tbl_area on y.fk_area equals a.area_id
                                             join b in db.tbl_billelectric on x.location_id equals b.fk_location
-                                            where x.location_electricmeter == model.locationElectricMeterNo && b.billelectric_month == model.billingMonth
+                                            where (x.location_electricmeter == model.locationElectricMeterNo || x.location_second_meter == model.locationElectricMeterNo) && b.billelectric_month == model.billingMonth 
                                             select new
                                             {
                                                 x.fk_subarea,
@@ -1186,23 +1289,80 @@ namespace BillingManagementSystem.DataHelpers
                 { 
                     if (!string.IsNullOrEmpty(model.consumerNo))
                     {
-                        var locationhistory = (from x in db.tbl_billelectric
+                        var _locationhistory = (from x in db.tbl_billelectric
                                                join r in db.tbl_residents on x.fk_resident equals r.resident_id
                                                join l in db.tbl_location on x.fk_location equals l.location_id
-                                               where l.location_electricmeter == model.consumerNo
+                                               where l.location_electricmeter == model.consumerNo || l.location_second_meter== model.consumerNo
                                                select new
                                                {
+                                                   x.billelectric_id,
                                                    x.fk_paymentstatus,
                                                    x.billelectric_amount,
                                                    x.billelectric_month,
+                                                   x.billelectric_datetime,
                                                    x.fk_location,
                                                    x.fk_resident,
                                                    r.resident_name,
                                                    r.resident_panumber,
                                                    r.resident_rank,
-                                                   r.resident_unit
-                                               }).ToList();
-                        
+                                                   r.resident_unit,
+                                                   r.resident_pin_code
+                                               }).OrderByDescending(x=>x.billelectric_datetime).ToList();
+                        var outstandings = db.tbl_outstanding.Where(x => x.fk_consummer_no == model.consumerNo).ToList();
+                        var payments = db.tbl_paymenthistory.Where(x => x.meter_no == model.consumerNo).ToList();
+                        var locationHistory = (from x in _locationhistory
+                                               join y in outstandings on x.billelectric_month equals y.outstanding_month
+                                               join z in payments on x.billelectric_month equals z.billingmonth into payment
+                                               from z in payment.DefaultIfEmpty()
+                                               select new
+                                               {
+                                                   x.billelectric_id,
+                                                   x.fk_paymentstatus,
+                                                   x.billelectric_amount,
+                                                   x.billelectric_month,
+                                                   x.fk_location,
+                                                   x.fk_resident,
+                                                   x.resident_name,
+                                                   x.resident_panumber,
+                                                   x.resident_rank,
+                                                   x.resident_unit,
+                                                   x.resident_pin_code,
+                                                   x.billelectric_datetime,
+                                                   y.outstanding_amount,
+                                                   paymentAmount = z!=null?z.payment_amount.ToString():"",
+                                                   paymentMonth = z!=null?z.paymentmonth:"",
+                                               }
+                                               ).OrderByDescending(x => x.billelectric_datetime).ToList();
+                        if (locationHistory.Count() > 0)
+                        {
+                            toReturn = locationHistory.Select(x => new LocationHistoryResponseModel()
+                            {
+                                billAmount = x.billelectric_amount.ToString(),
+                                paNo=x.resident_panumber,
+                                billStatus= x.fk_paymentstatus.ToString(),
+                                billId= x.billelectric_id.ToString(),
+                                residentStatus=x.resident_pin_code.ToString(),
+                                billingMonth= x.billelectric_month,
+                                OutstandingAmountOfMonth= x.outstanding_amount.ToString(),
+                                paymentAmount = x.paymentAmount,
+                                paymentMonth = x.paymentMonth,
+                                residentName=x.resident_name,
+                                residentRank=x.resident_rank,
+                                residentUnit=x.resident_unit,
+                                remarks="Success",
+                                resultCode="1100"
+                            }).ToList();
+                        }
+                        else
+                        {
+                            toReturn.Add(new LocationHistoryResponseModel()
+                            {
+                                resultCode = "1200",
+                                remarks = "No Record Found"
+                            });
+                        }
+
+
                     }
                     else
                     {

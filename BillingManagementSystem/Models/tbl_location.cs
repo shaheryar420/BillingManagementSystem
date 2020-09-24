@@ -20,5 +20,8 @@ namespace BillingManagementSystem.Models
         public string location_electricmeter { get; set; }
         public string location_gassmeter { get; set; }
         public string location_wapdameter { get; set; }
+        public string location_second_meter { get; set; }
+        public int location_tv_charges { get; set; }
+        public int location_water_charges { get; set; }
     }
 }

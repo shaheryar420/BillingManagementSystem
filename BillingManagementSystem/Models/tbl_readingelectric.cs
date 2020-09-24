@@ -25,5 +25,6 @@ namespace BillingManagementSystem.Models
         public int readingelectric_addedby { get; set; }
         public string readingelectric_month { get; set; }
         public int fk_resident { get; set; }
+        public int fk_location { get; set; }
     }
 }

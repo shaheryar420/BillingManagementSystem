@@ -32,6 +32,9 @@ namespace BillingManagementSystem.Models
         public string billMonth { get; set; }
         public string currentReading { get; set; }
         public string currentUnit { get; set; }
+        public string tvChargesStatus { get; set; }
+        public string waterChargesStatus { get; set; }
+        public string locationSecondMeter { get; set; }
         public string remarks { get; set; }
         public string resultCode { get; set; }
     }

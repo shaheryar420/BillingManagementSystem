@@ -90,6 +90,30 @@
                     { "title": "Consumer No", "data": "locationElectricMeter" },
                     { "title": "location Gas Meter", "data": "locationGassMeter" },
                     { "title": "location Wapda Meter", "data": "locationWapdaMeter" },
+                    { "title": "location Second Meter", "data": "locationSecondMeter" },
+                    {
+                        "title": "location Tv Charges Status", "data": "tvChargesStatus",
+                        render: function (data, type, row, meta) {
+                            if (data == 0) {
+                                return "Enabled";
+                            }
+                            if (data == 1) {
+                                return "Disabled"
+                            }
+                        }
+                    },
+                    {
+                        "title": "location Water Charges Status", "data": "waterChargesStatus",
+                        render: function (data, type, row, meta) {
+                            if (data == 0) {
+                                return "Enabled";
+                            }
+                            if (data == 1) {
+                                return "Disabled"
+                            }
+                        }
+                    },
+
 
 
 
@@ -112,10 +136,13 @@
                 $('#location_id').val(_id);
                 $("#location_name").val(rowData.locationName);
                 $("#location_electricMeter").val(rowData.locationElectricMeter);
+                $("#location_electricSecondMeter").val(rowData.locationSecondMeter);
                 $("#location_gassMeter").val(rowData.locationGassMeter);
                 $("#location_wapdaMeter").val(rowData.locationWapdaMeter);
                 $("#location_area").val(rowData.fk_area).trigger('change');
                 $("#location_subarea").val(rowData.fk_area).trigger('change');
+                $("#tvstatus").val(rowData.tvChargesStatus).trigger('change');
+                $("#waterstatus").val(rowData.waterChargesStatus).trigger('change');
             });
             $(document).on('click', '.btn_location_delete', function (e) {
                 e.preventDefault();
@@ -170,7 +197,10 @@
                 var _locationElectricMeter = $("#location_electricMeter").val();
                 var _locationGassMeter = $("#location_gassMeter").val();
                 var _locationWapdaMeter = $("#location_wapdaMeter").val();
-                $.post(url, { locationName: _locationName, locationElectricMeter: _locationElectricMeter, locationGassMeter: _locationGassMeter, locationWapdaMeter: _locationWapdaMeter, fk_subArea: _subAreaId }, function (data) {
+                var _locationtvStatus = $("#tvstatus").val();
+                var _locationwaterStatus = $("#waterstatus").val();
+                var _locationSecondMeter = $("#location_electricSecondMeter").val();
+                $.post(url, { locationName: _locationName, locationElectricMeter: _locationElectricMeter, locationGassMeter: _locationGassMeter, locationWapdaMeter: _locationWapdaMeter, fk_subArea: _subAreaId, locationTvStatus: _locationtvStatus, locationWaterStatus: _locationwaterStatus, locationSecondMeter:_locationSecondMeter }, function (data) {
                     if (data.resultCode == "1100") {
                         swal("Added!", data.remarks, "success");
                         initLocationGrid();
@@ -191,6 +221,8 @@
                     var _locationElectricMeter = $("#location_electricMeter").val();
                     var _locationGassMeter = $("#location_gassMeter").val();
                     var _locationWapdaMeter = $("#location_wapdaMeter").val();
+                    var _locationtvStatus = $("#tvstatus").val();
+                    var _locationwaterStatus = $("#waterstatus").val();
                     $.ajax({
                         url: '/Management/EditLocation',
                         type: 'POST',
@@ -200,7 +232,9 @@
                             locationName: _locationName,
                             locationElectricMeter: _locationElectricMeter,
                             locationGassMeter: _locationGassMeter,
-                            locationWapdaMeter: _locationWapdaMeter
+                            locationWapdaMeter: _locationWapdaMeter,
+                            locationTvStatus: _locationtvStatus,
+                            locationWaterStatus: _locationwaterStatus
                         },
                         beforeSend: function () {
                             $('.loading').show();
@@ -350,6 +384,12 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Second Meter No</span>
+                                    <input type="text" value="" id="location_electricSecondMeter" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
                                     <span class="input-group-addon bg-primary">location Gas Meter</span>
                                     <input type="text" value="" id="location_gassMeter" class="form-control" />
                                 </div>
@@ -358,6 +398,24 @@
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">location Wapda Meter</span>
                                     <input type="text" value="" id="location_wapdaMeter" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">TV Charges Status</span>
+                                    <select class="form-control dropdownlist" id="tvstatus">
+                                        <option value="0">Enabled</option>
+                                        <option value="1">Disabled</option>                                       
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Water Charges Status</span>
+                                    <select class="form-control dropdownlist" id="waterstatus">
+                                        <option value="0">Enabled</option>
+                                        <option value="1">Disabled</option>
+                                    </select>
                                 </div>
                             </div>
 

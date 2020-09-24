@@ -14,7 +14,6 @@
         <EntityTypeShape EntityType="db_bmsModel.tbl_controller" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_fixedrates" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_fixedratetype" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_location" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_offr" Width="1.5" PointX="8.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_paymentgashistory" Width="1.5" PointX="8.75" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_paymenthistory" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
@@ -34,11 +33,12 @@
         <EntityTypeShape EntityType="db_bmsModel.tbl_users" Width="1.5" PointX="14.75" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_usertype" Width="1.5" PointX="14.75" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_readinggas" Width="1.5" PointX="2.75" PointY="15.75" />
-        <EntityTypeShape EntityType="db_bmsModel.tbl_outstanding" Width="1.5" PointX="9.375" PointY="11.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_readingelectriclog" Width="1.5" PointX="5.375" PointY="15.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_readingelectric" Width="1.5" PointX="15.375" PointY="15.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_paymententryelectric" Width="1.5" PointX="17.375" PointY="0.75" />
         <EntityTypeShape EntityType="db_bmsModel.tbl_paymententrygas" Width="1.5" PointX="17.375" PointY="4.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_location" Width="1.5" PointX="7.375" PointY="17.75" />
+        <EntityTypeShape EntityType="db_bmsModel.tbl_outstanding" Width="1.5" PointX="17.375" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
