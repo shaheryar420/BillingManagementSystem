@@ -55,7 +55,7 @@ namespace BillingManagementSystem.SubDataHelpers
                             {
                                 var limitLow = double.Parse(slabs[i].slab_tariff.Split('-')[0].Trim());
                                 var limitHigh = double.Parse(slabs[i].slab_tariff.Split('-')[1].Trim());
-                                if (_units >= limitLow && _units <= limitHigh)
+                                if (_units > limitLow && _units <= limitHigh)
                                 {
                                     double extraUnits = _units - limitLow + 1;
                                     _units = _units - extraUnits;
@@ -72,7 +72,7 @@ namespace BillingManagementSystem.SubDataHelpers
                                 var limit = double.Parse(slabs[i].slab_tariff.Replace("<", " ").Trim());
                                 if (_units > limit)
                                 {
-                                    double extraUnits = _units - limit;
+                                    double extraUnits = _units - limit + 1;
                                     _units = _units - extraUnits;
                                     double extraTotalAmount = slabs[i].slab_net_rate.Value * extraUnits;
                                     double extraEnergy = slabs[i].slab_energy_charges.Value * extraUnits;

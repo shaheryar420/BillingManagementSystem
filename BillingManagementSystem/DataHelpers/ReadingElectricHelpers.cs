@@ -24,11 +24,13 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 using (db_bmsEntities db = new db_bmsEntities())
                                 {
-                                    var residentId = (from x in db.tbl_location
+                                    var resident = (from x in db.tbl_location
                                                       join y in db.tbl_residentbuilding on x.location_id equals y.fk_building
                                                       where x.location_electricmeter== model.readingElectricMeterNo || x.location_second_meter==model.readingElectricMeterNo
-                                                      select y.fk_resident).FirstOrDefault();
-                                    var existingReading = (from x in db.tbl_readingelectric where x.readingelectric_month == model.readingElectricMonth && x.fk_resident== residentId && x.readingelectric_meterno== model.readingElectricMeterNo select x).FirstOrDefault();
+                                                      select new { y.fk_resident,
+                                                      x.location_id}).FirstOrDefault();
+                                
+                                    var existingReading = (from x in db.tbl_readingelectric where x.readingelectric_month == model.readingElectricMonth && x.fk_resident== resident.fk_resident && x.readingelectric_meterno== model.readingElectricMeterNo select x).FirstOrDefault();
                                     if (existingReading == null)
                                     {
                                         if (!string.IsNullOrEmpty(model.readingpicture_data))
@@ -47,7 +49,8 @@ namespace BillingManagementSystem.DataHelpers
                                                 readingelectric_addedby = int.Parse(model.readingElectricAddedby),
                                                 readingelectric_units = int.Parse(model.readingElectricUnits),
                                                 readingelectric_month = model.readingElectricMonth,
-                                                fk_resident= residentId,
+                                                fk_resident= resident.fk_resident,
+                                                fk_location= resident.location_id,
                                                 readingelectric_currentreading = double.Parse(model.readingElectricCurrentReading),
                                                 readingelectric_datetime = DateTime.UtcNow.AddHours(5),
                                                 readingelectric_prevreading = double.Parse(model.readingElectricPrevReading),
@@ -61,6 +64,8 @@ namespace BillingManagementSystem.DataHelpers
                                         {
                                             var newReadingElectric = new tbl_readingelectric()
                                             {
+                                                fk_resident = resident.fk_resident,
+                                                fk_location = resident.location_id,
                                                 fk_readingpicture = 0,
                                                 readingelectric_addedby = int.Parse(model.readingElectricAddedby),
                                                 readingelectric_units = int.Parse(model.readingElectricUnits),
@@ -1308,8 +1313,9 @@ namespace BillingManagementSystem.DataHelpers
                                                    r.resident_unit,
                                                    r.resident_pin_code
                                                }).OrderByDescending(x=>x.billelectric_datetime).ToList();
-                        var outstandings = db.tbl_outstanding.Where(x => x.fk_consummer_no == model.consumerNo).ToList();
-                        var payments = db.tbl_paymenthistory.Where(x => x.meter_no == model.consumerNo).ToList();
+                        var location = _locationhistory[0].fk_location;
+                        var outstandings = db.tbl_outstanding.Where(x => x.fk_location == location).ToList();
+                        var payments = db.tbl_paymenthistory.Where(x => x.fk_location == location).ToList();
                         var locationHistory = (from x in _locationhistory
                                                join y in outstandings on x.billelectric_month equals y.outstanding_month
                                                join z in payments on x.billelectric_month equals z.billingmonth into payment

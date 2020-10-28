@@ -36,13 +36,18 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
+        public ActionResult RecoveryList()
+        {
+            return View();
+        }
         #region Electric
         public ActionResult AddPayment()
         {
             string _amount = Request.Form["_amount"].ToString();
             string _residentId = Request.Form["_residentId"].ToString();
             string _month = Request.Form["_month"].ToString();
-            string _billingMonth = Request.Form["_billMonth"].ToString();
+            string _billingMonth = Request.Form["_billingMonth"].ToString();
+            string _paymentType = Request.Form["_paymentType"].ToString();
             HttpPostedFileBase file = Request.Files[0]; //Uploaded file
                                                         //Use the following properties to get file's name, size and MIMEType
             int fileSize = file.ContentLength;
@@ -66,6 +71,7 @@ namespace BillingManagementSystem.Controllers
                 residentId = _residentId,
                 paymentMonth = _month,
                 billingMonth= _billingMonth,
+                fk_paymentType= _paymentType,
 
             };
             RecoveryHelpers helper = new RecoveryHelpers();
@@ -76,6 +82,14 @@ namespace BillingManagementSystem.Controllers
         }
 
         public ActionResult GetAllPayments()
+        {
+            RecoveryHelpers helper = new RecoveryHelpers();
+            var response = helper.GetAllPaymentsEntrys();
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetRecoveryList()
         {
             RecoveryHelpers helper = new RecoveryHelpers();
             var response = helper.GetAllPayments();

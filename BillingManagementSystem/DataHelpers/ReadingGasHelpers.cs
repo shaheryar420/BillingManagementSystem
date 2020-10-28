@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using BillingManagementSystem.Models;
+using BillingManagementSystem.SubDataHelpers;
 
 namespace BillingManagementSystem.DataHelpers
 {
@@ -40,12 +41,26 @@ namespace BillingManagementSystem.DataHelpers
                                                     };
                                                     db.tbl_readingpicture.Add(newReadingPicture);
                                                     db.SaveChanges();
+                                                    var resident = (from x in db.tbl_location
+                                                                    join y in db.tbl_residentbuilding on x.location_id equals y.fk_building
+                                                                    where x.location_gassmeter == model.readingGasMeterNo 
+                                                                    select new
+                                                                    {
+                                                                        y.fk_resident,
+                                                                        x.location_id
+                                                                    }).FirstOrDefault();
+                                                    var units = double.Parse(model.readingGasCurrentReading) - double.Parse(model.readingGasPrevReading);
+                                                    var MMBTU  = units / 100000;
+                                                    MMBTU = (MMBTU * 1046) / 281.7385;
                                                     var newReadingGas = new tbl_readinggas()
                                                     {
                                                         fk_readingpicture = newReadingPicture.readingpicture_id,
                                                         reading_addedby = int.Parse(model.readingGasAddedby),
-                                                        reading_units = double.Parse(model.readingGasCurrentReading) - double.Parse(model.readingGasPrevReading),
+                                                        reading_units = units,
                                                         reading_month = model.readingGasMonth,
+                                                        MMBTU= MMBTU,
+                                                        fk_location= resident.location_id,
+                                                        fk_resident= resident.fk_resident,
                                                         reading_currentreading = double.Parse(model.readingGasCurrentReading),
                                                         reading_datetime = DateTime.UtcNow.AddHours(5),
                                                         reading_prevreading = double.Parse(model.readingGasPrevReading),
@@ -546,7 +561,7 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             int readingGasId = int.Parse(model.readingGasId);
                             var readingGas = (from x in db.tbl_readinggas where x.reading_id == readingGasId select x).FirstOrDefault();
-                            double _units = readingGas.reading_units;
+                            double units = readingGas.reading_units;
                             var location = (from x in db.tbl_location
                                             join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
                                             join z in db.tbl_area on y.fk_area equals z.area_id
@@ -560,100 +575,21 @@ namespace BillingManagementSystem.DataHelpers
                                             }).FirstOrDefault();
                             if (location != null)
                             {
-                                var residentBuilding = (from x in db.tbl_residentbuilding where x.fk_building == location.location_id select x).FirstOrDefault();
-                                if (residentBuilding != null)
+                                var resident = db.tbl_residents.Where(x => x.resident_id == readingGas.fk_resident).FirstOrDefault();
+                                if (resident != null)
                                 {
-                                    var previousPendingBill = (from x in db.tbl_billgas where x.fk_paymentstatus == 3 && x.fk_location == residentBuilding.fk_building select x).FirstOrDefault();
-                                    double outstanding = 0.0;
-                                    if (previousPendingBill != null)
-                                    {
-                                        outstanding = previousPendingBill.outstanding.Value;
-                                    }
-                                    else
-                                    {
-                                        outstanding = 0.0;
-                                    }
-                                    //Calculating Bill Amount & Adding Bill
-                                    var fpa = (from x in db.tbl_fixedrates where x.fixedrates_id == 1 select x.fixedrates_amount).FirstOrDefault();
-                                    var meterRent = (from x in db.tbl_fixedrates where x.fixedrates_id == 2 select x.fixedrates_amount).FirstOrDefault();
-                                    var slabs = (from x in db.tbl_slabs select x).ToList();
-                                    //Calculations
-                                    double totalAmount = 0.0;
-                                    double totalEnergyCharges = 0.0;
-                                    double totalFPA = 0.0;
-                                    for (int i = 0; i < slabs.Count; i++)
-                                    {
-                                        if (totalEnergyCharges == 0)
-                                        {
 
-                                            if (slabs[i].slab_tariff.Contains(">"))
-                                            {
-                                                var limit = double.Parse(slabs[i].slab_tariff.Replace(">", " ").Trim());
-                                                if (_units <= limit)
-                                                {
-                                                    totalAmount = slabs[i].slab_net_rate.Value * _units;
-                                                    totalEnergyCharges = slabs[i].slab_energy_charges.Value * _units;
-                                                    totalFPA = fpa * _units;
-                                                }
-
-                                            }
-                                            else if (slabs[i].slab_tariff.Contains("-"))
-                                            {
-                                                var limitLow = double.Parse(slabs[i].slab_tariff.Split('-')[0].Trim());
-                                                var limitHigh = double.Parse(slabs[i].slab_tariff.Split('-')[1].Trim());
-                                                if (_units >= limitLow && _units <= limitHigh)
-                                                {
-                                                    double extraUnits = limitHigh - _units;
-                                                    _units = _units - extraUnits;
-                                                    double extraTotalAmount = slabs[i].slab_net_rate.Value * extraUnits;
-                                                    double extraEnergy = slabs[i].slab_energy_charges.Value * extraUnits;
-                                                    double extraFPA = fpa * extraUnits;
-                                                    totalAmount = (slabs[i - 1].slab_net_rate.Value * _units) + extraTotalAmount;
-                                                    totalEnergyCharges = (slabs[i - 1].slab_energy_charges.Value * _units) + extraEnergy;
-                                                    totalFPA = (fpa * _units) + extraFPA;
-                                                }
-                                            }
-                                            else if (slabs[i].slab_tariff.Contains("<"))
-                                            {
-                                                var limit = double.Parse(slabs[i].slab_tariff.Replace("<", " ").Trim());
-                                                if (_units > limit)
-                                                {
-                                                    double extraUnits = _units - limit;
-                                                    _units = _units - extraUnits;
-                                                    double extraTotalAmount = slabs[i].slab_net_rate.Value * extraUnits;
-                                                    double extraEnergy = slabs[i].slab_energy_charges.Value * extraUnits;
-                                                    double extraFPA = fpa * extraUnits;
-                                                    totalAmount = (slabs[i - 1].slab_net_rate.Value * _units) + extraTotalAmount;
-                                                    totalEnergyCharges = (slabs[i - 1].slab_energy_charges.Value * _units) + extraEnergy;
-                                                    totalFPA = (fpa * _units) + extraFPA;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                totalAmount = slabs[i].slab_net_rate.Value * _units;
-                                                totalEnergyCharges = slabs[i].slab_energy_charges.Value * _units;
-                                                totalFPA = fpa * _units;
-                                            }
-                                        }
-                                    }
-                                    totalEnergyCharges = totalEnergyCharges / 2;
-                                    totalAmount = totalAmount + (totalFPA + meterRent);
-                                    totalAmount = (totalAmount - totalEnergyCharges);
-                                    outstanding = outstanding + totalAmount;
+                                    var response = new SubDataHelpers.ReadingGasSubHelpers().CalculateBill(units, location.location_id);                                    
 
                                     /// Entry
                                     toReturn = new ApproveGasResponseModel()
                                     {
-                                         billGasAmount = totalAmount.ToString(),
+                                         billGasAmount = response.totalAmount.ToString(),
                                          billGasCurrentReading = readingGas.reading_currentreading.ToString(),
                                          billGasMonth = !String.IsNullOrEmpty(readingGas.reading_month) ? readingGas.reading_month : "",
-                                         billGasOutstanding = outstanding.ToString(),
                                          billGasPrevReading = readingGas.reading_prevreading.ToString(),
                                          billGasRemarks = !string.IsNullOrEmpty(readingGas.reading_remarks) ? readingGas.reading_remarks : "",
                                          billGasUnits = readingGas.reading_units.ToString(),
-                                         billGasWater = readingGas.reading_water.ToString(),
-                                         billGasTv = readingGas.reading_tv.ToString(),
-                                         gasCharges = totalEnergyCharges.ToString(),
                                          areaName = !string.IsNullOrEmpty(location.subarea_name)?location.subarea_name:"",
                                          subAreaName = !string.IsNullOrEmpty(location.area_name)?location.area_name:"",                                         
                                          locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",

@@ -79,10 +79,13 @@
                                     <a href="@Url.Action("Wapda","Recovery")">Wapda</a>
                                 </li>
                                 <li class="@Html.IsSelected(action: "RecoveryApproval", controller:"Recovery")" @Html.IsAllowed(controller: "Recovery", action: "RecoveryApproval")>
-                                    <a href="@Url.Action("RecoveryApproval","Recovery")">RecoveryApproval</a>
+                                    <a href="@Url.Action("RecoveryApproval","Recovery")">Recovery Approval</a>
                                 </li>
                                 <li class="@Html.IsSelected(action: "RecoveryApprovalGas", controller:"Recovery")" @Html.IsAllowed(controller: "Recovery", action: "RecoveryApprovalGas")>
-                                    <a href="@Url.Action("RecoveryApprovalGas","Recovery")">RecoveryApprovalGas</a>
+                                    <a href="@Url.Action("RecoveryApprovalGas","Recovery")">Recovery Approval Gas</a>
+                                </li>
+                                <li class="@Html.IsSelected(action: "RecoveryList", controller:"Recovery")" @Html.IsAllowed(controller: "Recovery", action: "RecoveryList")>
+                                    <a href="@Url.Action("RecoveryList","Recovery")">Electric Recovery List</a>
                                 </li>
                             </ul>
 

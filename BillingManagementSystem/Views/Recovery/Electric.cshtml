@@ -333,11 +333,14 @@
                                 return "Paid";
                             }
                             if (data == 2) {
-                                return "Partial Paid"
+                                return "Not Paid"
                             }
                             if (data == 3) {
                                 return "Pending"
-                            }                            
+                            } 
+                            if (data == 4) {
+                                return "Partial Paid"
+                            }
                         }
                     },
                     { "title": "Bill Payment Month", "data": "paymentMonth" },
@@ -352,21 +355,22 @@
         }
         $('#btn_electric_add').click(function () {
                 console.log('ok');
-                var _url = "/Recovery/AddPayment";
-                var _amount = $("#Amount").val();
-             var _billingMonth = $("#billing_month").val();
-             var _paymentMonth = $("#month").val();
-             var _paymentSource = $("#Payment_Source").val();
-                var formdata = new FormData(); //FormData object
-             var fileInput = document.getElementById('online_file');
-             if (fileInput.files.length > 0) {
-                 formdata.append(fileInput.files[0].Name, fileInput.files[0]);
-                 console.log(formdata);
+            var _url = "/Recovery/AddPayment";
+            var _consumerNo = $("#consumer_no").val();
+            var _amount = $("#Amount").val();
+            var _billingMonth = $("#billing_month").val();
+            var _paymentMonth = $("#month").val();
+            var _paymentSource = $("#Payment_Source").val();
+            var formdata = new FormData(); //FormData object
+            var fileInput = document.getElementById('online_file');
+            if (fileInput.files.length > 0) {
+                formdata.append(fileInput.files[0].Name, fileInput.files[0]);
+                console.log(formdata);
                 formdata.append("_amount", _amount);
                 formdata.append("_residentId", residentId);
-                 formdata.append("_month", _paymentMonth);
-                 formdata.append("_billingMonth", _billingMonth);
-                 formdata.append("_paymentType", _paymentSource);
+                formdata.append("_month", _paymentMonth);
+                formdata.append("_billingMonth", _billingMonth);
+                formdata.append("_paymentType", _paymentSource);
                 $.ajax({
                     url: _url,
                     type: "POST",
@@ -383,6 +387,7 @@
                         if (data.resultCode == "1100") {
                             swal("Added!", data.remarks, "success");
                             initElectricGrid();
+                            initHistoryGrid(_consumerNo);
                             clearFields();
                         }
                         else {

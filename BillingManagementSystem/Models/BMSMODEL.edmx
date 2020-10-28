@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="db_bmsModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="db_bmsModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="officerreport">
           <Key>
             <PropertyRef Name="CUNSUMER_NO" />
@@ -115,6 +115,14 @@
           </Key>
           <Property Name="fixedratetype_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fixedratetype_name" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="tbl_gas_slab">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="slab_tariff" Type="varchar" MaxLength="45" />
+          <Property Name="slab_rate" Type="double" />
         </EntityType>
         <EntityType Name="tbl_location">
           <Key>
@@ -278,8 +286,9 @@
           <Property Name="reading_units" Type="double" Nullable="false" />
           <Property Name="reading_addedby" Type="int" Nullable="false" />
           <Property Name="reading_month" Type="varchar" MaxLength="45" />
-          <Property Name="reading_water" Type="double" Nullable="false" />
-          <Property Name="reading_tv" Type="double" Nullable="false" />
+          <Property Name="fk_resident" Type="int" Nullable="false" />
+          <Property Name="fk_location" Type="int" Nullable="false" />
+          <Property Name="MMBTU" Type="double" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_readinggaslog">
           <Key>
@@ -428,6 +437,7 @@
           <EntitySet Name="tbl_controller" EntityType="Self.tbl_controller" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_fixedrates" EntityType="Self.tbl_fixedrates" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_fixedratetype" EntityType="Self.tbl_fixedratetype" Schema="db_bms" store:Type="Tables" />
+          <EntitySet Name="tbl_gas_slab" EntityType="Self.tbl_gas_slab" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_location" EntityType="Self.tbl_location" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_offr" EntityType="Self.tbl_offr" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_outstanding" EntityType="Self.tbl_outstanding" Schema="db_bms" store:Type="Tables" />
@@ -454,8 +464,7 @@
           <EntitySet Name="tbl_users" EntityType="Self.tbl_users" Schema="db_bms" store:Type="Tables" />
           <EntitySet Name="tbl_usertype" EntityType="Self.tbl_usertype" Schema="db_bms" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="db_bmsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -718,23 +727,6 @@
           <Property Name="readingelectriclog_archivedon" Type="DateTime" Nullable="false" />
           <Property Name="readingelectriclog_archivedby" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="tbl_readinggas">
-          <Key>
-            <PropertyRef Name="reading_id" />
-          </Key>
-          <Property Name="reading_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="reading_datetime" Type="DateTime" Nullable="false" />
-          <Property Name="reading_remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="reading_meterno" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="reading_prevreading" Type="Double" Nullable="false" />
-          <Property Name="reading_currentreading" Type="Double" Nullable="false" />
-          <Property Name="fk_readingpicture" Type="Int32" Nullable="false" />
-          <Property Name="reading_units" Type="Double" Nullable="false" />
-          <Property Name="reading_addedby" Type="Int32" Nullable="false" />
-          <Property Name="reading_month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="reading_water" Type="Double" Nullable="false" />
-          <Property Name="reading_tv" Type="Double" Nullable="false" />
-        </EntityType>
         <EntityType Name="tbl_readinggaslog">
           <Key>
             <PropertyRef Name="readinglog_id" />
@@ -893,7 +885,6 @@
           <EntitySet Name="tbl_paymenttype" EntityType="Self.tbl_paymenttype" />
           <EntitySet Name="tbl_readingelectric" EntityType="Self.tbl_readingelectric" />
           <EntitySet Name="tbl_readingelectriclog" EntityType="Self.tbl_readingelectriclog" />
-          <EntitySet Name="tbl_readinggas" EntityType="Self.tbl_readinggas" />
           <EntitySet Name="tbl_readinggaslog" EntityType="Self.tbl_readinggaslog" />
           <EntitySet Name="tbl_readingpicture" EntityType="Self.tbl_readingpicture" />
           <EntitySet Name="tbl_residentbuilding" EntityType="Self.tbl_residentbuilding" />
@@ -907,7 +898,35 @@
           <EntitySet Name="tbl_userpermissions" EntityType="Self.tbl_userpermissions" />
           <EntitySet Name="tbl_users" EntityType="Self.tbl_users" />
           <EntitySet Name="tbl_usertype" EntityType="Self.tbl_usertype" />
+          <EntitySet Name="tbl_readinggas" EntityType="db_bmsModel.tbl_readinggas" />
+          <EntitySet Name="tbl_gas_slab" EntityType="db_bmsModel.tbl_gas_slab" />
         </EntityContainer>
+        <EntityType Name="tbl_readinggas">
+          <Key>
+            <PropertyRef Name="reading_id" />
+          </Key>
+          <Property Name="reading_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="reading_datetime" Type="DateTime" Nullable="false" />
+          <Property Name="reading_remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="reading_meterno" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="reading_prevreading" Type="Double" Nullable="false" />
+          <Property Name="reading_currentreading" Type="Double" Nullable="false" />
+          <Property Name="fk_readingpicture" Type="Int32" Nullable="false" />
+          <Property Name="reading_units" Type="Double" Nullable="false" />
+          <Property Name="reading_addedby" Type="Int32" Nullable="false" />
+          <Property Name="reading_month" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="fk_resident" Type="Int32" Nullable="false" />
+          <Property Name="fk_location" Type="Int32" Nullable="false" />
+          <Property Name="MMBTU" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_gas_slab">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="slab_tariff" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="slab_rate" Type="Double" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1193,24 +1212,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tbl_readinggas">
-            <EntityTypeMapping TypeName="db_bmsModel.tbl_readinggas">
-              <MappingFragment StoreEntitySet="tbl_readinggas">
-                <ScalarProperty Name="reading_id" ColumnName="reading_id" />
-                <ScalarProperty Name="reading_datetime" ColumnName="reading_datetime" />
-                <ScalarProperty Name="reading_remarks" ColumnName="reading_remarks" />
-                <ScalarProperty Name="reading_meterno" ColumnName="reading_meterno" />
-                <ScalarProperty Name="reading_prevreading" ColumnName="reading_prevreading" />
-                <ScalarProperty Name="reading_currentreading" ColumnName="reading_currentreading" />
-                <ScalarProperty Name="fk_readingpicture" ColumnName="fk_readingpicture" />
-                <ScalarProperty Name="reading_units" ColumnName="reading_units" />
-                <ScalarProperty Name="reading_addedby" ColumnName="reading_addedby" />
-                <ScalarProperty Name="reading_month" ColumnName="reading_month" />
-                <ScalarProperty Name="reading_water" ColumnName="reading_water" />
-                <ScalarProperty Name="reading_tv" ColumnName="reading_tv" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tbl_readinggaslog">
             <EntityTypeMapping TypeName="db_bmsModel.tbl_readinggaslog">
               <MappingFragment StoreEntitySet="tbl_readinggaslog">
@@ -1358,6 +1359,34 @@
               <MappingFragment StoreEntitySet="tbl_usertype">
                 <ScalarProperty Name="usertype_id" ColumnName="usertype_id" />
                 <ScalarProperty Name="usertype_name" ColumnName="usertype_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_readinggas">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_readinggas">
+              <MappingFragment StoreEntitySet="tbl_readinggas">
+                <ScalarProperty Name="MMBTU" ColumnName="MMBTU" />
+                <ScalarProperty Name="fk_location" ColumnName="fk_location" />
+                <ScalarProperty Name="fk_resident" ColumnName="fk_resident" />
+                <ScalarProperty Name="reading_month" ColumnName="reading_month" />
+                <ScalarProperty Name="reading_addedby" ColumnName="reading_addedby" />
+                <ScalarProperty Name="reading_units" ColumnName="reading_units" />
+                <ScalarProperty Name="fk_readingpicture" ColumnName="fk_readingpicture" />
+                <ScalarProperty Name="reading_currentreading" ColumnName="reading_currentreading" />
+                <ScalarProperty Name="reading_prevreading" ColumnName="reading_prevreading" />
+                <ScalarProperty Name="reading_meterno" ColumnName="reading_meterno" />
+                <ScalarProperty Name="reading_remarks" ColumnName="reading_remarks" />
+                <ScalarProperty Name="reading_datetime" ColumnName="reading_datetime" />
+                <ScalarProperty Name="reading_id" ColumnName="reading_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_gas_slab">
+            <EntityTypeMapping TypeName="db_bmsModel.tbl_gas_slab">
+              <MappingFragment StoreEntitySet="tbl_gas_slab">
+                <ScalarProperty Name="slab_rate" ColumnName="slab_rate" />
+                <ScalarProperty Name="slab_tariff" ColumnName="slab_tariff" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

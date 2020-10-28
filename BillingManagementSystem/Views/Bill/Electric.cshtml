@@ -577,6 +577,29 @@
             <div class="modal-body" id="modal-overlay">
                 <div class="row">
                     <div class="col-md-6">
+                        <h4>Assign Location:</h4>
+                        <div class="form-group">
+                            <label class="control-label">Consumer #.</label>
+                            <input tabindex="1" type="number" value="" class="form-control" id="model_consumer_no" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Area</label>
+                            <input readonly class="form-control dropdownlist" id="resident_area">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Sub Area</label>
+                            <input readonly class="form-control dropdownlist" id="resident_subarea">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Location</label>
+                            <input readonly class="form-control dropdownlist" id="resident_location">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control dropdownlist hidden" id="resident_location_id">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
                         <h4>Resident Details:</h4>
                         <div class="form-group">
                             <label class="control-label">Resident PA #.</label>
@@ -610,28 +633,6 @@
                             </select>
                         </div>
 
-                    </div>
-                    <div class="col-md-6">
-                        <h4>Assign Location:</h4>
-                        <div class="form-group">
-                            <label class="control-label">Consumer #.</label>
-                            <input tabindex="1" type="number" value="" class="form-control" id="model_consumer_no" />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Area</label>
-                            <input readonly class="form-control dropdownlist" id="resident_area">
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Sub Area</label>
-                            <input readonly class="form-control dropdownlist" id="resident_subarea">
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Location</label>
-                            <input readonly class="form-control dropdownlist" id="resident_location">
-                        </div>
-                        <div class="form-group">                            
-                            <input class="form-control dropdownlist hidden" id="resident_location_id">
-                        </div>
                     </div>
                 </div>
             </div>

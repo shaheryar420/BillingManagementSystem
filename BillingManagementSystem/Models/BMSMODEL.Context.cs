@@ -45,7 +45,6 @@ namespace BillingManagementSystem.Models
         public virtual DbSet<tbl_paymenttype> tbl_paymenttype { get; set; }
         public virtual DbSet<tbl_readingelectric> tbl_readingelectric { get; set; }
         public virtual DbSet<tbl_readingelectriclog> tbl_readingelectriclog { get; set; }
-        public virtual DbSet<tbl_readinggas> tbl_readinggas { get; set; }
         public virtual DbSet<tbl_readinggaslog> tbl_readinggaslog { get; set; }
         public virtual DbSet<tbl_readingpicture> tbl_readingpicture { get; set; }
         public virtual DbSet<tbl_residentbuilding> tbl_residentbuilding { get; set; }
@@ -59,5 +58,7 @@ namespace BillingManagementSystem.Models
         public virtual DbSet<tbl_userpermissions> tbl_userpermissions { get; set; }
         public virtual DbSet<tbl_users> tbl_users { get; set; }
         public virtual DbSet<tbl_usertype> tbl_usertype { get; set; }
+        public virtual DbSet<tbl_readinggas> tbl_readinggas { get; set; }
+        public virtual DbSet<tbl_gas_slab> tbl_gas_slab { get; set; }
     }
 }

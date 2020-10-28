@@ -47,31 +47,48 @@ namespace BillingManagementSystem.DataHelpers
                                                                 {
                                                                     x.billelectric_id,
                                                                     x.fk_location,
-                                                                    y.location_electricmeter
+                                                                    y.location_electricmeter,
+                                                                    x.fk_paymentstatus,
+                                                                    x.billelectric_amount
                                                                 }).FirstOrDefault();
-                                                    var newPayment = new tbl_paymententryelectric()
+                                                    var existingPayment = (from x in db.tbl_paymententryelectric where x.fk_resident == residentId && x.billingmonth == model.billingMonth select x).FirstOrDefault();
+                                                    if (existingPayment == null)
                                                     {
-                                                        meter_no = bill.location_electricmeter,
-                                                        fk_resident = residentId,
-                                                        fk_location = bill.fk_location,
-                                                        billingmonth = model.billingMonth,
-                                                        fk_picture = newReadingPicture.readingpicture_id,
-                                                        fk_billelectric = bill.billelectric_id,
-                                                        payment_datetime = DateTime.UtcNow.AddHours(5),
-                                                        paymentmonth = model.paymentMonth,
-                                                        payment_amount = double.Parse(model.paymentAmount),
-                                                        fk_paymenttype = int.Parse(model.fk_paymentType),
-                                                    };
-                                                    db.tbl_paymententryelectric.Add(newPayment);
-                                                    db.SaveChanges();
+                                                        var newPayment = new tbl_paymententryelectric()
+                                                        {
+                                                            meter_no = bill.location_electricmeter,
+                                                            fk_resident = residentId,
+                                                            fk_location = bill.fk_location,
+                                                            billingmonth = model.billingMonth,
+                                                            fk_picture = newReadingPicture.readingpicture_id,
+                                                            fk_billelectric = bill.billelectric_id,
+                                                            payment_datetime = DateTime.UtcNow.AddHours(5),
+                                                            paymentmonth = model.paymentMonth,
+                                                            payment_amount = double.Parse(model.paymentAmount),
+                                                            fk_paymenttype = int.Parse(model.fk_paymentType),
+                                                        };
 
-
-
-                                                    toReturn = new PaymentResponseModel()
+                                                        db.tbl_paymententryelectric.Add(newPayment);
+                                                        db.SaveChanges();
+                                                        toReturn = new PaymentResponseModel()
+                                                        {
+                                                            resultCode = "1100",
+                                                            remarks = "Succesfully Added"
+                                                        };
+                                                       
+                                                    }
+                                                    else
                                                     {
-                                                        resultCode = "1100",
-                                                        remarks = "Succesfully Added"
-                                                    };
+                                                        toReturn = new PaymentResponseModel()
+                                                        {
+                                                            resultCode = "1400",
+                                                            remarks = "Already Paid"
+                                                        };
+                                                    }
+
+
+
+                                                  
                                                 }
                                                 else
                                                 {
@@ -537,6 +554,94 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
+        public List<PaymentResponseModel> GetAllPaymentsEntrys()
+        {
+            List<PaymentResponseModel> toReturn = new List<PaymentResponseModel>();
+            try
+            {
+                using (db_bmsEntities db = new db_bmsEntities())
+                {
+                    var payments = (from x in db.tbl_paymententryelectric
+                                    join y in db.tbl_location on x.meter_no equals y.location_electricmeter
+                                    join r in db.tbl_residents on x.fk_resident equals r.resident_id
+                                    join p in db.tbl_readingpicture on x.fk_picture equals p.readingpicture_id
+                                    join s in db.tbl_subarea on y.fk_subarea equals s.subarea_id
+                                    join a in db.tbl_area on s.fk_area equals a.area_id
+                                    select new
+                                    {
+                                        p.readingpicture_data,
+                                        p.readingpicture_id,
+                                        p.readingpicture_size,
+                                        p.readingpicture_type,
+                                        r.resident_name,
+                                        r.resident_panumber,
+                                        r.resident_unit,
+                                        r.resident_rank,
+                                        r.resident_pin_code,
+                                        y.location_id,
+                                        y.location_name,
+                                        s.subarea_name,
+                                        a.area_name,
+                                        x.paymentmonth,
+                                        x.payment_id,
+                                        x.payment_amount,
+                                        x.payment_datetime
+
+
+                                    }).ToList();
+                    if (payments.Count() > 0)
+                    {
+                        toReturn = payments.Select(payment => new PaymentResponseModel()
+                        {
+                            residentPaNo = payment.resident_panumber,
+                            residentRank = payment.resident_rank,
+                            residentStatus = payment.resident_pin_code.ToString(),
+                            residentUnit = payment.resident_unit,
+                            picturedata = payment.readingpicture_data,
+                            pictureSize = payment.readingpicture_size.ToString(),
+                            pictureId = payment.readingpicture_id.ToString(),
+                            pictureType = payment.readingpicture_type,
+                            locationId = payment.location_id.ToString(),
+                            paymentAmount = payment.payment_amount.ToString(),
+                            paymenthistoryDatetime = payment.payment_datetime.ToString(),
+                            paymenthistoryId = payment.payment_id.ToString(),
+                            paymentMonth = !String.IsNullOrEmpty(payment.paymentmonth) ? payment.paymentmonth : "",
+                            residentName = payment.resident_name,
+                            locationName = payment.location_name,
+                            subAreaName = payment.subarea_name,
+                            areaName = payment.area_name,
+
+                            remarks = "Successfully Found",
+                            resultCode = "1100"
+                        }).ToList();
+                        foreach (var payment in toReturn)
+                        {
+                            int locationId = int.Parse(payment.locationId);
+                            var bill = (from x in db.tbl_billelectric where x.fk_location == locationId select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
+                            payment.outstanding = bill.billelectric_outstanding.ToString();
+                        }
+
+                    }
+                    else
+                    {
+                        toReturn.Add(new PaymentResponseModel()
+                        {
+                            remarks = "No Record Found",
+                            resultCode = "1200"
+                        });
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn.Add(new PaymentResponseModel()
+                {
+                    remarks = "There Was A Fatal Error " + Ex.ToString(),
+                    resultCode = "1000"
+                });
+            }
+            return toReturn;
+        }
         public List<PaymentResponseModel> GetAllPayments()
         {
             List<PaymentResponseModel>  toReturn = new List<PaymentResponseModel>();
@@ -635,43 +740,59 @@ namespace BillingManagementSystem.DataHelpers
                     int paymentId = int.Parse(model.paymenthistoryId);
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var payment = (from x in db.tbl_paymenthistory where x.paymenthistory_id == paymentId select x).FirstOrDefault();
+                        var payment = (from x in db.tbl_paymententryelectric where x.payment_id == paymentId select x).FirstOrDefault();
                         if(payment!= null)
                         {
                            
-                            var newApprovedPayment = new tbl_residentpayments()
+                            var newApprovedPayment = new tbl_paymenthistory()
                             {
                                 fk_resident =payment.fk_resident,
                                 fk_paymenttype = 0,
                                 paymentmonth = payment.paymentmonth,
                                 payment_amount = payment.payment_amount,
-                                payment_datetime = payment.paymenthistory_datetime,
+                                paymenthistory_datetime = payment.payment_datetime,
+                                billingmonth= payment.billingmonth,
+                                fk_billelectric=payment.fk_billelectric,
+                                fk_location= payment.fk_location,
+                                fk_picture= payment.fk_picture,
                                 meter_no = payment.meter_no
                             };
-                            db.tbl_residentpayments.Add(newApprovedPayment);
+                            db.tbl_paymenthistory.Add(newApprovedPayment);
                             db.SaveChanges();
                             toReturn = new PaymentResponseModel()
                             {
                                 remarks = "Payment Successfully Approved",
                                 resultCode = "1100"
                             };
-                            var billPending = (from x in db.tbl_billelectric where x.fk_resident == payment.fk_resident && x.fk_paymentstatus == 2 select x).FirstOrDefault();
-                            if (billPending != null)
+                            var outstanding = (from x in db.tbl_outstanding where x.outstanding_month == model.billingMonth && x.fk_resident == newApprovedPayment.fk_resident && x.fk_location == newApprovedPayment.fk_location select x).FirstOrDefault();
+                            if (outstanding != null)
                             {
-                                if (billPending.billelectric_outstanding == payment.payment_amount)
+                                outstanding.outstanding_amount = outstanding.outstanding_amount - newApprovedPayment.payment_amount;
+                                db.SaveChanges();
+                            }
+                            var currentbill = (from x in db.tbl_billelectric where x.fk_resident == newApprovedPayment.fk_resident && x.billelectric_month == newApprovedPayment.billingmonth select x).FirstOrDefault();
+                            if (currentbill != null)
+                            {
+                                if (currentbill.billelectric_amount == newApprovedPayment.payment_amount)
                                 {
-                                    billPending.fk_paymentstatus = 1;
-                                    billPending.billelectric_outstanding = 0;
+                                    currentbill.fk_paymentstatus = 1;
+                                    currentbill.billelectric_paymentamount = newApprovedPayment.payment_amount;
+                                    currentbill.billelectric_paymentdate = newApprovedPayment.paymenthistory_datetime;
+                                    currentbill.billelectric_paymentmonth = newApprovedPayment.paymentmonth;
+                                    db.SaveChanges();
                                 }
                                 else
                                 {
-                                    billPending.billelectric_outstanding = billPending.billelectric_outstanding - payment.payment_amount;
+                                    currentbill.fk_paymentstatus = 4;
+                                    currentbill.billelectric_paymentamount = newApprovedPayment.payment_amount;
+                                    currentbill.billelectric_paymentdate = newApprovedPayment.paymenthistory_datetime;
+                                    currentbill.billelectric_paymentmonth = newApprovedPayment.paymentmonth;
+                                    db.SaveChanges();
                                 }
-
-                                db.SaveChanges();
                             }
-                            db.tbl_paymenthistory.Remove(payment);
+                            db.tbl_paymententryelectric.Remove(payment);
                             db.SaveChanges();
+
                         }
                         else
                         {
