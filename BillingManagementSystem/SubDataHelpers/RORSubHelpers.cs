@@ -254,7 +254,9 @@ namespace BillingManagementSystem.SubDataHelpers
                             billSecondaryPictureData= x.secondaryReadingPictureData,
                             billSecondaryPictureSize=x.secondaryReadingPictureSize,
                             billSecondaryPictureType= x.secondaryReadingPictureType,
-
+                            billGasPictureId = x.gasReadingPictureId,
+                            billPrimaryPictureId = x.primaryReadingPictureId,
+                            billSecondaryPictureId = x.secondaryReadingPictureId,
                             remarks = "Successfully Found",
                             resultCode = "1100"
                         }).ToList();
@@ -526,6 +528,9 @@ namespace BillingManagementSystem.SubDataHelpers
                             billSecondaryPictureData = x.secondaryReadingPictureData,
                             billSecondaryPictureSize = x.secondaryReadingPictureSize,
                             billSecondaryPictureType = x.secondaryReadingPictureType,
+                            billGasPictureId= x.gasReadingPictureId,
+                            billPrimaryPictureId= x.primaryReadingPictureId,
+                            billSecondaryPictureId= x.secondaryReadingPictureId,
 
                             remarks = "Successfully Found",
                             resultCode = "1100"

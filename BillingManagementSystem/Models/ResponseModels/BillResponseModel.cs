@@ -54,9 +54,6 @@ namespace BillingManagementSystem.Models
         public string billOutstanding { get; set; }
         public string remarks { get; set; }
         public string resultCode { get; set; }
-        public string pictureData { get; set; }
-        public string pictureSize { get; set; }
-        public string pictureType { get; set; }
         public string residentName { get; set; }
         public string residentPaNo { get; set; }
         public string residentRank { get; set; }
