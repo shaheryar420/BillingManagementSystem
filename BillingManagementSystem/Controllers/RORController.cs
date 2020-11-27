@@ -44,6 +44,14 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult GetRORById([FromBody] BillRequestModel model)
+        {
+            RORHelpers helper = new RORHelpers();
+            var response = helper.GetRORById(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         public ActionResult GenerateROR([FromBody] RORRequestModel model)
         {
             RORHelpers helper = new RORHelpers();

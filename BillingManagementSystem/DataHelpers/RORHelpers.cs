@@ -214,13 +214,13 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         toReturn = toReturn.Where(x => x.areaId == model.areaid).ToList();
                     }
-                    if (!string.IsNullOrEmpty(model.billElectricDateTime))
+                    if (!string.IsNullOrEmpty(model.billDateTime))
                     {
-                        toReturn = toReturn.Where(x => x.billDateTime == model.billElectricDateTime).ToList();
+                        toReturn = toReturn.Where(x => x.billDateTime == model.billDateTime).ToList();
                     }
-                    if (!string.IsNullOrEmpty(model.billElectricAmount))
+                    if (!string.IsNullOrEmpty(model.billAmount))
                     {
-                        toReturn = toReturn.Where(x => x.billAmount == model.billElectricAmount).ToList();
+                        toReturn = toReturn.Where(x => x.billAmount == model.billAmount).ToList();
                     }
                     if (!string.IsNullOrEmpty(model.fk_location))
                     {
@@ -246,9 +246,50 @@ namespace BillingManagementSystem.DataHelpers
             }
             return toReturn;
         }
-       
+        public BillResponseModel GetRORById(BillRequestModel model)
+        {
+            BillResponseModel toReturn = new BillResponseModel();
+            try
+            {
+                using (db_bmsEntities db = new db_bmsEntities())
+                {
+                    if (new ModelsValidatorHelper().validateint(model.billId))
+                    {
+                        int id = int.Parse(model.billId);
+                        toReturn = new SubDataHelpers.RORSubHelpers().GetAllRORById(id);
 
-       
-        
+                        if (toReturn == null)
+                        {
+                            toReturn = (new BillResponseModel()
+                            {
+                                remarks = "No Record Found",
+                                resultCode = "1200"
+                            });
+                        }
+                    }
+                    else
+                    {
+                        toReturn = new BillResponseModel()
+                        {
+                            remarks = "Please Provide Ror",
+                            resultCode = "1300"
+                        };
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                toReturn=(new BillResponseModel()
+                {
+                    remarks = "There Was A Fatal Error " + Ex.ToString(),
+                    resultCode = "1000"
+                });
+            }
+            return toReturn;
+        }
+
+
+
+
     }
 }

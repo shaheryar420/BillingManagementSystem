@@ -12,19 +12,19 @@ namespace BillingManagementSystem.Models
         public string paNo { get; set; }
         public string areaid { get; set; }
         public string meterNo { get; set; }
-        public string billElectricId { get; set; }
-        public string billElectricDateTime { get; set; }
-        public string billElectricAmount { get; set; }
+        public string billId { get; set; }
+        public string billDateTime { get; set; }
+        public string billAmount { get; set; }
         public string fk_paymentStatus { get; set; }
         public string fk_location { get; set; }
         public string fk_resident { get; set; }
         public string residentName { get; set; }
-        public string billElectricPrevReading { get; set; }
-        public string billElectricCurrentReading { get; set; }
-        public string billElectricUnits { get; set; }
-        public string billElectricWater { get; set; }
-        public string billElectricTv { get; set; }
-        public string billElectricRemarks { get; set; }
+        public string billPrevReading { get; set; }
+        public string billCurrentReading { get; set; }
+        public string billUnits { get; set; }
+        public string billWater { get; set; }
+        public string billTv { get; set; }
+        public string billRemarks { get; set; }
         public string fk_billPicture { get; set; }
         public string billElectricMonth { get; set; }
         public string billElectricOutstanding { get; set; }
