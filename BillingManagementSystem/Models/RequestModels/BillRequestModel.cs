@@ -5,7 +5,7 @@ using System.Web;
 
 namespace BillingManagementSystem.Models
 {
-    public class BillElectricRequestModel
+    public class BillRequestModel
     {
         public string rank { get; set; }
         public string unit { get; set; }

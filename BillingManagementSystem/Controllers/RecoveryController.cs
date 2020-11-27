@@ -13,7 +13,7 @@ namespace BillingManagementSystem.Controllers
     public class RecoveryController : Controller
     {
         [SetPermissions]
-        public ActionResult Electric()
+        public ActionResult BillRecovery()
         {
             return View();
         }
@@ -116,50 +116,50 @@ namespace BillingManagementSystem.Controllers
         }
         #endregion
         #region Gas
-        public ActionResult AddPaymentGas()
-        {
-            string _amount = Request.Form["_amount"].ToString();
-            string _residentId = Request.Form["_residentId"].ToString();
-            string _month = Request.Form["_month"].ToString();
-            HttpPostedFileBase file = Request.Files[0]; //Uploaded file
-                                                        //Use the following properties to get file's name, size and MIMEType
-            int fileSize = file.ContentLength;
-            string fileName = file.FileName;
-            string mimeType = file.ContentType;
-            System.IO.Stream fileContent = file.InputStream;
-            string ext = Path.GetExtension(fileName);
-            byte[] thePictureAsBytes = new byte[fileSize];
-            using (BinaryReader theReader = new BinaryReader(fileContent))
-            {
-                thePictureAsBytes = theReader.ReadBytes(fileSize);
-            }
+        //public ActionResult AddPaymentGas()
+        //{
+        //    string _amount = Request.Form["_amount"].ToString();
+        //    string _residentId = Request.Form["_residentId"].ToString();
+        //    string _month = Request.Form["_month"].ToString();
+        //    HttpPostedFileBase file = Request.Files[0]; //Uploaded file
+        //                                                //Use the following properties to get file's name, size and MIMEType
+        //    int fileSize = file.ContentLength;
+        //    string fileName = file.FileName;
+        //    string mimeType = file.ContentType;
+        //    System.IO.Stream fileContent = file.InputStream;
+        //    string ext = Path.GetExtension(fileName);
+        //    byte[] thePictureAsBytes = new byte[fileSize];
+        //    using (BinaryReader theReader = new BinaryReader(fileContent))
+        //    {
+        //        thePictureAsBytes = theReader.ReadBytes(fileSize);
+        //    }
 
-            String _base64 = Convert.ToBase64String(thePictureAsBytes);
-            PaymentRequestModel model = new PaymentRequestModel()
-            {
-                readingpicture_data = _base64,
-                readingpicture_size = fileSize.ToString(),
-                readingpicture_type = mimeType,
-                paymentAmount = _amount,
-                residentId = _residentId,
-                paymentMonth = _month
+        //    String _base64 = Convert.ToBase64String(thePictureAsBytes);
+        //    PaymentRequestModel model = new PaymentRequestModel()
+        //    {
+        //        readingpicture_data = _base64,
+        //        readingpicture_size = fileSize.ToString(),
+        //        readingpicture_type = mimeType,
+        //        paymentAmount = _amount,
+        //        residentId = _residentId,
+        //        paymentMonth = _month
 
-            };
-            RecoveryHelpers helper = new RecoveryHelpers();
-            var response = helper.AddPaymentGas(model);
-            var json = Json(response);
-            json.MaxJsonLength = int.MaxValue;
-            return json;
-        }
+        //    };
+        //    RecoveryHelpers helper = new RecoveryHelpers();
+        //    var response = helper.AddPaymentGas(model);
+        //    var json = Json(response);
+        //    json.MaxJsonLength = int.MaxValue;
+        //    return json;
+        //}
 
-        public ActionResult GetAllGasPayments()
-        {
-            RecoveryHelpers helper = new RecoveryHelpers();
-            var response = helper.GetAllGasPayments();
-            var json = Json(response);
-            json.MaxJsonLength = int.MaxValue;
-            return json;
-        }
+        //public ActionResult GetAllGasPayments()
+        //{
+        //    RecoveryHelpers helper = new RecoveryHelpers();
+        //    var response = helper.GetAllGasPayments();
+        //    var json = Json(response);
+        //    json.MaxJsonLength = int.MaxValue;
+        //    return json;
+        //}
         public ActionResult RemovePaymentElectric(string readingElectricId)
         {
             PaymentRequestModel model = new PaymentRequestModel();

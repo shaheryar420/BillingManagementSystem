@@ -150,6 +150,7 @@ namespace BillingManagementSystem.SubDataHelpers
                         totalFPA = totalFPA,
                         tvCharges= tvCharges,
                         waterCharges= waterCharges,
+                        meterRent = meterRent,
                         resultCode="1100",
                         remarks="Success"
                     };

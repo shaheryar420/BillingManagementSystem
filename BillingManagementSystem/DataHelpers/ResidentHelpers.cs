@@ -136,6 +136,7 @@ namespace BillingManagementSystem.DataHelpers
                                         resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : "",
                                         resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : "",
                                         resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : "",
+                                        resident_consumer_no = int.Parse(model.meterNo),
                                         resident_pin_code = int.Parse(model.residentPinCode),
                                     };
                                     var residentExistingBuilding = (from x in db.tbl_residentbuilding where x.fk_building == locationId select x).FirstOrDefault();
@@ -149,6 +150,8 @@ namespace BillingManagementSystem.DataHelpers
                                             remarks = "Successfully Added",
                                             resultCode = "1100"
                                         };
+                                        var residentExisting = db.tbl_residents.Where(x => x.resident_id == residentExistingBuilding.fk_resident).FirstOrDefault();
+                                        residentExisting.resident_consumer_no = 0;
                                         residentExistingBuilding.fk_resident = resident.resident_id;
                                         db.SaveChanges();
 
@@ -1116,8 +1119,9 @@ namespace BillingManagementSystem.DataHelpers
                                          join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
                                          join z in db.tbl_location on y.fk_building equals z.location_id
                                          join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
+                                         join c in db.tbl_consummer_pool on z.location_id equals c.fk_location
                                          join aera in db.tbl_area on a.fk_area equals aera.area_id
-                                         where z.location_electricmeter == model.meterNo
+                                         where c.consummer_no == model.meterNo
                                          select new
                                          {
                                              x.resident_id,
@@ -1130,6 +1134,7 @@ namespace BillingManagementSystem.DataHelpers
                                              z.location_name,
                                              a.subarea_id,
                                              a.subarea_name,
+                                             c.consummer_no,
                                              aera.area_id,
                                              aera.area_name
 
@@ -1199,9 +1204,10 @@ namespace BillingManagementSystem.DataHelpers
                         var residents = (from x in db.tbl_residents
                                          join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
                                          join z in db.tbl_location on y.fk_building equals z.location_id
+                                         join c in db.tbl_consummer_pool on z.location_id equals c.fk_location
                                          join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
                                          join aera in db.tbl_area on a.fk_area equals aera.area_id
-                                         where z.location_gassmeter == model.meterNo
+                                         where c.consummer_no == model.meterNo
                                          select new
                                          {
                                              x.resident_id,
@@ -1364,13 +1370,14 @@ namespace BillingManagementSystem.DataHelpers
                                          join a in db.tbl_subarea on l.fk_subarea equals a.subarea_id
                                          join rl in db.tbl_residentbuilding on l.location_id equals rl.fk_building
                                          join r in db.tbl_residents on rl.fk_resident equals r.resident_id
+                                         join z in db.tbl_consummer_pool on l.location_id equals z.fk_location
                                         join aera in db.tbl_area on a.fk_area equals aera.area_id
                                         where a.subarea_id == areaId
                                          select new
                                          {
                                              r.resident_name,
                                              r.resident_id,
-                                             l.location_electricmeter,
+                                             z.consummer_no
                                          }).FirstOrDefault();
 
                         if (resident!=null)
@@ -1379,7 +1386,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 residentName = resident.resident_name,
                                 residentId = resident.resident_id.ToString(),
-                                meterNo = resident.location_electricmeter,
+                                meterNo = resident.consummer_no,
                                 remarks = "Successfully Found",
                                 resultCode = "1100"
                             };
@@ -1429,18 +1436,19 @@ namespace BillingManagementSystem.DataHelpers
                                     join a in db.tbl_subarea on l.fk_subarea equals a.subarea_id
                                     join rl in db.tbl_residentbuilding on l.location_id equals rl.fk_building
                                     join r in db.tbl_residents on rl.fk_resident equals r.resident_id
+                                     join z in db.tbl_consummer_pool on l.location_id equals z.fk_location
                                      join aera in db.tbl_area on a.fk_area equals aera.area_id
                                      select new
                                     {
                                         r.resident_name,
                                         r.resident_id,
-                                        l.location_electricmeter,
                                         r.resident_panumber,
                                         r.resident_rank,
                                         r.resident_remarks,
                                         r.resident_unit,
                                         a.subarea_id,
                                         a.subarea_name,
+                                        z.consummer_no,
                                         aera.area_id,
                                         aera.area_name
                                     }).ToList();
@@ -1455,7 +1463,7 @@ namespace BillingManagementSystem.DataHelpers
                             subareaId = resident.subarea_id.ToString(),
                             residentName = resident.resident_name,
                             residentId = resident.resident_id.ToString(),
-                            meterNo = resident.location_electricmeter,
+                            meterNo = resident.consummer_no,
                             residentPaNumber = !string.IsNullOrEmpty(resident.resident_panumber)?resident.resident_panumber:"",
                             residentRank = !string.IsNullOrEmpty(resident.resident_rank)? resident.resident_rank:"",
                             residentRemarks = !string.IsNullOrEmpty(resident.resident_remarks)?resident.resident_remarks:"",

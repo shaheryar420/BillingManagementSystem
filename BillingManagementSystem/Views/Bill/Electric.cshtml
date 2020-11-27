@@ -54,6 +54,8 @@
             $("#current_unit").val('');
             $("#month").val('');
             $("#previous_reading").focus();
+            $("#electric_subarea").val('');
+            $("#electric_resident").val('');
 
         }
         function clearModalFields() {
@@ -66,6 +68,8 @@
             $("#resident_area").val('');
             $("#resident_subarea").val('');
             $("#resident_location").val('');
+            $("#pin_code").val('');
+            $("#resident_status_inwords").val('');
 
         }
 
@@ -119,6 +123,18 @@
                     { "title": "LocationId", "data": "location_id", className: "hidden" },
                     { "title": "Billing Month", "data": "readingElectricMonth" },
                     { "title": "Consumer #", "data": "readingElectricMeterNo" },
+                    {
+                        "title": "Meter Status",
+                        "data": "meterStatus",
+                        render: function (data, type, row, meta) {
+                            if (data == 0) {
+                                return "Primary";
+                            }
+                            if (data == 1) {
+                                return "Secondary"
+                            }
+                        }
+                    },
                     { "title": "Area", "data": "area_name" },
                     { "title": "Sub Area", "data": "subarea_name" },
                     { "title": "Location", "data": "location_name" },
@@ -129,7 +145,7 @@
                     { "title": "Resident PA No", "data": "residentPANo" },
                     { "title": "Resident Name", "data": "residentName" },
                     { "title": "Resident Unit", "data": "residentUnit" },
-                    { "title": "Resident Rank", "data": "residentRank" },
+                    { "title": "Resident Rank", "data": "residentRank" },                 
                     {
                         "title": "Resident Status",
                         "data": "residentPinCode",
@@ -150,7 +166,7 @@
                                 return "Commercial"
                             }
                         }
-                    },
+                    },                   
                     { "title": "Added By", "data": "readingElectricAddedby" },
                     {
                         "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
@@ -237,6 +253,7 @@
                 var _meterNo = $("#consumer_no").val();
                 var _currentReading = $("#current_reading").val();
                 var _previousReading = $("#previous_reading").val();
+                var _meterStatus = $("#meter_status").val();
                 var _currentUnit = $("#current_unit").val();
                 var _month = $("#month").val();
                 var formdata = new FormData(); //FormData object
@@ -248,6 +265,7 @@
                     formdata.append("_currentReading", _currentReading);
                     formdata.append("_currentUnit", _currentUnit);
                     formdata.append("_month", _month);
+                    formdata.append("_meterStatus", _meterStatus);
                     $.ajax({
                         url: _url,
                         type: "POST",
@@ -358,8 +376,10 @@
                     var _unit = $("#resident_unit").val();
                     var _remarks = $("#resident_remarks").val();
                     var _status = $("#resident_status").val();
+                    var _consummerNo = $("#model_consumer_no").val();
                     var formdata = new FormData(); //FormData object                                       
                     formdata.append("locationId", _locationId);
+                    formdata.append("meterNo", _consummerNo);
                     formdata.append("residentName", _name);
                     formdata.append("residentPaNumber", _PANO);
                     formdata.append("residentRank", _rank);
@@ -420,13 +440,17 @@
         });
 
         $("#consumer_no").change(function () {
-            var _consumerNo = $('#consumer_no').val();
-            console.log(_consumerNo);
+            var _consumerNo = $('#consumer_no').val();            
+            var _meterStatus = $('#meter_status').val();            
             if (_consumerNo) {
                 $.ajax({
                     url: '/Bill/getAllDetailByConsumerNoForReadingElectric',
                     type: 'POST',
-                    data: { consummerNo: _consumerNo },
+                    data:
+                    {
+                        consummerNo: _consumerNo,
+                        meterStatus: _meterStatus,
+                    },
                     success: function (response) {
                         if (response.resultCode == '1100') {
                             $("#electric_area").val(response.areaName);
@@ -452,18 +476,55 @@
         });
         $("#model_consumer_no").change(function () {
             var _consumerNo = $('#model_consumer_no').val();
-            console.log(_consumerNo);
+            var _meterStatus = $('#meter_status').val();
             if (_consumerNo) {
                 $.ajax({
                     url: '/Bill/getAllDetailByConsumerNoForReadingElectric',
                     type: 'POST',
-                    data: { consummerNo: _consumerNo },
+                    data: {
+                        consummerNo: _consumerNo,
+                        meterStatus: _meterStatus,
+                    },
                     success: function (response) {
                         if (response.resultCode == '1100') {;
                             $("#resident_area").val(response.areaName);
                             $("#resident_subarea").val(response.subAreaName);
                             $("#resident_location").val(response.locationName);
                             $("#resident_location_id").val(response.locationId);
+
+                        }
+                        else {
+                            clearModalFields();
+
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            }
+            else {
+
+            }
+
+        });
+        $("#meter_status").change(function () {
+            var _consumerNo = $('#consumer_no').val();
+            var _meterStatus = $('#meter_status').val();
+            if (_consumerNo) {
+                $.ajax({
+                    url: '/Bill/getAllDetailByConsumerNoForReadingElectric',
+                    type: 'POST',
+                    data: {
+                        consummerNo: _consumerNo,
+                        meterStatus: _meterStatus,
+                    },
+                    success: function (response) {
+                        if (response.resultCode == '1100') {;
+                            $("#electric_area").val(response.areaName);
+                            $("#electric_subarea").val(response.subAreaName);
+                            $("#electric_resident").val(response.locationName);                            
+                            $("#previous_reading").val(response.previousReading);
 
                         }
                         else {
@@ -479,6 +540,33 @@
             else {
 
             }
+
+        });
+        $("#pin_code").change(function () {
+            var _pinCodeNo = $('#pin_code').val();
+            console.log(_pinCodeNo);
+            $("#resident_status").val(_pinCodeNo);
+            if (_pinCodeNo == "1")
+            {
+                $("#resident_status_inwords").val("Officer")
+            }
+            if (_pinCodeNo == "2")
+            {
+                $("#resident_status_inwords").val("OR")
+            }
+            if (_pinCodeNo == "3")
+            {
+                $("#resident_status_inwords").val("JCO")
+            }
+            if (_pinCodeNo == "4")
+            {
+                $("#resident_status_inwords").val("Civilian")
+            }
+            if (_pinCodeNo == "5")
+            {
+                $("#resident_status_inwords").val("Commercial")
+            }
+            
 
         });
         $(".close").click(function () {
@@ -509,7 +597,14 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="control-label">Consumer #.</label>
-                        <input tabindex="1"  value="" class="form-control" id="consumer_no" />
+                        <input tabindex="1" value="" class="form-control" id="consumer_no" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Meter Status</label>
+                        <select class="form-control dropdownlist" id="meter_status">
+                            <option value="0">Primary</option>
+                            <option value="1">Secondary</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label class="control-label"> Area</label>
@@ -581,7 +676,7 @@
                         <div class="form-group">
                             <label class="control-label">Consumer #.</label>
                             <input tabindex="1" type="number" value="" class="form-control" id="model_consumer_no" />
-                        </div>
+                        </div>                        
                         <div class="form-group">
                             <label class="control-label">Area</label>
                             <input readonly class="form-control dropdownlist" id="resident_area">
@@ -623,14 +718,14 @@
                             <input class="form-control " id="resident_remarks">
                         </div>
                         <div class="form-group">
+                            <label class="control-label">Pin Code</label>
+                            <input class="form-control " id="pin_code">                              
+                        </div>
+                        <div class="form-group">
                             <label class="control-label">Status</label>
-                            <select class="form-control dropdownlist" id="resident_status">
-                                <option value="1">Officer</option>
-                                <option value="2">OR</option>
-                                <option value="3">JCO</option>
-                                <option value="4">Civilian</option>
-                                <option value="5">Commercial</option>
-                            </select>
+                            <input readonly class="form-control " id="resident_status_inwords">
+                            <input  class="form-control hidden" id="resident_status">
+                             
                         </div>
 
                     </div>

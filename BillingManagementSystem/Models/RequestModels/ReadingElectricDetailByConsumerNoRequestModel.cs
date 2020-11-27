@@ -9,5 +9,6 @@ namespace BillingManagementSystem.Models
     {
         public string userId { get; set; }
         public string consummerNo { get; set; }
+        public string meterStatus { get; set; }
     }
 }

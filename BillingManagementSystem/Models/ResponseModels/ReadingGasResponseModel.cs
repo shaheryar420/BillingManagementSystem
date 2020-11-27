@@ -20,6 +20,18 @@ namespace BillingManagementSystem.Models
         public string readingpicture_data { get; set; }
         public string readingpicture_type { get; set; }
         public string readingpicture_size { get; set; }
+        public string area_name { get; set; }
+        public string area_id { get; set; }
+        public string subarea_id { get; set; }
+        public string subarea_name { get; set; }
+        public string location_id { get; set; }
+        public string location_name { get; set; }
+        public string residentId { get; set; }
+        public string residentName { get; set; }
+        public string residentRank { get; set; }
+        public string residentPANo { get; set; }
+        public string residentUnit { get; set; }
+        public string residentPinCode { get; set; }
         public string remarks { get; set; }
         public string resultCode { get; set; }
     }

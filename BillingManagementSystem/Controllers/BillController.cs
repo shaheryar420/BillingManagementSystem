@@ -21,6 +21,7 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
+       
         [SetPermissions]
         public ActionResult Gas()
         {
@@ -55,6 +56,7 @@ namespace BillingManagementSystem.Controllers
             string _currentReading = Request.Form["_currentReading"].ToString();
             string _currentUnit = Request.Form["_currentUnit"].ToString();
             string _month = Request.Form["_month"].ToString();
+            string _meterStatus = Request.Form["_meterStatus"].ToString();
             string userId = Request.Cookies["bms_data"]["id"].ToString();
             ReadingElectricRequestModel model = new ReadingElectricRequestModel();
             if (Request.Files.Count > 0)
@@ -82,7 +84,8 @@ namespace BillingManagementSystem.Controllers
                     readingElectricPrevReading = _previousReading,
                     readingElectricMonth = _month,
                     readingElectricUnits = _currentUnit,
-                    readingElectricMeterNo = _meterNo
+                    readingElectricMeterNo = _meterNo,
+                    meter_status= _meterStatus,
 
                 };
             }
@@ -190,6 +193,22 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+        public ActionResult GetAllApproveReadings(ReadingElectricRequestModel requestModel)
+        {
+            string userId = Request.Cookies["bms_data"]["id"].ToString();
+            ReadingElectricRequestModel model = new ReadingElectricRequestModel()
+            {
+                readingElectricAddedby = userId,
+                readingElectricMeterNo = requestModel.readingElectricMeterNo,
+                readingElectricMonth = requestModel.readingElectricMonth,
+                residentName = requestModel.residentName,
+            };
+            ReadingElectricHelpers helper = new ReadingElectricHelpers();
+            var response = helper.getApprovedReadingsByUser(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         public ActionResult ApproveReadingElectric([FromBody] ReadingElectricRequestModel model)
         {
             model.userId = Request.Cookies["bms_data"]["id"].ToString();
@@ -231,6 +250,15 @@ namespace BillingManagementSystem.Controllers
             var userId = Request.Cookies["bms_data"]["id"].ToString();
             ReadingElectricHelpers helper = new ReadingElectricHelpers();
             var response = helper.getBillDetailsByConsummerNoAndMonthForBillRecovery(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult getAllResidentByConsumerNoForRecoveryElectric([FromBody] BillDetailsByConsummerNoAndMonthRequestModel model)
+        {
+            var userId = Request.Cookies["bms_data"]["id"].ToString();
+            ReadingElectricHelpers helper = new ReadingElectricHelpers();
+            var response = helper.getBillResidentsDetailsByConsummerNoAndMonthForBillRecovery(model);
             var json = Json(response);
             json.MaxJsonLength = int.MaxValue;
             return json;
@@ -351,6 +379,7 @@ namespace BillingManagementSystem.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+       
         public ActionResult ApproveReadingGas([FromBody] ReadingGasRequestModel model)
         {
             string userId = Request.Cookies["bms_data"]["id"].ToString();

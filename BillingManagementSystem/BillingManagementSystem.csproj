@@ -812,7 +812,7 @@
     </Compile>
     <Compile Include="Models\RequestModels\AreaRequestModel.cs" />
     <Compile Include="Models\RequestModels\BillDetailsByConsummerNoAndMonthRequestModel.cs" />
-    <Compile Include="Models\RequestModels\BillElectricRequestModel.cs" />
+    <Compile Include="Models\RequestModels\BillRequestModel.cs" />
     <Compile Include="Models\RequestModels\BillGasRequestModel.cs" />
     <Compile Include="Models\RequestModels\FixedRatesTypeRequestModel.cs" />
     <Compile Include="Models\RequestModels\FixedRatesRequestModel.cs" />
@@ -836,7 +836,7 @@
     <Compile Include="Models\ResponseModels\AreaResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillCalculationResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillDetailsByConsummerNoAndMonthResponseModel.cs" />
-    <Compile Include="Models\ResponseModels\BillElectricResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\BillResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillGasCalculationResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillGasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ControllerResponseModel.cs" />
@@ -854,12 +854,17 @@
     <Compile Include="Models\ResponseModels\ReadingGasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ResidentBuildingResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ResidentResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\RORRequestModel.cs" />
+    <Compile Include="Models\ResponseModels\RORResponseModel.cs" />
     <Compile Include="Models\ResponseModels\SubAreaResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserPermissionResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserSubAreasResponseModel.cs" />
     <Compile Include="Models\ResponseModels\UserTypeResponseModel.cs" />
     <Compile Include="Models\tbl_action.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_approvereadings.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_area.cs">
@@ -872,6 +877,9 @@
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_billpicture.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_consummer_pool.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_controller.cs">
@@ -940,6 +948,9 @@
     <Compile Include="Models\tbl_residents.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tbl_ror.cs">
+      <DependentUpon>BMSMODEL.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl_slabs.cs">
       <DependentUpon>BMSMODEL.tt</DependentUpon>
     </Compile>
@@ -966,6 +977,7 @@
     <Compile Include="App_Start\SetPermissionsAttribute.cs" />
     <Compile Include="SubDataHelpers\ReadingElectricSubHelpers.cs" />
     <Compile Include="SubDataHelpers\ReadingGasSubHelpers.cs" />
+    <Compile Include="SubDataHelpers\RORSubHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -1028,7 +1040,7 @@
     <Content Include="Views\Bill\Electric.cshtml" />
     <Content Include="Views\Bill\Gas.cshtml" />
     <Content Include="Views\Bill\Wapda.cshtml" />
-    <Content Include="Views\Recovery\Electric.cshtml" />
+    <Content Include="Views\Recovery\BillRecovery.cshtml" />
     <Content Include="Views\Recovery\Gas.cshtml" />
     <Content Include="Views\Recovery\Wapda.cshtml" />
     <Content Include="Views\ROR\Electric.cshtml" />
@@ -1052,6 +1064,7 @@
     <Content Include="Views\Home\Locations.cshtml" />
     <Content Include="Views\Home\ROR.cshtml" />
     <Content Include="Views\Recovery\RecoveryList.cshtml" />
+    <Content Include="Views\ROR\ApprovedReadings.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

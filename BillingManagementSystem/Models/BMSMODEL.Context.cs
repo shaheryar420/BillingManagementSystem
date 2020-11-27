@@ -34,7 +34,6 @@ namespace BillingManagementSystem.Models
         public virtual DbSet<tbl_controller> tbl_controller { get; set; }
         public virtual DbSet<tbl_fixedrates> tbl_fixedrates { get; set; }
         public virtual DbSet<tbl_fixedratetype> tbl_fixedratetype { get; set; }
-        public virtual DbSet<tbl_location> tbl_location { get; set; }
         public virtual DbSet<tbl_offr> tbl_offr { get; set; }
         public virtual DbSet<tbl_outstanding> tbl_outstanding { get; set; }
         public virtual DbSet<tbl_paymententryelectric> tbl_paymententryelectric { get; set; }
@@ -43,7 +42,6 @@ namespace BillingManagementSystem.Models
         public virtual DbSet<tbl_paymenthistory> tbl_paymenthistory { get; set; }
         public virtual DbSet<tbl_paymentstatus> tbl_paymentstatus { get; set; }
         public virtual DbSet<tbl_paymenttype> tbl_paymenttype { get; set; }
-        public virtual DbSet<tbl_readingelectric> tbl_readingelectric { get; set; }
         public virtual DbSet<tbl_readingelectriclog> tbl_readingelectriclog { get; set; }
         public virtual DbSet<tbl_readinggaslog> tbl_readinggaslog { get; set; }
         public virtual DbSet<tbl_readingpicture> tbl_readingpicture { get; set; }
@@ -58,7 +56,12 @@ namespace BillingManagementSystem.Models
         public virtual DbSet<tbl_userpermissions> tbl_userpermissions { get; set; }
         public virtual DbSet<tbl_users> tbl_users { get; set; }
         public virtual DbSet<tbl_usertype> tbl_usertype { get; set; }
-        public virtual DbSet<tbl_readinggas> tbl_readinggas { get; set; }
         public virtual DbSet<tbl_gas_slab> tbl_gas_slab { get; set; }
+        public virtual DbSet<tbl_location> tbl_location { get; set; }
+        public virtual DbSet<tbl_consummer_pool> tbl_consummer_pool { get; set; }
+        public virtual DbSet<tbl_approvereadings> tbl_approvereadings { get; set; }
+        public virtual DbSet<tbl_readingelectric> tbl_readingelectric { get; set; }
+        public virtual DbSet<tbl_readinggas> tbl_readinggas { get; set; }
+        public virtual DbSet<tbl_ror> tbl_ror { get; set; }
     }
 }

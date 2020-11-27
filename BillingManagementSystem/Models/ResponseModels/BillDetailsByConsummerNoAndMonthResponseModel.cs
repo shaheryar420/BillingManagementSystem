@@ -16,6 +16,8 @@ namespace BillingManagementSystem.Models
         public string currentReading { get; set; }
         public string units { get; set; }
         public string residentId { get; set; }
+        public string residentName { get; set; }
+        public string mmbtu { get; set; }
         public string remarks { get; set; }
         public string resultCode { get; set; }
         

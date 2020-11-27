@@ -16,7 +16,7 @@
     @Scripts.Render("~/bundles/sweetAlert")
 
     <script>
-        var residentId = null;
+        var residentId = null, Dtable = null, Dtable1 = null;
         $(document).on('nifty.ready', function () {
              $('#btn_electric_update').hide();
             $('editTitle').hide();
@@ -55,7 +55,9 @@
 
                         if (data.length > 0) {
                             if (data[0].resultCode == '1100') {
+                                console.log(data);
                                 return data;
+                                
                             }
                             {
                                 return [];
@@ -257,7 +259,7 @@
             });
         }
         function initHistoryGrid(_consumerNo) {
-            Dtable = $(".historyGrid").DataTable({
+            Dtable1 = $(".historyGrid").DataTable({
                 autoWidth: true,
                 destroy: true,
                 "ajax": {
@@ -348,7 +350,7 @@
 
                 ]
             });
-            Dtable.columns.adjust();
+            Dtable1.columns.adjust();
             $("div.tableTop").addClass("pull-left");
             $("div.tableBottom").addClass("pull-left");
             $("div.html5Buttons").addClass("pull-right");
@@ -410,11 +412,49 @@
             console.log(_billingMonth);
             if (_consumerNo) {
                 $.ajax({
-                    url: '/Bill/getAllDetailByConsumerNoForRecoveryElectric',
+                    url: '/Bill/getAllResidentByConsumerNoForRecoveryElectric',
                     type: 'POST',
                     data: {
                         locationElectricMeterNo: _consumerNo,
                         billingMonth: _billingMonth
+                    },
+                    success: function (response) {
+                        if (response[0].resultCode == '1100') {
+                            var list = [];
+                            for (var i = 0; i < response.length; i++) {
+                                list.push({ text: response[i].residentName, id: response[i].residentId });
+
+                            }
+                            $('#resident').select2().empty();
+                            $('#resident').select2({ data: list }).trigger('change');
+                        }
+                        else {
+                            clearFields()
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            }
+            else {
+                clearFields();
+            }
+
+        });
+        $("#resident").change(function () {
+            var _billingMonth = $('#billing_month').val();
+            var _consumerNo = $('#consumer_no').val();
+            var _resident = $('#resident').val();
+            console.log(_resident);
+            if (_consumerNo) {
+                $.ajax({
+                    url: '/Bill/getAllDetailByConsumerNoForRecoveryElectric',
+                    type: 'POST',
+                    data: {
+                        locationElectricMeterNo: _consumerNo,
+                        billingMonth: _billingMonth,
+                        residentId: _resident,
                     },
                     success: function (response) {
                         if (response.resultCode == '1100') {
@@ -426,6 +466,7 @@
                             $("#current_reading").val(response.currentReading);
                             $("#current_unit").val(response.units);
                             $("#electric_amount").val(response.amount);
+                            $("#mmbtu").val(response.mmbtu);
                             residentId = response.residentId;
                         }
                         else {
@@ -479,11 +520,15 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="control-label">Consumer No.</label>
-                        <input  value="" class="form-control" id="consumer_no" />
+                        <input value="" class="form-control" id="consumer_no" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Billing Month</label>
                         <input type="text" value="" class="form-control monthPicker" id="billing_month" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Resident</label>
+                        <select class="form-control dropdownlist" id="resident"></select>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Area</label>
@@ -501,18 +546,14 @@
                         <label class="control-label">Outstandings</label>
                         <input type="number" value="" readonly class="form-control" id="total_outstanding" />
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">Previous Reading</label>
-                        <input type="number" value="" readonly class="form-control" id="previous_reading" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Current Reading</label>
-                        <input type="hidden" id="electric_id" value="" />
-                        <input type="number" value="" readonly class="form-control" id="current_reading" />
-                    </div>
+
                     <div class="form-group">
                         <label class="control-label">Units</label>
                         <input type="number" value="" readonly class="form-control" id="current_unit" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">MMBTU</label>
+                        <input type="number" value="" readonly class="form-control" id="mmbtu" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Payment Month</label>
@@ -544,7 +585,7 @@
                         <a href="#" id="btn_electric_update" class="btn btn-success pull-right">Update</a>
                     </div>
                 </div>
-            </div>
+                </div>
         </div>
         <div class="col-md-8">
             <div class="panel panel-bordered-info panel-colorful">

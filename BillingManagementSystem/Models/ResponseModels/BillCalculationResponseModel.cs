@@ -10,6 +10,7 @@ namespace BillingManagementSystem.Models
         public double totalAmount { get; set; }
         public double totalFPA { get; set; }
         public double totalEnergyCharges { get; set; }
+        public double meterRent { get; set; }
         public double waterCharges { get; set; }
         public double tvCharges { get; set; }
         public string resultCode { get; set; }

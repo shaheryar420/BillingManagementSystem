@@ -22,5 +22,7 @@ namespace BillingManagementSystem.Models
         public string readingElectricUnits { get; set; }
         public string readingElectricAddedby { get; set; }
         public string readingElectricMonth { get; set; }
+        public string meter_status { get; set; }
+        public string residentName { get; set; }
     }
 }

@@ -12,12 +12,11 @@ namespace BillingManagementSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tbl_location
+    public partial class tbl_consummer_pool
     {
-        public int location_id { get; set; }
-        public string location_name { get; set; }
-        public int fk_subarea { get; set; }
-        public int location_tv_charges { get; set; }
-        public int location_water_charges { get; set; }
+        public int id { get; set; }
+        public string consummer_no { get; set; }
+        public int fk_location { get; set; }
+        public int is_active { get; set; }
     }
 }

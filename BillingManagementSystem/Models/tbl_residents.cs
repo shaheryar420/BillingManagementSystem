@@ -21,5 +21,6 @@ namespace BillingManagementSystem.Models
         public string resident_unit { get; set; }
         public string resident_remarks { get; set; }
         public int resident_pin_code { get; set; }
+        public int resident_consumer_no { get; set; }
     }
 }

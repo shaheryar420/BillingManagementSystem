@@ -12,12 +12,15 @@ namespace BillingManagementSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tbl_location
+    public partial class tbl_ror
     {
-        public int location_id { get; set; }
-        public string location_name { get; set; }
-        public int fk_subarea { get; set; }
-        public int location_tv_charges { get; set; }
-        public int location_water_charges { get; set; }
+        public int id { get; set; }
+        public double ror_amount { get; set; }
+        public System.DateTime ror_datetime { get; set; }
+        public double ror_outstanding { get; set; }
+        public int fk_resident { get; set; }
+        public string consummer_no { get; set; }
+        public string ror_month { get; set; }
+        public int ror_status { get; set; }
     }
 }

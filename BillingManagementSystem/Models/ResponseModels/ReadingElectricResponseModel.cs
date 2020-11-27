@@ -35,6 +35,14 @@ namespace BillingManagementSystem.Models
         public string residentPANo { get; set; }
         public string residentUnit { get; set; }
         public string residentPinCode { get; set; }
+        public string meterStatus { get; set; }
+        public string billAmount { get; set; }
+        public string billFpa { get; set; }
+        public string billGST { get; set; }
+        public string meterRent { get; set; }
+        public string billRebate { get; set; }
+        public string billTv { get; set; }
+        public string billWater { get; set; }
         public string remarks { get; set; }
         public string resultCode { get; set; }
     }

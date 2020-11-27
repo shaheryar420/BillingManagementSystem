@@ -99,11 +99,39 @@
                     { "title": "Id", "data": "readingGasId", className: "hidden" },
                     { "title": "Billing Month", "data": "readingGasMonth" },
                     { "title": "Meter #", "data": "readingGasMeterNo" },
+                    { "title": "Area", "data": "area_name" },
+                    { "title": "Sub Area", "data": "subarea_name" },
+                    { "title": "Location", "data": "location_name" },
                     { "title": "Previous Reading", "data": "readingGasPrevReading" },
                     { "title": "Current Reading", "data": "readingGasCurrentReading" },
                     { "title": "MM BTU", "data": "readingGasUnits" },
                     { "title": "Date Added", "data": "readingGasDatetime" },
-                     { "title": "Added By", "data": "readingGasAddedby" },
+                    { "title": "Resident PA No", "data": "residentPANo" },
+                    { "title": "Resident Name", "data": "residentName" },
+                    { "title": "Resident Unit", "data": "residentUnit" },
+                    { "title": "Resident Rank", "data": "residentRank" },                 
+                    {
+                        "title": "Resident Status",
+                        "data": "residentPinCode",
+                        render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "Officer";
+                            }
+                            if (data == 2) {
+                                return "OR"
+                            }
+                            if (data == 3) {
+                                return "JCO"
+                            }
+                            if (data == 4) {
+                                return "Civilian"
+                            }
+                            if (data == 5) {
+                                return "Commercial"
+                            }
+                        }
+                    },   
+                    { "title": "Added By", "data": "readingGasAddedby" },  
                     {
                         "title": "Picture", "data": "fk_readingPicture", render: function (data, type, row, meta) {
                             return "<img src='data:" + row.readingpicture_type + ";base64, " + row.readingpicture_data + "' class='img-sm img-thumbnail'/>";

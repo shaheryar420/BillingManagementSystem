@@ -9,5 +9,6 @@ namespace BillingManagementSystem.Models
     {
         public string locationElectricMeterNo { get; set; }
         public string billingMonth { get; set; }
+        public string residentId { get; set; }
     }
 }

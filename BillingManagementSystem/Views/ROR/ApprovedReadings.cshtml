@@ -1,0 +1,359 @@
+﻿@{
+    ViewBag.Title = "Approved Readings";
+}
+@section Styles
+{
+    @Styles.Render("~/plugins/select2")
+    @Styles.Render("~/plugins/datepicker")
+    @Styles.Render("~/plugins/datatable")
+    @Styles.Render("~/plugins/sweetAlert")
+}
+@section Scripts
+{
+    @Scripts.Render("~/bundles/select2")
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/datepicker")
+    @Scripts.Render("~/bundles/sweetAlert")
+
+    <script>
+        var Id = null;
+        var fileCounter = 0;
+
+        var dataSet = [];
+        var _prevResd = null;
+        var subareaId = null;
+        var locationId = null;
+        var Dtable = null;
+        $(document).on('nifty.ready', function () {
+            $('#btn_electric_update').hide();
+            $('editTitle').hide();
+            $(".monthPicker").datepicker({
+                format: "mm-yyyy",
+                startView: "months",
+                minViewMode: "months"
+            });
+            $('#btn_online_upload').on('click', function (e) {
+                e.preventDefault();
+                addFile($("#online_file")[0].files[0]);
+            });
+            $('#btn_reading_search').on('click', function (e) {
+                e.preventDefault();
+                var _meterNo = $("#consumer_no").val();
+                var _month = $("#month").val();
+                var _name = $("#resident_name").val();
+                console.log(_meterNo, _month, _name);
+                initElectricGrid(_meterNo, _month, _name);
+            });
+             $('#btn_reading_generate').on('click', function (e) {
+                e.preventDefault();
+                var _meterNo = $("#consumer_no").val();
+                var _month = $("#month").val();
+                var _name = $("#resident_name").val();
+                generateROR(_meterNo, _month, _name);
+            });
+
+            
+
+        });
+    </script>
+    <script>
+
+        function initElectricGrid(meterNo, month, name) {
+            console.log(meterNo, month);
+            Dtable = $(".electricGrid").DataTable({
+                autoWidth: true,
+                destroy: true,
+                scrollX: true,
+                "ajax": {
+                    "url": '/Bill/GetAllApproveReadings',
+                    "type": 'POST',
+                    "data": {
+                        readingElectricMeterNo: meterNo,
+                        readingElectricMonth: month,
+                        residentName:name
+                    },
+                    "dataSrc": function (data) {
+
+                        if (data.length > 0) {
+                            if (data[0].resultCode == '1100') {
+                                return data;
+                            }
+                            {
+                                return [];
+                            }
+                        }
+                        else {
+
+
+                        }
+                    },
+                    "error": function (a, b, c) {
+                        swal({
+                            title: "Error",
+                            text: a.status + ": " + c,
+                            type: "error"
+                        });
+                    }
+                },
+                "columns": [
+                    
+                    {
+                        title: 'Sr. #',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "title": "Id", "data": "readingElectricId", className: "hidden" },
+                    { "title": "AreaId", "data": "area_id", className: "hidden" },
+                    { "title": "SubAreaId", "data": "subarea_id", className: "hidden" },
+                    { "title": "LocationId", "data": "location_id", className: "hidden" },
+                    { "title": "Billing Month", "data": "readingElectricMonth" },
+                    { "title": "Consumer #", "data": "readingElectricMeterNo" },
+                    {
+                        "title": "Meter Status",
+                        "data": "meterStatus",
+                        render: function (data, type, row, meta) {
+                            if (data == 0) {
+                                return "Electric Primary Meter";
+                            }
+                            if (data == 1) {
+                                return "Electric Secondary Meter"
+                            }
+                             if (data == 2) {
+                                return "Gas Meter"
+                            }
+                        }
+                    },
+                    { "title": "Area", "data": "area_name" },
+                    { "title": "Sub Area", "data": "subarea_name" },
+                    { "title": "Location", "data": "location_name" },
+                    { "title": "Previous Reading", "data": "readingElectricPrevReading" },
+                    { "title": "Current Reading", "data": "readingElectricCurrentReading" },
+                    { "title": "Current Units", "data": "readingElectricUnits" },
+                    { "title": "Date Added", "data": "readingElectricDatetime" },
+                    { "title": "Resident PA No", "data": "residentPANo" },
+                    { "title": "Resident Name", "data": "residentName" },
+                    { "title": "Resident Unit", "data": "residentUnit" },
+                    { "title": "Resident Rank", "data": "residentRank" },
+                    { "title": "Total Amount", "data": "billAmount" },
+                    { "title": "FPA", "data": "billFpa" },
+                    { "title": "Rebate Charges", "data": "billRebate" },
+                    { "title": "Meter Rent", "data": "meterRent" },
+                    { "title": "Tv Charges", "data": "billTv" },
+                    { "title": "Water Charges", "data": "billWater" },
+                    { "title": "GST", "data": "billGST" },
+                    {
+                        "title": "Resident Status",
+                        "data": "residentPinCode",
+                        render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "Officer";
+                            }
+                            if (data == 2) {
+                                return "OR"
+                            }
+                            if (data == 3) {
+                                return "JCO"
+                            }
+                            if (data == 4) {
+                                return "Civilian"
+                            }
+                            if (data == 5) {
+                                return "Commercial"
+                            }
+                        }
+                    },
+                    { "title": "Added By", "data": "readingElectricAddedby" },
+                    {
+                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.readingpicture_type + ";base64, " + row.readingpicture_data + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
+
+                ]
+            });
+            Dtable.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+        }
+        function generateROR(meterno, month, name)
+        {
+            var _url = "/ROR/GenerateROR";              
+            var formdata = new FormData(); //FormData object
+                formdata.append("consumerNo", meterno);                
+                formdata.append("month", month);
+                formdata.append("residentName", name);
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        $('.loading').show();
+                    },
+                    complete: function () {
+                        $('.loading').hide();
+                    },
+                    success: function (data) {
+                        if (data.resultCode == "1100") {
+                            swal("Added!", data.remarks, "success");
+                        }
+                        else {
+                            $('.loading').hide();
+                            swal("Not Added", "Bill Not Generated", "error");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorMessage) {
+                        console.log(errorMessage);
+                    }
+                });
+        }
+
+    </script>
+    
+}
+<div id="page-head">
+    <div class="pad-all text-center">
+        <h2>Approved Readings</h2>
+    </div>
+</div>
+<div id="page-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-bordered-warning panel-colorful">
+
+                <div class="panel-heading">
+
+                    <h1 class="panel-title">Search By</h1>
+
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Consumer #.</label>
+                            <input type="text" value="" class="form-control" id="consumer_no" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="control-label">Select Month</label>
+                            <input value="" class="form-control monthPicker" id="month" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Resident Name</label>
+                            <input value="" class="form-control " id="resident_name" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-11">
+                            <a href="#" id="btn_reading_generate" class="btn btn-success pull-right">Generate Bill</a>
+
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" id="btn_reading_search" class="btn btn-success pull-right">Search</a>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="panel panel-bordered-info panel-colorful">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Approved Readings</h1>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-responsive table-hover electricGrid"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="resident-modal" role="dialog" aria-labelledby="inbox-modal" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!--Modal header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h2 class="text-center">Update Resident</h2>
+            </div>
+
+            <!--Modal body-->
+            <div class="modal-body" id="modal-overlay">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Assign Location:</h4>
+                        <div class="form-group">
+                            <label class="control-label">Consumer #.</label>
+                            <input tabindex="1" type="number" value="" class="form-control" id="model_consumer_no" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Area</label>
+                            <input readonly class="form-control dropdownlist" id="resident_area">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Sub Area</label>
+                            <input readonly class="form-control dropdownlist" id="resident_subarea">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Location</label>
+                            <input readonly class="form-control dropdownlist" id="resident_location">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control dropdownlist hidden" id="resident_location_id">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h4>Resident Details:</h4>
+                        <div class="form-group">
+                            <label class="control-label">Resident PA #.</label>
+                            <input class="form-control" id="resident_pa_no" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Resident Name</label>
+                            <input class="form-control " id="resident_name">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Resident Rank</label>
+                            <input class="form-control " id="resident_rank">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Resident Unit</label>
+                            <input class="form-control " id="resident_unit">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Resident Remarks</label>
+                            <input class="form-control " id="resident_remarks">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Pin Code</label>
+                            <input class="form-control " id="pin_code">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Status</label>
+                            <input readonly class="form-control " id="resident_status_inwords">
+                            <input class="form-control hidden" id="resident_status">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal footer-->
+            <div class="modal-footer">
+                <div class="btn-group pull-right">
+                    <a href="#" data-dismiss="modal" class="btn btn-primary close">Close</a>
+                    <a href="#" id="btn_resident_update" class="btn btn-success">Update</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
