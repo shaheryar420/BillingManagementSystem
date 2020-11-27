@@ -79,10 +79,10 @@
                 autoWidth: true,
                 destroy: true,
                 "ajax": {
-                    "url": '/ROR/GetAllRORElectricByMeterNo',
+                    "url": '/ROR/GetAllRORElectric',
                     "type": 'POST',
                     "data": {
-                        billElectricId: consumerNo
+                        fk_location: consumerNo
                     },
                     "dataSrc": function (data) {
 
@@ -114,7 +114,7 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { "title": "Id", "data": "billElectricId", className: "hidden" },
+                    { "title": "Id", "data": "billId", className: "hidden" },
                     { "title": "Consumer #", "data": "locationMeterNo" },
                     { "title": "Area", "data": "locationName" },
                     { "title": "Sub Area", "data": "locationName" },
@@ -123,20 +123,36 @@
                     { "title": "PA No", "data": "residentPaNo" },
                     { "title": "Rank", "data": "residentRank" },
                     { "title": "Unit/FMN", "data": "residentUnit" },
-                    { "title": "Previous Reading", "data": "billElectricPrevReading" },
-                    { "title": "Present Reading", "data": "billElectricCurrentReading" },
-                    { "title": "Units", "data": "billElectricUnits" },
-                    { "title": "Electric Charges", "data": "billElectricRebate" },
-                    { "title": "FPA", "data": "billElectricFpa" },
-                    { "title": "Water", "data": "billElectricWater" },
-                    { "title": "TV", "data": "billElectricTv" },
-                    { "title": "Total Amount", "data": "billElectricAmount" },
+                    { "title": "Main Meter Previous Reading", "data": "billPrimaryPrevReading" },
+                    { "title": "Main Meter Present Reading", "data": "billPrimaryCurrentReading" },
+                    { "title": "Main Meter Units", "data": "billPrimaryUnits" },
+                    { "title": "Main Meter Electric Charges", "data": "billPrimaryRebate" },
+                    { "title": "Main Meter FPA", "data": "billPrimaryFPA" },
+                    { "title": "Main Meter Water", "data": "billPrimaryWater" },
+                    { "title": "Main Meter TV", "data": "billPrimaryTv" },
+                    { "title": "Main Meter Rent", "data": "billPrimaryMeterRent" },
+                    { "title": "Main Meter Amount", "data": "billPrimaryAmount" },
+                    { "title": "Secondary Meter Previous Reading", "data": "billSecondaryPrevReading" },
+                    { "title": "Secondary Meter Present Reading", "data": "billSecondaryCurrentReading" },
+                    { "title": "Secondary Meter Units", "data": "billSecondaryUnits" },
+                    { "title": "Secondary Meter Electric Charges", "data": "billSecondaryRebate" },
+                    { "title": "Secondary Meter FPA", "data": "billSecondaryFPA" },
+                    { "title": "Secondary Meter Water", "data": "billSecondaryWater" },
+                    { "title": "Secondary Meter TV", "data": "billSecondaryTv" },
+                    { "title": "Secondary Meter Rent", "data": "billSecondaryMeterRent" },
+                    { "title": "Secondary Meter Amount", "data": "billSecondaryAmount" },
+                    { "title": "Gas Meter Previous Reading", "data": "billGasPrevReading" },
+                    { "title": "Gas Meter Present Reading", "data": "billGasCurrentReading" }, 
+                    { "title": "Gas Meter GST", "data": "billGasGST" },
+                    { "title": "Gas Meter MMBTU", "data": "billGasMMBTU" },
+                    { "title": "Gas Meter Rent", "data": "billGasMeterRent" },
+                    { "title": "Gas Meter Amount", "data": "billGasAmount" },
+                    { "title": "Total Amount", "data": "billAmount" },
                     {
-                        "title": "Picture", "data": "fk_billPicture", render: function (data, type, row, meta) {
+                        "title": "Picture", "data": "billPrimaryPictureId", render: function (data, type, row, meta) {
                             return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
                         }
                     },
-                    { "title": "Remarks", "data": "billElectricRemarks" }
                    
                 ]
             });

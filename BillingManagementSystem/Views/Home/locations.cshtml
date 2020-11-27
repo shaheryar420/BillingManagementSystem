@@ -108,13 +108,12 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { "title": "Id", "data": "locationId", className: "hidden" },
                     {
-                        "title": "Consumer No", "data": "locationElectricMeter", className: "hidden",
-                        "render": function (data, type, full, meta) {
+                        "title": "Id", "data": "locationId", className: "hidden",
+                         "render": function (data, type, full, meta) {
                             return id = data;
-                        }
-                    },
+                        }},
+                   
                     { "title": "Location Name", "data": "locationName" ,
                       "render": function(data, type, full, meta) {
                        return '<a href="ROR?consumerNo=' + id + '">"' + data + '"</a>'; }},         
@@ -208,7 +207,7 @@
         <div class="col-md-12">
             <div class="panel panel-bordered-warning">
                 <div class="panel-heading">
-                    <h1 class="panel-title">Lcoations List</h1>
+                    <h1 class="panel-title">Locations List</h1>
                 </div>
                 <div class="panel-body">
                     <table class="table table-bordered table-striped table-hover locationGrid"></table>

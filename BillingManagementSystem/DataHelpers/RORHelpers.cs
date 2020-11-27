@@ -185,8 +185,48 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
-                    toReturn = new SubDataHelpers.RORSubHelpers().GetAllRORByMonth(model);
-                    if(toReturn.Count()==0)
+                    toReturn = new SubDataHelpers.RORSubHelpers().GetAllROR(model);
+                    if (!string.IsNullOrEmpty(model.billElectricMonth))
+                    {
+                        toReturn = toReturn.Where(x => x.billMonth == model.billElectricMonth).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(model.paNo))
+                    {
+                        toReturn = toReturn.Where(x => x.residentPaNo == model.paNo).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(model.unit))
+                    {
+                        toReturn = toReturn.Where(x => x.residentUnit == model.unit).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(model.rank))
+                    {
+                        toReturn = toReturn.Where(x => x.residentRank == model.rank).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(model.residentName))
+                    {
+                        toReturn = toReturn.Where(x => x.residentName.Contains( model.residentName)).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(model.meterNo))
+                    {
+                        toReturn = toReturn.Where(x => x.locationMeterNo == model.meterNo).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(model.areaid))
+                    {
+                        toReturn = toReturn.Where(x => x.areaId == model.areaid).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(model.billElectricDateTime))
+                    {
+                        toReturn = toReturn.Where(x => x.billDateTime == model.billElectricDateTime).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(model.billElectricAmount))
+                    {
+                        toReturn = toReturn.Where(x => x.billAmount == model.billElectricAmount).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(model.fk_location))
+                    {
+                        toReturn = toReturn.Where(x => x.fk_location == model.fk_location).ToList();
+                    }
+                    if (toReturn.Count()==0)
                     {
                         toReturn.Add(new BillResponseModel()
                         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using BillingManagementSystem.Models;
+using BillingManagementSystem.SubDataHelpers;
 
 namespace BillingManagementSystem.DataHelpers
 {
@@ -259,7 +260,7 @@ namespace BillingManagementSystem.DataHelpers
                                           ).ToList();
                             var Locations = (from x in db.tbl_area
                                              join y in db.tbl_subarea on x.area_id equals y.fk_area
-                                             join z in db.tbl_location on y.subarea_id equals z.fk_subarea                                             
+                                             join z in db.tbl_location on y.subarea_id equals z.fk_subarea   
                                              where x.area_id == area.area_id
                                              select new
                                              {
@@ -273,28 +274,19 @@ namespace BillingManagementSystem.DataHelpers
                             double totalAmount = 0;
                             foreach (var Location in Locations)
                             {
-                                var ElectricBills = (from x in db.tbl_billelectric
-                                             where x.fk_location == Location.location_id
-                                             select x).ToList();
-                                var Gasbills = (from x in db.tbl_billgas
-                                               where x.fk_location == Location.location_id
-                                               select x).ToList(); 
-                                if (ElectricBills.Count()>0)
+                                var bills = new SubDataHelpers.RORSubHelpers().GetAllRORByLocation(Location.location_id);
+                                
+                                if (bills.Count()>0)
                                 {
-                                    foreach (var bill in ElectricBills)
+                                    foreach (var bill in bills)
                                     {
-                                        totalAmount = totalAmount+bill.billelectric_amount;
-                                        totalUnits = totalUnits + bill.billelectric_units;
+                                        totalAmount = totalAmount+double.Parse(bill.billAmount)+double.Parse(bill.billSecondaryAmount);
+                                        totalUnits = totalUnits + double.Parse(bill.billPrimaryUnits)+double.Parse(bill.billSecondaryUnits);
+                                        gasAmount = gasAmount + double.Parse(bill.billGasAmount);
+                                        gasUnits = gasUnits + double.Parse(bill.billGasMMBTU);
                                     }
                                 }
-                                if(Gasbills.Count()>0)
-                                {
-                                    foreach (var bill in Gasbills)
-                                    {
-                                        gasAmount = gasAmount + bill.amount;
-                                        gasUnits = gasUnits + bill.units;
-                                    }
-                                }
+                             
                             }
                             var _area = new AreaResponseModel()
                             {

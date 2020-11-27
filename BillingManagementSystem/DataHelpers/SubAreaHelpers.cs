@@ -421,26 +421,16 @@ namespace BillingManagementSystem.DataHelpers
                                     double gasAmount = 0;
                                     foreach (var Location in Locations)
                                     {
-                                        var ElectricBills = (from x in db.tbl_billelectric
-                                                             where x.fk_location == Location.location_id
-                                                             select x).ToList();
-                                        var Gasbills = (from x in db.tbl_billgas
-                                                        where x.fk_location == Location.location_id
-                                                        select x).ToList();
-                                        if (ElectricBills.Count() > 0)
+                                        var bills = new SubDataHelpers.RORSubHelpers().GetAllRORByLocation(Location.location_id);
+
+                                        if (bills.Count() > 0)
                                         {
-                                            foreach (var bill in ElectricBills)
+                                            foreach (var bill in bills)
                                             {
-                                                totalAmount = totalAmount + bill.billelectric_amount;
-                                                totalUnits = totalUnits + bill.billelectric_units;
-                                            }
-                                        }
-                                        if (Gasbills.Count() > 0)
-                                        {
-                                            foreach (var bill in Gasbills)
-                                            {
-                                                gasAmount = gasAmount + bill.amount;
-                                                gasUnits = gasUnits + bill.units;
+                                                totalAmount = totalAmount + double.Parse(bill.billAmount) + double.Parse(bill.billSecondaryAmount);
+                                                totalUnits = totalUnits + double.Parse(bill.billPrimaryUnits) + double.Parse(bill.billSecondaryUnits);
+                                                gasAmount = gasAmount + double.Parse(bill.billGasAmount);
+                                                gasUnits = gasUnits + double.Parse(bill.billGasMMBTU);
                                             }
                                         }
 
