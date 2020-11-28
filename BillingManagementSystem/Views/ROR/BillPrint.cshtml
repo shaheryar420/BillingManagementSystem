@@ -1,0 +1,494 @@
+﻿@model BillingManagementSystem.Models.BillRequestModel
+
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @*<link rel="apple-touch-icon" sizes="57x57" href="~/Images/icon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="~/Images/icon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="~/Images/icon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="~/Images/icon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="~/Images/icon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="~/Images/icon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="~/Images/icon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="~/Images/icon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Images/icon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon.ico">
+    <link rel="icon" type="image/png" sizes="96x96" href="~/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/favicon.ico">*@
+    @*<link rel="manifest" href="/manifest.json">*@
+    @*<meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="~/Images/icon/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">*@
+
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>@ViewBag.Title - BillPrint</title>
+
+    @Styles.Render("~/plugins/sweetAlert")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/premium-line-icons/css")
+    @Styles.Render("~/premium-solid-icons/css")
+    @Styles.Render("~/font-awesome/css")
+    @Styles.Render("~/plugins/validator")
+    <style>
+
+        #bill {
+            background-color: white;
+        }
+
+        /*tr, th, td {
+            border: 1px solid black;
+        }*/
+        .myDiv {
+            border: 1px solid black;
+            height: 70px;
+        }
+        tr,td,th{
+            border: 1px solid black;
+        }
+        table{
+            border-top-color: black;
+        }
+       
+    </style>
+
+</head>
+<body>
+    <div class="container" id="bill">
+        <div class="row">
+            <div class="col-xs-12">
+                <h4 class="font-italic text-center ">MES G.E(A) Services Rawalpindi.</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <h4 class=" text-center ">UTILITIES</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table  ">
+                        <tr class="text-xs text-thin">
+                            <th>Consumer No</th>
+                            <th>Billing Month</th>
+                            <th>Issue Date</th>
+                            <th>Due Date</th>
+                            <th>Meter Number</th>
+                            <th>Tariff</th>
+                        </tr>
+                   
+                        <tr class="text-xs text-thin">
+                            <td><span id="consumerNo"></span></td>
+                            <td><span id="billingMonth"></span></td>
+                            <td><span id="issueDate"></span></td>
+                            <td><span id="dueDate"></span></td>
+                            <td><span id="meterNumber"></span></td>
+                            <td><span id="tariff"></span></td>
+                        </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-3">No <span id="no"></span></div>
+            <div class="col-xs-3">Rank <span id="rank"></span></div>
+            <div class="col-xs-3">Name <span id="name"></span></div>
+            <div class="col-xs-3">Unit/Fmn <span id="unitFmn"></span></div>
+            <div class="col-xs-6">Address <span id="address"></span></div>
+        </div>
+        <div class="row">
+            <h5>Main Meter Charges</h5>
+            <div class="col-xs-12">
+                <table class="table">
+                    <tr class="text-xs text-thin">
+                        <th>Previous Reading</th>
+                        <th>Present Reading</th>
+                        <th>Units Consumed</th>
+                        <th>Auth-Ors/jcos</th>
+                        <th>Balance Units</th>
+                    </tr>
+                    <tr class="text-xs text-thin">
+                        <td><span id="mmPreviousreading"></span></td>
+                        <td><span id="mmPresentreading"></span></td>
+                        <td><span id="mmUnitsConsumed"></span></td>
+                        <td><span id="mmAuthOrs"></span></td>
+                        <td><span id="mmBalanceUnits"></span></td>
+
+                    </tr>
+                </table>
+                <table class="table">
+                    <tr class="text-xs text-thin">
+                        <th>TV Fee</th>
+                        <th>Meter Rent</th>
+                        <th>F.P.A</th>
+                        <th>Current Bill</th>
+                        <th>With in due</th>
+                    </tr>
+                    <tr class="text-xs text-thin">
+                        <td><span id="mmTvFee"></span></td>
+                        <td><span id="mmMeterRent"></span></td>
+                        <td><span id="mmFPA"></span></td>
+                        <td><span id="mmCurrentBill"></span></td>
+                        <td><span id="mmWithindue"></span></td>
+
+                    </tr>
+                </table>
+            </div>
+            <div class="col-xs-6">
+                <table class="table center-block">
+                    <tr class="text-xs text-thin">
+                        <th>Water Charges</th>
+                        <th>Arrears</th>
+                        <th>Total Amount</th>
+
+                    </tr>
+                    <tr class="text-sm text-thin">
+                        <td><span id="mmWater Charges"></span></td>
+                        <td><span id="mmArrears"></span></td>
+                        <td><span id="mmTotalAmount"></span></td>
+
+                    </tr>
+                </table>
+            </div>
+            <div class="col-xs-6">
+                <table class="table center-block">
+                    <tr class="text-xs text-thin">
+                        <th>Fur. Charges</th>
+                        <th>Arrears</th>
+                        <th>Total Amount</th>
+
+                    </tr>
+                    <tr class="text-xs text-thin">
+                        <td><span id="mmFurCharges"></span></td>
+                        <td><span id="mmFurArrears"></span></td>
+                        <td><span id="mmFurTotalAmount"></span></td>
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <h5>Secondary Meter Charges</h5>
+            <div class="col-xs-12">
+                <table class="table">
+                    <tr class="text-xs text-thin">
+                        <th>Previous Reading</th>
+                        <th>Present Reading</th>
+                        <th>Units Consumed</th>
+                        <th>Auth-Ors/jcos</th>
+                        <th>Blance Units</th>
+                    </tr>
+                    <tr class="text-xs text-thin">
+                        <td><span id="smPreviousreading"></span></td>
+                        <td><span id="smPresentreading"></span></td>
+                        <td><span id="smUnitsConsumed"></span></td>
+                        <td><span id="smAuthOrs"></span></td>
+                        <td><span id="smBalanceUnits"></span></td>
+                    </tr>
+                </table>
+                <table class="table">
+                    <tr class="text-xs text-thin">
+                        <th>TV Fee</th>
+                        <th>Meter Rent</th>
+                        <th>F.P.A</th>
+                        <th>Current Bill</th>
+                        <th>With in due</th>
+                    </tr>
+                    <tr>
+                        <td><span id="smTvFee"></span></td>
+                        <td><span id="smMeterRent"></span></td>
+                        <td><span id="smFPA"></span></td>
+                        <td><span id="smCurrentBill"></span></td>
+                        <td><span id="smWithindue"></span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-xs-6">
+                <table class="table">
+                    <tr class="text-xs text-thin">
+                        <th>Water Charges</th>
+                        <th>Arrears</th>
+                        <th>Total Amount</th>
+
+                    </tr>
+                    <tr class="text-xs text-thin">
+                        <td><span id="smWater Charges"></span></td>
+                        <td><span id="smArrears"></span></td>
+                        <td><span id="smTotalAmount"></span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-xs-6">
+                <table class="table">
+                    <tr class="text-xs text-thin">
+                        <th>Fur. Charges</th>
+                        <th>Arrears</th>
+                        <th>Total Amount</th>
+
+                    </tr>
+                    <tr class="text-xs text-thin">
+                        <td><span id="smFurCharges"></span></td>
+                        <td><span id="smFurArrears"></span></td>
+                        <td><span id="smFurTotalAmount"></span></td>
+
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <h5>Sui Gas Charges</h5>
+        </div>
+        <div class="row " style="display:inline-flex">
+            <div class="col-xs-10">
+                <table class="table">
+                    <tr class="text-xs text-thin">
+                        <th>Previous Reading</th>
+                        <th>Present Reading</th>
+                        <th>Gas Consumed</th>
+                        <th>NM MMBTU</th>
+                        <th>Meter Rent</th>
+                    </tr>
+                    <tr class="text-xs text-thin">
+                        <td><span id="gmPreviousReading"></span></td>
+                        <td><span id="gmPresentReading"></span></td>
+                        <td><span id="gmGasConsumed"></span></td>
+                        <td><span id="gmNMMMBTU"></span></td>
+                        <td><span id="gmMeterRent"></span></td>
+
+                    </tr>
+                </table>
+            </div>
+            <div class="col-xs-2 mar-lft myDiv">
+                <text class="text-thin text-xs">S.D.O E/M<br />GE(ARMY) SVCS RWP</text>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="col-xs-10">
+                <table class="table ">
+                    <tr class="text-xs text-thin">
+                        <th>Arrears</th>
+                        <th>Total</th>
+                        <th>Grand Total 1+2+3+4</th>
+
+                    </tr>
+                    <tr class="text-xs text-thin">
+                        <td><span id="gmTotal"></span></td>
+                        <td><span id="gmGrandTotal"></span></td>
+
+                    </tr>
+                </table>
+
+            </div>
+            <div class="col-xs-2 myDiv">
+                <text class="text-thin text-xs">U.A<br />GE(ARMY) SVCS RWP</text>
+            </div>
+        </div>
+        <div class="row">
+            <h5>UITITIES Bill</h5>
+        </div>
+        <div class="row">
+            <div class="col-sx-12">
+                <table class="table">
+                    <tr class="text-xs text-thin">
+                        <th>Consumer No</th>
+                        <th>Billing Month</th>
+                        <th>Issue Date</th>
+                        <th>Due Date</th>
+                        <th>Meter Number</th>
+                        <th>Tariff</th>
+                    </tr>
+                    <tr class="text-xs text-thin">
+                        <td><span id="dcConsumerNo"></span></td>
+                        <td><span id="dcBillingMonth"></span></td>
+                        <td><span id="dcIssueDate"></span></td>
+                        <td><span id="dcDueDate"></span></td>
+                        <td><span id="dcMeterNumber"></span></td>
+                        <td><span id="dcTariff"></span></td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="col-sx-12">
+                <table class="table">
+                    <tr class="text-xs text-thin">
+                        <th>Amount Payable with in Due Date</th>
+                        <th><span id="mmFurTotalAmount"></span></th>
+                        <th>Amount Payable After Due Date</th>
+                        <th><span id="mmFurTotalAmount"></span></th>
+
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <text>No <span id="dcNo"></span></text>
+                <br />
+                <text>Rank <span id="dcRank"></span></text>
+                <br />
+                <text>Name <span id="dcName"></span></text>
+                <br />
+                <text>Address <span id="dcAddress"></span></text>
+                <br />
+                <text>Unit/Fmn <span id="dcUnits"></span></text>
+            </div>
+            <div class="col-xs-6 myDiv">
+                <text class="text-thin text-xs">1. Duplicate Copy is returned to U.A.G.E (A) Svcs Rwp. after recovery.</text>
+                <br />
+                <text class="text-thin text-xs">2.Amount recovered through pay for.........................</text>
+                <br />
+                <text class="text-thin text-xs">3. Treasury receipt is enclosed.</text>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+
+            </div>
+            <div class="col-xs-3 myDiv">
+                <text class="text-thin text-xs">Total Recovery</text>
+                <br />
+                <text class="text-thin text-xs">Electric Rs.</text>
+                <br />
+                <text class="text-thin text-xs">Water Rs.</text>
+                <br />
+                <text class="text-thin text-xs">Furniture Rs.</text>
+            </div>
+            <div class="col-xs-3 myDiv">
+                <text class="text-semibold text-xs">U.A/ Audit Officer / OC Unit</text>
+
+            </div>
+        </div>
+        <div class="row">
+            <h5>UITITIES Bill</h5>
+        </div>
+        <div class="row">
+            <div class="col-sx-12">
+                <table class="table">
+                    <tr class="text-xs text-thin">
+                        <th>Consumer No</th>
+                        <th>Billing Month</th>
+                        <th>Issue Date</th>
+                        <th>Due Date</th>
+                        <th>Meter Number</th>
+                        <th>Tariff</th>
+                    </tr>
+                    <tr class="text-xs text-thin">
+                        <td><span id="ccConsumerNo"></span></td>
+                        <td><span id="ccBillingMonth"></span></td>
+                        <td><span id="ccIssueDate"></span></td>
+                        <td><span id="ccDueDate"></span></td>
+                        <td><span id="ccMeterNumber"></span></td>
+                        <td><span id="ccTariff"></span></td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="col-sx-12">
+                <table class="table">
+                    <tr class="text-xs text-thin">
+                        <th>Amount Payable with in Due Date</th>
+                        <th></th>
+                        <th>Amount Payable After Due Date</th>
+                        <th></th>
+
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-3">No <span id="ccNo"></span></div>
+            <div class="col-xs-3">Rank <span id="ccRank"></span></div>
+            <div class="col-xs-3">Name <span id="ccName"></span></div>
+            <div class="col-xs-3">Unit/Fmn <span id="ccUnits"></span></div>
+            <div class="col-xs-6">Address <span id="ccAddress"></span></div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/validator")
+    @Scripts.Render("~/bundles/sweetAlert")
+    @Scripts.Render("~/bundles/select2")
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/datepicker")
+    @Scripts.Render("~/bundles/nifty")
+
+    <script>
+    var Id = '@{ var bId = "";  if (Model != null) { bId = Model.billId; } }@bId';
+
+        $(document).on('nifty.ready', function () {
+            console.log(Id);
+            initBillInfo(Id);
+        });
+
+    </script>
+    <script>
+        function initBillInfo(Id) {
+            var _id = Id;
+            $.ajax({
+                url: '/ROR/GetRORById',
+                type: 'POST',
+                data: { billId : _id },
+                success: function (response) {
+                    if (response) {
+                        if (response.resultCode == '1100') {
+                            $('#consumerNo').text(response.locationMeterNo); 
+                            $('#billingMonth').text(response.billMonth); 
+                            $('#issueDate').text(response.billDateTime); 
+                            $('#dueDate').text(""); 
+                            $('#meterNumber').text(response.locationMeterNo); 
+                            $('#tariff').text(""); 
+                            $('#no').text(response.residentPaNo); 
+                            $('#rank').text(response.residentRank); 
+                            $('#name').text(response.residentName); 
+                            $('#unitFmn').text(response.residentUnit); 
+                            $('#address').text(response.locationName); 
+                            $('#dcConsumerNo').text(response.locationMeterNo);
+                            $('#dcBillingMonth').text(response.billMonth);
+                            $('#dcIssueDate').text(response.billDateTime);
+                            $('#dcDueDate').text("");
+                            $('#dcMeterNumber').text(response.locationMeterNo);
+                            $('#dcTariff').text(""); 
+                            $('#dcNo').text(response.residentPaNo);
+                            $('#dcRank').text(response.residentRank);
+                            $('#dcName').text(response.residentName);
+                            $('#dcUnitFmn').text(response.residentUnit);
+                            $('#dcAddress').text(response.locationName); 
+                            $('#ccConsumerNo').text(response.locationMeterNo);
+                            $('#ccBillingMonth').text(response.billMonth);
+                            $('#ccIssueDate').text(response.billDateTime);
+                            $('#ccDueDate').text("");
+                            $('#ccMeterNumber').text(response.locationMeterNo);
+                            $('#ccTariff').text(""); 
+                            $('#ccNo').text(response.residentPaNo);
+                            $('#ccRank').text(response.residentRank);
+                            $('#ccName').text(response.residentName);
+                            $('#ccUnitFmn').text(response.residentUnit);
+                            $('#ccAddress').text(response.locationName); 
+                        }
+
+                        else {
+                        }
+                    }
+                    window.print();
+                },
+                error: function (a, b, c) {
+                    swal('Info', 'Not connected to the internet', 'info');
+                }
+
+            });
+
+        }
+
+    </script>
+</body>
+</html>
+

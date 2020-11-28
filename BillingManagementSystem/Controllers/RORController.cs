@@ -33,7 +33,12 @@ namespace BillingManagementSystem.Controllers
         {
             return View();
         }
-
+        public ActionResult BillPrint(int id)
+        {
+            BillRequestModel model = new BillRequestModel();
+            model.billId = id.ToString();
+            return View("BillPrint", model);
+        }
         #endregion
         #region Electric Actions
         public ActionResult GetAllRORElectric([FromBody] BillRequestModel model)

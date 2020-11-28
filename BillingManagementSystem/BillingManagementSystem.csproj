@@ -1065,6 +1065,7 @@
     <Content Include="Views\Home\ROR.cshtml" />
     <Content Include="Views\Recovery\RecoveryList.cshtml" />
     <Content Include="Views\ROR\ApprovedReadings.cshtml" />
+    <Content Include="Views\ROR\BillPrint.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

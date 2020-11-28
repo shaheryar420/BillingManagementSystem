@@ -30,6 +30,16 @@
             initElectricGrid();
             initfilters();
             initDropDowns();
+            $(document).on('click', '.btn_print_view', function (e) {
+                e.preventDefault();
+                var rowData = Dtable.row($(this).parents('tr')).data();
+                var _id = rowData.billId;
+
+                var url = "@Url.Action("BillPrint", "ROR")";
+                url += "/" + _id;
+                window.open(url,'_blank');
+
+            });
         });
     </script>
     <script>
@@ -64,11 +74,17 @@
                     }
                 },
                 "columns": [
-
+                    
                     {
                         title: 'Sr. #',
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        title: 'Print Bill',
+                        render: function (data, type, row, meta) {
+                            return "<div class='btn-group'><a href='#' id='view' class='btn-sm btn-info btn_print_view'><i class='fa fa-eye'></i></a></div>";
                         }
                     },
                     { "title": "Id", "data": "billId", className: "hidden" },
