@@ -46,10 +46,23 @@
         }*/
         .myDiv {
             border: 1px solid black;
-            height: 70px;
+            height: 50px;
+            font-size: 10px;
         }
-        tr,td,th{
+        .myDiv2 {
             border: 1px solid black;
+            height: 55px;
+            font-size: 10px;
+        }
+        table,th,td{
+            
+            border: 1px solid black;
+        }
+        td, th {
+            padding: 1px !important;
+        }
+        th, td{
+            font-size: 10px !important;
         }
         table{
             border-top-color: black;
@@ -67,43 +80,44 @@
         </div>
 
         <div class="row">
-            <div class="col-xs-12 text-center">
-                <h4 class=" text-center ">UTILITIES</h4>
+            <div class="col-xs-7 ">
+                <h5 class=" text-right text-bold">UTILITIES BILL</h5>
             </div>
+            <div class="col-xs-offset-2 col-xs-3"><h5>Original Copy</h5></div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <table class="table  ">
-                        <tr class="text-xs text-thin">
-                            <th>Consumer No</th>
-                            <th>Billing Month</th>
-                            <th>Issue Date</th>
-                            <th>Due Date</th>
-                            <th>Meter Number</th>
-                            <th>Tariff</th>
-                        </tr>
-                   
-                        <tr class="text-xs text-thin">
-                            <td><span id="consumerNo"></span></td>
-                            <td><span id="billingMonth"></span></td>
-                            <td><span id="issueDate"></span></td>
-                            <td><span id="dueDate"></span></td>
-                            <td><span id="meterNumber"></span></td>
-                            <td><span id="tariff"></span></td>
-                        </tr>
+                <table class="table ">
+                    <tr class="text-xs text-thin trpad">
+                        <th>Consumer No</th>
+                        <th>Billing Month</th>
+                        <th>Issue Date</th>
+                        <th>Due Date</th>
+                        <th>Meter Number</th>
+                        <th>Tariff</th>
+                    </tr>
+
+                    <tr class="text-xs text-thin">
+                        <td><span id="consumerNo"></span></td>
+                        <td><span id="billingMonth"></span></td>
+                        <td><span id="issueDate"></span></td>
+                        <td><span id="dueDate"></span></td>
+                        <td><span id="meterNumber"></span></td>
+                        <td><span id="tariff"></span></td>
+                    </tr>
                 </table>
             </div>
-        </div>
-
-        <div class="row">
             <div class="col-xs-3">No <span id="no"></span></div>
             <div class="col-xs-3">Rank <span id="rank"></span></div>
             <div class="col-xs-3">Name <span id="name"></span></div>
             <div class="col-xs-3">Unit/Fmn <span id="unitFmn"></span></div>
             <div class="col-xs-6">Address <span id="address"></span></div>
         </div>
+
         <div class="row">
-            <h5>Main Meter Charges</h5>
+            <div class="col-xs-12">
+                <h5>Main Meter Charges</h5>
+            </div>
             <div class="col-xs-12">
                 <table class="table">
                     <tr class="text-xs text-thin">
@@ -141,15 +155,15 @@
                 </table>
             </div>
             <div class="col-xs-6">
-                <table class="table center-block">
+                <table class="table">
                     <tr class="text-xs text-thin">
                         <th>Water Charges</th>
                         <th>Arrears</th>
                         <th>Total Amount</th>
 
                     </tr>
-                    <tr class="text-sm text-thin">
-                        <td><span id="mmWater Charges"></span></td>
+                    <tr class="text-xs text-thin">
+                        <td><span id="mmWaterCharges"></span></td>
                         <td><span id="mmArrears"></span></td>
                         <td><span id="mmTotalAmount"></span></td>
 
@@ -157,7 +171,7 @@
                 </table>
             </div>
             <div class="col-xs-6">
-                <table class="table center-block">
+                <table class="table">
                     <tr class="text-xs text-thin">
                         <th>Fur. Charges</th>
                         <th>Arrears</th>
@@ -174,7 +188,9 @@
             </div>
         </div>
         <div class="row">
-            <h5>Secondary Meter Charges</h5>
+            <div class="col-xs-12">
+                <h5>Secondary Meter Charges</h5>
+            </div>
             <div class="col-xs-12">
                 <table class="table">
                     <tr class="text-xs text-thin">
@@ -218,7 +234,7 @@
 
                     </tr>
                     <tr class="text-xs text-thin">
-                        <td><span id="smWater Charges"></span></td>
+                        <td><span id="smWaterCharges"></span></td>
                         <td><span id="smArrears"></span></td>
                         <td><span id="smTotalAmount"></span></td>
                     </tr>
@@ -243,9 +259,9 @@
             </div>
         </div>
         <div class="row">
-            <h5>Sui Gas Charges</h5>
+            <div class="col-xs-12"><h5>Sui Gas Charges</h5></div>
         </div>
-        <div class="row " style="display:inline-flex">
+        <div class="row ">
             <div class="col-xs-10">
                 <table class="table">
                     <tr class="text-xs text-thin">
@@ -265,11 +281,11 @@
                     </tr>
                 </table>
             </div>
-            <div class="col-xs-2 mar-lft myDiv">
+            <div class="col-xs-2 myDiv">
                 <text class="text-thin text-xs">S.D.O E/M<br />GE(ARMY) SVCS RWP</text>
             </div>
         </div>
-        <div class="row" >
+        <div class="row">
             <div class="col-xs-10">
                 <table class="table ">
                     <tr class="text-xs text-thin">
@@ -279,6 +295,7 @@
 
                     </tr>
                     <tr class="text-xs text-thin">
+                        <td><span id="gmArrears"></span></td>
                         <td><span id="gmTotal"></span></td>
                         <td><span id="gmGrandTotal"></span></td>
 
@@ -291,7 +308,8 @@
             </div>
         </div>
         <div class="row">
-            <h5>UITITIES Bill</h5>
+            <div class="col-xs-9"><h5>UTILITIES BILL</h5></div>
+            <div class="col-xs-3"><h5>\Duplicate Copy</h5></div>
         </div>
         <div class="row">
             <div class="col-sx-12">
@@ -319,9 +337,9 @@
                 <table class="table">
                     <tr class="text-xs text-thin">
                         <th>Amount Payable with in Due Date</th>
-                        <th><span id="mmFurTotalAmount"></span></th>
+                        <th><span id="dcAmountwithinDueDate"></span></th>
                         <th>Amount Payable After Due Date</th>
-                        <th><span id="mmFurTotalAmount"></span></th>
+                        <th><span id="dcAmountAfterDueDate"></span></th>
 
                     </tr>
 
@@ -335,10 +353,7 @@
                 <text>Rank <span id="dcRank"></span></text>
                 <br />
                 <text>Name <span id="dcName"></span></text>
-                <br />
-                <text>Address <span id="dcAddress"></span></text>
-                <br />
-                <text>Unit/Fmn <span id="dcUnits"></span></text>
+
             </div>
             <div class="col-xs-6 myDiv">
                 <text class="text-thin text-xs">1. Duplicate Copy is returned to U.A.G.E (A) Svcs Rwp. after recovery.</text>
@@ -350,9 +365,11 @@
         </div>
         <div class="row">
             <div class="col-xs-6">
-
+                <text>Address <span id="dcAddress"></span></text>
+                <br />
+                <text>Unit/Fmn <span id="dcUnits"></span></text>
             </div>
-            <div class="col-xs-3 myDiv">
+            <div class="col-xs-3 myDiv2">
                 <text class="text-thin text-xs">Total Recovery</text>
                 <br />
                 <text class="text-thin text-xs">Electric Rs.</text>
@@ -361,13 +378,14 @@
                 <br />
                 <text class="text-thin text-xs">Furniture Rs.</text>
             </div>
-            <div class="col-xs-3 myDiv">
+            <div class="col-xs-3 myDiv2">
                 <text class="text-semibold text-xs">U.A/ Audit Officer / OC Unit</text>
 
             </div>
         </div>
         <div class="row">
-            <h5>UITITIES Bill</h5>
+            <div class="col-xs-9"><h5>UTILITIES BILL</h5></div>
+            <div class="col-xs-3"><h5>\Consumer Copy</h5></div>
         </div>
         <div class="row">
             <div class="col-sx-12">
@@ -395,9 +413,9 @@
                 <table class="table">
                     <tr class="text-xs text-thin">
                         <th>Amount Payable with in Due Date</th>
-                        <th></th>
+                        <th id="ccAmountwithinDueDate"></th>
                         <th>Amount Payable After Due Date</th>
-                        <th></th>
+                        <th id="ccAmountAfterDueDate"></th>
 
                     </tr>
 
@@ -436,43 +454,87 @@
             $.ajax({
                 url: '/ROR/GetRORById',
                 type: 'POST',
-                data: { billId : _id },
+                data: { billId: _id },
                 success: function (response) {
                     if (response) {
                         if (response.resultCode == '1100') {
-                            $('#consumerNo').text(response.locationMeterNo); 
-                            $('#billingMonth').text(response.billMonth); 
-                            $('#issueDate').text(response.billDateTime); 
-                            $('#dueDate').text(""); 
-                            $('#meterNumber').text(response.locationMeterNo); 
-                            $('#tariff').text(""); 
-                            $('#no').text(response.residentPaNo); 
-                            $('#rank').text(response.residentRank); 
-                            $('#name').text(response.residentName); 
-                            $('#unitFmn').text(response.residentUnit); 
-                            $('#address').text(response.locationName); 
+                            $('#consumerNo').text(response.locationMeterNo);
+                            $('#billingMonth').text(response.billMonth);
+                            $('#issueDate').text(response.billDateTime);
+                            $('#dueDate').text("0");
+                            $('#meterNumber').text(response.locationMeterNo);
+                            $('#tariff').text("0");
+                            $('#no').text(response.residentPaNo);
+                            $('#rank').text(response.residentRank);
+                            $('#name').text(response.residentName);
+                            $('#unitFmn').text(response.residentUnit);
+                            $('#address').text(response.locationName);
+                            $('#mmPreviousreading').text(response.billPrimaryPrevReading);
+                            $('#mmPresentreading').text(response.billPrimaryCurrentReading);
+                            $('#mmUnitsConsumed').text(response.billPrimaryUnits);
+                            $('#mmAuthOrs').text("0");
+                            $('#mmBalanceUnits').text("0");
+                            $('#mmTvFee').text(response.billPrimaryTv);
+                            $('#mmMeterRent').text(response.billPrimaryMeterRent);
+                            $('#mmFPA').text(response.billPrimaryFPA);
+                            $('#mmCurrentBill').text(response.billAmount);
+                            $('#mmWithindue').text("0");
+                            $('#mmWaterCharges').text(response.billPrimaryWater);
+                            $('#mmArrears').text("0");
+                            $('#mmTotalAmount').text("0");
+                            $('#mmFurCharges').text("0");
+                            $('#mmFurArrears').text("0");
+                            $('#mmFurTotalAmount').text("0");
+                            $('#smPreviousreading').text(response.billSecondaryPrevReading);
+                            $('#smPresentreading').text(response.billSecondaryCurrentReading);
+                            $('#smUnitsConsumed').text(response.billSecondaryUnits);
+                            $('#smAuthOrs').text("0");
+                            $('#smBalanceUnits').text("0");
+                            $('#smTvFee').text(response.billSecondaryTv);
+                            $('#smMeterRent').text(response.billSecondaryMeterRent);
+                            $('#smFPA').text(response.billSecondaryFPA);
+                            $('#smCurrentBill').text("0");
+                            $('#smWithindue').text("0");
+                            $('#smWaterCharges').text(response.billSecondaryWater);
+                            $('#smArrears').text("0");
+                            $('#smTotalAmount').text("0");
+                            $('#smFurCharges').text("0");
+                            $('#smFurArrears').text("0");
+                            $('#smFurTotalAmount').text("0");
+                            $('#gmPreviousReading').text(response.billGasPrevReading);
+                            $('#gmPresentReading').text(response.billGasCurrentReading);
+                            $('#gmGasConsumed').text("0");
+                            $('#gmNMMMBTU').text(response.billGasMMBTU);
+                            $('#gmMeterRent').text(response.billGasMeterRent);
+                            $('#gmArrears').text("0");
+                            $('#gmTotal').text("0");
+                            $('#gmGrandTotal').text("0");
+                            $('#ccAmountwithinDueDate').text("0000");
+                            $('#ccAmountAfterDueDate').text("0000");
+                            $('#dcAmountwithinDueDate').text("0000");
+                            $('#dcAmountAfterDueDate').text("0000");
                             $('#dcConsumerNo').text(response.locationMeterNo);
                             $('#dcBillingMonth').text(response.billMonth);
                             $('#dcIssueDate').text(response.billDateTime);
                             $('#dcDueDate').text("");
                             $('#dcMeterNumber').text(response.locationMeterNo);
-                            $('#dcTariff').text(""); 
+                            $('#dcTariff').text("");
                             $('#dcNo').text(response.residentPaNo);
                             $('#dcRank').text(response.residentRank);
                             $('#dcName').text(response.residentName);
                             $('#dcUnitFmn').text(response.residentUnit);
-                            $('#dcAddress').text(response.locationName); 
+                            $('#dcAddress').text(response.locationName);
                             $('#ccConsumerNo').text(response.locationMeterNo);
                             $('#ccBillingMonth').text(response.billMonth);
                             $('#ccIssueDate').text(response.billDateTime);
                             $('#ccDueDate').text("");
                             $('#ccMeterNumber').text(response.locationMeterNo);
-                            $('#ccTariff').text(""); 
+                            $('#ccTariff').text("");
                             $('#ccNo').text(response.residentPaNo);
                             $('#ccRank').text(response.residentRank);
                             $('#ccName').text(response.residentName);
                             $('#ccUnitFmn').text(response.residentUnit);
-                            $('#ccAddress').text(response.locationName); 
+                            $('#ccAddress').text(response.locationName);
                         }
 
                         else {
