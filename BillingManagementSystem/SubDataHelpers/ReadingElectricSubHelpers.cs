@@ -19,6 +19,7 @@ namespace BillingManagementSystem.SubDataHelpers
                     var meterRent = (from x in db.tbl_fixedrates where x.fixedrates_id == 2 select x.fixedrates_amount).FirstOrDefault();
                     var tvRate = (from x in db.tbl_fixedrates where x.fixedrates_id == 3 select x).FirstOrDefault();
                     var waterRate = (from x in db.tbl_fixedrates where x.fixedrates_id == 4 select x).FirstOrDefault();
+                    var furnitureCharges = (from x in db.tbl_fixedrates where x.fixedrates_id == 7 select x).FirstOrDefault();
                     var slabs = (from x in db.tbl_slabs select x).ToList();
                     if (resident_pin_code == 5)
                     {
@@ -35,6 +36,7 @@ namespace BillingManagementSystem.SubDataHelpers
                     double fpa = fparate.fixedrates_amount;
                     double waterCharges = waterRate.fixedrates_amount;
                     double tvCharges = tvRate.fixedrates_amount;
+                    double furnitureCharge = furnitureCharges.fixedrates_amount;
                     for (int i = 0; i < slabs.Count; i++)
                     {
                         if (totalEnergyCharges == 0)
@@ -134,6 +136,20 @@ namespace BillingManagementSystem.SubDataHelpers
                             }
                         }
                     }
+                    if (location.location_fur_charges == 0)
+                    {
+                        if (_units >= furnitureCharges.fixedrates_unit)
+                        {
+                            if (furnitureCharges.fixedrates_status == 0)
+                            {
+                                totalAmount = totalAmount + furnitureCharge;
+                            }
+                            else
+                            {
+                                totalAmount = totalAmount + furnitureCharge;
+                            }
+                        }
+                    }
                     if (resident_pin_code == 1)
                     {
                         totalAmount = (totalAmount - totalEnergyCharges);
@@ -150,6 +166,7 @@ namespace BillingManagementSystem.SubDataHelpers
                         totalFPA = totalFPA,
                         tvCharges= tvCharges,
                         waterCharges= waterCharges,
+                        furCharges = furnitureCharge,
                         meterRent = meterRent,
                         resultCode="1100",
                         remarks="Success"

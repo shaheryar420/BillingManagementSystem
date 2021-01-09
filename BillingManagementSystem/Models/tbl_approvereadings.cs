@@ -35,5 +35,6 @@ namespace BillingManagementSystem.Models
         public Nullable<double> bill_meter_rent { get; set; }
         public Nullable<double> bill_gst { get; set; }
         public int fk_ror { get; set; }
+        public Nullable<double> bill_fur_charge { get; set; }
     }
 }

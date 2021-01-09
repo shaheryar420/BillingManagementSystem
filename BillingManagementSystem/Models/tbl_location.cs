@@ -19,5 +19,6 @@ namespace BillingManagementSystem.Models
         public int fk_subarea { get; set; }
         public int location_tv_charges { get; set; }
         public int location_water_charges { get; set; }
+        public int location_fur_charges { get; set; }
     }
 }

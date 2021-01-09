@@ -11,6 +11,7 @@ namespace BillingManagementSystem.Models
         public string billElectricPrevReading { get; set; }
         public string billElectricCurrentReading { get; set; }
         public string billElectricUnits { get; set; }
+        public string billFurnitureCharges { get; set; }
         public string billElectricWater { get; set; }
         public string billElectricTv { get; set; }
         public string billElectricRemarks { get; set; }

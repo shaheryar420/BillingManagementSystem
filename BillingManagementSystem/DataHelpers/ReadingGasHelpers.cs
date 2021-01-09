@@ -43,7 +43,7 @@ namespace BillingManagementSystem.DataHelpers
                                                     db.SaveChanges();
                                                     var resident = (from x in db.tbl_location
                                                                     join z in db.tbl_consummer_pool on x.location_id equals z.fk_location
-                                                                    join y in db.tbl_residents on z.id equals y.resident_consumer_no
+                                                                    join y in db.tbl_residents on z.consummer_no equals y.resident_consumer_no
                                                                     where z.consummer_no == model.readingGasMeterNo
                                                                     select new
                                                                     {
@@ -679,7 +679,7 @@ namespace BillingManagementSystem.DataHelpers
                                         join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
                                         join a in db.tbl_area on y.fk_area equals a.area_id
                                         join z in db.tbl_consummer_pool on x.location_id equals z.fk_location
-                                        join rb in db.tbl_residents on z.id equals rb.resident_consumer_no
+                                        join rb in db.tbl_residents on z.consummer_no equals rb.resident_consumer_no
                                         where z.consummer_no == model.locationGassMeter
                                         select new
                                         {
@@ -693,11 +693,14 @@ namespace BillingManagementSystem.DataHelpers
                                         }).FirstOrDefault();
                         if (location != null)
                         {
+                            var reading = db.tbl_readinggas.Where(x => x.reading_meterno == model.locationGassMeter  && x.fk_resident == location.resident_id).OrderByDescending(x => x.reading_datetime).FirstOrDefault();
+                            var approveReading = db.tbl_approvereadings.Where(x => x.reading_meterno == model.locationGassMeter && x.is_secondary == 2 && x.fk_resident == location.resident_id).OrderByDescending(x => x.reading_datetime).FirstOrDefault();
                             toReturn = new LocationResponseModel()
                             {
                                 areaName = location.area_name,
                                 fk_area = location.area_id.ToString(),
                                 subAreaName = location.subarea_name,
+                                previousReading = reading != null ? reading.reading_currentreading.ToString():approveReading.reading_currentreading.ToString(),
                                 fk_subArea = location.fk_subarea.ToString(),
                                 locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
                                 locationId = location.location_id.ToString(),
@@ -705,42 +708,7 @@ namespace BillingManagementSystem.DataHelpers
                                 remarks = "Successfully Location Found",
                                 resultCode = "1100"
                             };
-                            var bill = (from x in db.tbl_billelectric where x.fk_location == location.location_id select x).OrderByDescending(x => x.billelectric_datetime).FirstOrDefault();
-                            var billGas = (from x in db.tbl_billgas where x.fk_location == location.location_id select x).OrderByDescending(x => x.datetime).FirstOrDefault();
-                            if (billGas != null)
-                            {
-                                toReturn.previousReading = !String.IsNullOrEmpty(billGas.prevreading.ToString()) ? billGas.prevreading.ToString() : "";
-                                toReturn.outstanding = !String.IsNullOrEmpty(billGas.outstanding.ToString()) ? billGas.outstanding.ToString() : "";
-                                toReturn.billMonth = !string.IsNullOrEmpty(billGas.month) ? billGas.month : "";
-                                toReturn.currentReading = billGas.currentreading.ToString();
-                                toReturn.totalGasAmount = billGas.amount.ToString();
-                                toReturn.currentUnit = billGas.units.ToString();
-                            }
-                            else
-                            {
-                                toReturn.previousReading = "0";
-                                toReturn.outstanding = "0";
-                                toReturn.billMonth = "0";
-                                toReturn.currentReading = "0";
-                                toReturn.currentUnit = "0";
-
-                            }
-                            if (billGas != null)
-                            {
-                                toReturn.previousGasReading = billGas.prevreading.ToString();
-                                toReturn.gasOutstanding = billGas.outstanding.ToString();
-                                toReturn.billGasMonth = billGas.month.ToString();
-                                toReturn.currentGasReading = billGas.currentreading.ToString();
-                                toReturn.currentGasUnit = billGas.units.ToString();
-                            }
-                            else
-                            {
-                                toReturn.previousGasReading = "0";
-                                toReturn.gasOutstanding = "0";
-                                toReturn.billGasMonth = "0";
-                                toReturn.currentGasReading = "0";
-                                toReturn.currentGasUnit = "0";
-                            }
+                         
                         }
                         else
                         {

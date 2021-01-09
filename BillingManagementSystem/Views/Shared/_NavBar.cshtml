@@ -96,11 +96,8 @@
                                     <a href="@Url.Action("ApprovedReadings","ROR")">Approved Readings</a>
                                 </li>
                                 <li class="@Html.IsSelected(action: "Electric", controller:"ROR")@Html.IsAllowed(controller:"ROR", action: "Electric")">
-                                    <a href="@Url.Action("Electric","ROR")"> Electric / General</a>
-                                </li>
-                                <li class="@Html.IsSelected(action: "Gas", controller:"ROR")@Html.IsAllowed(controller:"ROR", action: "Gas")">
-                                    <a href="@Url.Action("Gas","ROR")">SUI Gas</a>
-                                </li>
+                                    <a href="@Url.Action("Electric","ROR")">General</a>
+                                </li>                                
                                 <li class="@Html.IsSelected(action: "Wapda", controller:"ROR")@Html.IsAllowed(controller:"ROR", action: "Wapda")">
                                     <a href="@Url.Action("Wapda","ROR")">Wapda</a>
                                 </li>
@@ -144,6 +141,9 @@
                             <ul class="collapse">
                                 <li class="@Html.IsSelected(controller: "Management", action:"Users")" @Html.IsAllowed(controller: "Management", action: "Users")>
                                     <a href="@Url.Action("Users","Management")">Manage Users</a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "Management", action:"ConsumerPool")" @Html.IsAllowed(controller: "Management", action: "ConsumerPool")>
+                                    <a href="@Url.Action("ConsumerPool","Management")">Manage Consummer Pool</a>
                                 </li>
 
                                 <li class="@Html.IsSelected(controller: "Management", action:"Area")" @Html.IsAllowed(controller: "Management", action: "Area")>

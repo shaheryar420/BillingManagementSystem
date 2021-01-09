@@ -29,7 +29,7 @@ namespace BillingManagementSystem.DataHelpers
                                     {
                                         var resident = (from x in db.tbl_location
                                                         join z in db.tbl_consummer_pool on x.location_id equals z.fk_location
-                                                        join y in db.tbl_residents on z.id equals y.resident_consumer_no
+                                                        join y in db.tbl_residents on z.consummer_no equals y.resident_consumer_no
                                                         where z.consummer_no == model.readingElectricMeterNo
                                                         select new { y.resident_id,
                                                             x.location_id }).FirstOrDefault();
@@ -606,6 +606,7 @@ namespace BillingManagementSystem.DataHelpers
                                             bill_tv = response.tvCharges,
                                             bill_meter_rent = response.meterRent,
                                             bill_water = response.waterCharges,
+                                            bill_fur_charge = response.furCharges,
                                             
                                         };
                                         db.tbl_approvereadings.Add(newBill);
@@ -756,6 +757,7 @@ namespace BillingManagementSystem.DataHelpers
                                         locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
                                         subAreaName = !string.IsNullOrEmpty(location.subarea_name) ? location.subarea_name : "",
                                         areaName = !string.IsNullOrEmpty(location.area_name) ? location.area_name : "",
+                                        billFurnitureCharges = response.furCharges.ToString(),
                                         remarks = "Successfully Found",
                                         resultCode = "1100",
                                     };
@@ -958,6 +960,7 @@ namespace BillingManagementSystem.DataHelpers
                                         x.bill_rebate,
                                         x.bill_tv,
                                         x.bill_water,
+                                        x.bill_fur_charge,
                                         y.readingpicture_data,
                                         y.readingpicture_size,
                                         y.readingpicture_type,
@@ -1013,6 +1016,7 @@ namespace BillingManagementSystem.DataHelpers
                             billRebate = x.bill_rebate.ToString(),
                             billTv= x.bill_tv.ToString(),
                             billWater = x.bill_water.ToString(),
+                            billFurnitureCharges= x.bill_fur_charge.ToString(),
                             remarks = "Successfully Found",
                             resultCode = "1100"
                         }).ToList();
@@ -1160,7 +1164,7 @@ namespace BillingManagementSystem.DataHelpers
                                         join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
                                         join a in db.tbl_area on y.fk_area equals a.area_id
                                         join z in db.tbl_consummer_pool on x.location_id equals z.fk_location
-                                        join rb in db.tbl_residents on z.id equals rb.resident_consumer_no
+                                        join rb in db.tbl_residents on z.consummer_no equals rb.resident_consumer_no
                                         where z.consummer_no == model.locationElectricMeter
                                         select new
                                         {
@@ -1266,7 +1270,7 @@ namespace BillingManagementSystem.DataHelpers
                                         join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
                                         join a in db.tbl_area on y.fk_area equals a.area_id
                                         join z in db.tbl_consummer_pool on x.location_id equals z.fk_location
-                                        join rb in db.tbl_residents on z.id equals rb.resident_consumer_no
+                                        join rb in db.tbl_residents on z.consummer_no equals rb.resident_consumer_no
                                         where z.consummer_no == model.consummerNo 
                                         select new
                                         {
@@ -1279,12 +1283,13 @@ namespace BillingManagementSystem.DataHelpers
                                             y.subarea_name
                                         }).FirstOrDefault();
                         var reading = db.tbl_readingelectric.Where(x => x.readingelectric_meterno == model.consummerNo && x.is_secondary == meterStatus && x.fk_resident== location.resident_id).OrderByDescending(x => x.readingelectric_datetime).FirstOrDefault();
+                        var approveReading = db.tbl_approvereadings.Where(x => x.reading_meterno == model.consummerNo && x.is_secondary == meterStatus && x.fk_resident == location.resident_id).OrderByDescending(x => x.reading_datetime).FirstOrDefault();
                         if (location != null)
                         {
                             toReturn = new ReadingElectricDetailByConsumerNoResponseModel()
                             {
                                 locationId= location.location_id.ToString(),
-                                previousReading = reading!=null?reading.readingelectric_currentreading.ToString():"0",
+                                previousReading = reading!=null?reading.readingelectric_currentreading.ToString(): approveReading.reading_currentreading.ToString(),
                                 areaName = location.area_name,
                                 subAreaName = location.subarea_name,
                                 locationName = !string.IsNullOrEmpty(location.location_name) ? location.location_name : "",
@@ -1536,14 +1541,14 @@ namespace BillingManagementSystem.DataHelpers
                                                    r.resident_unit,
                                                    r.resident_pin_code
                                                }).OrderByDescending(x=>x.ror_datetime).ToList();
-                        var month = _locationhistory[0].ror_month;
                         var location = _locationhistory[0].location_id;
-                        var outstandings = db.tbl_outstanding.Where(x => x.fk_location == location && x.outstanding_month==month ).ToList();
+                        var outstandings = db.tbl_outstanding.Where(x => x.fk_location == location  ).ToList();
                         var payments = db.tbl_paymenthistory.Where(x => x.fk_location == location).ToList();
                         var locationHistory = (from x in _locationhistory
                                                join y in outstandings on x.fk_resident equals y.fk_resident
                                                join z in payments on x.id equals z.fk_billelectric into payment
                                                from z in payment.DefaultIfEmpty()
+                                               where y.outstanding_month== x.ror_month
                                                select new
                                                {
                                                    x.id,

@@ -16,28 +16,29 @@ namespace BillingManagementSystem.DataHelpers
             {
                 using(db_bmsEntities db = new db_bmsEntities())
                 {
-                    if (new ModelsValidatorHelper().validateint(model.locationId))
+                    if (!string.IsNullOrEmpty(model.meterNo))
                     {
-                        int locationId = int.Parse(model.locationId);
-                        if (!string.IsNullOrEmpty(model.residentName))
+                        if (new ModelsValidatorHelper().validateint(model.locationId))
                         {
-                            if (!string.IsNullOrEmpty(model.residentPaNumber))
-                            {   
-                                var existingResident = (from x in db.tbl_residents where x.resident_panumber == model.residentPaNumber select x).FirstOrDefault();
-                                if (existingResident == null)
+                            int locationId = int.Parse(model.locationId);
+                            if (!string.IsNullOrEmpty(model.residentName))
+                            {
+                                if (!string.IsNullOrEmpty(model.residentPaNumber))
                                 {
-                                    tbl_residents resident = new tbl_residents()
+                                    var existingResident = (from x in db.tbl_residents where x.resident_panumber == model.residentPaNumber select x).FirstOrDefault();
+                                    if (existingResident == null)
                                     {
-                                        resident_name = model.residentName,
-                                        resident_panumber = model.residentPaNumber,
-                                        resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : "",
-                                        resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : "",
-                                        resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : "",
-                                        resident_pin_code = int.Parse(model.residentPinCode),
-                                    };
-                                    var residentExistingBuilding = (from x in db.tbl_residentbuilding where x.fk_building == locationId select x).FirstOrDefault();
-                                    if(residentExistingBuilding == null)
-                                    {
+                                        tbl_residents resident = new tbl_residents()
+                                        {
+                                            resident_name = model.residentName,
+                                            resident_panumber = model.residentPaNumber,
+                                            resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : "",
+                                            resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : "",
+                                            resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : "",
+                                            resident_pin_code = int.Parse(model.residentPinCode),
+                                            resident_consumer_no = model.meterNo,
+                                            resident_status = 0,
+                                        };
                                         db.tbl_residents.Add(resident);
                                         db.SaveChanges();
                                         toReturn = new ResidentResponseModel()
@@ -53,24 +54,22 @@ namespace BillingManagementSystem.DataHelpers
                                         };
                                         db.tbl_residentbuilding.Add(resdidentBuilding);
                                         db.SaveChanges();
-                                       
                                     }
                                     else
                                     {
                                         toReturn = new ResidentResponseModel()
                                         {
-                                            remarks = "Please select Different building as it is already occupied",
-                                            resultCode = "1300"
+                                            remarks = "Resident Already Exists",
+                                            resultCode = "1400"
                                         };
                                     }
-                                   
                                 }
                                 else
                                 {
                                     toReturn = new ResidentResponseModel()
                                     {
-                                        remarks = "Resident Already Exists",
-                                        resultCode = "1400"
+                                        remarks = "Please Provide Pa Number",
+                                        resultCode = "1300"
                                     };
                                 }
                             }
@@ -78,7 +77,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                                 toReturn = new ResidentResponseModel()
                                 {
-                                    remarks = "Please Provide Pa Number",
+                                    remarks = "Please Provide Name",
                                     resultCode = "1300"
                                 };
                             }
@@ -87,17 +86,17 @@ namespace BillingManagementSystem.DataHelpers
                         {
                             toReturn = new ResidentResponseModel()
                             {
-                                remarks = "Please Provide Name",
+                                remarks = "Please Provide Building",
                                 resultCode = "1300"
                             };
                         }
                     }
-                    else
+                    else 
                     {
                         toReturn = new ResidentResponseModel()
                         {
-                            remarks = "Please Provide Building",
-                            resultCode = "1300"
+                            resultCode = "1300",
+                            remarks = "Please Provide Consummer No"
                         };
                     }
                 }
@@ -136,8 +135,9 @@ namespace BillingManagementSystem.DataHelpers
                                         resident_rank = !string.IsNullOrEmpty(model.residentRank) ? model.residentRank : "",
                                         resident_remarks = !string.IsNullOrEmpty(model.residentRemarks) ? model.residentRemarks : "",
                                         resident_unit = !string.IsNullOrEmpty(model.residentUnit) ? model.residentUnit : "",
-                                        resident_consumer_no = int.Parse(model.meterNo),
+                                        resident_consumer_no = model.meterNo,
                                         resident_pin_code = int.Parse(model.residentPinCode),
+                                        resident_status=0,
                                     };
                                     var residentExistingBuilding = (from x in db.tbl_residentbuilding where x.fk_building == locationId select x).FirstOrDefault();
                                     if (residentExistingBuilding != null)
@@ -151,7 +151,8 @@ namespace BillingManagementSystem.DataHelpers
                                             resultCode = "1100"
                                         };
                                         var residentExisting = db.tbl_residents.Where(x => x.resident_id == residentExistingBuilding.fk_resident).FirstOrDefault();
-                                        residentExisting.resident_consumer_no = 0;
+                                        residentExisting.resident_consumer_no = "0";
+                                        residentExisting.resident_status = 1;
                                         residentExistingBuilding.fk_resident = resident.resident_id;
                                         db.SaveChanges();
 
@@ -449,10 +450,14 @@ namespace BillingManagementSystem.DataHelpers
                 using (db_bmsEntities db = new db_bmsEntities())
                 {
                     var residents = (from x in db.tbl_residents
-                                     join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident
-                                     join z in db.tbl_location on y.fk_building equals z.location_id
-                                     join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id
-                                     join aera in db.tbl_area on a.fk_area equals aera.area_id
+                                     join y in db.tbl_residentbuilding on x.resident_id equals y.fk_resident into buildings
+                                     from y in buildings.DefaultIfEmpty()
+                                     join z in db.tbl_location on y.fk_building equals z.location_id into locations
+                                     from z in locations.DefaultIfEmpty()
+                                     join a in db.tbl_subarea on z.fk_subarea equals a.subarea_id into subarea
+                                     from a in subarea.DefaultIfEmpty()
+                                     join aera in db.tbl_area on a.fk_area equals aera.area_id into areas
+                                     from aera in areas.DefaultIfEmpty()
                                      select new
                                      {
                                          x.resident_id,
@@ -461,12 +466,14 @@ namespace BillingManagementSystem.DataHelpers
                                          x.resident_rank,
                                          x.resident_remarks,
                                          x.resident_unit,
-                                         z.location_id,
-                                         z.location_name,
-                                         a.subarea_id,
-                                         a.subarea_name,
-                                         aera.area_id,
-                                         aera.area_name
+                                         x.resident_status,
+                                         x.resident_pin_code,
+                                         location_id=z!=null?z.location_id:0,
+                                         location_name= z!=null?z.location_name:"",
+                                         subarea_id=a!=null?a.subarea_id:0,
+                                         subarea_name=a!=null?a.subarea_name:"",
+                                         area_id=aera!=null?aera.area_id:0,
+                                         area_name=aera!=null?aera.area_name:""
 
                                      }).ToList();
                     if (residents.Count() > 0)
@@ -485,6 +492,8 @@ namespace BillingManagementSystem.DataHelpers
                             residentId = resident.resident_id.ToString(),
                             residentRemarks = !string.IsNullOrEmpty(resident.resident_remarks) ? resident.resident_remarks : "",
                             residentUnit = !string.IsNullOrEmpty(resident.resident_unit) ? resident.resident_unit : "",
+                            residentStatus= resident.resident_status.ToString(),
+                            residentPinCode= resident.resident_pin_code.ToString(),
                             remarks = "Successfully Found",
                             resultCode = "1100"
                         }).ToList();

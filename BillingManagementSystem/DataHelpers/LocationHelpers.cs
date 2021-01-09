@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using BillingManagementSystem.Models;
+using BillingManagementSystem.Models.RequestModels;
 
 namespace BillingManagementSystem.DataHelpers
 {
@@ -470,6 +471,7 @@ namespace BillingManagementSystem.DataHelpers
                     {
                         int subAreaId = int.Parse(model.fk_subArea);
                         var residentBuildings = (from x in db.tbl_residentbuilding select x).ToList();
+                        var consummerPool = db.tbl_consummer_pool.ToList();
                         var locations = (from x in db.tbl_location
                                          join y in db.tbl_subarea on x.fk_subarea equals y.subarea_id
                                          where x.fk_subarea == subAreaId
@@ -499,7 +501,16 @@ namespace BillingManagementSystem.DataHelpers
                                 {
                                     if (residentBuilding.fk_building== locationId)
                                     {
-                                        alreadyAssignedLocations.Add(location);
+                                        var helper = new ConsummerPoolHelpers();
+                                        var request = new ConsummerPoolRequestModel()
+                                        {
+                                            fk_location = residentBuilding.fk_building.ToString(),
+                                        };
+                                        var response = helper.GetConsummerPoolByLocation(request);
+                                        if (response[0].resultCode == "1200")
+                                        {
+                                            alreadyAssignedLocations.Add(location);
+                                        }
                                     }
                                 }
                             }

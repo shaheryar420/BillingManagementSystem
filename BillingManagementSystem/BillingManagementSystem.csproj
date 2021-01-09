@@ -769,6 +769,7 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="DataHelpers\ApprovePaymentHelpers.cs" />
     <Compile Include="DataHelpers\AreaHelpers.cs" />
+    <Compile Include="DataHelpers\ConsummerPoolHelpers.cs" />
     <Compile Include="DataHelpers\DashBoardHelpers.cs" />
     <Compile Include="DataHelpers\FixedRatesHelpers.cs" />
     <Compile Include="DataHelpers\FixedRatesTypeHelpers.cs" />
@@ -814,6 +815,7 @@
     <Compile Include="Models\RequestModels\BillDetailsByConsummerNoAndMonthRequestModel.cs" />
     <Compile Include="Models\RequestModels\BillRequestModel.cs" />
     <Compile Include="Models\RequestModels\BillGasRequestModel.cs" />
+    <Compile Include="Models\RequestModels\ConsummerPoolRequestModel.cs" />
     <Compile Include="Models\RequestModels\FixedRatesTypeRequestModel.cs" />
     <Compile Include="Models\RequestModels\FixedRatesRequestModel.cs" />
     <Compile Include="Models\RequestModels\LocationHistoryRequestModel.cs" />
@@ -839,6 +841,7 @@
     <Compile Include="Models\ResponseModels\BillResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillGasCalculationResponseModel.cs" />
     <Compile Include="Models\ResponseModels\BillGasResponseModel.cs" />
+    <Compile Include="Models\ResponseModels\ConsummerPoolResponseModel.cs" />
     <Compile Include="Models\ResponseModels\ControllerResponseModel.cs" />
     <Compile Include="Models\ResponseModels\DashBoardResponseModel.cs" />
     <Compile Include="Models\ResponseModels\FixedRatesResponseModel.cs" />
@@ -1027,6 +1030,9 @@
     <Content Include="Models\BMSMODEL.edmx.diagram">
       <DependentUpon>BMSMODEL.edmx</DependentUpon>
     </Content>
+    <Content Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </Content>
     <None Include="packages.config" />
     <Content Include="scripts\plugins\jstree\LICENSE-MIT" />
     <Content Include="Views\Shared\_Footer.cshtml" />
@@ -1066,6 +1072,7 @@
     <Content Include="Views\Recovery\RecoveryList.cshtml" />
     <Content Include="Views\ROR\ApprovedReadings.cshtml" />
     <Content Include="Views\ROR\BillPrint.cshtml" />
+    <Content Include="Views\Management\ConsumerPool.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

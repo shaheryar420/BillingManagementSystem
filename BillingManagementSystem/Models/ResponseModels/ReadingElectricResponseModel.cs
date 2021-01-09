@@ -43,6 +43,7 @@ namespace BillingManagementSystem.Models
         public string billRebate { get; set; }
         public string billTv { get; set; }
         public string billWater { get; set; }
+        public string billFurnitureCharges { get; set; }
         public string remarks { get; set; }
         public string resultCode { get; set; }
     }

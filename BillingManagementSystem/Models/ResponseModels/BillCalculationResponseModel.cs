@@ -13,6 +13,7 @@ namespace BillingManagementSystem.Models
         public double meterRent { get; set; }
         public double waterCharges { get; set; }
         public double tvCharges { get; set; }
+        public double furCharges { get; set; }
         public string resultCode { get; set; }
         public string remarks { get; set; }
     }

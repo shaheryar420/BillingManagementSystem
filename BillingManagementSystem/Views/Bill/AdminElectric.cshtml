@@ -214,10 +214,10 @@
                                 $('#current_reading_detail').val(response.billElectricCurrentReading);
                                 $('#current_units_detail').val(response.billElectricUnits);
                                 $('#electric_water_detail').val(response.billElectricWater);
+                                $('#electric_furniture_detail').val(response.billFurnitureCharges);
                                 $('#electric_tv_detail').val(response.billElectricTv);
                                 $('#electric_remarks_detail').val(response.billElectricRemarks);
                                 $('#electric_mounth_detail').val(response.billElectricMonth);
-                                $('#electric_outstanding_detail').val(response.billElectricOutstanding);
                                 $('#meter_no_detail').val(response.locationMeterNo);
                                 $('#electric_area_detail').val(response.areaName);
                                 $('#electric_subarea_detail').val(response.subAreaName);
@@ -788,13 +788,8 @@
                                 <label class="control-label">Units</label>
                                 <input readonly class="form-control" id="current_units_detail" />
                             </div>
-                            
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Outstanding</label>
-                                <input readonly class="form-control " id="electric_outstanding_detail">
-                            </div>
                             <div class="form-group">
                                 <label class="control-label">Amount</label>
                                 <input readonly class="form-control " id="electric_amount_detail">
@@ -820,6 +815,10 @@
                             <div class="form-group">
                                 <label class="control-label">Water</label>
                                 <input readonly class="form-control " id="electric_water_detail">
+                            </div> 
+                            <div class="form-group">
+                                <label class="control-label">Furniture</label>
+                                <input readonly class="form-control " id="electric_furniture_detail">
                             </div>
                         </div>
                     </div>

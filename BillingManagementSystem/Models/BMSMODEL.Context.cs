@@ -48,7 +48,6 @@ namespace BillingManagementSystem.Models
         public virtual DbSet<tbl_residentbuilding> tbl_residentbuilding { get; set; }
         public virtual DbSet<tbl_residenthistory> tbl_residenthistory { get; set; }
         public virtual DbSet<tbl_residentpayments> tbl_residentpayments { get; set; }
-        public virtual DbSet<tbl_residents> tbl_residents { get; set; }
         public virtual DbSet<tbl_slabs> tbl_slabs { get; set; }
         public virtual DbSet<tbl_subarea> tbl_subarea { get; set; }
         public virtual DbSet<tbl_tarrif_category> tbl_tarrif_category { get; set; }
@@ -63,5 +62,6 @@ namespace BillingManagementSystem.Models
         public virtual DbSet<tbl_readingelectric> tbl_readingelectric { get; set; }
         public virtual DbSet<tbl_readinggas> tbl_readinggas { get; set; }
         public virtual DbSet<tbl_ror> tbl_ror { get; set; }
+        public virtual DbSet<tbl_residents> tbl_residents { get; set; }
     }
 }

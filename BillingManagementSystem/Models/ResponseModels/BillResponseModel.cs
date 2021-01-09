@@ -32,9 +32,11 @@ namespace BillingManagementSystem.Models
         public string billPrimaryPictureData { get; set; }
         public string billPrimaryPictureSize { get; set; }
         public string billPrimaryPictureType { get; set; }
+        public string billPrimaryFurCharges { get; set; }
         public string billSecondaryPictureData { get; set; }
         public string billSecondaryPictureSize { get; set; }
         public string billSecondaryPictureType { get; set; }
+        public string billSecondaryFurCharges { get; set; }
         public string billGasPictureId { get; set; }
         public string billPrimaryPictureId { get; set; }
         public string billSecondaryPictureId { get; set; }

@@ -89,7 +89,37 @@
                         { "title": "Remarks", "data": "residentRemarks" },
                         { "title": "Area", "data": "areaName" },
                         { "title": "Sub Area", "data": "subAreaName" },
-                        { "title": "Location", "data": "locationName" }                        
+                        { "title": "Location", "data": "locationName" },  
+                        {
+                            "title": "Resident Status",
+                            "data": "residentPinCode",
+                            render: function (data, type, row, meta) {
+                                if (data == 1) {
+                                    return "Officer";
+                                }
+                                if (data == 2) {
+                                    return "OR"
+                                }
+                                if (data == 3) {
+                                    return "JCO"
+                                }
+                                if (data == 4) {
+                                    return "Civilian"
+                                }
+                                if (data == 5) {
+                                    return "Commercial"
+                                }
+                            }
+                        },           
+                        { "title": "Occupant_Status", "data": "residentStatus",
+                        render: function (data, type, row, meta) {
+                            if (data == 0) {
+                                return "Resident";
+                            }
+                            if (data == 1) {
+                                return "Non-Resident"
+                            }
+                        } }                        
                     ]
                
             });
@@ -173,7 +203,8 @@
                 console.log(_remarks);
                 var _areaId = $("#resident_area").val();
                 var _locationId = $("#resident_location").val();
-                $.post(url, { locationId: _locationId, areaId: _areaId, residentPaNumber: _panumber, residentRank: _rank, residentName: _name, residentUnit: _unit, residentRemarks: _remarks, residentPinCode:_status }, function (data) {
+                var _meterNO = $("#location_cunsummerNo").val();
+                $.post(url, { locationId: _locationId, areaId: _areaId, residentPaNumber: _panumber, residentRank: _rank, residentName: _name, residentUnit: _unit, residentRemarks: _remarks, residentPinCode:_status,meterNo:_meterNO }, function (data) {
                     if (data.resultCode == "1100") {
                         swal("Added!", data.remarks, "success");
                         initResidentGrid();
@@ -333,6 +364,37 @@
                     }
                 });
             });
+             $("#resident_location").change(function () {
+                var _locationId = $("#resident_location").val();
+                $.ajax({
+                    url: '/Management/GetAvailableConsummerPoolByLocation',
+                    type: 'POST',
+                    data: { fk_location: _locationId },
+                    success: function (response) {
+                        if (response) {
+                            if (response[0].resultCode == '1100') {
+                                var list = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    list.push({ text: response[i].consummerNo, id: response[i].consummerId });
+
+                                }
+                                $('#location_cunsummerNo').select2().empty();
+                                $('#location_cunsummerNo').select2({ data: list }).trigger('change');
+                            }
+                            else {
+                                $('#location_cunsummerNo').select2().empty();
+                                $('#location_cunsummerNo').select2({
+                                    placeholder: "location not found ",
+                                    allowClear: true
+                                }).trigger('change');
+                            }
+                        }
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
+                    }
+                });
+            });
         }
     </script>
 }
@@ -414,6 +476,13 @@
                                 <div class="input-group">
                                     <span class="input-group-addon bg-primary">Location</span>
                                     <select class="form-control dropdownlist" id="resident_location">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-primary">Consummer No</span>
+                                    <select class="form-control dropdownlist" id="location_cunsummerNo">
                                     </select>
                                 </div>
                             </div>

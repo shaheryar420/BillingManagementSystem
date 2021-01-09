@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BillingManagementSystem.Models;
+using BillingManagementSystem.Models.RequestModels;
 using BillingManagementSystem.DataHelpers;
 using System.Web.Http;
 using BillingManagementSystem.App_Start;
@@ -16,6 +17,11 @@ namespace BillingManagementSystem.Controllers
         #region Views
         [SetPermissions]
         public ActionResult FixedRates()
+        {
+            return View();
+        }
+        [SetPermissions]
+        public ActionResult ConsumerPool()
         {
             return View();
         }
@@ -583,6 +589,48 @@ namespace BillingManagementSystem.Controllers
             return json;
         }
 
+        #endregion
+        #region Consummer Pool
+        public ActionResult GetConsummerPool([FromBody] ConsummerPoolRequestModel model)
+        {
+            ConsummerPoolHelpers helper = new ConsummerPoolHelpers();
+            var response = helper.GetConsummerPool(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetAvailableConsummerPoolByLocation([FromBody] ConsummerPoolRequestModel model)
+        {
+            ConsummerPoolHelpers helper = new ConsummerPoolHelpers();
+            var response = helper.GetConsummerPoolByLocation(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult AddConsummerNo([FromBody] ConsummerPoolRequestModel model)
+        {
+            ConsummerPoolHelpers helper = new ConsummerPoolHelpers();
+            var response = helper.AddConsummerNo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult UpdateConsummerNo([FromBody] ConsummerPoolRequestModel model)
+        {
+            ConsummerPoolHelpers helper = new ConsummerPoolHelpers();
+            var response = helper.UpdateConsummerNo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult DeleteConsummerNo([FromBody] ConsummerPoolRequestModel model)
+        {
+            ConsummerPoolHelpers helper = new ConsummerPoolHelpers();
+            var response = helper.DeleteConsummerNo(model);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
         #endregion
         #endregion
     }
