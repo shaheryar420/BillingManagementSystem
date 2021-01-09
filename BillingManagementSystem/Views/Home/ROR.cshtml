@@ -150,8 +150,18 @@
                     { "title": "Gas Meter Amount", "data": "billGasAmount" },
                     { "title": "Total Amount", "data": "billAmount" },
                     {
-                        "title": "Picture", "data": "billPrimaryPictureId", render: function (data, type, row, meta) {
-                            return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
+                        "title": "Primary Bill Picture", "data": "billPrimaryPictureId", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.billPrimaryPictureType + ";base64, " + row.billPrimaryPictureData + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
+                    {
+                        "title": "Secondary Bill Picture", "data": "billSecondaryPictureId", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.billSecondaryPictureType + ";base64, " + row.billSecondaryPictureData + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
+                    {
+                        "title": "Gas Bill Picture", "data": "billGasPictureId", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.billGasPictureType + ";base64, " + row.billGasPictureData + "' class='img-sm img-thumbnail'/>";
                         }
                     },
                    
@@ -311,45 +321,20 @@
 
         <div class="col-md-12">
 
-            <div class="tab-base">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h1 class="panel-title">ROR List</h1>
+                </div>
 
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a href="#tab0" id="t0" data-toggle="tab" aria-expanded="true">Electric</a>
-                    </li>
-                    <li>
-                        <a href="#tab1" id="t1" data-toggle="tab" aria-expanded="true">Gas</a>
-                    </li>
-                    
-                </ul>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h1 class="panel-title">ROR List</h1>
-                    </div>
-                    <div class="panel-body">
-                        <div class="tab-content">
-                            <div id="tab0" class="tab-pane fade active in">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <table class="table table-bordered table-striped table-hover rorElectricGrid"></table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="tab1" class="tab-pane fade">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <table class="table table-bordered table-striped table-hover rorGasGrid"></table>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            
-                            
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered table-striped table-hover rorElectricGrid"></table>
                         </div>
                     </div>
                 </div>
-
             </div>
+
         </div>
     </div>
 </div>
