@@ -9,7 +9,14 @@
     @Styles.Render("~/plugins/datepicker")
     @Styles.Render("~/plugins/datatable")
     @Styles.Render("~/plugins/sweetAlert")
+    <style>
+        .input-group-addon {
+            min-width: 120px;
+            text-align: center;
+        }
+    </style>
 }
+    
 @section Scripts
 {
     @Scripts.Render("~/bundles/select2")
@@ -83,7 +90,7 @@
                     },
                     { "title": "Id", "data": "subAreaId", className: "hidden" },
                     { "title": "areaId", "data": "fk_area", className: "hidden" },
-                    { "title": "SubArea Name", "data": "subAreaName" },
+                    { "title": "Sub Area Name", "data": "subAreaName" },
                     { "title": "Area Name", "data": "areaName" },
                     
                 ]

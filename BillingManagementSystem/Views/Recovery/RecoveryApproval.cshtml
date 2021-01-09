@@ -78,9 +78,15 @@
                 },
                 "columns": [
                     {
+                        title: 'Approvel',
+                        render: function (data, type, row, meta) {
+                            return "<a href='#' class='btn-sm btn-success btn_electric_approvel'>Approve</a>";
+                        }
+                    },
+                    {
                         title: 'Action',
                         render: function (data, type, row, meta) {
-                            return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_electric_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-success btn_electric_approvel'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_electric_delete'><i class='fa fa-trash'></i></a></div>";
+                            return "<div class='btn-group'><a href='#' class='btn-sm btn-info btn_electric_edit'><i class='fa fa-edit'></i></a><a href='#' class='btn-sm btn-danger btn_electric_delete'><i class='fa fa-trash'></i></a></div>";
                         }
                     },
                     {
