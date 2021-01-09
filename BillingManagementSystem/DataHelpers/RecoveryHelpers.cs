@@ -457,19 +457,11 @@ namespace BillingManagementSystem.DataHelpers
                     int paymentId = int.Parse(model.paymenthistoryId);
                     using (db_bmsEntities db = new db_bmsEntities())
                     {
-                        var payment = (from x in db.tbl_paymenthistory where x.paymenthistory_id == paymentId select x).FirstOrDefault();
+                        var payment = (from x in db.tbl_paymententryelectric where x.payment_id == paymentId select x).FirstOrDefault();
                         if (payment != null)
                         {
-                            var bill = (from x in db.tbl_billelectric where x.billelectric_id == payment.fk_billelectric select x).FirstOrDefault();
-                            if (bill != null)
-                            {
-                                bill.billelectric_paymentamount = 0;
-                                bill.billelectric_paymentdate = null;
-                                bill.billelectric_paymentmonth = "";
-                                bill.billelectric_outstanding = bill.billelectric_amount;
-                                bill.fk_paymentstatus = 3;
-                            }
-                            db.tbl_paymenthistory.Remove(payment);
+                           
+                            db.tbl_paymententryelectric.Remove(payment);
                             db.SaveChanges();
                             toReturn = new PaymentResponseModel()
                             {

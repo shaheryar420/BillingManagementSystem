@@ -26,14 +26,23 @@
                 startView: "months",
                 minViewMode: "months"
             });
-            initDropDowns();
             initElectricGrid();
             initElectricGridActions();
         });
     </script>
     <script>
         function clearFields() {
-
+            $('#electric_id').val('');
+            $('#electric_area').val('');
+            $('#electric_subarea').val('');
+            $('#electric_resident').val('');
+            $('#previous_reading').val('');
+            $("#total_outstanding").val('');
+            $("#current_reading").val('');
+            $("#current_unit").val('');
+            $("#month").val('');
+            $("#electric_amount").val('');
+            $("#Amount").val('');
         }
         function initElectricGrid() {
             Dtable = $(".electricGrid").DataTable({
@@ -46,7 +55,9 @@
 
                         if (data.length > 0) {
                             if (data[0].resultCode == '1100') {
+                                console.log(data);
                                 return data;
+                                
                             }
                             {
                                 return [];
@@ -83,11 +94,39 @@
                     { "title": "Outstanding", "data": "outstanding" },
                     { "title": "Amount Received", "data": "paymentAmount" },
                     { "title": "Date Added", "data": "paymenthistoryDatetime" },
-                    { "title": "Arae", "data": "areaName" },
-                    { "title": "SubArea", "data": "subAreaName" },
+                    { "title": "Area", "data": "areaName" },
+                    { "title": "Sub Area", "data": "subAreaName" },
                     { "title": "Location", "data": "locationName" },
                     { "title": "Resident Name", "data": "residentName" },
-
+                    {
+                        "title": "Resident Status",
+                        "data": "residentStatus",
+                        render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "Officer";
+                            }
+                            if (data == 2) {
+                                return "OR"
+                            }
+                            if (data == 3) {
+                                return "JCO"
+                            }
+                            if (data == 4) {
+                                return "Civilian"
+                            }
+                            if (data == 5) {
+                                return "Commercial"
+                            }
+                        }
+                    },
+                    { "title": "Resident PA No", "data": "residentPaNo" },
+                    { "title": "Resident Rank", "data": "residentRank" },
+                    { "title": "Resident Unit", "data": "residentUnit" },
+                    {
+                        "title": "Picture", "data": "pictureId", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.pictureType + ";base64, " + row.picturedata + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
                 ]
             });
             Dtable.columns.adjust();
@@ -179,8 +218,7 @@
                     }
 
                 });
-            });
-            
+            });            
             $(document).on('click', '#btn_electric_update', function (e) {
                 e.preventDefault();
                 var _paymentId = $('#electric_id').val();
@@ -226,16 +264,121 @@
                 }
             });
         }
+        function initHistoryGrid(_consumerNo) {
+            Dtable1 = $(".historyGrid").DataTable({
+                autoWidth: true,
+                destroy: true,
+                "ajax": {
+                    "url": '/Bill/getLocationHistoryByConsumerNo',
+                    "type": 'POST',
+                    "data": { consumerNo: _consumerNo },
+                    "dataSrc": function (data) {
+
+                        if (data.length > 0) {
+                            if (data[0].resultCode == '1100') {
+
+                                return data;
+                            }
+                            else {
+
+                                return [];
+                            }
+                        }
+                        else {
+
+                            return [];
+                        }
+                    },
+                    "error": function (a, b, c) {
+                        swal({
+                            title: "Info",
+                            text: "Not connected to the internet",
+                            type: "info"
+                        });
+                    }
+                },
+                "columns": [
+                    {
+                        title: 'Sr. #',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "title": "Bill Id", "data": "billId", className: "hidden" },
+                    { "title": "PA No", "data": "paNo" },
+                    { "title": "Resident Name", "data": "residentName" },
+                    { "title": "Resident Rank", "data": "residentRank" },
+                    { "title": "Resident Unit", "data": "residentUnit" },
+                    {
+                        "title": "Resident Status",
+                        "data": "residentStatus",
+                        render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "Officer";
+                            }
+                            if (data == 2) {
+                                return "OR"
+                            }
+                            if (data == 3) {
+                                return "JCO"
+                            }
+                            if (data == 4) {
+                                return "Civilian"
+                            }
+                            if (data == 5) {
+                                return "Commercial"
+                            }
+                        }
+                    },
+                    { "title": "Billing Month", "data": "billingMonth" },
+                    { "title": "Bill Amount", "data": "billAmount" },
+                    { "title": "Bill Outstanding", "data": "OutstandingAmountOfMonth" },
+                    {
+                        "title": "Bill Status",
+                        "data": "billStatus",
+                        render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "Paid";
+                            }
+                            if (data == 2) {
+                                return "Not Paid"
+                            }
+                            if (data == 3) {
+                                return "Pending"
+                            } 
+                            if (data == 4) {
+                                return "Partial Paid"
+                            }
+                        }
+                    },
+                    { "title": "Bill Payment Month", "data": "paymentMonth" },
+                    { "title": "Bill Payment Amount", "data": "paymentAmount" },
+
+                ]
+            });
+            Dtable1.columns.adjust();
+            $("div.tableTop").addClass("pull-left");
+            $("div.tableBottom").addClass("pull-left");
+            $("div.html5Buttons").addClass("pull-right");
+        }
          $('#btn_electric_add').click(function () {
                 console.log('ok');
-                var _url = "/Recovery/AddPayment";
-                var _amount = $("#Amount").val();
-                var _month = $("#month").val();
-                var formdata = new FormData(); //FormData object
-
+            var _url = "/Recovery/AddPayment";
+            var _consumerNo = $("#consumer_no").val();
+            var _amount = $("#Amount").val();
+            var _billingMonth = $("#billing_month").val();
+            var _paymentMonth = $("#month").val();
+            var _paymentSource = $("#Payment_Source").val();
+            var formdata = new FormData(); //FormData object
+            var fileInput = document.getElementById('online_file');
+            if (fileInput.files.length > 0) {
+                formdata.append(fileInput.files[0].Name, fileInput.files[0]);
+                console.log(formdata);
                 formdata.append("_amount", _amount);
                 formdata.append("_residentId", residentId);
-                formdata.append("_month", _month);
+                formdata.append("_month", _paymentMonth);
+                formdata.append("_billingMonth", _billingMonth);
+                formdata.append("_paymentType", _paymentSource);
                 $.ajax({
                     url: _url,
                     type: "POST",
@@ -252,6 +395,7 @@
                         if (data.resultCode == "1100") {
                             swal("Added!", data.remarks, "success");
                             initElectricGrid();
+                            initHistoryGrid(_consumerNo);
                             clearFields();
                         }
                         else {
@@ -263,131 +407,96 @@
                         console.log(errorMessage);
                     }
                 });
-
+             }
+             else {
+                 swal('Warning', 'Please attach the meter image', 'warning');
+             }
             });
-        function initDropDowns() {
-            $.ajax({
-                url: '/Management/GetAllAreas',
-                type: 'POST',
-                success: function (response) {
-                    if (response) {
+        $("#billing_month").change(function () {
+            var _billingMonth = $('#billing_month').val();
+            var _consumerNo = $('#consumer_no').val();
+            console.log(_billingMonth);
+            if (_consumerNo) {
+                $.ajax({
+                    url: '/Bill/getAllResidentByConsumerNoForRecoveryElectric',
+                    type: 'POST',
+                    data: {
+                        locationElectricMeterNo: _consumerNo,
+                        billingMonth: _billingMonth
+                    },
+                    success: function (response) {
                         if (response[0].resultCode == '1100') {
                             var list = [];
                             for (var i = 0; i < response.length; i++) {
-                                list.push({ text: response[i].areaName, id: response[i].areaId });
+                                list.push({ text: response[i].residentName, id: response[i].residentId });
+
                             }
-                            $('#electric_area').select2({ data: list }).trigger('change');
-
-
+                            $('#resident').select2().empty();
+                            $('#resident').select2({ data: list }).trigger('change');
                         }
                         else {
-                            $('#electric_area').select2({
-                                placeholder: "area not found ",
-                                allowClear: true
-                            }).trigger('change');
-                        }
-                    }
-                },
-                error: function (a, b, c) {
-                    swal('Error', a + b + c, 'error');
-                }
-
-            });
-             $("#electric_area").change(function () {
-                var _areaId = $("#electric_area").val();
-                $.ajax({
-                    url: '/Management/GetAllSubAreasByArea',
-                    type: 'POST',
-                    data: { fk_area: _areaId },
-                    success: function (response) {
-                        if (response) {
-                            if (response[0].resultCode == '1100') {
-                                var list = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    list.push({ text: response[i].subAreaName, id: response[i].subAreaId });
-
-                                }
-                                $('#electric_subarea').select2().empty();
-                                $('#electric_subarea').select2({ data: list }).trigger('change');
-                            }
-                            else {
-                                $('#electric_subarea').select2().empty();
-                                $('#electric_subarea').select2({
-                                    placeholder: "SubArea not found ",
-                                    allowClear: true
-                                }).trigger('change');
-                            }
+                            clearFields()
                         }
                     },
                     error: function (a, b, c) {
                         swal('Error', a + b + c, 'error');
                     }
                 });
-            });
+            }
+            else {
+                clearFields();
+            }
 
-            $("#electric_subarea").change(function () {
-                var _subareaId = $("#electric_subarea").val();
+        });
+        $("#resident").change(function () {
+            var _billingMonth = $('#billing_month').val();
+            var _consumerNo = $('#consumer_no').val();
+            var _resident = $('#resident').val();
+            console.log(_resident);
+            if (_consumerNo) {
                 $.ajax({
-                    url: '/Management/GetAllLocationsBySubArea',
+                    url: '/Bill/getAllDetailByConsumerNoForRecoveryElectric',
                     type: 'POST',
-                    data: { fk_subArea: _subareaId },
-                    success: function (response) {
-                        if (response) {
-                            if (response[0].resultCode == '1100') {
-                                var list = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    list.push({ text: response[i].locationName, id: response[i].locationId });
-
-                                }
-                                $('#electric_resident').select2().empty();
-                                $('#electric_resident').select2({ data: list }).trigger('change');
-                                Id = $('#electric_resident').val();
-                                initmeterNo(Id);
-                            }
-                            else {
-                                $('#electric_resident').select2().empty();
-                                $('#electric_resident').select2({
-                                    placeholder: "resident not found ",
-                                    allowClear: true
-                                }).trigger('change');
-                            }
-                        }
+                    data: {
+                        locationElectricMeterNo: _consumerNo,
+                        billingMonth: _billingMonth,
+                        residentId: _resident,
                     },
-                    error: function (a, b, c) {
-                        swal('Error', a + b + c, 'error');
-                    }
-                });
-            });
-        }
-        function initmeterNo(Id) {
-            $.ajax({
-                url: '/Management/GetLocationById',
-                type: 'POST',
-                data: { locationId: Id },
-                success: function (response) {
-                    if (response) {
+                    success: function (response) {
                         if (response.resultCode == '1100') {
-                            $('#consumer_no').val(response.locationElectricMeter);
-                            $('#previous_reading').val(response.previousReading);
-                            $('#current_reading').val(response.currentReading);
-                            $('#current_unit').val(response.currentUnit);
-                            $('#total_outstanding').val(response.outstanding);
-                            $('#month').val(response.billMonth);
+                            $("#electric_area").val(response.area);
+                            $("#electric_subarea").val(response.subArea);
+                            $("#electric_resident").val(response.location);
+                            $("#previous_reading").val(response.previousReading);
+                            $("#total_outstanding").val(response.outstandings);
+                            $("#current_reading").val(response.currentReading);
+                            $("#current_unit").val(response.units);
+                            $("#electric_amount").val(response.amount);
+                            $("#mmbtu").val(response.mmbtu);
                             residentId = response.residentId;
-                            console.log(residentId);
                         }
                         else {
-                            swal("Warning", response.remarks, "warning");
+                            clearFields()
                         }
-
+                    },
+                    error: function (a, b, c) {
+                        swal('Error', a + b + c, 'error');
                     }
-                },
-                error: function (a, b, c) {
-                    swal('Error', a + b + c, 'error');
-                }
+                });
+            }
+            else {
+                clearFields();
+            }
 
-            });
-        }
+        });
+        $('#consumer_no').change(function (e) {
+
+            var _consumerNo = $(this).val();
+            if (_consumerNo) {
+                initHistoryGrid(_consumerNo);
+
+            }
+        });
     </script>
 }
 <div id="page-head">
@@ -397,6 +506,18 @@
 </div>
 <div id="page-content">
     <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-bordered-dark">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Location History</h1>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-striped table-hover historyGrid"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-4">
             <div class="panel panel-bordered-warning panel-colorful">
                 <div class="panel-head">
@@ -404,41 +525,45 @@
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
-                        <label class="control-label">Select Area</label>
-                        <select class="form-control dropdownlist" id="electric_area"></select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Select SubArea</label>
-                        <select class="form-control dropdownlist" id="electric_subarea"></select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Select Location</label>
-                        <select class="form-control dropdownlist" id="electric_resident"></select>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label">Consumer No.</label>
-                        <input type="number" value="" readonly class="form-control" id="consumer_no" />
+                        <input value="" class="form-control" id="consumer_no" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Billing Month</label>
+                        <input type="text" value="" class="form-control monthPicker" id="billing_month" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Resident</label>
+                        <select class="form-control dropdownlist" id="resident"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Area</label>
+                        <input readonly class="form-control " id="electric_area">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Sub Area</label>
+                        <input readonly class="form-control " id="electric_subarea">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Location</label>
+                        <input readonly class="form-control " id="electric_resident">
                     </div>
                     <div class="form-group">
                         <label class="control-label">Outstandings</label>
                         <input type="number" value="" readonly class="form-control" id="total_outstanding" />
                     </div>
+
                     <div class="form-group">
-                        <label class="control-label">Previous Reading</label>
-                        <input type="number" value="" readonly class="form-control" id="previous_reading" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Enter Current Reading</label>
-                        <input type="hidden" id="electric_id" value="" />
-                        <input type="number" value="" readonly class="form-control" id="current_reading" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Current Units</label>
+                        <label class="control-label">Units</label>
                         <input type="number" value="" readonly class="form-control" id="current_unit" />
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Select Month</label>
-                        <input type="text" value="" readonly class="form-control monthPicker" id="month" />
+                        <label class="control-label">MMBTU</label>
+                        <input type="number" value="" readonly class="form-control" id="mmbtu" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Payment Month</label>
+                        <input type="text" value="" class="form-control monthPicker" id="month" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Upload Picture</label>
@@ -446,7 +571,19 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Amount</label>
+                        <input readonly value="" class="form-control" id="electric_amount" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Amount Recived</label>
                         <input type="number" value="" class="form-control" id="Amount" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Payment Source</label>
+                        <select class="form-control dropdownlist" id="Payment_Source">
+                            <option value="1">Through Salary</option>
+                            <option value="2">Through Bank</option>
+
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -468,7 +605,5 @@
             </div>
         </div>
     </div>
-
-
 </div>
 

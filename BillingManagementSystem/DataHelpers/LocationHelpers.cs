@@ -345,7 +345,7 @@ namespace BillingManagementSystem.DataHelpers
                                 double gasAmount = 0;
                                 var bills = new SubDataHelpers.RORSubHelpers().GetAllRORByLocation(location.location_id);
 
-                                if (bills.Count() > 0)
+                                if (bills[0].resultCode == "1100")
                                 {
                                     foreach (var bill in bills)
                                     {

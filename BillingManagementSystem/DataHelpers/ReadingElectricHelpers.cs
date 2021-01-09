@@ -1284,6 +1284,13 @@ namespace BillingManagementSystem.DataHelpers
                                         }).FirstOrDefault();
                         var reading = db.tbl_readingelectric.Where(x => x.readingelectric_meterno == model.consummerNo && x.is_secondary == meterStatus && x.fk_resident== location.resident_id).OrderByDescending(x => x.readingelectric_datetime).FirstOrDefault();
                         var approveReading = db.tbl_approvereadings.Where(x => x.reading_meterno == model.consummerNo && x.is_secondary == meterStatus && x.fk_resident == location.resident_id).OrderByDescending(x => x.reading_datetime).FirstOrDefault();
+                        if (approveReading == null)
+                        {
+                            approveReading = new tbl_approvereadings()
+                            {
+                                reading_currentreading = 0,
+                            };
+                        }
                         if (location != null)
                         {
                             toReturn = new ReadingElectricDetailByConsumerNoResponseModel()
@@ -1455,6 +1462,7 @@ namespace BillingManagementSystem.DataHelpers
                             {
                             var locationResidents = (from x in db.tbl_ror 
                                             join y in db.tbl_residents on x.fk_resident equals y.resident_id
+                                            where x.consummer_no == model.locationElectricMeterNo && x.ror_month == model.billingMonth
                                             select new
                                             {
                                                

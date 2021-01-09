@@ -21,7 +21,15 @@ namespace BillingManagementSystem.DataHelpers
                     var billgas = (from x in db.tbl_billgas select x).Count();
                     var payElectric = (from x in db.tbl_paymenthistory where x.paymentmonth == currentMonth select x).Count();
                     var payGas = (from x in db.tbl_paymentgashistory where x.paymentmonth == currentMonth select x).Count();
-                    toReturn.totalOutstandings = db.tbl_outstanding.Sum(x => x.outstanding_amount).ToString();
+                    var totalOutstanding = db.tbl_outstanding.ToList();
+                    if (totalOutstanding.Count() > 0)
+                    {
+                        toReturn.totalOutstandings = totalOutstanding.Sum(x => x.outstanding_amount).ToString();
+                    }
+                    else
+                    {
+                        toReturn.totalOutstandings = "0";
+                    }
                     var outstanding = db.tbl_outstanding.Where(x => x.outstanding_month == currentMonth).ToList();
                     if (outstanding != null)
                     {
