@@ -426,7 +426,7 @@
             <div class="col-xs-3">No <span id="ccNo"></span></div>
             <div class="col-xs-3">Rank <span id="ccRank"></span></div>
             <div class="col-xs-3">Name <span id="ccName"></span></div>
-            <div class="col-xs-3">Unit/Fmn <span id="ccUnits"></span></div>
+            <div class="col-xs-3">Unit/Fmn <span id="ccUnitFmn"></span></div>
             <div class="col-xs-6">Address <span id="ccAddress"></span></div>
         </div>
     </div>
@@ -482,9 +482,9 @@
                             $('#mmWaterCharges').text(response.billPrimaryWater);
                             $('#mmArrears').text("0");
                             $('#mmTotalAmount').text("0");
-                            $('#mmFurCharges').text("0");
+                            $('#mmFurCharges').text(response.billPrimaryFurCharges);
                             $('#mmFurArrears').text("0");
-                            $('#mmFurTotalAmount').text("0");
+                            $('#mmFurTotalAmount').text(response.billPrimaryFurCharges);
                             $('#smPreviousreading').text(response.billSecondaryPrevReading);
                             $('#smPresentreading').text(response.billSecondaryCurrentReading);
                             $('#smUnitsConsumed').text(response.billSecondaryUnits);
@@ -498,9 +498,9 @@
                             $('#smWaterCharges').text(response.billSecondaryWater);
                             $('#smArrears').text("0");
                             $('#smTotalAmount').text("0");
-                            $('#smFurCharges').text("0");
+                            $('#mmFurCharges').text(response.billSecondaryFurCharges);
                             $('#smFurArrears').text("0");
-                            $('#smFurTotalAmount').text("0");
+                            $('#smFurTotalAmount').text(response.billSecondaryFurCharges);
                             $('#gmPreviousReading').text(response.billGasPrevReading);
                             $('#gmPresentReading').text(response.billGasCurrentReading);
                             $('#gmGasConsumed').text("0");

@@ -125,8 +125,18 @@
                     { "title": "Gas Meter Amount", "data": "billGasAmount" },
                     { "title": "Total Amount", "data": "billAmount" },
                     {
-                        "title": "Picture", "data": "billPrimaryPictureId", render: function (data, type, row, meta) {
-                            return "<img src='data:" + row.pictureType + ";base64, " + row.pictureData + "' class='img-sm img-thumbnail'/>";
+                        "title": "Primary Bill Picture", "data": "billPrimaryPictureId", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.billPrimaryPictureType + ";base64, " + row.billPrimaryPictureData + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
+                    {
+                        "title": "Secondary Bill Picture", "data": "billSecondaryPictureId", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.billSecondaryPictureType + ";base64, " + row.billSecondaryPictureData + "' class='img-sm img-thumbnail'/>";
+                        }
+                    },
+                    {
+                        "title": "Gas Bill Picture", "data": "billGasPictureId", render: function (data, type, row, meta) {
+                            return "<img src='data:" + row.billGasPictureType + ";base64, " + row.billGasPictureData + "' class='img-sm img-thumbnail'/>";
                         }
                     },
                 ]
